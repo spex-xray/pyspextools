@@ -1,0 +1,161 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>SPEX user model interface module &#8212; pyspex 0.1 documentation</title>
+    
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="PySPEX Example programs" href="examples.html" />
+    <link rel="prev" title="Install pyspex" href="install.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="PySPEX Example programs"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Install pyspex"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="spex-user-model-interface-module">
+<span id="usermodel"></span><h1>SPEX user model interface module<a class="headerlink" href="#spex-user-model-interface-module" title="Permalink to this headline">¶</a></h1>
+<p>This is a Python helper class for the development of user defined models in SPEX.
+The &#8216;user&#8217; and &#8216;musr&#8217; components in SPEX can calculate an additive and multiplicative
+model, respectively, based on a user program. See the SPEX manual for details:
+<a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
+<p>The &#8216;user&#8217; component can run an executable provided by the user. This module provides
+the class that helps to exchange the relevant information between SPEX and the user
+provided executable. Documentation for an example program is here: <a class="reference internal" href="examples/myusermodel.html#user-example"><span class="std std-ref">User model example</span></a>.</p>
+<p><strong>SPEX output and executable input:</strong></p>
+<p>The SPEX user component will provide an energy grid and a list of model parameters to
+the executable through a text file, for example input-01-01.prm. Using this information,
+the user provided program should calculate the spectrum on the provided grid using the
+input parameters.</p>
+<p><strong>Executable output and SPEX input:</strong></p>
+<p>The spectrum (and the weights) can be written to the provided sener (and wener) arrays
+in this module. The writespc function will write the calculated spectrum to an output
+file named, for example, output-01-01.spc. This file will be read again by the SPEX
+user model and the resulting values will be used in the SPEX fit.</p>
+<div class="section" id="module-pyspex.user">
+<span id="class-description"></span><h2>Class description:<a class="headerlink" href="#module-pyspex.user" title="Permalink to this headline">¶</a></h2>
+<p>This is a module containing the necessary methods to
+develop an executable for use with the SPEX user model.</p>
+<dl class="class">
+<dt id="pyspex.user.IO">
+<em class="property">class </em><code class="descclassname">pyspex.user.</code><code class="descname">IO</code><a class="headerlink" href="#pyspex.user.IO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class structure to contain the input and output parameters of the user function.</p>
+<dl class="method">
+<dt id="pyspex.user.IO.writespc">
+<code class="descname">writespc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pyspex.user.IO.writespc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the calculated spectrum to the output file for SPEX.
+Make sure that the sener and wener arrays are initialized and 
+filled with a spectrum before calling this function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SPEX user model interface module</a><ul>
+<li><a class="reference internal" href="#module-pyspex.user">Class description:</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Install pyspex</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="examples.html"
+                        title="next chapter">PySPEX Example programs</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/user.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="examples.html" title="PySPEX Example programs"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="install.html" title="Install pyspex"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.1 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Jelle de Plaa.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
