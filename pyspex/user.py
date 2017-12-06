@@ -82,7 +82,13 @@ class IO(object):
         self.par=numpy.zeros(self.npar,dtype=float)
     
         # Read parameters into the array for the parameters
-        spar=str(f.readline()).split()
+        spar=[]
+        for i in numpy.arange(int(self.npar/5)):
+          spar.append(str(f.readline()).split())
+        
+        # Flatten list
+        spar=sum(spar, [])
+        
         for i in numpy.arange(self.npar):
           self.par[i]=float(spar[i])
     
