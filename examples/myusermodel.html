@@ -1,16 +1,13 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
     <title>User model example &#8212; pyspex 0.1 documentation</title>
-    
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -28,16 +25,13 @@
     <link rel="search" title="Search" href="../search.html" />
     <link rel="prev" title="PySPEX Example programs" href="../examples.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
         <li class="right" style="margin-right: 10px">
           <a href="../genindex.html" title="General Index"
              accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
         <li class="right" >
           <a href="../examples.html" title="PySPEX Example programs"
              accesskey="P">previous</a> |</li>
@@ -73,7 +67,7 @@ the input file from SPEX automatically and initialize the arrays:</p>
 </div>
 <p><strong>Calculation</strong></p>
 <p>This step needs the creativity of the user. The output spectrum or transmission
-needs to be calculated and written to the &#8216;usr.sener&#8217; output array:</p>
+needs to be calculated and written to the ‘usr.sener’ output array:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># For each energy bin in the provided energy grid</span>
 <span class="c1"># calculate the spectrum in photons/s/bin:</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">numpy</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">usr</span><span class="o">.</span><span class="n">neg</span><span class="p">):</span>
@@ -81,17 +75,17 @@ needs to be calculated and written to the &#8216;usr.sener&#8217; output array:<
   <span class="n">usr</span><span class="o">.</span><span class="n">wener</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="mf">0.</span>
 </pre></div>
 </div>
-<p>The unit for the &#8216;usr.sener&#8217; array is &#8216;photons/s/bin&#8217; and the bin parameters are
-available in the &#8216;usr&#8217; object (see <a class="reference internal" href="../user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a>). The model parameters from
-SPEX can be accessed through the &#8216;usr.par&#8217; array. Note the difference between
+<p>The unit for the ‘usr.sener’ array is ‘photons/s/bin’ and the bin parameters are
+available in the ‘usr’ object (see <a class="reference internal" href="../user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a>). The model parameters from
+SPEX can be accessed through the ‘usr.par’ array. Note the difference between
 the index of the array and the parameter number in SPEX. The parameter number in
 SPEX is equal to the array index + 1.</p>
-<p>The &#8216;usr.wener&#8217; array can be used to optimize the calculations in SPEX.
+<p>The ‘usr.wener’ array can be used to optimize the calculations in SPEX.
 If Delta E = average photon energy within the bin (keV) minus the bin
 centroid then wener = sener * Delta E.</p>
 <p><strong>Write output</strong></p>
 <p>The result needs to be handed back to SPEX through a text file, which can be
-written by calling the &#8216;usr.writespc()&#8217; function:</p>
+written by calling the ‘usr.writespc()’ function:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># Write the calculated spectrum to the output file:</span>
 <span class="n">usr</span><span class="o">.</span><span class="n">writespc</span><span class="p">()</span>
 </pre></div>
@@ -103,15 +97,15 @@ executable using the shell command:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">chmod</span> <span class="n">u</span><span class="o">+</span><span class="n">x</span> <span class="n">myusermodel</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>In SPEX, this program can be loaded into the &#8216;user&#8217; or &#8216;musr&#8217; model using
+<p>In SPEX, this program can be loaded into the ‘user’ or ‘musr’ model using
 the following commands:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">com</span> <span class="n">user</span>
 <span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">par</span> <span class="mi">1</span> <span class="mi">1</span> <span class="n">exec</span> <span class="n">av</span> <span class="o">./</span><span class="n">myusermodel</span><span class="o">.</span><span class="n">py</span>
 </pre></div>
 </div>
-<p>The &#8216;./&#8217; is used if the program is in the current working directory. Otherwise,
+<p>The ‘./’ is used if the program is in the current working directory. Otherwise,
 please use the full path to the program.</p>
-<p>The &#8216;user&#8217; and &#8216;musr&#8217; model also needs the number of parameters that the
+<p>The ‘user’ and ‘musr’ model also needs the number of parameters that the
 model needs. Set it using:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">par</span> <span class="mi">1</span> <span class="mi">1</span> <span class="n">npar</span> <span class="n">v</span> <span class="mi">1</span>
 </pre></div>
@@ -165,9 +159,6 @@ model needs. Set it using:</p>
           <a href="../genindex.html" title="General Index"
              >index</a></li>
         <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
           <a href="../examples.html" title="PySPEX Example programs"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.1 documentation</a> &#187;</li>
@@ -176,7 +167,7 @@ model needs. Set it using:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2017, Jelle de Plaa.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

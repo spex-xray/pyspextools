@@ -1,0 +1,291 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>ATOMDB interface for SPEX &#8212; pyspex 0.1 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="User model example" href="myusermodel.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../examples.html" accesskey="U">PySPEX Example programs</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="atomdb-interface-for-spex">
+<span id="apec-example"></span><h1>ATOMDB interface for SPEX<a class="headerlink" href="#atomdb-interface-for-spex" title="Permalink to this headline">¶</a></h1>
+<p>This example program creates an interface between ATOMDB and
+the SPEX user model. Using this program, the APEC model can be used
+within SPEX.</p>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>Before you start, make sure the following things are installed or set:</p>
+<ul class="simple">
+<li>Install numpy</li>
+<li>Install pyspex</li>
+<li>Install ATOMDB (Coco and line tables.)</li>
+<li>Install pyatomdb</li>
+<li>Set ATOMDB environment variable to your local ATOMDB installation.</li>
+</ul>
+<p>For more information about installing ATOMDB and pyatomdb see <a class="reference external" href="http://www.atomdb.org/">atomdb.org</a></p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>Use this program directly in the SPEX user model. Make the apec.py file executable before you start SPEX:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">chmod</span> <span class="n">u</span><span class="o">+</span><span class="n">x</span> <span class="n">apec</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>If the apec.py is located in the working directory, it can be added to the user model easily:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">par</span> <span class="mi">1</span> <span class="mi">1</span> <span class="n">exec</span> <span class="n">av</span> <span class="o">./</span><span class="n">apec</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>If apec.py is located somewhere else, provide the full path:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">par</span> <span class="mi">1</span> <span class="mi">1</span> <span class="n">exec</span> <span class="n">av</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">apec</span><span class="o">.</span><span class="n">py</span>
+</pre></div>
+</div>
+<p>The ATOMDB environment variable needs to be set to the ATOMDB installation at all times.
+Please note that by default, ATOMDB uses solar abundances by Anders &amp; Grevesse (1989).</p>
+</div>
+<div class="section" id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
+<p>User model parameter translation table:</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="10%" />
+<col width="24%" />
+<col width="66%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">Param
+in
+SPEX</th>
+<th class="head">Variable
+in
+script</th>
+<th class="head">Corresponding value and unit</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>p01</td>
+<td>usr.par[0]</td>
+<td>Normalisation (Photons m^-3 s^-1 keV^-1)</td>
+</tr>
+<tr class="row-odd"><td>p02</td>
+<td>usr.par[1]</td>
+<td>Temperature (keV)</td>
+</tr>
+<tr class="row-even"><td>p03</td>
+<td>usr.par[2]</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>p04</td>
+<td>usr.par[3]</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-even"><td>p05</td>
+<td>usr.par[4]</td>
+<td>&#160;</td>
+</tr>
+<tr class="row-odd"><td>p06</td>
+<td>usr.par[5]</td>
+<td>06 C</td>
+</tr>
+<tr class="row-even"><td>p07</td>
+<td>usr.par[6]</td>
+<td>07 N</td>
+</tr>
+<tr class="row-odd"><td>p08</td>
+<td>usr.par[7]</td>
+<td>08 O</td>
+</tr>
+<tr class="row-even"><td>p09</td>
+<td>usr.par[8]</td>
+<td>09 F</td>
+</tr>
+<tr class="row-odd"><td>p10</td>
+<td>usr.par[9]</td>
+<td>10 Ne</td>
+</tr>
+<tr class="row-even"><td>p11</td>
+<td>usr.par[10]</td>
+<td>11 Na</td>
+</tr>
+<tr class="row-odd"><td>p12</td>
+<td>usr.par[11]</td>
+<td>12 Mg</td>
+</tr>
+<tr class="row-even"><td>p13</td>
+<td>usr.par[12]</td>
+<td>13 Al</td>
+</tr>
+<tr class="row-odd"><td>p14</td>
+<td>usr.par[13]</td>
+<td>14 Si</td>
+</tr>
+<tr class="row-even"><td>p15</td>
+<td>usr.par[14]</td>
+<td>15 P</td>
+</tr>
+<tr class="row-odd"><td>p16</td>
+<td>usr.par[15]</td>
+<td>16 S</td>
+</tr>
+<tr class="row-even"><td>p17</td>
+<td>usr.par[16]</td>
+<td>17 Cl</td>
+</tr>
+<tr class="row-odd"><td>p18</td>
+<td>usr.par[17]</td>
+<td>18 Ar</td>
+</tr>
+<tr class="row-even"><td>p19</td>
+<td>usr.par[18]</td>
+<td>19 K</td>
+</tr>
+<tr class="row-odd"><td>p20</td>
+<td>usr.par[19]</td>
+<td>20 Ca</td>
+</tr>
+<tr class="row-even"><td>p21</td>
+<td>usr.par[20]</td>
+<td>21 Sc</td>
+</tr>
+<tr class="row-odd"><td>p22</td>
+<td>usr.par[21]</td>
+<td>22 Ti</td>
+</tr>
+<tr class="row-even"><td>p23</td>
+<td>usr.par[22]</td>
+<td>23 V</td>
+</tr>
+<tr class="row-odd"><td>p24</td>
+<td>usr.par[23]</td>
+<td>24 Cr</td>
+</tr>
+<tr class="row-even"><td>p25</td>
+<td>usr.par[24]</td>
+<td>25 Mn</td>
+</tr>
+<tr class="row-odd"><td>p26</td>
+<td>usr.par[25]</td>
+<td>26 Fe</td>
+</tr>
+<tr class="row-even"><td>p27</td>
+<td>usr.par[26]</td>
+<td>27 Co</td>
+</tr>
+<tr class="row-odd"><td>p28</td>
+<td>usr.par[27]</td>
+<td>28 Ni</td>
+</tr>
+<tr class="row-even"><td>p29</td>
+<td>usr.par[28]</td>
+<td>29 Cu</td>
+</tr>
+<tr class="row-odd"><td>p30</td>
+<td>usr.par[29]</td>
+<td>30 Zn</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">ATOMDB interface for SPEX</a><ul>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+<li><a class="reference internal" href="#usage">Usage</a></li>
+<li><a class="reference internal" href="#parameters">Parameters</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="myusermodel.html"
+                        title="previous chapter">User model example</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/examples/apec.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../examples.html" >PySPEX Example programs</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2017, Jelle de Plaa.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
