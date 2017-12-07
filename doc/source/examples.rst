@@ -5,3 +5,4 @@ PySPEX Example programs
    :maxdepth: 2
 
    examples/myusermodel
+   examples/apec
