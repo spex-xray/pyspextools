@@ -12,15 +12,15 @@
 #              responses organized in SPEX regions   
 #
 # Dependencies:
-#   - pyfits:     Read and write FITS files
 #   - numpy:      Array operations
+#   - spo:        The spo class from this pyspex data module
+#   - res:        The res class from this pyspex data module
 # =========================================================
 
-import pyfits
 import numpy as np
 
-from pyspex.data.spo import spo
-from pyspex.data.res import res  
+from .spo import spo
+from .res import res  
 
 # See if Heasoft python modules are available
 try:
@@ -35,14 +35,14 @@ else:
 # Region class
 # =========================================================
 
-class region(spo,res):
+class region:
     """A SPEX region is a spectrum/response combination for a
        specific observation, instrument or region on the sky.
        It combines the spectrum and response file in one object."""
     
     def __init__(self):
-        spo.__init__(self)
-        res.__init__(self)
+        self.spo=spo()
+        self.res=res()
 
     def Check(self):
         """Check whether spectrum and response are compatible
@@ -52,7 +52,7 @@ class region(spo,res):
     def Show(self):
         """Show a summary of the region metadata"""
         
-        print("==========================================================================")
+        print("===========================================================")
         print(" Sector:             "+str(self.res.sector[0]))
         print(" Region:             "+str(self.res.region[0]))
         
@@ -67,8 +67,8 @@ class region(spo,res):
 # Data class
 # =========================================================
 
-class data:
-    """The data class is the most general class containing a 
+class dataset:
+    """The dataset class is the most general class containing a 
        dataset with multiple regions. Using this class, users
        can read, write and manipulate spectral datasets."""
  
@@ -197,7 +197,7 @@ class data:
 # =========================================================
 
 if __name__ == "__main__":
-    dat=data()
+    dat=dataset()
     dat.ReadAllRegions("rgs.spo","rgs.res")
     dat.Show()
     dat.WriteRegion("rgs_test.spo","rgs_test.res",1)

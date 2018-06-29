@@ -10,11 +10,11 @@
 # This file contains the res class
 #
 # Dependencies:
-#   - pyfits:     Read and write FITS files
-#   - numpy:      Array operations
+#   - astropy.io.fits:     Read and write FITS files
+#   - numpy:               Array operations
 # =========================================================
 
-import pyfits
+import astropy.io.fits as fits
 import numpy as np
 
 # =========================================================
@@ -180,8 +180,8 @@ class res:
         # The filename is saved in the data object for reference.
         self.resname = resfile
         
-        # Open the .res file with pyfits 
-        resfile=pyfits.open(self.resname)
+        # Open the .res file with astropy.io.fits 
+        resfile=fits.open(self.resname)
         
         table  = resfile['SPEX_RESP_ICOMP'].data
         header = resfile['SPEX_RESP_ICOMP'].header
@@ -304,25 +304,25 @@ class res:
           return
         
         # Create a primary header
-        prihdr = pyfits.Header()
+        prihdr = fits.Header()
         prihdr['CREATOR'] = 'pyspex python module'
         prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
-        prihdu = pyfits.PrimaryHDU(header=prihdr)
+        prihdu = fits.PrimaryHDU(header=prihdr)
 
         
         # Create the SPEX_RESP_ICOMP extension
-        col1 = pyfits.Column(name='NCHAN', format='1J', array=self.nchan)
-        col2 = pyfits.Column(name='NEG', format='1J', array=self.neg)
-        col3 = pyfits.Column(name='SECTOR', format='1J', array=self.sector)
-        col4 = pyfits.Column(name='REGION', format='1J', array=self.region)
+        col1 = fits.Column(name='NCHAN', format='1J', array=self.nchan)
+        col2 = fits.Column(name='NEG', format='1J', array=self.neg)
+        col3 = fits.Column(name='SECTOR', format='1J', array=self.sector)
+        col4 = fits.Column(name='REGION', format='1J', array=self.region)
         
         if (self.share_comp):
-          col5 = pyfits.Column(name='SHCOMP', format='1J', array=self.shcomp) 
-          cols=pyfits.ColDefs([col1,col2,col3,col4,col5])
+          col5 = fits.Column(name='SHCOMP', format='1J', array=self.shcomp) 
+          cols = fits.ColDefs([col1,col2,col3,col4,col5])
         else:
-          cols=pyfits.ColDefs([col1,col2,col3,col4]) 
+          cols = fits.ColDefs([col1,col2,col3,col4]) 
           
-        tb_icomp = pyfits.BinTableHDU.from_columns(cols)   
+        tb_icomp = fits.BinTableHDU.from_columns(cols)   
         tb_icomp.header['NSECTOR'] = self.nsector
         tb_icomp.header['NREGION'] = self.nregion
         tb_icomp.header['NCOMP'] = self.ncomp
@@ -335,36 +335,36 @@ class res:
 
         
         # Create the SPEX_RESP_GROUP extension
-        col1 = pyfits.Column(name='EG1', format='1D', unit='keV', array=self.eg1)
-        col2 = pyfits.Column(name='EG2', format='1D', unit='keV', array=self.eg2)
-        col3 = pyfits.Column(name='IC1', format='1J', array=self.ic1)
-        col4 = pyfits.Column(name='IC2', format='1J', array=self.ic2)
-        col5 = pyfits.Column(name='NC', format='1J', array=self.nc)
+        col1 = fits.Column(name='EG1', format='1D', unit='keV', array=self.eg1)
+        col2 = fits.Column(name='EG2', format='1D', unit='keV', array=self.eg2)
+        col3 = fits.Column(name='IC1', format='1J', array=self.ic1)
+        col4 = fits.Column(name='IC2', format='1J', array=self.ic2)
+        col5 = fits.Column(name='NC', format='1J', array=self.nc)
         
         if (self.area_scal):
-          col6 = pyfits.Column(name='RELAREA', format='1J', array=self.relarea)
-          cols=pyfits.ColDefs([col1,col2,col3,col4,col5,col6])
+          col6 = fits.Column(name='RELAREA', format='1J', array=self.relarea)
+          cols = fits.ColDefs([col1,col2,col3,col4,col5,col6])
         else:
-          cols=pyfits.ColDefs([col1,col2,col3,col4,col5])
+          cols = fits.ColDefs([col1,col2,col3,col4,col5])
         
-        tb_group = pyfits.BinTableHDU.from_columns(cols)
+        tb_group = fits.BinTableHDU.from_columns(cols)
         tb_group.header['EXTNAME'] = 'SPEX_RESP_GROUP'
         
         
         # Create the SPEX_RESP_GROUP extension
-        col1 = pyfits.Column(name='Response', format='1E', unit='m**2', array=self.resp)
+        col1 = fits.Column(name='Response', format='1E', unit='m**2', array=self.resp)
         if (self.resp_der):
-          col2 = pyfits.Column(name='Response_Der', format='1E', unit='m**2', array=self.dresp)
-          cols=pyfits.ColDefs([col1,col2])
+          col2 = fits.Column(name='Response_Der', format='1E', unit='m**2', array=self.dresp)
+          cols = fits.ColDefs([col1,col2])
         else:
-          cols=pyfits.ColDefs([col1])
+          cols = fits.ColDefs([col1])
           
-        tb_resp = pyfits.BinTableHDU.from_columns(cols)    
+        tb_resp = fits.BinTableHDU.from_columns(cols)    
         tb_resp.header['EXTNAME'] = 'SPEX_RESP_RESP'
         
         
         # Combine the extentions into one list
-        thdulist = pyfits.HDUList([prihdu, tb_icomp, tb_group, tb_resp])
+        thdulist = fits.HDUList([prihdu, tb_icomp, tb_group, tb_resp])
             
         
         # Write hdulist to file

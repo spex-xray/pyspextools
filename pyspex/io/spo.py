@@ -10,11 +10,11 @@
 # This file contains the spo class
 #
 # Dependencies:
-#   - pyfits:     Read and write FITS files
-#   - numpy:      Array operations
+#   - astropy.io.fits:     Read and write FITS files
+#   - numpy:               Array operations
 # =========================================================
 
-import pyfits
+import astropy.io.fits as fits
 import numpy as np
 
 # =========================================================
@@ -151,9 +151,9 @@ class spo:
         # The filename is saved in the data object for reference.
         self.sponame = spofile
         
-        # Open the .spo file with pyfits and open the table and header 
+        # Open the .spo file with astropy.io.fits and open the table and header 
         # information in the SPEX_REGIONS extension in the FITS file.
-        spofile = pyfits.open(self.sponame)
+        spofile = fits.open(self.sponame)
         table   = spofile['SPEX_REGIONS'].data
         header  = spofile['SPEX_REGIONS'].header
         
@@ -247,39 +247,39 @@ class spo:
            return -1
                 
         # Create a primary header
-        prihdr = pyfits.Header()
+        prihdr = fits.Header()
         prihdr['CREATOR'] = 'pyspex python module'
         prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
-        prihdu = pyfits.PrimaryHDU(header=prihdr)
+        prihdu = fits.PrimaryHDU(header=prihdr)
                 
         # Create the SPEX_REGIONS extension
-        col1 = pyfits.Column(name='NCHAN', format='1J', array=self.nchan)
-        cols = pyfits.ColDefs([col1])
+        col1 = fits.Column(name='NCHAN', format='1J', array=self.nchan)
+        cols = fits.ColDefs([col1])
         
-        tb_regions = pyfits.BinTableHDU.from_columns(cols)
+        tb_regions = fits.BinTableHDU.from_columns(cols)
         tb_regions.header['EXTNAME'] = 'SPEX_REGIONS'
                 
         # Then create the SPEX_SPECTRUM extension
-        col1=pyfits.Column(name='Lower_Energy', format='1D', unit='keV', array=self.echan1)
-        col2=pyfits.Column(name='Upper_Energy', format='1D', unit='keV', array=self.echan2)
-        col3=pyfits.Column(name='Exposure_Time', format='1E', unit='s', array=self.tints)
-        col4=pyfits.Column(name='Source_Rate', format='1E', unit='c/s', array=self.ochan)
-        col5=pyfits.Column(name='Err_Source_Rate', format='1E', unit='c/s', array=self.dochan)
-        col6=pyfits.Column(name='Back_Rate', format='1E', unit='c/s', array=self.mbchan)
-        col7=pyfits.Column(name='Err_Back_Rate', format='1E', unit='c/s', array=self.dbchan)
-        col8=pyfits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
-        col9=pyfits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
-        col10=pyfits.Column(name='First', format='1L', unit='', array=self.first)
-        col11=pyfits.Column(name='Last', format='1L', unit='', array=self.last)
-        col12=pyfits.Column(name='Used', format='1L', unit='', array=self.used)
+        col1=fits.Column(name='Lower_Energy', format='1D', unit='keV', array=self.echan1)
+        col2=fits.Column(name='Upper_Energy', format='1D', unit='keV', array=self.echan2)
+        col3=fits.Column(name='Exposure_Time', format='1E', unit='s', array=self.tints)
+        col4=fits.Column(name='Source_Rate', format='1E', unit='c/s', array=self.ochan)
+        col5=fits.Column(name='Err_Source_Rate', format='1E', unit='c/s', array=self.dochan)
+        col6=fits.Column(name='Back_Rate', format='1E', unit='c/s', array=self.mbchan)
+        col7=fits.Column(name='Err_Back_Rate', format='1E', unit='c/s', array=self.dbchan)
+        col8=fits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
+        col9=fits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
+        col10=fits.Column(name='First', format='1L', unit='', array=self.first)
+        col11=fits.Column(name='Last', format='1L', unit='', array=self.last)
+        col12=fits.Column(name='Used', format='1L', unit='', array=self.used)
         
-        cols=pyfits.ColDefs([col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12])
+        cols=fits.ColDefs([col1,col2,col3,col4,col5,col6,col7,col8,col9,col10,col11,col12])
     
-        tb_spectrum = pyfits.BinTableHDU.from_columns(cols)
+        tb_spectrum = fits.BinTableHDU.from_columns(cols)
         tb_spectrum.header['EXTNAME']='SPEX_SPECTRUM'
             
         # Combine the extentions into one list
-        thdulist = pyfits.HDUList([prihdu, tb_regions, tb_spectrum])
+        thdulist = fits.HDUList([prihdu, tb_regions, tb_spectrum])
             
         # Write hdulist to file
         thdulist.writeto(sponame)

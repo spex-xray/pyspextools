@@ -11,16 +11,16 @@ of the SPEX manual: http://var.sron.nl/SPEX-doc/
 The Data class description:
 ---------------------------
 
-.. automodule:: pyspex.data
+.. automodule:: pyspex.io
 
-   .. autoclass:: pyspex.data.data
+   .. autoclass:: pyspex.io.dataset
       :members:
 
-   .. autoclass:: pyspex.data.region
+   .. autoclass:: pyspex.io.region
       :members:
 
-   .. autoclass:: pyspex.data.spo
+   .. autoclass:: pyspex.io.spo
       :members:
 
-   .. autoclass:: pyspex.data.res
+   .. autoclass:: pyspex.io.res
       :members:
