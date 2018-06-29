@@ -13,6 +13,8 @@ Welcome to pyspex's documentation!
 
    user
 
+   data
+
    examples
 
 

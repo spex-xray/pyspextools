@@ -5,7 +5,7 @@ import os
 import re
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['sphinx','numpy','future']
+dependencies = ['sphinx','numpy','future','pyfits']
 
 # Auto-generate documentation
 import sphinx
@@ -26,7 +26,7 @@ sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html']
 
 # Do the actual setup
 setup(name='pyspex',
-      version='0.1',
+      version='0.2',
       description='SPEX Python tools',
       author='SPEX development team',
       author_email='j.de.plaa@sron.nl',
