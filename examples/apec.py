@@ -14,22 +14,18 @@ from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
 from __future__ import absolute_import
-from builtins import int
-from builtins import open
-from builtins import str
 from future import standard_library
-standard_library.install_aliases()
-from builtins import object
 
 import sys
 import numpy
-from pyspex.model import user
+from pyspex.model import User
+
+standard_library.install_aliases()
 
 if sys.version_info[0] < 3:
-   import pyatomdb
+    import pyatomdb
 else:
-   raise Exception("pyATOMDB does not support Python 3 yet...")
-
+    raise Exception("pyATOMDB does not support Python 3 yet...")
 
 """
 User model parameter translation table:
@@ -65,16 +61,17 @@ p29	usr.par[28]	29 Cu
 p30	usr.par[29]	30 Zn
 """
 
+
 def main():
     # Initialize the IO class. The input file from SPEX will be read automatically.
-    usr=user()
+    usr = User()
 
     if sys.version_info[0] > 2:
-      raise Exception("pyATOMDB does not support Python 3 yet...")
+        raise Exception("pyATOMDB does not support Python 3 yet...")
 
-    if (usr.npar!=30):
-      print("Please set 'npar' parameter to 30 for this model")
-      exit
+    if usr.npar != 30:
+        print("Please set 'npar' parameter to 30 for this model")
+        sys.exit()
 
     # Create a pyatomdb spectrum session
     data = pyatomdb.spectrum.Session()
@@ -84,36 +81,37 @@ def main():
     # SPEX has an array of upper boundary,
     # so we need to calculate the lower boundary
     # for the first bin:
-    fbin=numpy.array([usr.egb[0]-usr.deg[0]])
+    fbin = numpy.array([usr.egb[0] - usr.deg[0]])
 
     # And set the energy bins
-    data.set_specbins(numpy.append(fbin,usr.egb), specunits='keV')
+    data.set_specbins(numpy.append(fbin, usr.egb), specunits='keV')
 
     # Set abundance table
-    data.set_abundset("AG89") # Anders & Grevesse (1989)
+    data.set_abundset("AG89")  # Anders & Grevesse (1989)
 
     # Set atomic number array
-    atom=numpy.arange(30)+1
+    atom = numpy.arange(30) + 1
 
     # Set model parameters
-    norm=1E+14*usr.par[0]         # Photons cm^-3 s^-1 keV^-1
-                                  # APEC norm is 1E-14 times emission measure
-    temp=usr.par[1]               # Temperature in keV
+    norm = 1E+14 * usr.par[0]  # Photons cm^-3 s^-1 keV^-1
+    # APEC norm is 1E-14 times emission measure
+    temp = usr.par[1]  # Temperature in keV
 
     # Parameters with index 2,3,4 are not used
 
     # Set abundances for C to Zn    
-    for a in numpy.arange(25)+5:
-      data.set_abund(atom[a],usr.par[a])
+    for a in numpy.arange(25) + 5:
+        data.set_abund(atom[a], usr.par[a])
 
     # Calculate the APEC spectrum
-    aspec=data.return_spectra(temp, teunit='keV')
+    aspec = data.return_spectra(temp, teunit='keV')
 
     # Write the calculated spectrum to the sener array:
-    for i in numpy.arange(usr.neg):      
-      usr.sener[i]=norm*aspec[i]
+    for i in numpy.arange(usr.neg):
+        usr.sener[i] = norm * aspec[i]
 
     # Write the calculated spectrum to the output file: 
-    usr.Writespc()
+    usr.write_spc()
+
 
 main()

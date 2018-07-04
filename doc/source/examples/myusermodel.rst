@@ -16,7 +16,7 @@ The following imports are mandatory::
 
   import math                    # Import math module
   import numpy                   # Import numpy module
-  from pyspex.model import user  # Import the user module from pyspex.model
+  from pyspex.model import User  # Import the user module from pyspex.model
 
 
 **Initialisation**
@@ -24,7 +24,7 @@ The following imports are mandatory::
 The user module from pyspex.model needs to be initialized first. This will read in
 the input file from SPEX automatically and initialize the arrays::
 
-    usr=user()
+    usr=User()
  
  
 **Calculation**
@@ -52,10 +52,10 @@ centroid then wener = sener * Delta E.
 **Write output**
 
 The result needs to be handed back to SPEX through a text file, which can be
-written by calling the 'usr.Writespc()' function:: 
+written by calling the 'usr.write_spc()' function::
 
     # Write the calculated spectrum to the output file: 
-    usr.Writespc()
+    usr.write_spc()
 
 Usage
 -----

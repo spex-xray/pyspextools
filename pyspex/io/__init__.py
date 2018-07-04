@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-from .data import dataset, region
-from .spo  import spo
-from .res  import res
-
+from .data import Dataset, Region
+from .spo import Spo
+from .res import Res

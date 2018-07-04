@@ -3,11 +3,10 @@ Interfaces for SPEX models
 
 .. automodule:: pyspex.model
 
+.. _usermodel:
 
 SPEX user model interface module
 --------------------------------
-
-.. _usermodel:
 
 This is a Python helper class for the development of user defined models in SPEX. 
 The 'user' and 'musr' components in SPEX can calculate an additive and multiplicative
@@ -28,9 +27,9 @@ input parameters.
 **Executable output and SPEX input:**
 
 The spectrum (and the weights) can be written to the provided sener (and wener) arrays
-in this module. The writespc function will write the calculated spectrum to an output
+in this module. The write_spc function will write the calculated spectrum to an output
 file named, for example, output-01-01.spc. This file will be read again by the SPEX 
 user model and the resulting values will be used in the SPEX fit. 
 
-   .. autoclass:: pyspex.model.user
+   .. autoclass:: pyspex.model.User
       :members:  
