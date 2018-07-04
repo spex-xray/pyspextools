@@ -22,8 +22,11 @@ Make sure that the `$HOME/python/lib/pythonx.x/site-packages` directory is in th
 
 ## Usage
 
-Currently, there is one class available in PySPEX to help users create their own
-model in SPEX. This class is `pyspex.user.IO` and handles the communication between SPEX and the user defined model. 
+Currently, there is a class available in PySPEX to help users create their own
+model in SPEX. This class is `pyspex.model.user` and handles the communication between SPEX and the user defined model. 
+
+In the spexdata branch there is a new experimental interface to manipulate SPEX spo and res files. Note that this is still
+under development. Comments are welcome.
 
 ### SPEX user model examples
 
