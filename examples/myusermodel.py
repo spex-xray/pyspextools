@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 
-import math                  # Import math module
-import numpy                 # Import numpy module
-from pyspex.user import IO   # Import IO from pyspex.user
+import math                    # Import math module
+import numpy                   # Import numpy module
+from pyspex.model import user  # Import user from pyspex.model
 
 
 def main():
-    # Initialize the IO class. The input file from SPEX will be read automatically.
-    usr=IO()
+    # Initialize the user class. The input file from SPEX will be read automatically.
+    usr=user()
     
     # For each energy bin in the provided energy grid
     # calculate the spectrum in photons/s/bin:
@@ -16,6 +16,6 @@ def main():
       usr.wener[i]=0.
     
     # Write the calculated spectrum to the output file: 
-    usr.writespc()
+    usr.Writespc()
 
 main()

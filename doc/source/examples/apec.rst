@@ -20,6 +20,7 @@ Before you start, make sure the following things are installed or set:
 
 For more information about installing ATOMDB and pyatomdb see `atomdb.org <http://www.atomdb.org/>`_ 
 
+Please note that pyATOMDB does not support Python 3 yet!
 
 Usage
 -----

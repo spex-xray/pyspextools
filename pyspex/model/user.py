@@ -3,6 +3,8 @@
 """This is a module containing the necessary methods to
 develop an executable for use with the SPEX user model.
 """
+
+# Stuff to import for compatibility between python 2 and 3
 from __future__ import print_function
 from __future__ import unicode_literals
 from __future__ import division
@@ -19,23 +21,23 @@ import math
 import numpy
 
 
-class IO(object):
+class user(object):
     """Class structure to contain the input and output parameters of the user function. """
     
     # Input parameters:
     
-    #: Number of input parameters from SPEX 
-    npar = 0        
+    #: Number of input parameters from SPEX
+    npar = 0
     #: Array containing the parameter values from SPEX (length npar)
-    par  = None     
+    par  = None
     #: Number of bins in the input energy grid from SPEX
-    neg  = 0       
-    #: Upper boundaries of the energy bins (length neg) 
-    egb  = None     
+    neg  = 0
+    #: Upper boundaries of the energy bins (length neg)
+    egb  = None
     #: Bin centroids of the energy bins (length neg)
-    eg   = None     
+    eg   = None
     #: Bin widths of the energy bins (length deg)
-    deg  = None     
+    deg  = None
 
     # Output parameters:
     
@@ -83,7 +85,7 @@ class IO(object):
     
         # Read parameters into the array for the parameters
         spar=[]
-        for i in numpy.arange(int(self.npar/5)):
+        for i in numpy.arange(math.ceil(self.npar/5)):
           spar.append(str(f.readline()).split())
         
         # Flatten list
@@ -115,7 +117,7 @@ class IO(object):
         self.wener=numpy.zeros(self.neg, dtype=float)
         
 
-    def writespc(self):
+    def Writespc(self):
         """Write the calculated spectrum to the output file for SPEX.
         Make sure that the sener and wener arrays are initialized and 
         filled with a spectrum before calling this function."""

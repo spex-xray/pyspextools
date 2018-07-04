@@ -5,7 +5,7 @@ import os
 import re
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['sphinx','numpy','future','pyfits']
+dependencies = ['sphinx','numpy','future','astropy']
 
 # Auto-generate documentation
 import sphinx

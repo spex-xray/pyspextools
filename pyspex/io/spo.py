@@ -1,18 +1,33 @@
 #!/usr/bin/env python
 
 # =========================================================
-# Python module to read and write SPEX spo files.
-# SPEX spo files contain (background subtracted) spectra
-# See this page for the format specification: 
-#     
-#   http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
-# 
-# This file contains the spo class
-#
-# Dependencies:
-#   - astropy.io.fits:     Read and write FITS files
-#   - numpy:               Array operations
+"""
+  Python module to read and write SPEX spo files.
+  SPEX spo files contain (background subtracted) spectra
+  See this page for the format specification: 
+      
+    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+  
+  This file contains the spo class
+ 
+  Dependencies:
+    - astropy.io.fits:     Read and write FITS files
+    - numpy:               Array operations
+"""
 # =========================================================
+
+# Stuff to import for compatibility between python 2 and 3
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from builtins import int
+from builtins import open
+from builtins import str
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
 
 import astropy.io.fits as fits
 import numpy as np
@@ -24,13 +39,13 @@ import numpy as np
 
 class spo:
     """The spo class contains the spectral information for one
-       spo file. This file can contain multiple spectra (regions). """
+       spo file. This file can contain multiple spectra (regions). 
+       A call to spo() sets the variables that will contain 
+       the spectral information."""
+    
     # -----------------------------------------------------
     # Function to initialize the spo object
     # -----------------------------------------------------
-    
-    # A call to spo() sets the variables that will contain 
-    # the spectral information. 
     # The 'add_' functions below are used to fill the arrays with information.  
     #
 

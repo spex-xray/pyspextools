@@ -1,18 +1,35 @@
 #!/usr/bin/env python
 
 # =========================================================
-# Python module to read and write SPEX res files.
-# SPEX res files contain the response matrix and effective area
-# See this page for the format specification: 
-#     
-#   http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
-# 
-# This file contains the res class
-#
-# Dependencies:
-#   - astropy.io.fits:     Read and write FITS files
-#   - numpy:               Array operations
+"""
+  Python module to read and write SPEX res files.
+  SPEX res files contain the response matrix and effective area
+  See this page for the format specification: 
+      
+    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+  
+  This file contains the res class
+ 
+  Dependencies:
+    - astropy.io.fits:     Read and write FITS files
+    - numpy:               Array operations
+"""
 # =========================================================
+
+# Stuff to import for compatibility between python 2 and 3
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from builtins import int
+from builtins import open
+from builtins import str
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
+
+
 
 import astropy.io.fits as fits
 import numpy as np
@@ -23,7 +40,9 @@ import numpy as np
 # =========================================================
 
 class res:
-    
+    """The res class contains the response information for one
+       res file. This file can contain multiple responses (regions)."""
+       
     def __init__(self):
         
         self.resname=''
@@ -130,7 +149,7 @@ class res:
     # -----------------------------------------------------
     
     def DelResRegion(self,iregion):
-        """Remove region with number 'iregion'"""
+        """Remove region with number 'iregion'."""
         
         stat=self.GetMask(iregion)
         if (stat!=0):

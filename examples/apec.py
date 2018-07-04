@@ -3,15 +3,33 @@
 """
 This example program creates an interface between ATOMDB and
 the SPEX user model. Using this program, the APEC model can be used
-within SPEX. 
+within SPEX.
 
 This model needs the pyatomdb module from atomdb.org and numpy.
 Also set the ATOMDB environment variable to a local ATOMDB installation.
 """
 
+# Stuff to import for compatibility between python 2 and 3
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from builtins import int
+from builtins import open
+from builtins import str
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
+import sys
 import numpy
-import pyatomdb
-from pyspex.user import IO
+from pyspex.model import user
+
+if sys.version_info[0] < 3:
+   import pyatomdb
+else:
+   raise Exception("pyATOMDB does not support Python 3 yet...")
+
 
 """
 User model parameter translation table:
@@ -49,10 +67,13 @@ p30	usr.par[29]	30 Zn
 
 def main():
     # Initialize the IO class. The input file from SPEX will be read automatically.
-    usr=IO()
+    usr=user()
+
+    if sys.version_info[0] > 2:
+      raise Exception("pyATOMDB does not support Python 3 yet...")
 
     if (usr.npar!=30):
-      print "Please set 'npar' parameter to 30 for this model"
+      print("Please set 'npar' parameter to 30 for this model")
       exit
 
     # Create a pyatomdb spectrum session
@@ -93,6 +114,6 @@ def main():
       usr.sener[i]=norm*aspec[i]
 
     # Write the calculated spectrum to the output file: 
-    usr.writespc()
+    usr.Writespc()
 
 main()

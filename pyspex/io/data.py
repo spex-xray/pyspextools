@@ -1,21 +1,36 @@
 #!/usr/bin/env python
 
 # =========================================================
-# Python module to read and write SPEX res and spo files.
-# See this page for the format specification: 
-#     
-#   http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
-# 
-# This module contains the data class:
-#
-#   DATA:      Contains the collection of spectra and
-#              responses organized in SPEX regions   
-#
-# Dependencies:
-#   - numpy:      Array operations
-#   - spo:        The spo class from this pyspex data module
-#   - res:        The res class from this pyspex data module
+"""
+  Python module to read and write SPEX res and spo files.
+  See this page for the format specification: 
+      
+    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+  
+  This module contains the data class:
+ 
+    DATA:      Contains the collection of spectra and
+               responses organized in SPEX regions   
+ 
+  Dependencies:
+    - numpy:      Array operations
+    - spo:        The spo class from this pyspex data module
+    - res:        The res class from this pyspex data module
+"""    
 # =========================================================
+
+# Import stuff for compatibility between python 2 and 3
+from __future__ import print_function
+from __future__ import unicode_literals
+from __future__ import division
+from __future__ import absolute_import
+from builtins import int
+from builtins import open
+from builtins import str
+from future import standard_library
+standard_library.install_aliases()
+from builtins import object
+
 
 import numpy as np
 
@@ -50,7 +65,7 @@ class region:
         pass
         
     def Show(self):
-        """Show a summary of the region metadata"""
+        """Show a summary of the region metadata."""
         
         print("===========================================================")
         print(" Sector:             "+str(self.res.sector[0]))
@@ -183,12 +198,12 @@ class dataset:
           self.regions[ireg].Show()
     
     
-    def AddOGIP(self):
-        """This function needs HEASP to run!"""
-        if not _has_heasp:
-          raise ImportError("HEASP module from HEASOFT is required to do this.")    
-        pass
-        # To be implemented...
+#    def AddOGIP(self):
+#        """This function needs HEASP to run!"""
+#        if not _has_heasp:
+#          raise ImportError("HEASP module from HEASOFT is required to do this.")    
+#        pass
+#        # To be implemented...
 
 
 # =========================================================
