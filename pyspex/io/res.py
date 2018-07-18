@@ -78,6 +78,9 @@ class Res:
         self.mask_group = np.array([], dtype=bool)
         self.mask_icomp = np.array([], dtype=bool)
 
+        # Should channel order be swapped?
+        self.swap = False
+
     # -----------------------------------------------------
     # Function to add a response from another region
     # -----------------------------------------------------
@@ -114,7 +117,7 @@ class Res:
             print("the existing response. The matrices are incompatible.")
             return -1
 
-            # Append the response information to the arrays
+        # Append the response information to the arrays
         self.nchan = np.append(self.nchan, origres.nchan[origres.mask_icomp])
         self.neg = np.append(self.neg, origres.neg[origres.mask_icomp])
         self.sector = np.append(self.sector, origres.sector[origres.mask_icomp])
@@ -392,6 +395,38 @@ class Res:
         thdulist.writeto(resfile)
 
     # -----------------------------------------------------
+    # Swap the channel order between wavelength and energy order
+    # -----------------------------------------------------
+
+    def swap_order(self):
+        """Swap the channel order of the response between wavelength or energy order. This is
+        for example helpful for grating spectra, which are originally stored in wavelength order
+        but must be flipped to energy order in SPEX format."""
+
+        # Loop over components to swap the channel numbers
+        n1=0   # Lowest channel number
+        r1=0   # Index of response array
+
+        for i in np.arange(self.ncomp):
+            n2=n1+self.neg[i]
+            for j in (n1 + np.arange(self.neg[i])):
+                # Update group definition
+                ic2 = self.nchan[i] - self.ic1[j] + 1
+                ic1 = self.nchan[i] - self.ic2[j] + 1
+
+                self.ic1[j] = ic1
+                self.ic2[j] = ic2
+
+                # Update response
+                r2 = r1 + self.nc[j]
+                self.resp[r1:r2] = np.flip(self.resp[r1:r2], 0)
+                if self.resp_der:
+                    self.dresp[r1:r2] = np.flip(self.dresp[r1:r2], 0)
+                r1 = r2
+
+            n1 = n2 + 1
+
+    # -----------------------------------------------------
     # Function to check the response arrays
     # -----------------------------------------------------
 
@@ -411,10 +446,10 @@ class Res:
 
         return 0
 
-        # -----------------------------------------------------
-
+    # -----------------------------------------------------
     # Function to create a masks for a certain region
     # -----------------------------------------------------
+
     def get_mask(self, iregion):
         """Create masks to select a particular region in a .res file. """
         # Check if iregion is in an allowed range

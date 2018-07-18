@@ -70,6 +70,7 @@ class Spo:
         self.dochan = np.array([], dtype=float)  #: Error Source rate (c/s)
         self.mbchan = np.array([], dtype=float)  #: Background rate (c/s)
         self.dbchan = np.array([], dtype=float)  #: Error Background rate (c/s)
+        self.brat = np.array([], dtype=float)   #: Backscale ratio
         self.ssys = np.array([], dtype=float)  #: Systematic error fraction in ochan
         self.bsys = np.array([], dtype=float)  #: Systematic error fraction in bchan
         self.used = np.array([], dtype=bool)  #: true if data channel is used in the calculations
@@ -79,15 +80,41 @@ class Spo:
         #: true if last channel of a binned group, or if it is an unbinned data channel; otherwise false
         self.last = np.array([], dtype=bool)
 
+        # New feature since SPEX 3.05.00
+        self.brat_exist=False                 #: Does the Ext_rate column exist?
+
+        # Does the channel order need to be swapped?
+        self.swap=False
+
         # Create a dictionary with array names
         self.anames = {'echan1': 'Lower_Energy', 'echan2': 'Upper_Energy', 'tints': 'Exposure_Time',
                        'ochan': 'Source_Rate', 'dochan': 'Err_Source_Rate', 'mbchan': 'Back_Rate',
-                       'dbchan': 'Err_Back_Rate', 'ssys': 'Sys_Source', 'bsys': 'Sys_Back', 'used': 'Used',
-                       'first': 'First', 'last': 'Last'}
+                       'dbchan': 'Err_Back_Rate', 'brat': 'Exp_Rate', 'ssys': 'Sys_Source', 'bsys': 'Sys_Back',
+                       'used': 'Used', 'first': 'First', 'last': 'Last'}
 
         # Mask arrays for region selection
         self.mask_region = np.array([], dtype=bool)
         self.mask_spectrum = np.array([], dtype=bool)
+
+
+    # -----------------------------------------------------
+    # Create a spo with zeros and size nchan
+    # -----------------------------------------------------
+    def zero_spo(self,nchan):
+        """Creates empty arrays of size nchan."""
+        self.echan1 = np.zeros(nchan, dtype=float)
+        self.echan2 = np.zeros(nchan, dtype=float)
+        self.tints = np.zeros(nchan, dtype=float)
+        self.ochan = np.zeros(nchan, dtype=float)
+        self.dochan = np.zeros(nchan, dtype=float)
+        self.mbchan = np.zeros(nchan, dtype=float)
+        self.dbchan = np.zeros(nchan, dtype=float)
+        self.brat = np.zeros(nchan, dtype=float)
+        self.ssys = np.zeros(nchan, dtype=float)
+        self.bsys = np.zeros(nchan, dtype=float)
+        self.used = np.ones(nchan, dtype=bool)
+        self.first = np.ones(nchan, dtype=bool)
+        self.last = np.ones(nchan, dtype=bool)
 
     # -----------------------------------------------------
     # Functions to add spectra to the spo file
@@ -112,6 +139,7 @@ class Spo:
         self.dochan = np.append(self.dochan, origspo.dochan[mask])
         self.mbchan = np.append(self.mbchan, origspo.mbchan[mask])
         self.dbchan = np.append(self.dbchan, origspo.dbchan[mask])
+        self.brat = np.append(self.brat, origspo.brat[mask])
         self.ssys = np.append(self.ssys, origspo.ssys[mask])
         self.bsys = np.append(self.bsys, origspo.bsys[mask])
         self.used = np.append(self.used, origspo.used[mask])
@@ -143,6 +171,7 @@ class Spo:
         self.dochan = self.dochan[mask]
         self.mbchan = self.mbchan[mask]
         self.dbchan = self.dbchan[mask]
+        self.brat = self.brat[mask]
         self.ssys = self.ssys[mask]
         self.bsys = self.bsys[mask]
         self.used = self.used[mask]
@@ -182,6 +211,7 @@ class Spo:
         # Now, we open the SPEX_SPECTRUM extension in the .spo file 
         # which contains the actual spectra.
         table = spofile['SPEX_SPECTRUM'].data
+        cols = spofile['SPEX_SPECTRUM'].columns
 
         # Copy all the table columns
         self.echan1 = table['Lower_Energy']
@@ -196,6 +226,14 @@ class Spo:
         self.used = table['Used']
         self.first = table['First']
         self.last = table['Last']
+
+        for col in cols.names:
+           if col == "Exp_Rate":
+               self.brat = table['Exp_Rate']
+               self.brat_exist=True
+
+        if not self.brat_exist:
+            self.brat = np.ones(self.nchan,dtype=float)
 
         # Close the .spo file
         spofile.close()
@@ -232,6 +270,7 @@ class Spo:
         sporeg.dochan = self.dochan[mask]
         sporeg.mbchan = self.mbchan[mask]
         sporeg.dbchan = self.dbchan[mask]
+        sporeg.brat = self.brat[mask]
         sporeg.ssys = self.ssys[mask]
         sporeg.bsys = self.bsys[mask]
         sporeg.used = self.used[mask]
@@ -248,8 +287,10 @@ class Spo:
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
-    def write_file(self, sponame):
-        """Function to write the spectrum to a .spo file with the name 'sponame'. """
+    def write_file(self, sponame, ext_rate=True):
+        """Function to write the spectrum to a .spo file with the name 'sponame'.
+        The ext_rate flag determines whether the Ext_Rate column is added (SPEX >=3.05.00)."""
+
         # First check whether object is complete and consistent
         good = self.check()
 
@@ -279,13 +320,24 @@ class Spo:
         col5 = fits.Column(name='Err_Source_Rate', format='1E', unit='c/s', array=self.dochan)
         col6 = fits.Column(name='Back_Rate', format='1E', unit='c/s', array=self.mbchan)
         col7 = fits.Column(name='Err_Back_Rate', format='1E', unit='c/s', array=self.dbchan)
-        col8 = fits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
-        col9 = fits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
-        col10 = fits.Column(name='First', format='1L', unit='', array=self.first)
-        col11 = fits.Column(name='Last', format='1L', unit='', array=self.last)
-        col12 = fits.Column(name='Used', format='1L', unit='', array=self.used)
 
-        cols = fits.ColDefs([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12])
+        if ext_rate:
+            col8 = fits.Column(name='Ext_rate', format='1E', unit='', array=self.brat)
+            col9 = fits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
+            col10 = fits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
+            col11 = fits.Column(name='First', format='1L', unit='', array=self.first)
+            col12 = fits.Column(name='Last', format='1L', unit='', array=self.last)
+            col13 = fits.Column(name='Used', format='1L', unit='', array=self.used)
+
+            cols = fits.ColDefs([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12, col13])
+        else:
+            col8 = fits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
+            col9 = fits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
+            col10 = fits.Column(name='First', format='1L', unit='', array=self.first)
+            col11 = fits.Column(name='Last', format='1L', unit='', array=self.last)
+            col12 = fits.Column(name='Used', format='1L', unit='', array=self.used)
+
+            cols = fits.ColDefs([col1, col2, col3, col4, col5, col6, col7, col8, col9, col10, col11, col12])
 
         tb_spectrum = fits.BinTableHDU.from_columns(cols)
         tb_spectrum.header['EXTNAME'] = 'SPEX_SPECTRUM'
@@ -295,6 +347,20 @@ class Spo:
 
         # Write hdulist to file
         thdulist.writeto(sponame)
+
+    # -----------------------------------------------------
+    # Swap/Flip arrays between energy or wavelength order
+    # -----------------------------------------------------
+    def swap_order(self):
+        """Swap the channel order of the spectrum between wavelength or energy order. This is
+        for example helpful for grating spectra, which are originally stored in wavelength order
+        but must be flipped to energy order in SPEX format. """
+
+        # Loop over columns in SPO object and swap/flip arrays
+        for var in self.anames.keys():
+            if hasattr(self, var):
+                inarr = getattr(self, var)
+                setattr(self, var, np.flip(inarr, 0))
 
     # -----------------------------------------------------
     # Sanity check whether object is complete and consistent
@@ -310,6 +376,8 @@ class Spo:
             if array.size != total:
                 print("Error: " + self.anames[name] + " array length not consistent!")
                 return -1
+
+        return 0
 
     # -----------------------------------------------------
     # Create a mask for a spo region selection
