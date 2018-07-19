@@ -15,6 +15,8 @@ Welcome to pyspex's documentation!
 
    data
 
+   ogip
+
    examples
 
 

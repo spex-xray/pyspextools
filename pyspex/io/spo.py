@@ -287,9 +287,11 @@ class Spo:
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
-    def write_file(self, sponame, ext_rate=True):
+    def write_file(self, sponame, ext_rate=False, overwrite=False):
         """Function to write the spectrum to a .spo file with the name 'sponame'.
-        The ext_rate flag determines whether the Ext_Rate column is added (SPEX >=3.05.00)."""
+        The ext_rate flag determines whether the Ext_Rate column is added containing
+        the ratio between the backscales of the source and background spectra. This column
+        can only be read by SPEX >=3.05.00."""
 
         # First check whether object is complete and consistent
         good = self.check()
@@ -346,7 +348,11 @@ class Spo:
         thdulist = fits.HDUList([prihdu, tb_regions, tb_spectrum])
 
         # Write hdulist to file
-        thdulist.writeto(sponame)
+        try:
+            thdulist.writeto(sponame, overwrite=overwrite)
+        except IOError:
+            print("Error: File {0} already exists. I will not overwrite it!".format(sponame))
+
 
     # -----------------------------------------------------
     # Swap/Flip arrays between energy or wavelength order

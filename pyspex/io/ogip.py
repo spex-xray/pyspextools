@@ -28,6 +28,7 @@ except ImportError:
 else:
     has_heasp = True
 
+
 class OGIPRegion(Region):
     """The OGIPRegion class contains methods to read OGIP data into the pyspex module and convert these to spo and res
     format objects."""
@@ -85,7 +86,7 @@ class OGIPRegion(Region):
         self.save_grouping = grouping
 
         # Check the consistency between the OGIP files
-        stat = self.check()
+        stat = self.check_ogip()
         if stat != 0:
             print("Error: Check of OGIP files failed.")
             return
@@ -201,11 +202,11 @@ class OGIPRegion(Region):
             print("Error: No correction file specified.")
 
     # -----------------------------------------------------
-    # Do a consistency check
+    # Do a consistency check for the OGIP part
     # -----------------------------------------------------
 
-    def check(self):
-        """Check consistency of the OGIP files."""
+    def check_ogip(self):
+        """Check consistency of the OGIP files in this class."""
 
         # Check consistency of the source spectrum
         print("Check OGIP source spectrum... ", end='')
@@ -270,6 +271,42 @@ class OGIPRegion(Region):
         return 0
 
     # -----------------------------------------------------
+    # Show a summary of the provided OGIP data
+    # -----------------------------------------------------
+
+    def show_ogip(self):
+        """Shows a summary of the loaded OGIP data."""
+
+        print("===========================================================")
+        print("Summary of OGIP information:")
+        print("===========================================================")
+
+        print(self.spec.disp())
+
+        if self.input_back:
+            print(self.back.disp())
+        else:
+            print("No background spectrum provided.")
+            print("")
+
+        if self.input_corr:
+            print(self.corr.disp())
+        else:
+            print("No correction spectrum provided.")
+            print("")
+
+        print(self.resp.disp())
+
+        if self.input_area:
+            print(self.area.disp())
+        else:
+            print("No effective area file provided.")
+            print("")
+
+        print("===========================================================")
+
+
+    # -----------------------------------------------------
     # Return a spo object derived from the OGIP data
     # -----------------------------------------------------
 
@@ -287,12 +324,13 @@ class OGIPRegion(Region):
         # Determine number of channels and add to spo
         nchan = self.spec.NumberChannels()
         spo.nchan = np.append(spo.nchan, nchan)
+        spo.sponame = None
 
         # Initialize local arrays for spectral rates
-        ochan = np.zeros(nchan, dtype=float)        # Local variable containing the source rate
-        mbchan = np.zeros(nchan, dtype=float)       # Local variable containing the background rate
-        dbchan = np.zeros(nchan, dtype=float)       # Local variable containing the error on the background
-        corr = np.zeros(nchan, dtype=float)         # Local variable containing the correction spectrum
+        ochan = np.zeros(nchan, dtype=float)  # Local variable containing the source rate
+        mbchan = np.zeros(nchan, dtype=float)  # Local variable containing the background rate
+        dbchan = np.zeros(nchan, dtype=float)  # Local variable containing the error on the background
+        corr = np.zeros(nchan, dtype=float)  # Local variable containing the correction spectrum
 
         # Read source rate per bin (or convert to rate)
         ochan = self.__read_counts_pha(self.spec, ochan, nchan)
@@ -301,7 +339,7 @@ class OGIPRegion(Region):
         if self.input_back:
             mbchan = self.__read_counts_pha(self.back, mbchan, nchan)
             # If the error is provided in the file, use this column
-            if hasattr(self.back, 'StatError'):
+            if hasattr(self.back, 'StatError') and not self.back.Poisserr:
                 for i in np.arange(nchan):
                     if self.back.Datatype == "COUNT":
                         dbchan[i] = float(self.back.StatError[i]) / self.back.Exposure
@@ -314,8 +352,7 @@ class OGIPRegion(Region):
             # If the error is not in the file, assume Poissonian errors
             else:
                 for i in np.arange(nchan):
-                    dbchan[i]=math.sqrt(mbchan[i] / self.back.Exposure)
-
+                    dbchan[i] = math.sqrt(mbchan[i] / self.back.Exposure)
 
         # Read correction spectrum if available
         if self.input_corr:
@@ -331,7 +368,7 @@ class OGIPRegion(Region):
             # Calculate the source rates and errors
             if spo.tints[i] > 0:
                 spo.ochan[i] = ochan[i] / self.spec.AreaScaling[i]
-                spo.dochan[i] = spo.ochan[i] / spo.tints[i]         # Add the errors in square later
+                spo.dochan[i] = spo.ochan[i] / spo.tints[i]  # Add the errors in square later
             else:
                 spo.ochan[i] = 0.
                 spo.dochan[i] = 0.
@@ -414,8 +451,8 @@ class OGIPRegion(Region):
                     spo.last[i] = False
                 if self.spec.Grouping[i] == 0:
                     spo.first[i] = False
-                    if i < nchan-1:
-                        if self.spec.Grouping[i+1] == 1:
+                    if i < nchan - 1:
+                        if self.spec.Grouping[i + 1] == 1:
                             spo.last[i] = True
                     elif i == nchan - 1:
                         spo.last[i] = True
@@ -439,6 +476,8 @@ class OGIPRegion(Region):
             if spo.echan1[0] > spo.echan1[1]:
                 spo.swap = True
                 spo.swap_order()
+
+        spo.empty=False
 
         return spo
 
@@ -482,6 +521,7 @@ class OGIPRegion(Region):
         res.nregion = 1
         res.sector = np.append(res.sector, 1)
         res.region = np.append(res.region, 1)
+        res.resname = None
 
         # Read the total number of groups (which is neg in SPEX format)
         res.neg = np.append(res.neg, self.resp.NumberTotalGroups())
@@ -494,7 +534,7 @@ class OGIPRegion(Region):
 
         # Read the total number of matrix elements
         nm = self.resp.NumberTotalElements()
-        res.resp=np.zeros(nm, dtype=float)
+        res.resp = np.zeros(nm, dtype=float)
 
         # Set the number of components to 1 (no optimization or re-ordering)
         res.ncomp = 1
@@ -515,11 +555,13 @@ class OGIPRegion(Region):
 
                 res.eg2[g] = self.resp.HighEnergy[i]
                 if res.eg2[g] <= res.eg1[g]:
-                    print("Error: Discontinous bins in energy array in channel {0}. Please check the numbers.".format(i + 1))
+                    print("Error: Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
+                        i + 1))
                     return
 
                 res.nc[g] = self.resp.NumberChannelsGroup[g]
-                res.ic1[g] = self.resp.FirstChannelGroup[g] + 1  # +1 because C++ starts counting at 0 and Fortran with 1
+                res.ic1[g] = self.resp.FirstChannelGroup[
+                                 g] + 1  # +1 because C++ starts counting at 0 and Fortran with 1
                 ic2 = res.ic1[g] + res.nc[g] - 1
                 res.ic2[g] = ic2
 
@@ -550,4 +592,3 @@ class OGIPRegion(Region):
         res.empty = False
 
         return res
-

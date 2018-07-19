@@ -324,7 +324,7 @@ class Res:
     # Function to write a response to a .res file
     # -----------------------------------------------------
 
-    def write_file(self, resfile):
+    def write_file(self, resfile, overwrite=False):
         """Write the response information to a .res file with name 'resfile'."""
 
         check = self.check()
@@ -392,7 +392,10 @@ class Res:
         thdulist = fits.HDUList([prihdu, tb_icomp, tb_group, tb_resp])
 
         # Write hdulist to file
-        thdulist.writeto(resfile)
+        try:
+            thdulist.writeto(resfile, overwrite=overwrite)
+        except IOError:
+            print("Error: File {0} already exists. I will not overwrite it!".format(resfile))
 
     # -----------------------------------------------------
     # Swap the channel order between wavelength and energy order
