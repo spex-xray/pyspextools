@@ -353,7 +353,6 @@ class Spo:
         except IOError:
             print("Error: File {0} already exists. I will not overwrite it!".format(sponame))
 
-
     # -----------------------------------------------------
     # Swap/Flip arrays between energy or wavelength order
     # -----------------------------------------------------
@@ -374,13 +373,21 @@ class Spo:
 
     def check(self):
         """Perform several checks whether the information in the spectrum is consistent. """
+
+        # Check if nchan is numpy array
+        if not isinstance(self.nchan, np.ndarray):
+            print("Error: NCHAN is not a numpy array.")
+            return -1
+
         # Check if all the columns have the right length
-        total = self.nchan.sum()
+        total = np.sum(self.nchan)
 
         for name in self.anames.keys():
             array = getattr(self, name)
             if array.size != total:
                 print("Error: " + self.anames[name] + " array length not consistent!")
+                print("According to nchan the length should be: {0}".format(total))
+                print("The actual array length is:              {0}".format(array.size))
                 return -1
 
         return 0
@@ -437,15 +444,3 @@ class Spo:
         print(" Data energy range                      :  {0:.2f} - {1:.2f} keV".format(np.min(tspo.echan1),
                                                                                         np.max(tspo.echan2)))
         print(" Exposure time mean                     :  {0:.2f} s".format(np.mean(tspo.tints)))
-
-
-# =========================================================
-# Finally, a trick to run the module from the command line
-# as an executable for testing purposes.
-# =========================================================
-
-if __name__ == "__main__":
-    test = Spo()
-    test.read_file("rgs.spo")
-    test.del_spo_region(1)
-    test.write_file("rgs_test.spo")

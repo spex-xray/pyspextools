@@ -14,7 +14,7 @@ from future import standard_library
 import numpy as np
 import math
 
-from .data import Region
+from .region import Region
 from .res import Res
 from .spo import Spo
 
@@ -65,22 +65,22 @@ class OGIPRegion(Region):
         are mandatory. If needed, a background file and effective area file can be added."""
 
         # Read the source PHA file
-        self.read_source_pha(phafile)
+        self.__read_source_pha(phafile)
 
         # Read the background PHA file if specified:
         if bkgfile is not None:
-            self.read_background_pha(bkgfile)
+            self.__read_background_pha(bkgfile)
 
         # Read a correction spectrum if specified:
         if corrfile is not None:
-            self.read_corr(corrfile)
+            self.__read_corr(corrfile)
 
         # Read the response matrix
-        self.read_rmf(rmffile)
+        self.__read_rmf(rmffile)
 
         # Read the effective area
         if arffile is not None:
-            self.read_arf(arffile)
+            self.__read_arf(arffile)
 
         # Should the spectrum grouping remain?
         self.save_grouping = grouping
@@ -93,16 +93,20 @@ class OGIPRegion(Region):
 
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
-            spo = self.ogip_to_spo()
+            print("Convert OGIP spectra to spo format... ", end='')
+            spo = self.__ogip_to_spo()
             if spo != 0:
                 self.spo = spo
+                print("OK")
             else:
                 print("Error: OGIP to SPO failed.")
                 return
 
-            res = self.ogip_to_res()
+            print("Convert OGIP response to res format... ", end='')
+            res = self.__ogip_to_res()
             if res != 0:
                 self.res = res
+                print("OK")
             else:
                 print("Error: OGIP to RES failed.")
                 return
@@ -126,7 +130,7 @@ class OGIPRegion(Region):
     # Read an OGIP pha file
     # -----------------------------------------------------
 
-    def read_source_pha(self, phafile):
+    def __read_source_pha(self, phafile):
         """Open a pha file containing the source spectrum."""
         stat = self.spec.read(phafile)
         if stat != 0:
@@ -145,7 +149,7 @@ class OGIPRegion(Region):
     # Read an OGIP background file
     # -----------------------------------------------------
 
-    def read_background_pha(self, bkgfile):
+    def __read_background_pha(self, bkgfile):
         """Open a pha file containing the background spectrum (if specified)."""
         if bkgfile is not None:
             stat = self.back.read(bkgfile)
@@ -161,7 +165,7 @@ class OGIPRegion(Region):
     # Read an OGIP rmf file
     # -----------------------------------------------------
 
-    def read_rmf(self, rmffile):
+    def __read_rmf(self, rmffile):
         """Open rmf file containing the response matrix."""
         stat = self.resp.read(rmffile)
         if stat != 0:
@@ -174,7 +178,7 @@ class OGIPRegion(Region):
     # Read an OGIP arf file
     # -----------------------------------------------------
 
-    def read_arf(self, arffile):
+    def __read_arf(self, arffile):
         """Read arf file containing the effective area."""
         if arffile is not None:
             stat = self.area.read(arffile)
@@ -182,8 +186,8 @@ class OGIPRegion(Region):
                 print("Error: Unable to read ARF file.")
             self.input_area = True
             # Check if arf and rmf are compatible
-            if self.resp.checkCompatibility(self.area) == 0:
-                self.resp *= self.area
+            if self.resp.checkCompatibility(self.area) != 0:
+                print("Error: The ARF is incompatible with the provided response matrix.")
         else:
             print("Error: No effective area filename specified.")
 
@@ -191,7 +195,7 @@ class OGIPRegion(Region):
     # Read an OGIP corr file
     # -----------------------------------------------------
 
-    def read_corr(self, corrfile):
+    def __read_corr(self, corrfile):
         """Read correction file if specified."""
         if corrfile is not None:
             stat = self.corr.read(corrfile)
@@ -310,7 +314,7 @@ class OGIPRegion(Region):
     # Return a spo object derived from the OGIP data
     # -----------------------------------------------------
 
-    def ogip_to_spo(self):
+    def __ogip_to_spo(self):
         """Convert the source and optional background and correction spectra from OGIP to SPEX format. This
         method returns a pyspex Spo object containing the source and background rates. Please make sure that
         all necessary OGIP files are read in before running this method."""
@@ -325,6 +329,7 @@ class OGIPRegion(Region):
         nchan = self.spec.NumberChannels()
         spo.nchan = np.append(spo.nchan, nchan)
         spo.sponame = None
+        spo.nregion = 1
 
         # Initialize local arrays for spectral rates
         ochan = np.zeros(nchan, dtype=float)  # Local variable containing the source rate
@@ -498,7 +503,7 @@ class OGIPRegion(Region):
     # Return a res object derived from the OGIP data
     # -----------------------------------------------------
 
-    def ogip_to_res(self):
+    def __ogip_to_res(self):
         """Convert response matrix from OGIP to SPEX format. The response matrix is translated one-to-one
         without optimizations. All groups in the OGIP matrix are put into one SPEX response component. This
         method returns a pyspex Res object containing the response matrix."""
@@ -560,8 +565,8 @@ class OGIPRegion(Region):
                     return
 
                 res.nc[g] = self.resp.NumberChannelsGroup[g]
-                res.ic1[g] = self.resp.FirstChannelGroup[
-                                 g] + 1  # +1 because C++ starts counting at 0 and Fortran with 1
+                # Add the start channel to the IC to correct for cases where we start at channel 0/1
+                res.ic1[g] = self.resp.FirstChannelGroup[g] + self.resp.FirstChannel
                 ic2 = res.ic1[g] + res.nc[g] - 1
                 res.ic2[g] = ic2
 

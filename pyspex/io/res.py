@@ -429,25 +429,6 @@ class Res:
 
             n1 = n2 + 1
 
-    # -----------------------------------------------------
-    # Function to check the response arrays
-    # -----------------------------------------------------
-
-    def check(self):
-        """Perform a number of checks to see if the response information is consistent."""
-        # Check if the number of indexed channels is equal to the length of the response array
-        if sum(self.nc) != len(self.resp):
-            print("Error: Number of indexed channels not equal to response array.")
-            return -1
-
-        # Check if the channel start and end bin are consistent with the number of channels      
-        for j in np.arange(len(self.neg)):
-            check = self.ic2[j] - self.ic1[j] + 1
-            if check != self.nc[j]:
-                print("Error: Number of group channels not consistent.")
-                return -1
-
-        return 0
 
     # -----------------------------------------------------
     # Function to create a masks for a certain region
@@ -496,6 +477,29 @@ class Res:
         return 0
 
     # -----------------------------------------------------
+    # Function to check the response arrays
+    # -----------------------------------------------------
+
+    def check(self):
+        """Perform a number of checks to see if the response information is consistent."""
+        # Check if the number of indexed channels is equal to the length of the response array
+        if sum(self.nc) != self.resp.size:
+            print("")
+            print("Error: Number of indexed channels not equal to response array.")
+            print("Sum of channels in group:  {0}".format(sum(self.nc)))
+            print("Length of response array:  {0}".format(self.resp.size))
+            return -1
+
+        # Check if the channel start and end bin are consistent with the number of channels
+        for j in np.arange(len(self.neg)):
+            check = self.ic2[j] - self.ic1[j] + 1
+            if check != self.nc[j]:
+                print("Error: Number of group channels not consistent.")
+                return -1
+
+        return 0
+
+    # -----------------------------------------------------
     # Show summary of response file
     # -----------------------------------------------------
 
@@ -507,15 +511,3 @@ class Res:
         print(" Original response file name            :  {0}".format(tres.resname))
         print(" Number of data channels in response    :  {0}".format(tres.nchan[0]))
         print(" Number of response components          :  {0}".format(tres.ncomp))
-
-
-# =========================================================
-# Finally, a trick to run the module from the command line
-# as an executable for testing purposes.
-# =========================================================
-
-if __name__ == "__main__":
-    test = Res()
-    test.read_file("rgs.res")
-    test.del_res_region(1)
-    test.write_file("rgs_test.res")

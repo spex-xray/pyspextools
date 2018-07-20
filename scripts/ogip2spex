@@ -1,0 +1,56 @@
+#!/usr/bin/env python
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import argparse
+from pyspex.io.ogip import OGIPRegion
+from pyspex.data.badchannels import clean_region
+
+# See if Heasoft python modules are available
+try:
+    import heasp
+except ImportError:
+    has_heasp = False
+else:
+    has_heasp = True
+
+from builtins import int
+
+from future import standard_library
+
+standard_library.install_aliases()
+
+
+def main():
+    # This script needs HEASP to run...
+
+    if not has_heasp:
+         raise ImportError("HEASP module from HEASOFT is required for OGIP functionality.\n "
+                           "Please source your local HEASOFT installation to use this program.")
+
+    # Obtain command line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--phafile', help='PHA source spectrum', type=str, required=True)
+    parser.add_argument('--bkgfile', help='Background spectrum', type=str)
+    parser.add_argument('--rmffile', help='Response matrix', type=str, required=True)
+    parser.add_argument('--arffile', help='Effective area file', type=str)
+    args = parser.parse_args()
+
+    ogip = OGIPRegion()
+
+    print("Input PHA file: {0}".format(args.phafile))
+    print("Input Background file: {0}".format(args.bkgfile))
+    print("Input Response file: {0}".format(args.rmffile))
+    print("Input Effective area file: {0}".format(args.arffile))
+
+    ogip.read_region(args.phafile,args.rmffile,bkgfile=args.bkgfile,arffile=args.arffile)
+
+    ogip = clean_region(ogip)
+
+    ogip.spo.write_file("test1.spo")
+    ogip.res.write_file("test1.res")
+
+main()

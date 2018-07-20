@@ -32,50 +32,11 @@ from future import standard_library
 
 import numpy as np
 
+from .region import Region
 from .spo import Spo
 from .res import Res
 
 standard_library.install_aliases()
-
-# See if Heasoft python modules are available
-try:
-    import heasp
-except ImportError:
-    has_heasp = False
-else:
-    has_heasp = True
-
-
-# =========================================================
-# Region class
-# =========================================================
-
-class Region:
-    """A SPEX region is a spectrum/response combination for a
-       specific observation, instrument or region on the sky.
-       It combines the spectrum and response file in one object."""
-
-    def __init__(self):
-        self.spo = Spo()
-        self.res = Res()
-
-    def check(self):
-        """Check whether spectrum and response are compatible
-           and whether the arrays really consist of one region."""
-        pass
-
-    def show(self):
-        """Show a summary of the region metadata."""
-
-        print("===========================================================")
-        print(" Sector:             " + str(self.res.sector[0]))
-        print(" Region:             " + str(self.res.region[0]))
-
-        print(" --------------------  Spectrum  -------------------------")
-        self.spo.show()
-
-        print(" --------------------  Response  -------------------------")
-        self.res.show(iregion=self.res.region[0])
 
 
 # =========================================================
@@ -193,23 +154,3 @@ class Dataset:
         """Show a summary for the entire dataset"""
         for ireg in np.arange(len(self.regions)):
             self.regions[ireg].show()
-
-
-#    def AddOGIP(self):
-#        """This function needs HEASP to run!"""
-#        if not _has_heasp:
-#          raise ImportError("HEASP module from HEASOFT is required to do this.")    
-#        pass
-#        # To be implemented...
-
-
-# =========================================================
-# Finally, a trick to run the module from the command line
-# as an executable for testing purposes.
-# =========================================================
-
-if __name__ == "__main__":
-    dat = Dataset()
-    dat.read_all_regions("rgs.spo", "rgs.res")
-    dat.show()
-    dat.write_region("rgs_test.spo", "rgs_test.res", 1)
