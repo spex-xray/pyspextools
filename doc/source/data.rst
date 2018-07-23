@@ -1,7 +1,7 @@
 .. _datamodule:
 
-The SPEX data format
-====================
+pyspex.io: The SPEX data format
+===============================
 
 This is a Python class to read, write and manipulate 
 SPEX spectrum and response file (.spo and .res). The

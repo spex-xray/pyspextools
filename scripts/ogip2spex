@@ -5,9 +5,13 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import os
+import sys
 import argparse
+import pyspex
 from pyspex.io.ogip import OGIPRegion
 from pyspex.data.badchannels import clean_region
+import pyspex.messages as message
 
 # See if Heasoft python modules are available
 try:
@@ -25,6 +29,15 @@ standard_library.install_aliases()
 
 
 def main():
+    """The OGIP2spex script offers a quick way to convert OGIP type spectra to SPEX format.
+    It reads OGIP PHA type I spectra and responses. After the conversion to SPEX format, the
+    files are filtered for bad channels (optional)."""
+
+    print("==================================")
+    print(" This is ogip2spex version {0}".format(pyspex.__version__))
+    print("==================================")
+    print("")
+
     # This script needs HEASP to run...
 
     if not has_heasp:
@@ -32,13 +45,32 @@ def main():
                            "Please source your local HEASOFT installation to use this program.")
 
     # Obtain command line arguments
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--phafile', help='PHA source spectrum', type=str, required=True)
-    parser.add_argument('--bkgfile', help='Background spectrum', type=str)
-    parser.add_argument('--rmffile', help='Response matrix', type=str, required=True)
-    parser.add_argument('--arffile', help='Effective area file', type=str)
+    parser = ogip2spex_arguments()
     args = parser.parse_args()
 
+    # Set color in the terminal
+    message.set_color(args.color)
+
+    # Check if input spo and res filenames have the right extension:
+    sponame, spo_extension = os.path.splitext(args.spofile)
+    if spo_extension != ".spo":
+        message.warning("Output filename does not have the correct .spo extension.")
+        print("Renaming file to end at '.spo'.")
+        print("")
+        spofile = args.spofile + '.spo'
+    else:
+        spofile = args.spofile
+
+    resname, res_extension = os.path.splitext(args.resfile)
+    if res_extension != ".res":
+        message.warning("Output filename does not have the correct .res extension.")
+        print("Renaming file to end with '.res'.")
+        print("")
+        resfile = args.resfile + '.res'
+    else:
+        resfile = args.resfile
+
+    # Load OGIP spectra and response files
     ogip = OGIPRegion()
 
     print("Input PHA file: {0}".format(args.phafile))
@@ -48,9 +80,48 @@ def main():
 
     ogip.read_region(args.phafile,args.rmffile,bkgfile=args.bkgfile,arffile=args.arffile)
 
-    ogip = clean_region(ogip)
+    # Filter for bad channels (if not blocked by command line argument)
+    if args.badchan:
+        ogip = clean_region(ogip)
 
-    ogip.spo.write_file("test1.spo")
-    ogip.res.write_file("test1.res")
+    # Add the ogip2spex command to the file history
+    history = []
+    history.append("OGIP2SPEX version: {0}".format(pyspex.__version__))
+    command = ''
+    for arg in sys.argv:
+        command = command + ' ' + arg
+    history.append("Command used: {0}".format(command))
+    history.append("Variables derived from commandline:")
+    for arg in vars(args):
+        line = "{0} : {1}".format(arg, getattr(args,arg))
+        history.append(line)
 
-main()
+    # Write output spo and res file
+    print("Writing SPO to file: {0}".format(spofile))
+    ogip.spo.write_file(spofile,ext_rate=args.extrate,overwrite=args.overwrite,history=history)
+
+    print("Writing RES to file: {0}".format(resfile))
+    ogip.res.write_file(resfile,overwrite=args.overwrite,history=history)
+
+# Get command line arguments
+def ogip2spex_arguments():
+    # Obtain command line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--phafile', help='Input PHA source spectrum (required)', type=str, required=True)
+    parser.add_argument('--bkgfile', help='Input Background spectrum', type=str)
+    parser.add_argument('--rmffile', help='Input Response matrix (required)', type=str, required=True)
+    parser.add_argument('--arffile', help='Input Effective area file', type=str)
+    parser.add_argument('--spofile', help='Output SPEX spectrum file (.spo, required)', type=str, required=True)
+    parser.add_argument('--resfile', help='Output SPEX response file (.res, required)', type=str, required=True)
+    parser.add_argument('--keep-badchannels', help='Do not remove bad channels.', dest="badchan", action="store_false",
+                        default=True)
+    parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
+                        default=False)
+    parser.add_argument('--extrate', help="Write additional Ext_Rate column (SPEX >=3.05.00).", action="store_true",
+                        default=False)
+    parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
+
+    return parser
+
+if __name__ == "__main__":
+    main()

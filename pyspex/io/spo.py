@@ -25,6 +25,7 @@ from __future__ import unicode_literals
 
 import astropy.io.fits as fits
 import numpy as np
+import datetime
 
 # Stuff to import for compatibility between python 2 and 3
 
@@ -287,7 +288,7 @@ class Spo:
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
-    def write_file(self, sponame, ext_rate=False, overwrite=False):
+    def write_file(self, sponame, ext_rate=False, overwrite=False, history=None):
         """Function to write the spectrum to a .spo file with the name 'sponame'.
         The ext_rate flag determines whether the Ext_Rate column is added containing
         the ratio between the backscales of the source and background spectra. This column
@@ -305,6 +306,13 @@ class Spo:
         prihdr = fits.Header()
         prihdr['CREATOR'] = 'pyspex python module'
         prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
+
+        now = datetime.datetime.now()
+        prihdr['HISTORY'] = "Created on: {0}".format(str(now))
+        if history is not None:
+            for line in history:
+                prihdr['HISTORY'] = line
+
         prihdu = fits.PrimaryHDU(header=prihdr)
 
         # Create the SPEX_REGIONS extension

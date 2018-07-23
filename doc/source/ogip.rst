@@ -1,19 +1,21 @@
 
-Importing OGIP files
-====================
+pyspex.io.ogip: Importing OGIP files
+====================================
 
 The pyspex module offers to import OGIP spectral files and convert them to 
 SPEX format. The OGIP interface is provided by the HEASP module from NASA's 
-HEASOFT package (Keith Arnaud, `HEASP <https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/>`_ ).
+HEASOFT package (Keith Arnaud, `HEASP <https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/>`_).
 
- **Important note:** This functionality depends on the HEASP module, which currently 
- only supports Python 2.7!
+.. NOTE::
+   This functionality depends on the HEASP module, which currently
+   only supports Python 2.7!
  
 The pyspex OGIPRegion class contains methods to read a source spectrum, background 
 spectrum, response file and effective area file, and save them as a SPEX region, which 
 can be used by the other methods in the pyspex module. Please note that the
 module does a direct translation of the OGIP files. No filtering of bad channels or
-other optimizations are performed. 
+other optimizations are performed. Bad channel filtering and optimizations can be
+found in pyspex.data.
 
 The main method of the OGIPRegion class is read_region. We recommend to use this 
 method to read a combination of a spectrum and response matrix. This method will
@@ -36,10 +38,11 @@ source and background rates with errors is relatively straightforward. The areas
 backscal values from the PHA file are used to scale the spectral rates and errors as they
 are stored in SPEX format.
 
-  **Important note:** The method of subtracting the background from a spectrum provides wrong
-  results in case of Poisson distributed data and C-statistics. It would be better to
-  use a model for the background instead. Such alternatives will be implemented from
-  SPEX version >=3.05.00.   
+.. NOTE::
+   The method of subtracting the background from a spectrum provides wrong
+   results in case of Poisson distributed data and C-statistics. It would be better to
+   use a model for the background instead. Such alternatives will be implemented from
+   SPEX version >=3.05.00.
 
 This method does not yet ignore bad channels. In pyspex this is regarded as additional 
 filtering of the data and is implemented in a different method (ref). Therefore, this

@@ -6,6 +6,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 from pyspex.io.region import Region
+import pyspex.messages as message
 
 import numpy as np
 
@@ -19,24 +20,24 @@ standard_library.install_aliases()
 
 def clean_region(reg):
     """Remove bad channels and channels with zero response from the region."""
-    
+
     if not isinstance(reg, Region):
-        print("The input object is not of type Region.")
+        message.error("The input object is not of type Region.")
         return 1
-    
+
     if reg.spo.empty:
-        print("The input spo object is empty.")
+        message.error("The input spo object is empty.")
         return -1
 
     if reg.res.empty:
-        print("The input spo object is empty.")
+        message.error("The input spo object is empty.")
         return -1
 
-    print("Identify bad channels in spectrum and response matrix and re-index matrix... ", end='')
+    message.proc_start("Identify bad channels in spectrum and response matrix and re-index matrix")
 
     (chanmask, groupmask, respmask) = __get_bad_channel_masks(reg)
 
-    print("OK")
+    message.proc_end(0)
 
     # Print number of good and bad channels
     goodchan = np.sum(chanmask)
@@ -45,7 +46,7 @@ def clean_region(reg):
     print("Number of good channels: {0}".format(goodchan))
     print("Number of bad channels:  {0}".format(badchan))
 
-    print("Removing bad channels from spectral region... ", end='')
+    message.proc_start("Removing bad channels from spectral region")
 
     spo = reg.spo
 
@@ -70,10 +71,8 @@ def clean_region(reg):
     # Check the consistency of the new object
     stat = spo.check()
 
-    if stat == 0:
-        print("OK")
-    else:
-        print("ERROR")
+    # Show result to user
+    message.proc_end(stat)
 
     # Copy the filtered object to the original region
     reg.spo = spo
@@ -86,17 +85,17 @@ def clean_region(reg):
 
     # Print number of removed response elements
     badelements = respmask.size - np.sum(respmask)
-    
+
     print("Number of original response elements:  {0}".format(respmask.size))
     print("Number of bad response elements:       {0}".format(badelements))
 
-    print("Removing bad channels from response matrix... ", end='')
+    message.proc_start("Removing bad channels from response matrix")
 
     # Mask response array
     reg.res.resp = reg.res.resp[respmask]
     if reg.res.resp_der:
         reg.res.dresp = reg.res.dresp[respmask]
-    
+
     # Mask group arrays
     reg.res.eg1 = reg.res.eg1[groupmask]
     reg.res.eg2 = reg.res.eg2[groupmask]
@@ -114,42 +113,39 @@ def clean_region(reg):
         reg.res.neg[icomp] = np.sum(groupmask[eg_start:eg_end])
         eg_start = eg_end + 1
 
-    stat=reg.res.check()
+    stat = reg.res.check()
 
-    if stat == 0:
-        print("OK")
-    else:
-        print("ERROR")
-        return
-    
+    message.proc_end(stat)
+
     return reg
+
 
 def __get_bad_channel_masks(reg):
     """Identify channels with zero response."""
 
     # Get the amount of channels and create a channel chanmask with that size
-    chanmask = reg.spo.used
+    chanmask = np.zeros(reg.spo.used.size, dtype=bool)
 
     if reg.spo.nchan != reg.spo.used.size:
-        print("Error: Mismatch in number of channels in spo object.")
+        message.error("Mismatch in number of channels in spo object.")
         return 1
 
     if chanmask.size != reg.res.nchan[0]:
-        print("Error: Mismatch in number of channels between res and spo object.")
+        message.error("Mismatch in number of channels between res and spo object.")
         return 1
 
     # Create a mask array for the number of groups (all true)
     groupmask = np.ones(reg.res.nc.size, dtype=bool)
 
     if groupmask.size != np.sum(reg.res.neg):
-        print("Error: Mismatch between the number of groups in the ICOMP and GROUP extensions.")
+        message.error("Mismatch between the number of groups in the ICOMP and GROUP extensions.")
         return 1
 
     # Create a mask array for the number of response elements (all true)
     respmask = np.ones(reg.res.resp.size, dtype=bool)
 
     if respmask.size != np.sum(reg.res.nc):
-        print("Error: Mismatch between the number of response elements in the GROUP and RESP extensions.")
+        message.error("Mismatch between the number of response elements in the GROUP and RESP extensions.")
         return 1
 
     ir = 0
@@ -160,35 +156,38 @@ def __get_bad_channel_masks(reg):
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j
             if ic > ic2:
-                print("Error: Mismatch in number of channels.")
-            if chanmask[ic]:
-                if reg.res.resp[ir] <= 0.0:
-                    chanmask[ic] = False
+                message.error("Error: Mismatch in number of channels.")
+            if reg.res.resp[ir] <= 0.0:
+                chanmask[ic] = False or chanmask[ic]
+            else:
+                chanmask[ic] = True
 
             ir = ir + 1
+
+    chanmask = np.logical_and(chanmask, reg.spo.used)
 
     # Loop over groups to set the new channel boundaries and fill respmask
     newie = 0  # Index of energy bins
     ir = 0  # Index of response elements in original array (at maximum reg.res.resp.size)
-    
+
     for ie in np.arange(reg.res.eg1.size):
 
         ic1 = reg.res.ic1[ie]  # Original first channel of group
-        first = True           # Is this the first channel of the group?
+        first = True  # Is this the first channel of the group?
         newnc = 0
-        
+
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j
-            if chanmask[ic]:      # If channel is good
-                newnc = newnc + 1   # Count number of good channels in group
-                if first:           # If this is the first good bin of the group, set ic1
+            if chanmask[ic]:  # If channel is good
+                newnc = newnc + 1  # Count number of good channels in group
+                if first:  # If this is the first good bin of the group, set ic1
                     first = False
                     reg.res.ic1[ie] = np.sum(chanmask[0:ic]) + 1
             else:
                 respmask[ir] = False
 
             ir = ir + 1
-    
+
         # Set new ic1, ic2 and nc
         reg.res.ic2[ie] = reg.res.ic1[ie] + newnc - 1
         reg.res.nc[ie] = reg.res.ic2[ie] - reg.res.ic1[ie] + 1
@@ -198,4 +197,4 @@ def __get_bad_channel_masks(reg):
         else:
             newie = newie + 1
 
-    return (chanmask,groupmask,respmask)
+    return chanmask, groupmask, respmask

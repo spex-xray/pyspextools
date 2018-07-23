@@ -22,6 +22,7 @@ from __future__ import unicode_literals
 
 import astropy.io.fits as fits
 import numpy as np
+import datetime
 
 # Stuff to import for compatibility between python 2 and 3
 
@@ -324,7 +325,7 @@ class Res:
     # Function to write a response to a .res file
     # -----------------------------------------------------
 
-    def write_file(self, resfile, overwrite=False):
+    def write_file(self, resfile, overwrite=False, history=None):
         """Write the response information to a .res file with name 'resfile'."""
 
         check = self.check()
@@ -336,6 +337,13 @@ class Res:
         prihdr = fits.Header()
         prihdr['CREATOR'] = 'pyspex python module'
         prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
+
+        now = datetime.datetime.now()
+        prihdr['HISTORY'] = "Created on: {0}".format(str(now))
+        if history is not None:
+            for line in history:
+                prihdr['HISTORY'] = line
+
         prihdu = fits.PrimaryHDU(header=prihdr)
 
         # Create the SPEX_RESP_ICOMP extension

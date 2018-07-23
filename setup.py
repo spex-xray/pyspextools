@@ -3,9 +3,10 @@
 from setuptools import setup, find_packages
 import os
 import re
+import pyspex
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['sphinx','numpy','future','astropy']
+dependencies = ['sphinx','numpy','future','astropy','sphinx-argparse']
 
 # Auto-generate documentation
 import sphinx
@@ -26,7 +27,7 @@ sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html']
 
 # Do the actual setup
 setup(name='pyspex',
-      version='0.2',
+      version=pyspex.__version__,
       description='SPEX Python tools',
       author='SPEX development team',
       author_email='j.de.plaa@sron.nl',

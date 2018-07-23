@@ -11,6 +11,7 @@ from builtins import str
 
 from future import standard_library
 
+import pyspex.messages as message
 import numpy as np
 import math
 
@@ -88,42 +89,43 @@ class OGIPRegion(Region):
         # Check the consistency between the OGIP files
         stat = self.check_ogip()
         if stat != 0:
-            print("Error: Check of OGIP files failed.")
+            message.error("Check of OGIP files failed.")
             return
 
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
-            print("Convert OGIP spectra to spo format... ", end='')
+            message.proc_start("Convert OGIP spectra to spo format")
             spo = self.__ogip_to_spo()
             if spo != 0:
                 self.spo = spo
-                print("OK")
+                message.proc_end(0)
             else:
-                print("Error: OGIP to SPO failed.")
+                message.proc_end(1)
+                message.error("OGIP to SPO failed.")
                 return
 
-            print("Convert OGIP response to res format... ", end='')
+            message.proc_start("Convert OGIP response to res format")
             res = self.__ogip_to_res()
             if res != 0:
                 self.res = res
-                print("OK")
+                message.proc_end(0)
             else:
-                print("Error: OGIP to RES failed.")
+                message.error("OGIP to RES failed.")
                 return
         else:
-            print("Error: Source spectrum or response not specified.")
+            message.error("Source spectrum or response not specified.")
             return
 
         # Check output spo object
         checkspo = self.spo.check()
         if checkspo != 0:
-            print("Error: Resulting spo file is not OK.")
+            message.error("Resulting spo file is not OK.")
             return
 
         # Check
         checkres = self.res.check()
         if checkres != 0:
-            print("Error: Resulting res file is not OK.")
+            message.error("Resulting res file is not OK.")
             return
 
     # -----------------------------------------------------
@@ -134,7 +136,7 @@ class OGIPRegion(Region):
         """Open a pha file containing the source spectrum."""
         stat = self.spec.read(phafile)
         if stat != 0:
-            print("Error: Unable to read source PHA file.")
+            message.error("Unable to read source PHA file.")
             return
         else:
             self.input_spec = True
@@ -154,12 +156,12 @@ class OGIPRegion(Region):
         if bkgfile is not None:
             stat = self.back.read(bkgfile)
             if stat != 0:
-                print("Error: Unable to read background PHA file.")
+                message.error("Unable to read background PHA file.")
                 return
             else:
                 self.input_back = True
         else:
-            print("Error: No background filename specified.")
+            message.error("No background filename specified.")
 
     # -----------------------------------------------------
     # Read an OGIP rmf file
@@ -169,7 +171,7 @@ class OGIPRegion(Region):
         """Open rmf file containing the response matrix."""
         stat = self.resp.read(rmffile)
         if stat != 0:
-            print("Error: Unable to read RMF/RSP file.")
+            message.error("Unable to read RMF/RSP file.")
             return
         else:
             self.input_resp = True
@@ -183,13 +185,13 @@ class OGIPRegion(Region):
         if arffile is not None:
             stat = self.area.read(arffile)
             if stat != 0:
-                print("Error: Unable to read ARF file.")
+                message.error("Unable to read ARF file.")
             self.input_area = True
             # Check if arf and rmf are compatible
             if self.resp.checkCompatibility(self.area) != 0:
-                print("Error: The ARF is incompatible with the provided response matrix.")
+                message.error("The ARF is incompatible with the provided response matrix.")
         else:
-            print("Error: No effective area filename specified.")
+            message.error("No effective area filename specified.")
 
     # -----------------------------------------------------
     # Read an OGIP corr file
@@ -200,10 +202,10 @@ class OGIPRegion(Region):
         if corrfile is not None:
             stat = self.corr.read(corrfile)
             if stat != 0:
-                print("Error: Unable to read CORR file.")
+                message.error("Unable to read CORR file.")
             self.input_corr = True
         else:
-            print("Error: No correction file specified.")
+            message.error("No correction file specified.")
 
     # -----------------------------------------------------
     # Do a consistency check for the OGIP part
@@ -213,64 +215,74 @@ class OGIPRegion(Region):
         """Check consistency of the OGIP files in this class."""
 
         # Check consistency of the source spectrum
-        print("Check OGIP source spectrum... ", end='')
+        message.proc_start("Check OGIP source spectrum")
+
         spec = self.spec.check()
+
         if spec != '':
+            message.proc_end(1)
             print(spec)
             return 1
         else:
-            print("OK")
+            message.proc_end(0)
 
         # Check consistency of the background spectrum
         if self.input_back:
             # Is the background file in order?
-            print("Check OGIP background spectrum... ", end='')
+            message.proc_start("Check OGIP background spectrum")
             back = self.back.check()
             if back != '':
+                message.proc_end(1)
                 print(back)
                 return 1
             back = self.spec.checkCompatibility(self.back)
             if back != 0:
-                print("Error: Background spectrum is not compatible with source spectrum.")
+                message.proc_end(1)
+                message.error("Background spectrum is not compatible with source spectrum.")
                 return 1
-            print("OK")
+            message.proc_end(0)
 
         # Check consistency of the correction spectrum
         if self.input_corr:
             # Is the correction file in order?
-            print("Check OGIP correction spectrum... ", end='')
+            message.proc_start("Check OGIP correction spectrum")
             corr = self.corr.check()
             if corr != '':
+                message.proc_end(1)
                 print(corr)
                 return 1
             corr = self.spec.checkCompatibility(self.corr)
             if corr != 0:
-                print("Error: Correction spectrum is not compatible with source spectrum.")
+                message.proc_end(1)
+                message.error("Correction spectrum is not compatible with source spectrum.")
                 return 1
-            print("OK")
+            message.proc_end(0)
 
         # Check rmf file
-        print("Check OGIP response matrix... ", end='')
+        message.proc_start("Check OGIP response matrix")
         resp = self.resp.check()
         if resp != '':
+            message.proc_end(1)
             print(resp)
             return 1
-        print("OK")
+        message.proc_end(0)
 
         # Check consistency between ARF and RMF
         if self.input_area:
             # Is the effective area file in order?
-            print("Check OGIP effective area file... ", end='')
+            message.proc_start("Check OGIP effective area file")
             area = self.area.check()
             if area != '':
+                message.proc_end(1)
                 print(area)
                 return 1
             # Is the effective area consistent with the response?
             area = self.resp.checkCompatibility(self.area)
             if area != 0:
+                message.proc_end(1)
                 print("Error: Effective area file is not consistent with the provided response file.")
                 return 1
-            print("OK")
+            message.proc_end(0)
 
         return 0
 
@@ -320,7 +332,7 @@ class OGIPRegion(Region):
         all necessary OGIP files are read in before running this method."""
 
         if not self.input_spec:
-            print("Error: Spectrum has not been read in yet.")
+            message.error("Spectrum has not been read in yet.")
             return
 
         spo = Spo()
@@ -351,7 +363,7 @@ class OGIPRegion(Region):
                     elif self.back.Datatype == "RATE":
                         dbchan[i] = self.back.StatError[i]
                     else:
-                        print("Error: Unknown datatype in source PHA file.")
+                        message.error("Unknown datatype in source PHA file.")
                         return
 
             # If the error is not in the file, assume Poissonian errors
@@ -467,11 +479,11 @@ class OGIPRegion(Region):
             # Get channel boundaries from response
             # Channel boundary cannot be 0.
             if self.resp.EnergyUnits != "keV":
-                print("Warning: Energy units of keV are expected in the response file!")
+                message.warning("Energy units of keV are expected in the response file!")
 
             if self.resp.ChannelLowEnergy[i] <= 0.:
                 spo.echan1[i] = 1e-5
-                print("Warning: Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.")
+                message.warning("Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.")
             else:
                 spo.echan1[i] = self.resp.ChannelLowEnergy[i]
             spo.echan2[i] = self.resp.ChannelHighEnergy[i]
@@ -494,7 +506,7 @@ class OGIPRegion(Region):
             elif input_pha.Datatype == "RATE":
                 outarray[i] = input_pha.Pha[i]
             else:
-                print("Error: Unknown datatype in source PHA file.")
+                message.error("Unknown datatype in source PHA file.")
                 return
 
         return outarray
@@ -511,11 +523,11 @@ class OGIPRegion(Region):
         try:
             self.resp.NumberChannels()
         except NameError:
-            print("Error: The OGIP response matrix has not been initialised yet.")
+            message.error("The OGIP response matrix has not been initialised yet.")
             return 0
 
         if not self.input_resp:
-            print("Error: The OGIP response matrix has not been read yet.")
+            message.error("The OGIP response matrix has not been read yet.")
             return 0
 
         res = Res()
@@ -554,13 +566,13 @@ class OGIPRegion(Region):
                 # Energy bin boundaries
                 if self.resp.LowEnergy[i] <= 0.:
                     res.eg1[g] = 1e-7
-                    print("Warning: Lowest energy boundary is 0. Set to 1E-7 to avoid problems.")
+                    message.warning("Lowest energy boundary is 0. Set to 1E-7 to avoid problems.")
                 else:
                     res.eg1[g] = self.resp.LowEnergy[i]
 
                 res.eg2[g] = self.resp.HighEnergy[i]
                 if res.eg2[g] <= res.eg1[g]:
-                    print("Error: Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
+                    message.error("Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
                         i + 1))
                     return
 
@@ -570,23 +582,30 @@ class OGIPRegion(Region):
                 ic2 = res.ic1[g] + res.nc[g] - 1
                 res.ic2[g] = ic2
 
+                if self.input_area:
+                    area=self.area.EffArea[i]
+                else:
+                    area = 1.0
+
                 for k in np.arange(res.nc[g]):
-                    res.resp[m] = self.resp.Matrix[m]
+                    res.resp[m] = self.resp.Matrix[m] * area
                     m = m + 1
                 g = g + 1
 
         if g > res.neg:
-            print("Error: Mismatch between number of groups.")
+            message.error("Mismatch between number of groups.")
             return 0
 
         if m > nm:
-            print("Error: Mismatch between number of matrix elements.")
+            message.error("Mismatch between number of matrix elements.")
             return 0
 
         # Convert matrix to m**2 units for SPEX
         if self.input_area:
             if self.area.arfUnits == "cm2":
                 res.resp *= 1.E-4
+        else:
+            res.resp *= 1.E-4
 
         # Check if channel order needs to be swapped
         if res.nchan > 1:
