@@ -1,6 +1,9 @@
 Install pyspex
 ==============
 
+Install using setup.py
+----------------------
+
 Download the pyspex source code from Github and, if necessary, extract it in a 
 convenient directory.
 

@@ -1,0 +1,287 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pyspex.io.ogip: Importing OGIP files &#8212; pyspex 0.2.0 documentation</title>
+    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="pyspex.model: Interfaces for SPEX models" href="user.html" />
+    <link rel="prev" title="pyspex.io: The SPEX data format" href="data.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="pyspex.io: The SPEX data format"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="pyspex-io-ogip-importing-ogip-files">
+<h1>pyspex.io.ogip: Importing OGIP files<a class="headerlink" href="#pyspex-io-ogip-importing-ogip-files" title="Permalink to this headline">¶</a></h1>
+<p>The pyspex module offers to import OGIP spectral files and convert them to
+SPEX format. The OGIP interface is provided by the HEASP module from NASA’s
+HEASOFT package (Keith Arnaud, <a class="reference external" href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/">HEASP</a>).</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">This functionality depends on the HEASP module, which currently
+only supports Python 2.7!</p>
+</div>
+<p>The pyspex OGIPRegion class contains methods to read a source spectrum, background
+spectrum, response file and effective area file, and save them as a SPEX region, which
+can be used by the other methods in the pyspex module. Please note that the
+module does a direct translation of the OGIP files. No filtering of bad channels or
+other optimizations are performed. Bad channel filtering and optimizations can be
+found in pyspex.data.</p>
+<p>The main method of the OGIPRegion class is read_region. We recommend to use this
+method to read a combination of a spectrum and response matrix. This method will
+do the necessary checks to make sure that the final region object is consistent.
+Since this class depends on the HEASP module, this class is not imported
+automatically, but needs to imported separately, for example:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspex.io.ogip</span> <span class="k">as</span> <span class="nn">ogip</span>
+<span class="n">oregion</span> <span class="o">=</span> <span class="n">ogip</span><span class="o">.</span><span class="n">OGIPRegion</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The oregion instance above will be an extended version of the parent region class of
+pyspex and will have the same functionality.</p>
+<div class="section" id="notes-about-converting-pha-to-spex-format">
+<h2>Notes about converting PHA to SPEX format<a class="headerlink" href="#notes-about-converting-pha-to-spex-format" title="Permalink to this headline">¶</a></h2>
+<p>The methods in this class perform an almost direct copy of the PHA spectrum files into
+SPEX format. The conversion of source and background spectra into (background subtracted)
+source and background rates with errors is relatively straightforward. The areascal and
+backscal values from the PHA file are used to scale the spectral rates and errors as they
+are stored in SPEX format.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">The method of subtracting the background from a spectrum provides wrong
+results in case of Poisson distributed data and C-statistics. It would be better to
+use a model for the background instead. Such alternatives will be implemented from
+SPEX version &gt;=3.05.00.</p>
+</div>
+<p>This method does not yet ignore bad channels. In pyspex this is regarded as additional
+filtering of the data and is implemented in a different method (ref). Therefore, this
+method alone could give different results from the SPEX trafo program.</p>
+</div>
+<div class="section" id="notes-about-converting-rmf-to-spex-format">
+<h2>Notes about converting RMF to SPEX format<a class="headerlink" href="#notes-about-converting-rmf-to-spex-format" title="Permalink to this headline">¶</a></h2>
+<p>While the conversion of PHA format spectra to SPEX format is relatively trivial, the
+conversion of response matrices is more interesting. The RMF format chooses to store
+response groups, which describe a particular redistribution function, per model energy
+bin. Since there can be multiple physical effects causing their own characteristic
+response function, there can be multiple groups associated with a particular model energy,
+each describing the redistribution function for a particular physical effect.</p>
+<p>In SPEX, the groups are not organised per model energy bin, but per physical effect, which
+is called a response component. This allows more freedom in the binning that is needed for
+the group and thus the storage space required. The optimal range and binning needed for a sharp
+Gaussian response feature is obviously different from a broad-band power-law redistribution
+function. The latter can be binned in a much coarser way than the Gaussian case.</p>
+<p>However, the RMF files do not contain information about the physical response components.
+There are methods to detect similar groups in an RMF file and organise them in a component,
+but we did not add this method to this class. This class does a direct copy of all the groups
+of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in
+components is desired, that should be done with other methods in the pyspex module (ref).</p>
+</div>
+<div class="section" id="the-ogip-class-description">
+<h2>The OGIP class description<a class="headerlink" href="#the-ogip-class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspex.io.ogip.OGIPRegion">
+<em class="property">class </em><code class="descclassname">pyspex.io.ogip.</code><code class="descname">OGIPRegion</code><a class="reference internal" href="_modules/pyspex/io/ogip.html#OGIPRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OGIPRegion class contains methods to read OGIP data into the pyspex module and convert these to spo and res
+format objects.</p>
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.spec">
+<code class="descname">spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input PHA source spectrum.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.back">
+<code class="descname">back</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input PHA background spectrum (optional).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.resp">
+<code class="descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.resp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input RMF response matrix.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.area">
+<code class="descname">area</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input ARF effective area (optional).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.corr">
+<code class="descname">corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Input CORR correction file (optional).</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.input_spec">
+<code class="descname">input_spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.input_spec" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is a source spectrum read in?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.input_back">
+<code class="descname">input_back</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.input_back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is a background spectrum specified?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.input_resp">
+<code class="descname">input_resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.input_resp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is a response matrix read in?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.input_area">
+<code class="descname">input_area</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.input_area" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is an effective area file specified?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.input_corr">
+<code class="descname">input_corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.input_corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is a correction file specified?</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.first_channel_zero">
+<code class="descname">first_channel_zero</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.first_channel_zero" title="Permalink to this definition">¶</a></dt>
+<dd><p>If the first channel is 0, then matrix data needs shift since SPEX starts at 1.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.ogip.OGIPRegion.save_grouping">
+<code class="descname">save_grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.save_grouping" title="Permalink to this definition">¶</a></dt>
+<dd><p>By default no grouping of data</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.ogip.OGIPRegion.read_region">
+<code class="descname">read_region</code><span class="sig-paren">(</span><em>phafile</em>, <em>rmffile</em>, <em>bkgfile=None</em>, <em>arffile=None</em>, <em>corrfile=None</em>, <em>grouping=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
+are mandatory. If needed, a background file and effective area file can be added.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.ogip.OGIPRegion.check_ogip">
+<code class="descname">check_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/ogip.html#OGIPRegion.check_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.check_ogip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check consistency of the OGIP files in this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.ogip.OGIPRegion.show_ogip">
+<code class="descname">show_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/ogip.html#OGIPRegion.show_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion.show_ogip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a summary of the loaded OGIP data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">pyspex.io.ogip: Importing OGIP files</a><ul>
+<li><a class="reference internal" href="#notes-about-converting-pha-to-spex-format">Notes about converting PHA to SPEX format</a></li>
+<li><a class="reference internal" href="#notes-about-converting-rmf-to-spex-format">Notes about converting RMF to SPEX format</a></li>
+<li><a class="reference internal" href="#the-ogip-class-description">The OGIP class description</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="data.html"
+                        title="previous chapter">pyspex.io: The SPEX data format</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="user.html"
+                        title="next chapter">pyspex.model: Interfaces for SPEX models</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/ogip.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="data.html" title="pyspex.io: The SPEX data format"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

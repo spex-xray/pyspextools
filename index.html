@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Welcome to pyspex’s documentation! &#8212; pyspex 0.1 documentation</title>
+    <title>Welcome to pyspex’s documentation! &#8212; pyspex 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -38,7 +38,7 @@
         <li class="right" >
           <a href="install.html" title="Install pyspex"
              accesskey="N">next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">pyspex 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -49,19 +49,64 @@
             
   <div class="section" id="welcome-to-pyspex-s-documentation">
 <h1>Welcome to pyspex’s documentation!<a class="headerlink" href="#welcome-to-pyspex-s-documentation" title="Permalink to this headline">¶</a></h1>
+<p>Welcome to pyspex, the python helper module for the <a class="reference external" href="http://www.sron.nl/spex">SPEX spectral fitting package</a>.
+This module offers a growing number of utilities and scripts that can help with analysing X-ray spectra using
+SPEX.</p>
+<p>This page offers the following help and documentation:</p>
+<div class="section" id="install-pyspex">
+<h2>Install pyspex<a class="headerlink" href="#install-pyspex" title="Permalink to this headline">¶</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="install.html">Install pyspex</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user.html">SPEX user model interface module</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="user.html#module-pyspex.user">Class description:</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="examples.html">PySPEX Example programs</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="examples/myusermodel.html">User model example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="examples/apec.html">ATOMDB interface for SPEX</a></li>
+<li class="toctree-l1"><a class="reference internal" href="install.html">Install pyspex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="install.html#install-using-setup-py">Install using setup.py</a></li>
 </ul>
 </li>
 </ul>
+</div>
+</div>
+<div class="section" id="pyspex-tutorials">
+<h2>Pyspex tutorials<a class="headerlink" href="#pyspex-tutorials" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Using the pyspex module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/datasets.html">Managing datasets in pyspex</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#using-the-pyspex-scripts">Using the pyspex scripts</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/ogip2spex.html">OGIP2spex</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html#using-the-spex-user-model">Using the SPEX user model</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/myusermodel.html">User model example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/apec.html">APEC interface for SPEX</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="module-refererence">
+<h2>Module Refererence<a class="headerlink" href="#module-refererence" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="data.html">pyspex.io: The SPEX data format</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="data.html#reading-and-writing-datasets">Reading and writing datasets</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#the-region-class">The region class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#the-spo-class">The spo class</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html#the-res-class">The res class</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="ogip.html">pyspex.io.ogip: Importing OGIP files</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="ogip.html#notes-about-converting-pha-to-spex-format">Notes about converting PHA to SPEX format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ogip.html#notes-about-converting-rmf-to-spex-format">Notes about converting RMF to SPEX format</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ogip.html#the-ogip-class-description">The OGIP class description</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="user.html">pyspex.model: Interfaces for SPEX models</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="user.html#spex-user-model-interface-module">SPEX user model interface module</a></li>
+</ul>
+</li>
+</ul>
+</div>
 </div>
 </div>
 <div class="section" id="indices-and-tables">
@@ -81,7 +126,12 @@
         <div class="sphinxsidebarwrapper">
   <h3><a href="#">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Welcome to pyspex’s documentation!</a></li>
+<li><a class="reference internal" href="#">Welcome to pyspex’s documentation!</a><ul>
+<li><a class="reference internal" href="#install-pyspex">Install pyspex</a></li>
+<li><a class="reference internal" href="#pyspex-tutorials">Pyspex tutorials</a></li>
+<li><a class="reference internal" href="#module-refererence">Module Refererence</a></li>
+</ul>
+</li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
@@ -121,11 +171,11 @@
         <li class="right" >
           <a href="install.html" title="Install pyspex"
              >next</a> |</li>
-        <li class="nav-item nav-item-0"><a href="#">pyspex 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="#">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Jelle de Plaa.
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>

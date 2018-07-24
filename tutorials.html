@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Install pyspex &#8212; pyspex 0.2.0 documentation</title>
+    <title>Using the pyspex module &#8212; pyspex 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the pyspex scripts" href="tutorials.html" />
-    <link rel="prev" title="Welcome to pyspex’s documentation!" href="index.html" /> 
+    <link rel="next" title="Managing datasets in pyspex" href="tutorials/datasets.html" />
+    <link rel="prev" title="Install pyspex" href="install.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,10 +37,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials.html" title="Using the pyspex scripts"
+          <a href="tutorials/datasets.html" title="Managing datasets in pyspex"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to pyspex’s documentation!"
+          <a href="install.html" title="Install pyspex"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
@@ -51,25 +51,44 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="install-pyspex">
-<h1>Install pyspex<a class="headerlink" href="#install-pyspex" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-using-setup-py">
-<h2>Install using setup.py<a class="headerlink" href="#install-using-setup-py" title="Permalink to this headline">¶</a></h2>
-<p>Download the pyspex source code from Github and, if necessary, extract it in a
-convenient directory.</p>
-<p>Before you continue, please think about where you want to install pyspex. It
-may be wise to create an Anaconda environment where pyspex can be compiled
-with the most compatible versions of the modules that pyspex depends on.</p>
-<p>Within a conda environment, install pyspex as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">conda</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~/</span><span class="n">pyspex</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
-</pre></div>
+  <div class="section" id="using-the-pyspex-module">
+<h1>Using the pyspex module<a class="headerlink" href="#using-the-pyspex-module" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/datasets.html">Managing datasets in pyspex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/datasets.html#example-use-of-the-dataset-class">Example use of the dataset class</a></li>
+</ul>
+</li>
+</ul>
 </div>
-<p>If you do not have conda, install it in a local python module directory:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>linux:~/pyspex&gt; python setup.py install --prefix=$HOME/python
-</pre></div>
 </div>
-<p>Make sure that the ‘$HOME/python/lib/pythonx.x/site-packages’ directory
-is in the PYTHONPATH environment variable.</p>
+<div class="section" id="using-the-pyspex-scripts">
+<h1>Using the pyspex scripts<a class="headerlink" href="#using-the-pyspex-scripts" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/ogip2spex.html">OGIP2spex</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/ogip2spex.html#example">Example</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/ogip2spex.html#command-line-arguments">Command-line arguments</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="using-the-spex-user-model">
+<h1>Using the SPEX user model<a class="headerlink" href="#using-the-spex-user-model" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/myusermodel.html">User model example</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/myusermodel.html#usage">Usage</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials/apec.html">APEC interface for SPEX</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/apec.html#dependencies">Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/apec.html#usage">Usage</a></li>
+<li class="toctree-l2"><a class="reference internal" href="tutorials/apec.html#parameters">Parameters</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 
@@ -81,22 +100,21 @@ is in the PYTHONPATH environment variable.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">Install pyspex</a><ul>
-<li><a class="reference internal" href="#install-using-setup-py">Install using setup.py</a></li>
-</ul>
-</li>
+<li><a class="reference internal" href="#">Using the pyspex module</a></li>
+<li><a class="reference internal" href="#using-the-pyspex-scripts">Using the pyspex scripts</a></li>
+<li><a class="reference internal" href="#using-the-spex-user-model">Using the SPEX user model</a></li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to pyspex’s documentation!</a></p>
+  <p class="topless"><a href="install.html"
+                        title="previous chapter">Install pyspex</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="tutorials.html"
-                        title="next chapter">Using the pyspex scripts</a></p>
+  <p class="topless"><a href="tutorials/datasets.html"
+                        title="next chapter">Managing datasets in pyspex</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="_sources/install.rst.txt"
+      <li><a href="_sources/tutorials.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div>
@@ -124,10 +142,10 @@ is in the PYTHONPATH environment variable.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="tutorials.html" title="Using the pyspex scripts"
+          <a href="tutorials/datasets.html" title="Managing datasets in pyspex"
              >next</a> |</li>
         <li class="right" >
-          <a href="index.html" title="Welcome to pyspex’s documentation!"
+          <a href="install.html" title="Install pyspex"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>

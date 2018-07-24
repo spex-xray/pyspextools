@@ -1,0 +1,263 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OGIP2spex &#8212; pyspex 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User model example" href="myusermodel.html" />
+    <link rel="prev" title="Using the pyspex scripts" href="../tutorials.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Using the pyspex scripts"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspex scripts</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ogip2spex">
+<h1>OGIP2spex<a class="headerlink" href="#ogip2spex" title="Permalink to this headline">¶</a></h1>
+<p>OGIP2spex is a script that converts OGIP spectra and responses to SPEX format, similar to the trafo program in SPEX.</p>
+<div class="admonition warning">
+<p class="first admonition-title">Warning</p>
+<p class="last">This script only works if <a class="reference external" href="https://heasarc.nasa.gov/lheasoft/">HEASOFT</a> is installed and sourced in your terminal.
+It needs the python heasp module to read OGIP spectra and responses.</p>
+</div>
+<p>The ogip2spex works with command-line arguments to gather all the input, contrary to trafo, which asks questions
+interactively. When pyspex is installed, the ogip2spex program can show an overview of the available command-line
+arguments directly from the command line:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ogip2spex</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<p>A full overview of the arguments is given below in the section <a class="reference internal" href="#ogip2spex-commandline">Command-line arguments</a>.</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">By default ogip2spex creates spo files without the ‘Ext_Rate’ column. This column was added in SPEX version 3.05.00.
+The Ext_Rate column contains the ratio between the backscale values of the source and background spectrum and is
+used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Ext_Rate
+column is created.</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Suppose one would like to convert a set of OGIP spectra from the MOS instrument aboard XMM-Newton. The XMM-Newton SAS
+software has provided a <em>M1.pi</em> file with the source spectrum, <em>M1_bkg.pi</em> with the source background, <em>M1.rmf</em>
+containing the response matrix and <em>M1.arf</em> with the effective area. These files can be converted into SPEX format
+within one go:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>linux:~&gt; ogip2spex --phafile M1.pi --bkgfile M1_bkg.pi --rmffile M1.rmf --arffile M1.arf --spofile M1.spo --resfile M1.res
+</pre></div>
+</div>
+<p>The output starts by listing and checking the input OGIP files:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>==================================
+ This is ogip2spex version 0.2
+==================================
+
+Input PHA file: M1.pi
+Input Background file: M1_bkg.pi
+Input Response file: M1.rmf
+Input Effective area file: M1.arf
+Check OGIP source spectrum... OK
+Check OGIP background spectrum... OK
+Check OGIP response matrix... OK
+Check OGIP effective area file... OK
+</pre></div>
+</div>
+<p>Then the program converts the OGIP files to SPEX format:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Convert OGIP spectra to spo format... WARNING Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.
+OK
+Convert OGIP response to res format... OK
+</pre></div>
+</div>
+<p>In this case, the lowest energy boundary of the first channel of the MOS spectrum is 0, which SPEX does not like. Since
+this bin is not used, it does not hurt to change this zero into a small number (smaller than the upper boundary), in
+this case 1E-5.</p>
+<p>The program continues with detecting bad channels in the spectrum and channels with zero response in the response
+matrix:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Identify bad channels in spectrum and response matrix and re-index matrix... OK
+Number of good channels: 795
+Number of bad channels:  5
+Removing bad channels from spectral region... OK
+Number of original groups:       2394
+Number of zero-response groups:  0
+Number of original response elements:  1000056
+Number of bad response elements:       0
+Removing bad channels from response matrix... OK
+</pre></div>
+</div>
+<p>The removal of bad channels is default behavior. In cases where the bad channels should be kept, one can add the
+‘–keep-badchannels’ argument to the call to ogip2spex.</p>
+<p>At the end of the program, the spo and res files are saved:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>Writing SPO to file: M1.spo
+Writing RES to file: M1.res
+</pre></div>
+</div>
+<p>One can overwrite existing files by adding the ‘–overwrite’ option to the ogip2spex call.</p>
+<p>This spo file does not have an ‘Ext_Rate’ column. To generate a spo file with such a column, add ‘–extrate’ to the
+ogip2spex call.</p>
+<p>By default, ogip2spex shows colored output for warnings, errors and OKs. If it is hard for you to see, use the
+‘–no-color’ argument to show the output without colors.</p>
+</div>
+<div class="section" id="command-line-arguments">
+<span id="ogip2spex-commandline"></span><h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ogip2spex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">phafile</span> <span class="n">PHAFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span> <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">extrate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--phafile</kbd></td>
+<td>Input PHA source spectrum (required)</td></tr>
+<tr><td class="option-group">
+<kbd>--bkgfile</kbd></td>
+<td>Input Background spectrum</td></tr>
+<tr><td class="option-group">
+<kbd>--rmffile</kbd></td>
+<td>Input Response matrix (required)</td></tr>
+<tr><td class="option-group">
+<kbd>--arffile</kbd></td>
+<td>Input Effective area file</td></tr>
+<tr><td class="option-group">
+<kbd>--spofile</kbd></td>
+<td>Output SPEX spectrum file (.spo, required)</td></tr>
+<tr><td class="option-group">
+<kbd>--resfile</kbd></td>
+<td>Output SPEX response file (.res, required)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--keep-badchannels</kbd></td>
+</tr>
+<tr><td>&#160;</td><td><p class="first">Do not remove bad channels.</p>
+<p class="last">Default: True</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--overwrite</kbd></td>
+<td><p class="first">Overwrite existing spo and res files with same name.</p>
+<p class="last">Default: False</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--extrate</kbd></td>
+<td><p class="first">Write additional Ext_Rate column (SPEX &gt;=3.05.00).</p>
+<p class="last">Default: False</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--no-color</kbd></td>
+<td><p class="first">Suppress color output.</p>
+<p class="last">Default: True</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OGIP2spex</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a><ul>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../tutorials.html"
+                        title="previous chapter">Using the pyspex scripts</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="myusermodel.html"
+                        title="next chapter">User model example</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/ogip2spex.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Using the pyspex scripts"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspex scripts</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

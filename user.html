@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>SPEX user model interface module &#8212; pyspex 0.1 documentation</title>
+    <title>pyspex.model: Interfaces for SPEX models &#8212; pyspex 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.1',
+        VERSION:     '0.2.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -23,8 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="PySPEX Example programs" href="examples.html" />
-    <link rel="prev" title="Install pyspex" href="install.html" /> 
+    <link rel="prev" title="pyspex.io.ogip: Importing OGIP files" href="ogip.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,12 +36,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples.html" title="PySPEX Example programs"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="install.html" title="Install pyspex"
+          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,15 +47,20 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="spex-user-model-interface-module">
-<span id="usermodel"></span><h1>SPEX user model interface module<a class="headerlink" href="#spex-user-model-interface-module" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyspex.model">
+<span id="pyspex-model-interfaces-for-spex-models"></span><h1>pyspex.model: Interfaces for SPEX models<a class="headerlink" href="#module-pyspex.model" title="Permalink to this headline">¶</a></h1>
+<p>The pyspex module can provide interfaces to SPEX models. Currently, there is only a
+helper class for the SPEX ‘user’ and ‘musr’ models, which provides the opportunity for
+users to import their own models into SPEX.</p>
+<div class="section" id="spex-user-model-interface-module">
+<span id="usermodel"></span><h2>SPEX user model interface module<a class="headerlink" href="#spex-user-model-interface-module" title="Permalink to this headline">¶</a></h2>
 <p>This is a Python helper class for the development of user defined models in SPEX.
 The ‘user’ and ‘musr’ components in SPEX can calculate an additive and multiplicative
 model, respectively, based on a user program. See the SPEX manual for details:
 <a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
 <p>The ‘user’ component can run an executable provided by the user. This module provides
 the class that helps to exchange the relevant information between SPEX and the user
-provided executable. Documentation for an example program is here: <a class="reference internal" href="examples/myusermodel.html#user-example"><span class="std std-ref">User model example</span></a>.</p>
+provided executable. Documentation for an example program is here: <a class="reference internal" href="tutorials/myusermodel.html#user-example"><span class="std std-ref">User model example</span></a>.</p>
 <p><strong>SPEX output and executable input:</strong></p>
 <p>The SPEX user component will provide an energy grid and a list of model parameters to
 the executable through a text file, for example input-01-01.prm. Using this information,
@@ -67,80 +68,77 @@ the user provided program should calculate the spectrum on the provided grid usi
 input parameters.</p>
 <p><strong>Executable output and SPEX input:</strong></p>
 <p>The spectrum (and the weights) can be written to the provided sener (and wener) arrays
-in this module. The writespc function will write the calculated spectrum to an output
+in this module. The write_spc function will write the calculated spectrum to an output
 file named, for example, output-01-01.spc. This file will be read again by the SPEX
 user model and the resulting values will be used in the SPEX fit.</p>
-<div class="section" id="module-pyspex.user">
-<span id="class-description"></span><h2>Class description:<a class="headerlink" href="#module-pyspex.user" title="Permalink to this headline">¶</a></h2>
-<p>This is a module containing the necessary methods to
-develop an executable for use with the SPEX user model.</p>
-<dl class="class">
-<dt id="pyspex.user.IO">
-<em class="property">class </em><code class="descclassname">pyspex.user.</code><code class="descname">IO</code><a class="reference internal" href="_modules/pyspex/user.html#IO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.user.IO" title="Permalink to this definition">¶</a></dt>
+<blockquote>
+<div><dl class="class">
+<dt id="pyspex.model.User">
+<em class="property">class </em><code class="descclassname">pyspex.model.</code><code class="descname">User</code><a class="reference internal" href="_modules/pyspex/model/user.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.model.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class structure to contain the input and output parameters of the user function.</p>
 <dl class="attribute">
-<dt id="pyspex.user.IO.fprm">
-<code class="descname">fprm</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.fprm" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.fprm">
+<code class="descname">fprm</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.fprm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input file name</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.fspc">
-<code class="descname">fspc</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.fspc" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.fspc">
+<code class="descname">fspc</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.fspc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output file name</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.npar">
-<code class="descname">npar</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.user.IO.npar" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.npar">
+<code class="descname">npar</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.model.User.npar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of input parameters from SPEX</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.par">
-<code class="descname">par</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.par" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.par">
+<code class="descname">par</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.par" title="Permalink to this definition">¶</a></dt>
 <dd><p>Array containing the parameter values from SPEX (length npar)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.neg">
-<code class="descname">neg</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.user.IO.neg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.neg">
+<code class="descname">neg</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.model.User.neg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of bins in the input energy grid from SPEX</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.egb">
-<code class="descname">egb</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.egb" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.egb">
+<code class="descname">egb</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.egb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upper boundaries of the energy bins (length neg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.eg">
-<code class="descname">eg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.eg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.eg">
+<code class="descname">eg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.eg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin centroids of the energy bins (length neg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.deg">
-<code class="descname">deg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.deg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.deg">
+<code class="descname">deg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.deg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin widths of the energy bins (length deg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.sener">
-<code class="descname">sener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.sener" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.sener">
+<code class="descname">sener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.sener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum or transmission (e.g. in ph/s/bin)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.user.IO.wener">
-<code class="descname">wener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.user.IO.wener" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.wener">
+<code class="descname">wener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.wener" title="Permalink to this definition">¶</a></dt>
 <dd><p>If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.user.IO.writespc">
-<code class="descname">writespc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/user.html#IO.writespc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.user.IO.writespc" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspex.model.User.write_spc">
+<code class="descname">write_spc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/model/user.html#User.write_spc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.model.User.write_spc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the calculated spectrum to the output file for SPEX.
 Make sure that the sener and wener arrays are initialized and 
 filled with a spectrum before calling this function.</p>
@@ -148,6 +146,7 @@ filled with a spectrum before calling this function.</p>
 
 </dd></dl>
 
+</div></blockquote>
 </div>
 </div>
 
@@ -159,18 +158,15 @@ filled with a spectrum before calling this function.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">SPEX user model interface module</a><ul>
-<li><a class="reference internal" href="#module-pyspex.user">Class description:</a></li>
+<li><a class="reference internal" href="#">pyspex.model: Interfaces for SPEX models</a><ul>
+<li><a class="reference internal" href="#spex-user-model-interface-module">SPEX user model interface module</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="install.html"
-                        title="previous chapter">Install pyspex</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="examples.html"
-                        title="next chapter">PySPEX Example programs</a></p>
+  <p class="topless"><a href="ogip.html"
+                        title="previous chapter">pyspex.io.ogip: Importing OGIP files</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -202,16 +198,13 @@ filled with a spectrum before calling this function.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="examples.html" title="PySPEX Example programs"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="install.html" title="Install pyspex"
+          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
-        &#169; Copyright 2017, Jelle de Plaa.
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
       Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>

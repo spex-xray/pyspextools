@@ -1,0 +1,239 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Managing datasets in pyspex &#8212; pyspex 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="OGIP2spex" href="ogip2spex.html" />
+    <link rel="prev" title="Using the pyspex module" href="../tutorials.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ogip2spex.html" title="OGIP2spex"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Using the pyspex module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspex module</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="managing-datasets-in-pyspex">
+<h1>Managing datasets in pyspex<a class="headerlink" href="#managing-datasets-in-pyspex" title="Permalink to this headline">¶</a></h1>
+<p>The best starting point to manipulate SPEX files is to use the Dataset class in pyspex. A dataset can be a collection
+of several spectrum-response combinations, which are called regions. This way, multiple related spectra can be stored
+in a spo and res file.</p>
+<p>The different spectra and responses inside a dataset can be related to each other in multiple ways. To distinguish
+between different cases, each spectrum-response combination can have a sector and region number. These numbers are
+defined as follows:</p>
+<dl class="docutils">
+<dt><strong>Sector</strong></dt>
+<dd>A sector number refers to the model that needs to be associated to the dataset. Suppose one has spectra from two
+areas of the sky that share a common absorption component, but have different emission components. One would like
+to fit these spectra simultaneously with coupled absorption components. The SPEX solution is to assign different
+sector numbers to the different spectra, such that SPEX applies the right models to the right dataset.</dd>
+<dt><strong>Region</strong></dt>
+<dd>A region number identifies the dataset that a model applies to. Usually the region number just iterates over the
+number of spectra, so four spectra are just counted as 1, 2, 3 and 4.</dd>
+</dl>
+<p>However, in some cases it can be helpful to point different sectors to one region. For example, a particle background
+model is not supposed to be multiplied by the effective area, but just the response. Then this model needs to be added
+to the model spectrum of the previous region. In that case, two spectrum-response combinations are required (one with
+and one without ARF), where each combination obtains its own sector number (1,2), but only a single region number(1).
+See the <a class="reference external" href="http://var.sron.nl/SPEX-doc/cookbookv3.0/cookbookch8.html#x36-570008">SPEX Cookbook</a> for more information.</p>
+<div class="section" id="example-use-of-the-dataset-class">
+<h2>Example use of the dataset class<a class="headerlink" href="#example-use-of-the-dataset-class" title="Permalink to this headline">¶</a></h2>
+<p>Let’s perform a simple operation to read a few existing spo and res files and combine them into one dataset.
+First, start python and then import the pyspex.io module:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyspex.io</span>
+</pre></div>
+</div>
+<p>The pyspex.io module contains a Dataset class that needs to be initiated first:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pyspex</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The Dataset class contains methods to read spo and res files into a region. Suppose we have two spectra from the
+RGS instrument aboard XMM-Newton. We have two sets of spectra and responses: RGS1.spo, RGS1.res, RGS2.spo and RGS2.res.
+We can read them into the dataset easily using the read_all_regions method:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">read_all_regions</span><span class="p">(</span><span class="s2">&quot;RGS1.spo&quot;</span><span class="p">,</span><span class="s2">&quot;RGS1.res&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">read_all_regions</span><span class="p">(</span><span class="s2">&quot;RGS2.spo&quot;</span><span class="p">,</span><span class="s2">&quot;RGS2.res&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>This method reads all regions within a file and adds it to the dataset. In this case, the spectral files only contain
+one region, so by reading them in both, we have now two parts of the dataset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">===========================================================</span>
+<span class="go"> Part 0</span>
+<span class="go">===========================================================</span>
+<span class="go"> Sector:            1  =&gt;  Region:            1</span>
+<span class="go"> Label:</span>
+<span class="go"> --------------------  Spectrum  -------------------------</span>
+<span class="go"> Original spo file                      :  RGS1.spo</span>
+<span class="go"> Number of data channels                :  2831</span>
+<span class="go"> Data energy range                      :  0.32 - 2.41 keV</span>
+<span class="go"> Exposure time mean                     :  104813.48 s</span>
+<span class="go"> --------------------  Response  -------------------------</span>
+<span class="go"> Original response file name            :  RGS1.res</span>
+<span class="go"> Number of data channels in response    :  2831</span>
+<span class="go"> Number of response components          :  8</span>
+
+<span class="go">===========================================================</span>
+<span class="go"> Part 1</span>
+<span class="go">===========================================================</span>
+<span class="go"> Sector:            1  =&gt;  Region:            2</span>
+<span class="go"> Label:</span>
+<span class="go"> --------------------  Spectrum  -------------------------</span>
+<span class="go"> Original spo file                      :  RGS2.spo</span>
+<span class="go"> Number of data channels                :  2728</span>
+<span class="go"> Data energy range                      :  0.33 - 2.64 keV</span>
+<span class="go"> Exposure time mean                     :  104409.24 s</span>
+<span class="go"> --------------------  Response  -------------------------</span>
+<span class="go"> Original response file name            :  RGS2.res</span>
+<span class="go"> Number of data channels in response    :  2728</span>
+<span class="go"> Number of response components          :  8</span>
+</pre></div>
+</div>
+<p>Suppose one wants to apply a different model for RGS2 than for RGS1 and put RGS2 in a different sector, then we can do
+that as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_sector</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="go">===========================================================</span>
+<span class="go"> Part 0</span>
+<span class="go">===========================================================</span>
+<span class="go"> Sector:            1  =&gt;  Region:            1</span>
+<span class="go"> Label:</span>
+<span class="go"> --------------------  Spectrum  -------------------------</span>
+<span class="go"> Original spo file                      :  RGS1.spo</span>
+<span class="go"> Number of data channels                :  2831</span>
+<span class="go"> Data energy range                      :  0.32 - 2.41 keV</span>
+<span class="go"> Exposure time mean                     :  104813.48 s</span>
+<span class="go"> --------------------  Response  -------------------------</span>
+<span class="go"> Original response file name            :  RGS1.res</span>
+<span class="go"> Number of data channels in response    :  2831</span>
+<span class="go"> Number of response components          :  8</span>
+
+<span class="go">===========================================================</span>
+<span class="go"> Part 1</span>
+<span class="go">===========================================================</span>
+<span class="go"> Sector:            2  =&gt;  Region:            2</span>
+<span class="go"> Label:</span>
+<span class="go"> --------------------  Spectrum  -------------------------</span>
+<span class="go"> Original spo file                      :  RGS2.spo</span>
+<span class="go"> Number of data channels                :  2728</span>
+<span class="go"> Data energy range                      :  0.33 - 2.64 keV</span>
+<span class="go"> Exposure time mean                     :  104409.24 s</span>
+<span class="go"> --------------------  Response  -------------------------</span>
+<span class="go"> Original response file name            :  RGS2.res</span>
+<span class="go"> Number of data channels in response    :  2728</span>
+<span class="go"> Number of response components          :  8</span>
+</pre></div>
+</div>
+<p>In the data.show() command, the part with the RGS2 spectrum (Part 1) has now sector 2 assigned to it. We can now save
+the created structure to one spo and res file:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">write_all_regions</span><span class="p">(</span><span class="s2">&quot;RGS.spo&quot;</span><span class="p">,</span><span class="s2">&quot;RGS.res&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The dataset has been succesfully written to RGS.spo and RGS.res.</p>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Managing datasets in pyspex</a><ul>
+<li><a class="reference internal" href="#example-use-of-the-dataset-class">Example use of the dataset class</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="../tutorials.html"
+                        title="previous chapter">Using the pyspex module</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="ogip2spex.html"
+                        title="next chapter">OGIP2spex</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/datasets.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="ogip2spex.html" title="OGIP2spex"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="../tutorials.html" title="Using the pyspex module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspex module</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

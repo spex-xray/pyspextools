@@ -1,0 +1,705 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pyspex.io.ogip &#8212; pyspex 0.2.0 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyspex.io.ogip</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Import stuff for compatibility between python 2 and 3</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+
+<span class="kn">import</span> <span class="nn">pyspex.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+
+<span class="kn">from</span> <span class="nn">.region</span> <span class="k">import</span> <span class="n">Region</span>
+<span class="kn">from</span> <span class="nn">.res</span> <span class="k">import</span> <span class="n">Res</span>
+<span class="kn">from</span> <span class="nn">.spo</span> <span class="k">import</span> <span class="n">Spo</span>
+
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+
+<span class="c1"># See if Heasoft python modules are available</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">import</span> <span class="nn">heasp</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="n">has_heasp</span> <span class="o">=</span> <span class="kc">False</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="n">has_heasp</span> <span class="o">=</span> <span class="kc">True</span>
+
+
+<div class="viewcode-block" id="OGIPRegion"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion">[docs]</a><span class="k">class</span> <span class="nc">OGIPRegion</span><span class="p">(</span><span class="n">Region</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The OGIPRegion class contains methods to read OGIP data into the pyspex module and convert these to spo and res</span>
+<span class="sd">    format objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">Region</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">has_heasp</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="s2">&quot;HEASP module from HEASOFT is required for OGIP functionality.</span><span class="se">\n</span><span class="s2"> &quot;</span>
+                              <span class="s2">&quot;Please source your local HEASOFT installation to use this module.&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">heasp</span><span class="o">.</span><span class="n">pha</span><span class="p">()</span>  <span class="c1">#: Input PHA source spectrum.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">back</span> <span class="o">=</span> <span class="n">heasp</span><span class="o">.</span><span class="n">pha</span><span class="p">()</span>  <span class="c1">#: Input PHA background spectrum (optional).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">heasp</span><span class="o">.</span><span class="n">rmf</span><span class="p">()</span>  <span class="c1">#: Input RMF response matrix.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">heasp</span><span class="o">.</span><span class="n">arf</span><span class="p">()</span>  <span class="c1">#: Input ARF effective area (optional).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corr</span> <span class="o">=</span> <span class="n">heasp</span><span class="o">.</span><span class="n">pha</span><span class="p">()</span>  <span class="c1">#: Input CORR correction file (optional).</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is a source spectrum read in?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is a background spectrum specified?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is a response matrix read in?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is an effective area file specified?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is a correction file specified?</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: If the first channel is 0, then matrix data needs shift since SPEX starts at 1.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_grouping</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: By default no grouping of data</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read a set of OGIP files into a region</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="OGIPRegion.read_region"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">bkgfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arffile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corrfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grouping</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names</span>
+<span class="sd">        are mandatory. If needed, a background file and effective area file can be added.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Read the source PHA file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_source_pha</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
+
+        <span class="c1"># Read the background PHA file if specified:</span>
+        <span class="k">if</span> <span class="n">bkgfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_background_pha</span><span class="p">(</span><span class="n">bkgfile</span><span class="p">)</span>
+
+        <span class="c1"># Read a correction spectrum if specified:</span>
+        <span class="k">if</span> <span class="n">corrfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_corr</span><span class="p">(</span><span class="n">corrfile</span><span class="p">)</span>
+
+        <span class="c1"># Read the response matrix</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">__read_rmf</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
+
+        <span class="c1"># Read the effective area</span>
+        <span class="k">if</span> <span class="n">arffile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">__read_arf</span><span class="p">(</span><span class="n">arffile</span><span class="p">)</span>
+
+        <span class="c1"># Should the spectrum grouping remain?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">save_grouping</span> <span class="o">=</span> <span class="n">grouping</span>
+
+        <span class="c1"># Check the consistency between the OGIP files</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_ogip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Check of OGIP files failed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Convert OGIP spectra to SPO object:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Convert OGIP spectra to spo format&quot;</span><span class="p">)</span>
+            <span class="n">spo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ogip_to_spo</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">spo</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">spo</span> <span class="o">=</span> <span class="n">spo</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to SPO failed.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Convert OGIP response to res format&quot;</span><span class="p">)</span>
+            <span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__ogip_to_res</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">res</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">res</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to RES failed.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Source spectrum or response not specified.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Check output spo object</span>
+        <span class="n">checkspo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">checkspo</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Resulting spo file is not OK.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># Check</span>
+        <span class="n">checkres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">checkres</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Resulting res file is not OK.&quot;</span><span class="p">)</span>
+            <span class="k">return</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read an OGIP pha file</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__read_source_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a pha file containing the source spectrum.&quot;&quot;&quot;</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to read source PHA file.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="o">=</span> <span class="kc">True</span>
+
+        <span class="c1"># Check if first channel of spectrum is zero:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">False</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read an OGIP background file</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__read_background_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bkgfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open a pha file containing the background spectrum (if specified).&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">bkgfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">bkgfile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to read background PHA file.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No background filename specified.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read an OGIP rmf file</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__read_rmf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Open rmf file containing the response matrix.&quot;&quot;&quot;</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to read RMF/RSP file.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read an OGIP arf file</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__read_arf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read arf file containing the effective area.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">arffile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">arffile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to read ARF file.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="c1"># Check if arf and rmf are compatible</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The ARF is incompatible with the provided response matrix.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No effective area filename specified.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read an OGIP corr file</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__read_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read correction file if specified.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">corrfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">corrfile</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unable to read CORR file.&quot;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No correction file specified.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Do a consistency check for the OGIP part</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="OGIPRegion.check_ogip"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.check_ogip">[docs]</a>    <span class="k">def</span> <span class="nf">check_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check consistency of the OGIP files in this class.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check consistency of the source spectrum</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Check OGIP source spectrum&quot;</span><span class="p">)</span>
+
+        <span class="n">spec</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="n">spec</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Check consistency of the background spectrum</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+            <span class="c1"># Is the background file in order?</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Check OGIP background spectrum&quot;</span><span class="p">)</span>
+            <span class="n">back</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">back</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">back</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">back</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">back</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Background spectrum is not compatible with source spectrum.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Check consistency of the correction spectrum</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span><span class="p">:</span>
+            <span class="c1"># Is the correction file in order?</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Check OGIP correction spectrum&quot;</span><span class="p">)</span>
+            <span class="n">corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">corr</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">corr</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Correction spectrum is not compatible with source spectrum.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Check rmf file</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Check OGIP response matrix&quot;</span><span class="p">)</span>
+        <span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">resp</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="c1"># Check consistency between ARF and RMF</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span><span class="p">:</span>
+            <span class="c1"># Is the effective area file in order?</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Check OGIP effective area file&quot;</span><span class="p">)</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">!=</span> <span class="s1">&#39;&#39;</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">area</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="c1"># Is the effective area consistent with the response?</span>
+            <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">area</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Effective area file is not consistent with the provided response file.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Show a summary of the provided OGIP data</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="OGIPRegion.show_ogip"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.show_ogip">[docs]</a>    <span class="k">def</span> <span class="nf">show_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shows a summary of the loaded OGIP data.&quot;&quot;&quot;</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Summary of OGIP information:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">disp</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">disp</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No background spectrum provided.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">disp</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No correction spectrum provided.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">disp</span><span class="p">())</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">disp</span><span class="p">())</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No effective area file provided.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span></div>
+
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Return a spo object derived from the OGIP data</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__ogip_to_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert the source and optional background and correction spectra from OGIP to SPEX format. This</span>
+<span class="sd">        method returns a pyspex Spo object containing the source and background rates. Please make sure that</span>
+<span class="sd">        all necessary OGIP files are read in before running this method.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Spectrum has not been read in yet.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="n">spo</span> <span class="o">=</span> <span class="n">Spo</span><span class="p">()</span>
+
+        <span class="c1"># Determine number of channels and add to spo</span>
+        <span class="n">nchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">NumberChannels</span><span class="p">()</span>
+        <span class="n">spo</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">spo</span><span class="o">.</span><span class="n">nchan</span><span class="p">,</span> <span class="n">nchan</span><span class="p">)</span>
+        <span class="n">spo</span><span class="o">.</span><span class="n">sponame</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="n">spo</span><span class="o">.</span><span class="n">nregion</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Initialize local arrays for spectral rates</span>
+        <span class="n">ochan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Local variable containing the source rate</span>
+        <span class="n">mbchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Local variable containing the background rate</span>
+        <span class="n">dbchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Local variable containing the error on the background</span>
+        <span class="n">corr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Local variable containing the correction spectrum</span>
+
+        <span class="c1"># Read source rate per bin (or convert to rate)</span>
+        <span class="n">ochan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_counts_pha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="p">,</span> <span class="n">ochan</span><span class="p">,</span> <span class="n">nchan</span><span class="p">)</span>
+
+        <span class="c1"># Read background rate (or convert to rate) if available</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+            <span class="n">mbchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_counts_pha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="p">,</span> <span class="n">mbchan</span><span class="p">,</span> <span class="n">nchan</span><span class="p">)</span>
+            <span class="c1"># If the error is provided in the file, use this column</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="p">,</span> <span class="s1">&#39;StatError&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Poisserr</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;COUNT&quot;</span><span class="p">:</span>
+                        <span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">StatError</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Exposure</span>
+                    <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;RATE&quot;</span><span class="p">:</span>
+                        <span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">StatError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unknown datatype in source PHA file.&quot;</span><span class="p">)</span>
+                        <span class="k">return</span>
+
+            <span class="c1"># If the error is not in the file, assume Poissonian errors</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">):</span>
+                    <span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Exposure</span><span class="p">)</span>
+
+        <span class="c1"># Read correction spectrum if available</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span><span class="p">:</span>
+            <span class="n">corr</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_counts_pha</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="p">,</span> <span class="n">corr</span><span class="p">,</span> <span class="n">nchan</span><span class="p">)</span>
+
+        <span class="c1"># Create zero arrays of length nchan to fill in the loop later</span>
+        <span class="n">spo</span><span class="o">.</span><span class="n">zero_spo</span><span class="p">(</span><span class="n">nchan</span><span class="p">)</span>
+
+        <span class="c1"># Loop through all the bins for the relevant spectral arrays</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">):</span>
+            <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="c1"># Calculate the source rates and errors</span>
+            <span class="k">if</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>  <span class="c1"># Add the errors in square later</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="c1"># Subtract background if available</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+                <span class="n">btints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="c1"># Calculate backscale ratio</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fb</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fb</span> <span class="o">=</span> <span class="mf">0.</span>
+
+                <span class="c1"># Subtract background and calculate errors</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fb</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fb</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fb</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fb</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span>
+
+                <span class="c1"># Calculate the Ext_Rate backscale ratio</span>
+                <span class="k">if</span> <span class="n">fb</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">brat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">btints</span> <span class="o">/</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">fb</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">brat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="c1"># Subtract correction spectrum, if available</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span><span class="p">:</span>
+                <span class="n">ctints</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="c1"># Note: The influence of brat on the corr spectrum is not taken into account!</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">fc</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">fc</span> <span class="o">=</span> <span class="mf">0.</span>
+
+                <span class="c1"># Subtract correction spectrum and calculate errors</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">ochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fc</span> <span class="o">/</span> <span class="n">ctints</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">fc</span> <span class="o">/</span> <span class="n">ctints</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="n">fc</span> <span class="o">/</span> <span class="n">ctints</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">corr</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">fc</span> <span class="o">/</span> <span class="n">ctints</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+            <span class="c1"># Set background to zero for zero exposure bins</span>
+            <span class="k">if</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">mbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">brat</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spo</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spo</span><span class="o">.</span><span class="n">dbchan</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+
+            <span class="c1"># Add systematic errors to spo file</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;RATE&quot;</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">ssys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">SysError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">ssys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">SysError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">ssys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;RATE&quot;</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">bsys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">SysError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">bsys</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">SysError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="n">spo</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="c1"># Set first, last and used variables</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Quality</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">back</span><span class="o">.</span><span class="n">Quality</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">corr</span><span class="o">.</span><span class="n">Quality</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">used</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">save_grouping</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Grouping</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">first</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">last</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Grouping</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">spo</span><span class="o">.</span><span class="n">first</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">nchan</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">Grouping</span><span class="p">[</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="n">spo</span><span class="o">.</span><span class="n">last</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">elif</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nchan</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="n">spo</span><span class="o">.</span><span class="n">last</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">spo</span><span class="o">.</span><span class="n">last</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span>
+
+            <span class="c1"># Get channel boundaries from response</span>
+            <span class="c1"># Channel boundary cannot be 0.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">!=</span> <span class="s2">&quot;keV&quot;</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Energy units of keV are expected in the response file!&quot;</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-5</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">spo</span><span class="o">.</span><span class="n">echan2</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelHighEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="c1"># Check if channel order needs to be swapped</span>
+        <span class="k">if</span> <span class="n">nchan</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">spo</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">spo</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">swap</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">spo</span><span class="o">.</span><span class="n">swap_order</span><span class="p">()</span>
+
+        <span class="n">spo</span><span class="o">.</span><span class="n">empty</span><span class="o">=</span><span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">spo</span>
+
+    <span class="c1"># Helper function for ogip_to_spo</span>
+    <span class="k">def</span> <span class="nf">__read_counts_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">input_pha</span><span class="p">,</span> <span class="n">outarray</span><span class="p">,</span> <span class="n">nchan</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nchan</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">input_pha</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;COUNT&quot;</span><span class="p">:</span>
+                <span class="n">outarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">input_pha</span><span class="o">.</span><span class="n">Pha</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="n">input_pha</span><span class="o">.</span><span class="n">Exposure</span>
+            <span class="k">elif</span> <span class="n">input_pha</span><span class="o">.</span><span class="n">Datatype</span> <span class="o">==</span> <span class="s2">&quot;RATE&quot;</span><span class="p">:</span>
+                <span class="n">outarray</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">input_pha</span><span class="o">.</span><span class="n">Pha</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unknown datatype in source PHA file.&quot;</span><span class="p">)</span>
+                <span class="k">return</span>
+
+        <span class="k">return</span> <span class="n">outarray</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Return a res object derived from the OGIP data</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__ogip_to_res</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert response matrix from OGIP to SPEX format. The response matrix is translated one-to-one</span>
+<span class="sd">        without optimizations. All groups in the OGIP matrix are put into one SPEX response component. This</span>
+<span class="sd">        method returns a pyspex Res object containing the response matrix.&quot;&quot;&quot;</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberChannels</span><span class="p">()</span>
+        <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The OGIP response matrix has not been initialised yet.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The OGIP response matrix has not been read yet.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">res</span> <span class="o">=</span> <span class="n">Res</span><span class="p">()</span>
+
+        <span class="c1"># Read the number of energy bins and groups</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">nchan</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberChannels</span><span class="p">())</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">nsector</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">nregion</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">resname</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Read the total number of groups (which is neg in SPEX format)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberTotalGroups</span><span class="p">())</span>
+
+        <span class="n">res</span><span class="o">.</span><span class="n">eg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">eg2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">ic1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">ic2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Read the total number of matrix elements</span>
+        <span class="n">nm</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberTotalElements</span><span class="p">()</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nm</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="c1"># Set the number of components to 1 (no optimization or re-ordering)</span>
+        <span class="n">res</span><span class="o">.</span><span class="n">ncomp</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Read the energy bin boundaries and group information</span>
+        <span class="n">g</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Index for the group number</span>
+        <span class="n">m</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Index for the matrix element number</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">()):</span>
+            <span class="c1"># Number of response groups for this energy bin</span>
+            <span class="n">ngrp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ngrp</span><span class="p">):</span>
+                <span class="c1"># Energy bin boundaries</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">eg1</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1e-7</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Lowest energy boundary is 0. Set to 1E-7 to avoid problems.&quot;</span><span class="p">)</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">eg1</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+                <span class="n">res</span><span class="o">.</span><span class="n">eg2</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">eg2</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">res</span><span class="o">.</span><span class="n">eg1</span><span class="p">[</span><span class="n">g</span><span class="p">]:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Discontinous bins in energy array in channel </span><span class="si">{0}</span><span class="s2">. Please check the numbers.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                        <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span>
+
+                <span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">g</span><span class="p">]</span>
+                <span class="c1"># Add the start channel to the IC to correct for cases where we start at channel 0/1</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">FirstChannelGroup</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">FirstChannel</span>
+                <span class="n">ic2</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">+</span> <span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">-</span> <span class="mi">1</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">ic2</span><span class="p">[</span><span class="n">g</span><span class="p">]</span> <span class="o">=</span> <span class="n">ic2</span>
+
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span><span class="p">:</span>
+                    <span class="n">area</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">EffArea</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">area</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">g</span><span class="p">]):</span>
+                    <span class="n">res</span><span class="o">.</span><span class="n">resp</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">Matrix</span><span class="p">[</span><span class="n">m</span><span class="p">]</span> <span class="o">*</span> <span class="n">area</span>
+                    <span class="n">m</span> <span class="o">=</span> <span class="n">m</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">g</span> <span class="o">=</span> <span class="n">g</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">g</span> <span class="o">&gt;</span> <span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch between number of groups.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="k">if</span> <span class="n">m</span> <span class="o">&gt;</span> <span class="n">nm</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch between number of matrix elements.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="c1"># Convert matrix to m**2 units for SPEX</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="o">.</span><span class="n">arfUnits</span> <span class="o">==</span> <span class="s2">&quot;cm2&quot;</span><span class="p">:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">resp</span> <span class="o">*=</span> <span class="mf">1.E-4</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">resp</span> <span class="o">*=</span> <span class="mf">1.E-4</span>
+
+        <span class="c1"># Check if channel order needs to be swapped</span>
+        <span class="k">if</span> <span class="n">res</span><span class="o">.</span><span class="n">nchan</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">swap</span> <span class="o">=</span> <span class="kc">True</span>
+                <span class="n">res</span><span class="o">.</span><span class="n">swap_order</span><span class="p">()</span>
+
+        <span class="n">res</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>
