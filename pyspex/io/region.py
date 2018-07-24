@@ -31,8 +31,11 @@ from builtins import str
 
 from future import standard_library
 
+import numpy as np
+
 from pyspex.io.spo import Spo
 from pyspex.io.res import Res
+import pyspex.messages as message
 
 standard_library.install_aliases()
 
@@ -47,20 +50,47 @@ class Region:
        It combines the spectrum and response file in one object."""
 
     def __init__(self):
-        self.spo = Spo()
-        self.res = Res()
+        self.spo = Spo()        #: Spo object
+        self.res = Res()        #: Res object
+        self.label = ""         #: Optional region label (will not be written to file). For example: MOS1, annulus2, etc.
 
-    def check(self):
+    def change_label(self, label):
+        """Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc."""
+        self.label = str(label)
+
+    def set_sector(self,sector):
+        """Set the sector number for this region."""
+
+        for i in np.arange(self.res.sector.size):
+            self.res.sector[i]=sector
+
+
+    def check(self, nregion=False):
         """Check whether spectrum and response are compatible
-           and whether the arrays really consist of one region."""
-        pass
+           and whether the arrays really consist of one region (if nregion flag is set)."""
+
+        if self.res.nchan[0] != self.spo.nchan[0]:
+            message.error("Number of channels in spectrum is not equal to number of channels in response.")
+            return -1
+
+        if nregion:
+            if self.spo.nchan.size != 1:
+                message.error("SPO object consists of more than one region according to nchan array size.")
+                return -1
+
+            if self.spo.nregion != 1:
+                message.error("SPO object consists of more than one region according to nregion parameter.")
+                return -1
+
+        return 0
 
     def show(self):
         """Show a summary of the region metadata."""
 
         print("===========================================================")
-        print(" Sector:             " + str(self.res.sector[0]))
-        print(" Region:             " + str(self.res.region[0]))
+        print(" Sector:            {0}  =>  Region:            {1}".format(str(self.res.sector[0]),
+              str(self.res.region[0])))
+        print(" Label:             {0}".format(self.label))
 
         print(" --------------------  Spectrum  -------------------------")
         self.spo.show()

@@ -124,7 +124,7 @@ class Spo:
     def add_spo_region(self, origspo, iregion=1):
         """Function to add spectrum regions to a spo file."""
 
-        stat = origspo.GetMask(iregion)
+        stat = origspo.get_mask(iregion)
         if stat != 0:
             print("Error: Cannot select region.")
             return -1
@@ -234,7 +234,7 @@ class Spo:
                self.brat_exist=True
 
         if not self.brat_exist:
-            self.brat = np.ones(self.nchan,dtype=float)
+            self.brat = np.ones(self.ochan.size,dtype=float)
 
         # Close the .spo file
         spofile.close()

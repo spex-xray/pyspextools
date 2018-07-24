@@ -49,14 +49,14 @@ class Dataset:
        can read, write and manipulate spectral datasets."""
 
     def __init__(self):
-        self.regions = []
+        self.regions = []  #: List of regions
 
     # -----------------------------------------------------
     # Read one region from a spo and res file.
     # -----------------------------------------------------
 
-    def read_region(self, iregion, spofile, resfile):
-        """Read one region with number iregion from the two SPEX files."""
+    def read_region(self, iregion, spofile, resfile, label=""):
+        """Read one region with number iregion from the two SPEX files and add it to the dataset."""
 
         # Read the spo and res files in a temporary object
         tspo = Spo()
@@ -78,6 +78,9 @@ class Dataset:
         # Run consistency checks
         reg.check()
 
+        # Add label to the region
+        self.label = label
+
         # Add region to list of regions
         self.regions.append(reg)
 
@@ -86,7 +89,7 @@ class Dataset:
     # -----------------------------------------------------
 
     def read_all_regions(self, spofile, resfile):
-        """Read all the regions from a spo and res file."""
+        """Read all the regions from a spo and res file and add them to the dataset."""
 
         # Read the spo and res files in a temporary object
         tspo = Spo()
@@ -119,12 +122,12 @@ class Dataset:
     # Write one region to a spo and res file.
     # -----------------------------------------------------
 
-    def write_region(self, spofile, resfile, iregion):
+    def write_region(self, spofile, resfile, iregion, ext_rate=False, overwrite=False, history=None):
         """Write one region to a spo and res file."""
 
         if len(self.regions) >= iregion > 0:
-            self.regions[iregion - 1].spo.write_file(spofile)
-            self.regions[iregion - 1].res.write_file(resfile)
+            self.regions[iregion - 1].spo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
+            self.regions[iregion - 1].res.write_file(resfile, overwrite=overwrite, history=history)
         else:
             print("Error: region number not found!")
 
@@ -132,7 +135,7 @@ class Dataset:
     # Write all the regions to a spo and res file.
     # -----------------------------------------------------
 
-    def write_all_regions(self, spofile, resfile):
+    def write_all_regions(self, spofile, resfile, ext_rate=False, overwrite=False, history=None):
         """Write all regions in the data object to spo and res. """
         tspo = Spo()
         tres = Res()
@@ -143,8 +146,8 @@ class Dataset:
             tres.add_res_region(ireg.res, i)
             i = i + 1
 
-        tspo.write_file(spofile)
-        tres.write_file(resfile)
+        tspo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
+        tres.write_file(resfile, overwrite=overwrite, history=history)
 
     # -----------------------------------------------------
     # Show a summary of the dataset, similar to data show in SPEX
@@ -153,4 +156,7 @@ class Dataset:
     def show(self):
         """Show a summary for the entire dataset"""
         for ireg in np.arange(len(self.regions)):
+            print("===========================================================")
+            print(" Part {0}".format(ireg))
             self.regions[ireg].show()
+            print("")

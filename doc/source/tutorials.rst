@@ -1,3 +1,12 @@
+Using the pyspex module
+-----------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   tutorials/datasets.rst
+
+
 Using the pyspex scripts
 ------------------------
 
@@ -5,8 +14,6 @@ Using the pyspex scripts
    :maxdepth: 2
 
    tutorials/ogip2spex
-
-
 
 
 Using the SPEX user model

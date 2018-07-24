@@ -1,9 +1,9 @@
 .. _apec-example:
 
-ATOMDB interface for SPEX
+APEC interface for SPEX
 =========================
 
-This example program creates an interface between ATOMDB and
+This example program creates an interface between ATOMDB/APEC and
 the SPEX user model. Using this program, the APEC model can be used
 within SPEX. 
 

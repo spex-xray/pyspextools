@@ -89,7 +89,7 @@ class Res:
     def add_res_region(self, origres, iregion=1):
         """Function to add region(s) to a response."""
 
-        stat = origres.GetMask(iregion)
+        stat = origres.get_mask(iregion)
         if stat != 0:
             print("Error: Cannot select region.")
             return -1
@@ -143,9 +143,6 @@ class Res:
         self.nregion = self.nregion + origres.nregion
         self.ncomp = self.ncomp + origres.ncomp
         self.nsector = np.max(self.sector)
-
-        print("Response added.")
-        print("Please check if the sector structure is correct before saving the file.")
 
         if self.empty:
             self.empty = False
