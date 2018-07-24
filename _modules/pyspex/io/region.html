@@ -91,7 +91,7 @@
 <span class="c1"># Region class</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Region">[docs]</a><span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
+<div class="viewcode-block" id="Region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Region">[docs]</a><span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;A SPEX region is a spectrum/response combination for a</span>
 <span class="sd">       specific observation, instrument or region on the sky.</span>
 <span class="sd">       It combines the spectrum and response file in one object.&quot;&quot;&quot;</span>
@@ -101,18 +101,18 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">Res</span><span class="p">()</span>        <span class="c1">#: Res object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>         <span class="c1">#: Optional region label (will not be written to file). For example: MOS1, annulus2, etc.</span>
 
-<div class="viewcode-block" id="Region.change_label"><a class="viewcode-back" href="../../../data.html#pyspex.io.Region.change_label">[docs]</a>    <span class="k">def</span> <span class="nf">change_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.change_label"><a class="viewcode-back" href="../../../io.html#pyspex.io.Region.change_label">[docs]</a>    <span class="k">def</span> <span class="nf">change_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../data.html#pyspex.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sector</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../io.html#pyspex.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sector</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the sector number for this region.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">sector</span></div>
 
 
-<div class="viewcode-block" id="Region.check"><a class="viewcode-back" href="../../../data.html#pyspex.io.Region.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.check"><a class="viewcode-back" href="../../../io.html#pyspex.io.Region.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check whether spectrum and response are compatible</span>
 <span class="sd">           and whether the arrays really consist of one region (if nregion flag is set).&quot;&quot;&quot;</span>
 
@@ -131,7 +131,7 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Region.show"><a class="viewcode-back" href="../../../data.html#pyspex.io.Region.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Region.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show a summary of the region metadata.&quot;&quot;&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>

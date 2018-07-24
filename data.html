@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io: The SPEX data format &#8212; pyspex 0.2.0 documentation</title>
+    <title>pyspex.data: Data filtering and optimization functions &#8212; pyspex 0.2.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
@@ -23,8 +23,8 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pyspex.io.ogip: Importing OGIP files" href="ogip.html" />
-    <link rel="prev" title="ATOMDB interface for SPEX" href="tutorials/apec.html" /> 
+    <link rel="next" title="pyspex.model: Interfaces for SPEX models" href="user.html" />
+    <link rel="prev" title="pyspex.io.ogip: Importing OGIP files" href="ogip.html" /> 
   </head>
   <body>
     <div class="related" role="navigation" aria-label="related navigation">
@@ -37,10 +37,10 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
+          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tutorials/apec.html" title="ATOMDB interface for SPEX"
+          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
              accesskey="P">previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>
@@ -51,489 +51,41 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pyspex-io-the-spex-data-format">
-<span id="datamodule"></span><h1>pyspex.io: The SPEX data format<a class="headerlink" href="#pyspex-io-the-spex-data-format" title="Permalink to this headline">¶</a></h1>
-<p>This is a Python class to read, write and manipulate
-SPEX spectrum and response file (.spo and .res). The
-format of these FITS files is described in Chapter 5
-of the SPEX manual: <a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
-<span class="target" id="module-pyspex.io"></span><div class="section" id="reading-and-writing-datasets">
-<h2>Reading and writing datasets<a class="headerlink" href="#reading-and-writing-datasets" title="Permalink to this headline">¶</a></h2>
-<p>SPEX res and spo files can contain a set of spectra and responses from, for example,
-different instruments used in the same observation or spectra from different spatial
-regions. Each combination of a spectrum and response is called a region in SPEX
-(see the region class below). The dataset class is basically a list of regions and
-allows the user to add and remove regions from a dataset.</p>
+  <div class="section" id="pyspex-data-data-filtering-and-optimization-functions">
+<h1>pyspex.data: Data filtering and optimization functions<a class="headerlink" href="#pyspex-data-data-filtering-and-optimization-functions" title="Permalink to this headline">¶</a></h1>
+<p>Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
+bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
+calculation speed and statistical accuracy. The pyspex.data module contains functions to filter or optimize
+spectra and response matrices with respect to their originals.</p>
+<div class="section" id="filtering-for-bad-channels">
+<h2>Filtering for bad channels<a class="headerlink" href="#filtering-for-bad-channels" title="Permalink to this headline">¶</a></h2>
+<p>The clean_region function returns a region without bad channels and zero response bins. The function reads the
+original region object from the function input and returns a cleaned region. The function call is quite simple:</p>
+<dl class="function">
+<dt id="pyspex.data.clean_region">
+<code class="descclassname">pyspex.data.</code><code class="descname">clean_region</code><span class="sig-paren">(</span><em>reg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/data/badchannels.html#clean_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.data.clean_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Remove bad channels and channels with zero response from the region.</p>
+</dd></dl>
+
+<p>The function first checks whether the input object is indeed an instance of the Region class and that the spectrum
+and response are loaded. Then masks are created for several arrays in the spectrum and response files:</p>
 <blockquote>
-<div><dl class="class">
-<dt id="pyspex.io.Dataset">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Dataset</code><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset" title="Permalink to this definition">¶</a></dt>
-<dd><p>The dataset class is the most general class containing a 
-dataset with multiple regions. Using this class, users
-can read, write and manipulate spectral datasets.</p>
-<dl class="attribute">
-<dt id="pyspex.io.Dataset.regions">
-<code class="descname">regions</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Dataset.regions" title="Permalink to this definition">¶</a></dt>
-<dd><p>List of regions</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Dataset.read_region">
-<code class="descname">read_region</code><span class="sig-paren">(</span><em>iregion</em>, <em>spofile</em>, <em>resfile</em>, <em>label=u''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read one region with number iregion from the two SPEX files and add it to the dataset.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Dataset.read_all_regions">
-<code class="descname">read_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read all the regions from a spo and res file and add them to the dataset.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Dataset.write_region">
-<code class="descname">write_region</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>iregion</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write one region to a spo and res file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Dataset.write_all_regions">
-<code class="descname">write_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write all regions in the data object to spo and res.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Dataset.show">
-<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show a summary for the entire dataset</p>
-</dd></dl>
-
-</dd></dl>
-
+<div><ul class="simple">
+<li>Chanmask is a boolean array, based on the ‘used’ array from the spo file, which identifies which spectral channels
+can be used or not. This logical value can be based on the Quality flag in the original OGIP spectrum. The channel
+should be usable if the channel is good in both the source and background spectrum.</li>
+<li>Respmask identifies zero response values in the response array. They are found by looping through the response groups
+and through the channels (from ic1 to ic2, with a total of nc channels per group). If a channel has a zero response
+every time, it is also marked bad in the chanmask array (previous bullet). Then the zero response element is masked
+and the array indices (ic1, ic2 and nc) are modified to point to the correct response elements.</li>
+<li>Groupmask masks response groups that have a zero response in total, so with no useful channels within the group.</li>
+</ul>
 </div></blockquote>
+<p>When the masks are finished, they are applied to the input region, both to the spo and res component. The new
+filtered region object is returned to the user. Such a call could look like this:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">filtered_region</span> <span class="o">=</span> <span class="n">clean_region</span><span class="p">(</span><span class="n">region</span><span class="p">)</span>
+</pre></div>
 </div>
-<div class="section" id="the-region-class">
-<h2>The region class<a class="headerlink" href="#the-region-class" title="Permalink to this headline">¶</a></h2>
-<p>A combination of a spectrum and its response matrix is called a region in SPEX. This
-name originates from the idea that a dataset (see above) can contain spectra extracted
-from multiple regions in a spatial image. The region class combines a spo and res
-object into one region and provides tests to see if the spo and res files actually
-belong to each other.</p>
-<blockquote>
-<div><dl class="class">
-<dt id="pyspex.io.Region">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Region</code><a class="reference internal" href="_modules/pyspex/io/region.html#Region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region" title="Permalink to this definition">¶</a></dt>
-<dd><p>A SPEX region is a spectrum/response combination for a
-specific observation, instrument or region on the sky.
-It combines the spectrum and response file in one object.</p>
-<dl class="attribute">
-<dt id="pyspex.io.Region.spo">
-<code class="descname">spo</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.spo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Spo object</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Region.res">
-<code class="descname">res</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.res" title="Permalink to this definition">¶</a></dt>
-<dd><p>Res object</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Region.label">
-<code class="descname">label</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Optional region label (will not be written to file). For example: MOS1, annulus2, etc.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Region.change_label">
-<code class="descname">change_label</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.change_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.change_label" title="Permalink to this definition">¶</a></dt>
-<dd><p>Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Region.set_sector">
-<code class="descname">set_sector</code><span class="sig-paren">(</span><em>sector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.set_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Set the sector number for this region.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Region.check">
-<code class="descname">check</code><span class="sig-paren">(</span><em>nregion=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>Check whether spectrum and response are compatible
-and whether the arrays really consist of one region (if nregion flag is set).</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Region.show">
-<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show a summary of the region metadata.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div></blockquote>
-</div>
-<div class="section" id="the-spo-class">
-<h2>The spo class<a class="headerlink" href="#the-spo-class" title="Permalink to this headline">¶</a></h2>
-<p>The SPEX .spo file contains the source and background spectra, including information
-about systematic uncertainties and grouping. This class manages the reading and writing
-of (regions) in spo files.</p>
-<blockquote>
-<div><dl class="class">
-<dt id="pyspex.io.Spo">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Spo</code><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo" title="Permalink to this definition">¶</a></dt>
-<dd><p>The spo class contains the spectral information for one
-spo file. This file can contain multiple spectra (regions). 
-A call to spo() sets the variables that will contain 
-the spectral information.</p>
-<dl class="attribute">
-<dt id="pyspex.io.Spo.nregion">
-<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.nregion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of regions</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.nchan">
-<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.nchan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of channels</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.echan1">
-<code class="descname">echan1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.echan1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Lower energy bin value (keV)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.echan2">
-<code class="descname">echan2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.echan2" title="Permalink to this definition">¶</a></dt>
-<dd><p>Upper energy bin value (keV)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.tints">
-<code class="descname">tints</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.tints" title="Permalink to this definition">¶</a></dt>
-<dd><p>Exposure time (s)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.ochan">
-<code class="descname">ochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.ochan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Source rate (c/s)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.dochan">
-<code class="descname">dochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.dochan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Error Source rate (c/s)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.mbchan">
-<code class="descname">mbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.mbchan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Background rate (c/s)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.dbchan">
-<code class="descname">dbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.dbchan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Error Background rate (c/s)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.brat">
-<code class="descname">brat</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.brat" title="Permalink to this definition">¶</a></dt>
-<dd><p>Backscale ratio</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.ssys">
-<code class="descname">ssys</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.ssys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Systematic error fraction in ochan</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.bsys">
-<code class="descname">bsys</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.bsys" title="Permalink to this definition">¶</a></dt>
-<dd><p>Systematic error fraction in bchan</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.used">
-<code class="descname">used</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.used" title="Permalink to this definition">¶</a></dt>
-<dd><p>true if data channel is used in the calculations</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.first">
-<code class="descname">first</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.first" title="Permalink to this definition">¶</a></dt>
-<dd><p>true if first channel of a binned group, or if it is an unbinned data channel; otherwise false</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.last">
-<code class="descname">last</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.last" title="Permalink to this definition">¶</a></dt>
-<dd><p>true if last channel of a binned group, or if it is an unbinned data channel; otherwise false</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Spo.brat_exist">
-<code class="descname">brat_exist</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.brat_exist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Does the Ext_rate column exist?</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.zero_spo">
-<code class="descname">zero_spo</code><span class="sig-paren">(</span><em>nchan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.zero_spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.zero_spo" title="Permalink to this definition">¶</a></dt>
-<dd><p>Creates empty arrays of size nchan.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.add_spo_region">
-<code class="descname">add_spo_region</code><span class="sig-paren">(</span><em>origspo</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.add_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.add_spo_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to add spectrum regions to a spo file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.del_spo_region">
-<code class="descname">del_spo_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.del_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove spectrum from region with number ‘iregion’</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.read_file">
-<code class="descname">read_file</code><span class="sig-paren">(</span><em>spofile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.read_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to read a spectrum from a .spo file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.return_region">
-<code class="descname">return_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to return a spo object with containing the
-spectrum of the region with number ‘iregion’.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>sponame</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to write the spectrum to a .spo file with the name ‘sponame’.
-The ext_rate flag determines whether the Ext_Rate column is added containing
-the ratio between the backscales of the source and background spectra. This column
-can only be read by SPEX &gt;=3.05.00.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.swap_order">
-<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.swap_order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Swap the channel order of the spectrum between wavelength or energy order. This is
-for example helpful for grating spectra, which are originally stored in wavelength order
-but must be flipped to energy order in SPEX format.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform several checks whether the information in the spectrum is consistent.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.get_mask">
-<code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create a mask to select spectral information for one region only.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Spo.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show some basic properties of the spectrum.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div></blockquote>
-</div>
-<div class="section" id="the-res-class">
-<h2>The res class<a class="headerlink" href="#the-res-class" title="Permalink to this headline">¶</a></h2>
-<p>The SPEX .res file contains the response matrix and effective area information for a
-spectrum. This class manages the reading and writing of (regions) in res files.</p>
-<blockquote>
-<div><dl class="class">
-<dt id="pyspex.io.Res">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Res</code><a class="reference internal" href="_modules/pyspex/io/res.html#Res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res" title="Permalink to this definition">¶</a></dt>
-<dd><p>The res class contains the response information for one
-res file. This file can contain multiple responses (regions).</p>
-<dl class="attribute">
-<dt id="pyspex.io.Res.nchan">
-<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nchan" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of channels</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.neg">
-<code class="descname">neg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.neg" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of energy bins</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.sector">
-<code class="descname">sector</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.sector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Sectors</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.region">
-<code class="descname">region</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Regions</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.shcomp">
-<code class="descname">shcomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.shcomp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shared components (optional)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.nsector">
-<code class="descname">nsector</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nsector" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of sectors</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.nregion">
-<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nregion" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of regions</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.ncomp">
-<code class="descname">ncomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ncomp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of response components</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.share_comp">
-<code class="descname">share_comp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.share_comp" title="Permalink to this definition">¶</a></dt>
-<dd><p>Are there shared components (?)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.area_scal">
-<code class="descname">area_scal</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.area_scal" title="Permalink to this definition">¶</a></dt>
-<dd><p>Is there areascal information (?)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.resp_der">
-<code class="descname">resp_der</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.resp_der" title="Permalink to this definition">¶</a></dt>
-<dd><p>Are there response derivatives (?)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.eg1">
-<code class="descname">eg1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.eg1" title="Permalink to this definition">¶</a></dt>
-<dd><p>start energy for group (keV)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.eg2">
-<code class="descname">eg2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.eg2" title="Permalink to this definition">¶</a></dt>
-<dd><p>end energy for group (keV)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.ic1">
-<code class="descname">ic1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ic1" title="Permalink to this definition">¶</a></dt>
-<dd><p>Start channel for response group</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.ic2">
-<code class="descname">ic2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ic2" title="Permalink to this definition">¶</a></dt>
-<dd><p>End channel for response group</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.nc">
-<code class="descname">nc</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nc" title="Permalink to this definition">¶</a></dt>
-<dd><p>Number of data channels in group</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.relarea">
-<code class="descname">relarea</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.relarea" title="Permalink to this definition">¶</a></dt>
-<dd><p>Area scaling factors</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.resp">
-<code class="descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.resp" title="Permalink to this definition">¶</a></dt>
-<dd><p>response values for group (m**2)</p>
-</dd></dl>
-
-<dl class="attribute">
-<dt id="pyspex.io.Res.dresp">
-<code class="descname">dresp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.dresp" title="Permalink to this definition">¶</a></dt>
-<dd><p>response derivatives for group (optional)</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.add_res_region">
-<code class="descname">add_res_region</code><span class="sig-paren">(</span><em>origres</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.add_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.add_res_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to add region(s) to a response.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.del_res_region">
-<code class="descname">del_res_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.del_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove region with number ‘iregion’.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.read_file">
-<code class="descname">read_file</code><span class="sig-paren">(</span><em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.read_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to read a response from a .res file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.return_region">
-<code class="descname">return_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.return_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Return a res object with the data from 1 selected region.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>resfile</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the response information to a .res file with name ‘resfile’.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.swap_order">
-<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.swap_order" title="Permalink to this definition">¶</a></dt>
-<dd><p>Swap the channel order of the response between wavelength or energy order. This is
-for example helpful for grating spectra, which are originally stored in wavelength order
-but must be flipped to energy order in SPEX format.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.get_mask">
-<code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
-<dd><p>Create masks to select a particular region in a .res file.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.check" title="Permalink to this definition">¶</a></dt>
-<dd><p>Perform a number of checks to see if the response information is consistent.</p>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspex.io.Res.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.show" title="Permalink to this definition">¶</a></dt>
-<dd><p>Show some basic properties of the response file.</p>
-</dd></dl>
-
-</dd></dl>
-
-</div></blockquote>
 </div>
 </div>
 
@@ -545,21 +97,18 @@ but must be flipped to energy order in SPEX format.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">pyspex.io: The SPEX data format</a><ul>
-<li><a class="reference internal" href="#reading-and-writing-datasets">Reading and writing datasets</a></li>
-<li><a class="reference internal" href="#the-region-class">The region class</a></li>
-<li><a class="reference internal" href="#the-spo-class">The spo class</a></li>
-<li><a class="reference internal" href="#the-res-class">The res class</a></li>
+<li><a class="reference internal" href="#">pyspex.data: Data filtering and optimization functions</a><ul>
+<li><a class="reference internal" href="#filtering-for-bad-channels">Filtering for bad channels</a></li>
 </ul>
 </li>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tutorials/apec.html"
-                        title="previous chapter">ATOMDB interface for SPEX</a></p>
-  <h4>Next topic</h4>
   <p class="topless"><a href="ogip.html"
-                        title="next chapter">pyspex.io.ogip: Importing OGIP files</a></p>
+                        title="previous chapter">pyspex.io.ogip: Importing OGIP files</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="user.html"
+                        title="next chapter">pyspex.model: Interfaces for SPEX models</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -591,10 +140,10 @@ but must be flipped to energy order in SPEX format.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
+          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
              >next</a> |</li>
         <li class="right" >
-          <a href="tutorials/apec.html" title="ATOMDB interface for SPEX"
+          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
              >previous</a> |</li>
         <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
       </ul>

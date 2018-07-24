@@ -88,7 +88,7 @@
 <span class="c1"># spo file. This file can contain multiple spectra (regions).</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Spo"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo">[docs]</a><span class="k">class</span> <span class="nc">Spo</span><span class="p">:</span>
+<div class="viewcode-block" id="Spo"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo">[docs]</a><span class="k">class</span> <span class="nc">Spo</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The spo class contains the spectral information for one</span>
 <span class="sd">       spo file. This file can contain multiple spectra (regions). </span>
 <span class="sd">       A call to spo() sets the variables that will contain </span>
@@ -148,7 +148,7 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Create a spo with zeros and size nchan</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Spo.zero_spo"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.zero_spo">[docs]</a>    <span class="k">def</span> <span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nchan</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.zero_spo"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.zero_spo">[docs]</a>    <span class="k">def</span> <span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nchan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates empty arrays of size nchan.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">echan1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">echan2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -168,7 +168,7 @@
     <span class="c1"># Functions to add spectra to the spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.add_spo_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.add_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origspo</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.add_spo_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.add_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origspo</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to add spectrum regions to a spo file.&quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="n">origspo</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -200,7 +200,7 @@
     <span class="c1"># Function to remove a region from a spectrum</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.del_spo_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.del_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.del_spo_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.del_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove spectrum from region with number &#39;iregion&#39;&quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -235,7 +235,7 @@
     <span class="c1"># Function to read spectrum from a .spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.read_file"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.read_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot; Function to read a spectrum from a .spo file.&quot;&quot;&quot;</span>
 
         <span class="c1"># The filename is saved in the data object for reference.</span>
@@ -292,7 +292,7 @@
     <span class="c1"># Function to return one spectrum for one region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.return_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.return_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to return a spo object with containing the</span>
 <span class="sd">           spectrum of the region with number &#39;iregion&#39;. &quot;&quot;&quot;</span>
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -335,7 +335,7 @@
     <span class="c1"># Function to write all spectra to a .spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.write_file"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.write_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to write the spectrum to a .spo file with the name &#39;sponame&#39;.</span>
 <span class="sd">        The ext_rate flag determines whether the Ext_Rate column is added containing</span>
 <span class="sd">        the ratio between the backscales of the source and background spectra. This column</span>
@@ -411,7 +411,7 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Swap/Flip arrays between energy or wavelength order</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Spo.swap_order"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.swap_order"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Swap the channel order of the spectrum between wavelength or energy order. This is</span>
 <span class="sd">        for example helpful for grating spectra, which are originally stored in wavelength order</span>
 <span class="sd">        but must be flipped to energy order in SPEX format. &quot;&quot;&quot;</span>
@@ -426,7 +426,7 @@
     <span class="c1"># Sanity check whether object is complete and consistent</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.check"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.check"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Perform several checks whether the information in the spectrum is consistent. &quot;&quot;&quot;</span>
 
         <span class="c1"># Check if nchan is numpy array</span>
@@ -455,7 +455,7 @@
     <span class="c1"># spectrum or region begins and ends.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.get_mask"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.get_mask"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create a mask to select spectral information for one region only. &quot;&quot;&quot;</span>
         <span class="c1"># Python counts from 0, so create adequate counter</span>
         <span class="n">ireg</span> <span class="o">=</span> <span class="n">iregion</span> <span class="o">-</span> <span class="mi">1</span>
@@ -489,7 +489,7 @@
     <span class="c1"># Show a summary of the spo file, similar to data show in SPEX</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.show"><a class="viewcode-back" href="../../../data.html#pyspex.io.Spo.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show some basic properties of the spectrum.&quot;&quot;&quot;</span>
 
         <span class="n">tspo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>

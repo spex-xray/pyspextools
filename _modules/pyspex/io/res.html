@@ -85,7 +85,7 @@
 <span class="c1"># res file. This file can contain multiple responses (regions).</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Res"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res">[docs]</a><span class="k">class</span> <span class="nc">Res</span><span class="p">:</span>
+<div class="viewcode-block" id="Res"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res">[docs]</a><span class="k">class</span> <span class="nc">Res</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The res class contains the response information for one</span>
 <span class="sd">       res file. This file can contain multiple responses (regions).&quot;&quot;&quot;</span>
 
@@ -133,7 +133,7 @@
     <span class="c1"># Function to add a response from another region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.&quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="n">origres</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -198,7 +198,7 @@
     <span class="c1"># Function to remove a region from a response</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.&quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -243,7 +243,7 @@
     <span class="c1"># Function to read a response from a .res file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.read_file"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.read_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to read a response from a .res file.&quot;&quot;&quot;</span>
 
         <span class="c1"># The filename is saved in the data object for reference.</span>
@@ -311,7 +311,7 @@
     <span class="c1"># Function to return a region from a res object</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.&quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
@@ -369,7 +369,7 @@
     <span class="c1"># Function to write a response to a .res file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.write_file"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.write_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write the response information to a .res file with name &#39;resfile&#39;.&quot;&quot;&quot;</span>
 
         <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
@@ -453,7 +453,7 @@
     <span class="c1"># Swap the channel order between wavelength and energy order</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.swap_order"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.swap_order"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Swap the channel order of the response between wavelength or energy order. This is</span>
 <span class="sd">        for example helpful for grating spectra, which are originally stored in wavelength order</span>
 <span class="sd">        but must be flipped to energy order in SPEX format.&quot;&quot;&quot;</span>
@@ -486,7 +486,7 @@
     <span class="c1"># Function to create a masks for a certain region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file. &quot;&quot;&quot;</span>
         <span class="c1"># Check if iregion is in an allowed range</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
@@ -532,7 +532,7 @@
     <span class="c1"># Function to check the response arrays</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.check"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.check"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Perform a number of checks to see if the response information is consistent.&quot;&quot;&quot;</span>
         <span class="c1"># Check if the number of indexed channels is equal to the length of the response array</span>
         <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
@@ -555,7 +555,7 @@
     <span class="c1"># Show summary of response file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../data.html#pyspex.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.&quot;&quot;&quot;</span>
 
         <span class="n">tres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>

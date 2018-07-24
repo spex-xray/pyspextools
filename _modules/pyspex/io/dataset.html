@@ -90,7 +90,7 @@
 <span class="c1"># Data class</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
+<div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The dataset class is the most general class containing a </span>
 <span class="sd">       dataset with multiple regions. Using this class, users</span>
 <span class="sd">       can read, write and manipulate spectral datasets.&quot;&quot;&quot;</span>
@@ -102,7 +102,7 @@
     <span class="c1"># Read one region from a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.read_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.read_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read one region with number iregion from the two SPEX files and add it to the dataset.&quot;&quot;&quot;</span>
 
         <span class="c1"># Read the spo and res files in a temporary object</span>
@@ -135,7 +135,7 @@
     <span class="c1"># Read all the regions from a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.read_all_regions"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset.read_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">read_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.read_all_regions"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.read_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">read_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read all the regions from a spo and res file and add them to the dataset.&quot;&quot;&quot;</span>
 
         <span class="c1"># Read the spo and res files in a temporary object</span>
@@ -169,7 +169,7 @@
     <span class="c1"># Write one region to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_region"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset.write_region">[docs]</a>    <span class="k">def</span> <span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_region">[docs]</a>    <span class="k">def</span> <span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write one region to a spo and res file.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">iregion</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
@@ -182,7 +182,7 @@
     <span class="c1"># Write all the regions to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_all_regions"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset.write_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_all_regions"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write all regions in the data object to spo and res. &quot;&quot;&quot;</span>
         <span class="n">tspo</span> <span class="o">=</span> <span class="n">Spo</span><span class="p">()</span>
         <span class="n">tres</span> <span class="o">=</span> <span class="n">Res</span><span class="p">()</span>
@@ -200,7 +200,7 @@
     <span class="c1"># Show a summary of the dataset, similar to data show in SPEX</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.show"><a class="viewcode-back" href="../../../data.html#pyspex.io.Dataset.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show a summary for the entire dataset&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">ireg</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">)):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
