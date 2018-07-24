@@ -1,54 +1,39 @@
-.. _datamodule:
+pyspex.data: Data filtering and optimization functions
+======================================================
 
-pyspex.io: The SPEX data format
-===============================
+Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
+bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
+calculation speed and statistical accuracy. The pyspex.data module contains functions to filter or optimize
+spectra and response matrices with respect to their originals.
 
-This is a Python class to read, write and manipulate 
-SPEX spectrum and response file (.spo and .res). The
-format of these FITS files is described in Chapter 5
-of the SPEX manual: http://var.sron.nl/SPEX-doc/ 
+.. currentmodule:: pyspex.data
 
-.. automodule:: pyspex.io
+Filtering for bad channels
+--------------------------
 
-Reading and writing datasets
-----------------------------
+The clean_region function returns a region without bad channels and zero response bins. The function reads the
+original region object from the function input and returns a cleaned region. The function call is quite simple:
 
-SPEX res and spo files can contain a set of spectra and responses from, for example,
-different instruments used in the same observation or spectra from different spatial 
-regions. Each combination of a spectrum and response is called a region in SPEX
-(see the region class below). The dataset class is basically a list of regions and 
-allows the user to add and remove regions from a dataset.  
+.. autofunction:: clean_region
 
-   .. autoclass:: pyspex.io.Dataset
-      :members:
+The function first checks whether the input object is indeed an instance of the Region class and that the spectrum
+and response are loaded. Then masks are created for several arrays in the spectrum and response files:
 
-The region class
-----------------
+ * Chanmask is a boolean array, based on the 'used' array from the spo file, which identifies which spectral channels
+   can be used or not. This logical value can be based on the Quality flag in the original OGIP spectrum. The channel
+   should be usable if the channel is good in both the source and background spectrum.
 
-A combination of a spectrum and its response matrix is called a region in SPEX. This
-name originates from the idea that a dataset (see above) can contain spectra extracted 
-from multiple regions in a spatial image. The region class combines a spo and res 
-object into one region and provides tests to see if the spo and res files actually
-belong to each other. 
+ * Respmask identifies zero response values in the response array. They are found by looping through the response groups
+   and through the channels (from ic1 to ic2, with a total of nc channels per group). If a channel has a zero response
+   every time, it is also marked bad in the chanmask array (previous bullet). Then the zero response element is masked
+   and the array indices (ic1, ic2 and nc) are modified to point to the correct response elements.
 
-   .. autoclass:: pyspex.io.Region
-      :members:
+ * Groupmask masks response groups that have a zero response in total, so with no useful channels within the group.
 
-The spo class
--------------
+When the masks are finished, they are applied to the input region, both to the spo and res component. The new
+filtered region object is returned to the user. Such a call could look like this::
 
-The SPEX .spo file contains the source and background spectra, including information
-about systematic uncertainties and grouping. This class manages the reading and writing
-of (regions) in spo files.
+    filtered_region = clean_region(region)
 
-   .. autoclass:: pyspex.io.Spo
-      :members:
 
-The res class
--------------
 
-The SPEX .res file contains the response matrix and effective area information for a 
-spectrum. This class manages the reading and writing of (regions) in res files.
-
-   .. autoclass:: pyspex.io.Res
-      :members:

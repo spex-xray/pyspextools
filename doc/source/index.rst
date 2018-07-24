@@ -31,9 +31,11 @@ Module Refererence
 .. toctree::
    :maxdepth: 2
 
-   data
+   io
 
    ogip
+
+   data
 
    user
 
