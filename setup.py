@@ -11,8 +11,8 @@ dependencies = ['sphinx','numpy','future','astropy','sphinx-argparse']
 # Add doc directory to install-prefix directory
 datafiles=[]
 for d, folders, files in os.walk('doc/build/html'):
-  dir_inst='doc/'+re.sub('doc/build/','',d)
-  datafiles.append((dir_inst, [os.path.join(d,f) for f in files]))
+    dir_inst='doc/'+re.sub('doc/build/','',d)
+    datafiles.append((dir_inst, [os.path.join(d,f) for f in files]))
 
 # Do the actual setup
 setup(name='pyspex',
@@ -30,11 +30,16 @@ setup(name='pyspex',
       )
 
 # Auto-generate documentation
-import sphinx
+try:
+    import sphinx
 
-# Automatically build html documentation
-# For example:
-#   format = 'html'
-#   sphinx-src-dir = './doc'
-#   sphinx-build-dir = './doc/build'
-sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html'])
+    # Automatically build html documentation
+    # For example:
+    #   format = 'html'
+    #   sphinx-src-dir = './doc'
+    #   sphinx-build-dir = './doc/build'
+    sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html'])
+
+except ImportError:
+    print("Unable to generate documentation. Install sphinx")
+
