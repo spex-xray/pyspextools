@@ -8,22 +8,11 @@ import pyspex
 # Set dependencies, we need sphinx to build doc and numpy for arrays
 dependencies = ['sphinx','numpy','future','astropy','sphinx-argparse']
 
-# Auto-generate documentation
-import sphinx
-
 # Add doc directory to install-prefix directory
 datafiles=[]
 for d, folders, files in os.walk('doc/build/html'):
   dir_inst='doc/'+re.sub('doc/build/','',d)
   datafiles.append((dir_inst, [os.path.join(d,f) for f in files]))
-
-
-# Automatically build html documentation
-# For example:
-#   format = 'html'
-#   sphinx-src-dir = './doc'
-#   sphinx-build-dir = './doc/build'
-sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html'])
 
 # Do the actual setup
 setup(name='pyspex',
@@ -39,3 +28,13 @@ setup(name='pyspex',
       data_files=datafiles,
       install_requires=dependencies,
       )
+
+# Auto-generate documentation
+import sphinx
+
+# Automatically build html documentation
+# For example:
+#   format = 'html'
+#   sphinx-src-dir = './doc'
+#   sphinx-build-dir = './doc/build'
+sphinx.build_main(['setup.py', '-b', 'html', './doc/source', './doc/build/html'])
