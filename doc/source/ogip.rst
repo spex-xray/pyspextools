@@ -3,12 +3,7 @@ pyspex.io.ogip: Importing OGIP files
 ====================================
 
 The pyspex module offers to import OGIP spectral files and convert them to 
-SPEX format. The OGIP interface is provided by the HEASP module from NASA's 
-HEASOFT package (Keith Arnaud, `HEASP <https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/>`_).
-
-.. NOTE::
-   This functionality depends on the HEASP module, which currently
-   only supports Python 2.7!
+SPEX format.
  
 The pyspex OGIPRegion class contains methods to read a source spectrum, background 
 spectrum, response file and effective area file, and save them as a SPEX region, which 
@@ -20,8 +15,7 @@ found in pyspex.data.
 The main method of the OGIPRegion class is read_region. We recommend to use this 
 method to read a combination of a spectrum and response matrix. This method will
 do the necessary checks to make sure that the final region object is consistent.
-Since this class depends on the HEASP module, this class is not imported 
-automatically, but needs to imported separately, for example::
+The OGIP class can be imported separately if needed:
  
     import pyspex.io.ogip as ogip
     oregion = ogip.OGIPRegion()
@@ -72,8 +66,23 @@ of the RMF to one SPEX response component. If a more optimal re-arrangement of g
 components is desired, that should be done with other methods in the pyspex module (ref). 
 
 
-The OGIP class description
---------------------------
+The OGIPRegion class description
+--------------------------------
 
 .. autoclass:: pyspex.io.ogip.OGIPRegion
+   :members:
+
+The OGIP file classes
+---------------------
+
+.. autoclass:: pyspex.io.pha.Pha
+   :members:
+
+.. autoclass:: pyspex.io.pha2.Pha2
+   :members:
+
+.. autoclass:: pyspex.io.rmf.Rmf
+   :members:
+
+.. autoclass:: pyspex.io.arf.Arf
    :members:

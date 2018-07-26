@@ -13,14 +13,6 @@ from pyspex.io.ogip import OGIPRegion
 from pyspex.data.badchannels import clean_region
 import pyspex.messages as message
 
-# See if Heasoft python modules are available
-try:
-    import heasp
-except ImportError:
-    has_heasp = False
-else:
-    has_heasp = True
-
 from builtins import int
 
 from future import standard_library
@@ -37,12 +29,6 @@ def main():
     print(" This is ogip2spex version {0}".format(pyspex.__version__))
     print("==================================")
     print("")
-
-    # This script needs HEASP to run...
-
-    if not has_heasp:
-         raise ImportError("HEASP module from HEASOFT is required for OGIP functionality.\n "
-                           "Please source your local HEASOFT installation to use this program.")
 
     # Obtain command line arguments
     parser = ogip2spex_arguments()

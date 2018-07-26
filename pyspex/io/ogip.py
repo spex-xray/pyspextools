@@ -18,16 +18,11 @@ import math
 from .region import Region
 from .res import Res
 from .spo import Spo
+from .pha import Pha
+from .rmf import Rmf
+from .arf import Arf
 
 standard_library.install_aliases()
-
-# See if Heasoft python modules are available
-try:
-    import heasp
-except ImportError:
-    has_heasp = False
-else:
-    has_heasp = True
 
 
 class OGIPRegion(Region):
@@ -38,15 +33,11 @@ class OGIPRegion(Region):
 
         Region.__init__(self)
 
-        if not has_heasp:
-            raise ImportError("HEASP module from HEASOFT is required for OGIP functionality.\n "
-                              "Please source your local HEASOFT installation to use this module.")
-
-        self.spec = heasp.pha()  #: Input PHA source spectrum.
-        self.back = heasp.pha()  #: Input PHA background spectrum (optional).
-        self.resp = heasp.rmf()  #: Input RMF response matrix.
-        self.area = heasp.arf()  #: Input ARF effective area (optional).
-        self.corr = heasp.pha()  #: Input CORR correction file (optional).
+        self.spec = Pha()  #: Input PHA source spectrum.
+        self.back = Pha()  #: Input PHA background spectrum (optional).
+        self.resp = Rmf()  #: Input RMF response matrix.
+        self.area = Arf()  #: Input ARF effective area (optional).
+        self.corr = Pha()  #: Input CORR correction file (optional).
 
         self.input_spec = False  #: Is a source spectrum read in?
         self.input_back = False  #: Is a background spectrum specified?
@@ -134,12 +125,15 @@ class OGIPRegion(Region):
 
     def __read_source_pha(self, phafile):
         """Open a pha file containing the source spectrum."""
+        message.proc_start("Read source PHA spectrum")
         stat = self.spec.read(phafile)
         if stat != 0:
+            message.proc_end(stat)
             message.error("Unable to read source PHA file.")
             return
         else:
             self.input_spec = True
+            message.proc_end(stat)
 
         # Check if first channel of spectrum is zero:
         if self.spec.FirstChannel == 0:
@@ -154,12 +148,15 @@ class OGIPRegion(Region):
     def __read_background_pha(self, bkgfile):
         """Open a pha file containing the background spectrum (if specified)."""
         if bkgfile is not None:
+            message.proc_start("Read background PHA spectrum")
             stat = self.back.read(bkgfile)
             if stat != 0:
+                message.proc_end(stat)
                 message.error("Unable to read background PHA file.")
                 return
             else:
                 self.input_back = True
+                message.proc_end(stat)
         else:
             message.error("No background filename specified.")
 
@@ -169,12 +166,15 @@ class OGIPRegion(Region):
 
     def __read_rmf(self, rmffile):
         """Open rmf file containing the response matrix."""
+        message.proc_start("Read RMF response matrix")
         stat = self.resp.read(rmffile)
         if stat != 0:
+            message.proc_end(stat)
             message.error("Unable to read RMF/RSP file.")
             return
         else:
             self.input_resp = True
+            message.proc_end(stat)
 
     # -----------------------------------------------------
     # Read an OGIP arf file
@@ -183,13 +183,19 @@ class OGIPRegion(Region):
     def __read_arf(self, arffile):
         """Read arf file containing the effective area."""
         if arffile is not None:
+            message.proc_start("Read ARF effective area")
             stat = self.area.read(arffile)
             if stat != 0:
+                message.proc_end(stat)
                 message.error("Unable to read ARF file.")
-            self.input_area = True
+                return
+            else:
+                self.input_area = True
+                message.proc_end(stat)
+
             # Check if arf and rmf are compatible
-            if self.resp.checkCompatibility(self.area) != 0:
-                message.error("The ARF is incompatible with the provided response matrix.")
+            #if self.resp.checkCompatibility(self.area) != 0:
+            #    message.error("The ARF is incompatible with the provided response matrix.")
         else:
             message.error("No effective area filename specified.")
 
@@ -200,10 +206,15 @@ class OGIPRegion(Region):
     def __read_corr(self, corrfile):
         """Read correction file if specified."""
         if corrfile is not None:
+            message.proc_start("Read correction spectrum")
             stat = self.corr.read(corrfile)
             if stat != 0:
+                message.proc_end(stat)
                 message.error("Unable to read CORR file.")
-            self.input_corr = True
+                return
+            else:
+                message.proc_end(stat)
+                self.input_corr = True
         else:
             message.error("No correction file specified.")
 
@@ -219,7 +230,7 @@ class OGIPRegion(Region):
 
         spec = self.spec.check()
 
-        if spec != '':
+        if spec != 0:
             message.proc_end(1)
             print(spec)
             return 1
@@ -231,7 +242,7 @@ class OGIPRegion(Region):
             # Is the background file in order?
             message.proc_start("Check OGIP background spectrum")
             back = self.back.check()
-            if back != '':
+            if back != 0:
                 message.proc_end(1)
                 print(back)
                 return 1
@@ -247,7 +258,7 @@ class OGIPRegion(Region):
             # Is the correction file in order?
             message.proc_start("Check OGIP correction spectrum")
             corr = self.corr.check()
-            if corr != '':
+            if corr != 0:
                 message.proc_end(1)
                 print(corr)
                 return 1
@@ -261,7 +272,7 @@ class OGIPRegion(Region):
         # Check rmf file
         message.proc_start("Check OGIP response matrix")
         resp = self.resp.check()
-        if resp != '':
+        if resp != 0:
             message.proc_end(1)
             print(resp)
             return 1
@@ -272,16 +283,16 @@ class OGIPRegion(Region):
             # Is the effective area file in order?
             message.proc_start("Check OGIP effective area file")
             area = self.area.check()
-            if area != '':
+            if area != 0:
                 message.proc_end(1)
                 print(area)
                 return 1
             # Is the effective area consistent with the response?
-            area = self.resp.checkCompatibility(self.area)
-            if area != 0:
-                message.proc_end(1)
-                print("Error: Effective area file is not consistent with the provided response file.")
-                return 1
+            #area = self.resp.checkCompatibility(self.area)
+            #if area != 0:
+            #    message.proc_end(1)
+            #    print("Error: Effective area file is not consistent with the provided response file.")
+            #    return 1
             message.proc_end(0)
 
         return 0
@@ -297,30 +308,29 @@ class OGIPRegion(Region):
         print("Summary of OGIP information:")
         print("===========================================================")
 
-        print(self.spec.disp())
+        self.spec.disp()
 
         if self.input_back:
-            print(self.back.disp())
+            self.back.disp()
         else:
             print("No background spectrum provided.")
             print("")
 
         if self.input_corr:
-            print(self.corr.disp())
+            self.corr.disp()
         else:
             print("No correction spectrum provided.")
             print("")
 
-        print(self.resp.disp())
+        self.resp.disp()
 
         if self.input_area:
-            print(self.area.disp())
+            self.area.disp()
         else:
             print("No effective area file provided.")
             print("")
 
         print("===========================================================")
-
 
     # -----------------------------------------------------
     # Return a spo object derived from the OGIP data
@@ -343,37 +353,17 @@ class OGIPRegion(Region):
         spo.sponame = None
         spo.nregion = 1
 
-        # Initialize local arrays for spectral rates
-        ochan = np.zeros(nchan, dtype=float)  # Local variable containing the source rate
-        mbchan = np.zeros(nchan, dtype=float)  # Local variable containing the background rate
-        dbchan = np.zeros(nchan, dtype=float)  # Local variable containing the error on the background
-        corr = np.zeros(nchan, dtype=float)  # Local variable containing the correction spectrum
-
         # Read source rate per bin (or convert to rate)
-        ochan = self.__read_counts_pha(self.spec, ochan, nchan)
+        ochan = self.spec.Rate
 
         # Read background rate (or convert to rate) if available
         if self.input_back:
-            mbchan = self.__read_counts_pha(self.back, mbchan, nchan)
-            # If the error is provided in the file, use this column
-            if hasattr(self.back, 'StatError') and not self.back.Poisserr:
-                for i in np.arange(nchan):
-                    if self.back.Datatype == "COUNT":
-                        dbchan[i] = float(self.back.StatError[i]) / self.back.Exposure
-                    elif self.back.Datatype == "RATE":
-                        dbchan[i] = self.back.StatError[i]
-                    else:
-                        message.error("Unknown datatype in source PHA file.")
-                        return
-
-            # If the error is not in the file, assume Poissonian errors
-            else:
-                for i in np.arange(nchan):
-                    dbchan[i] = math.sqrt(mbchan[i] / self.back.Exposure)
+            mbchan = self.back.Rate
+            dbchan = self.back.StatError
 
         # Read correction spectrum if available
         if self.input_corr:
-            corr = self.__read_counts_pha(self.corr, corr, nchan)
+            corr = self.corr.Rate
 
         # Create zero arrays of length nchan to fill in the loop later
         spo.zero_spo(nchan)
@@ -385,7 +375,7 @@ class OGIPRegion(Region):
             # Calculate the source rates and errors
             if spo.tints[i] > 0:
                 spo.ochan[i] = ochan[i] / self.spec.AreaScaling[i]
-                spo.dochan[i] = spo.ochan[i] / spo.tints[i]  # Add the errors in square later
+                spo.dochan[i] = (spo.dochan[i])**2 / self.spec.AreaScaling[i]  # Add the errors in square later
             else:
                 spo.ochan[i] = 0.
                 spo.dochan[i] = 0.
@@ -435,21 +425,6 @@ class OGIPRegion(Region):
             spo.dochan[i] = math.sqrt(spo.dochan[i])
             spo.dbchan[i] = math.sqrt(spo.dbchan[i])
 
-            # Add systematic errors to spo file
-            if self.spec.Datatype == "RATE":
-                spo.ssys[i] = self.spec.SysError[i]
-            else:
-                if spo.tints[i] > 0:
-                    spo.ssys[i] = self.spec.SysError[i] / spo.tints[i]
-                else:
-                    spo.ssys[i] = 0.
-
-            if self.input_back:
-                if self.back.Datatype == "RATE":
-                    spo.bsys[i] = self.back.SysError[i]
-                else:
-                    spo.bsys[i] = self.back.SysError[i] / spo.tints[i]
-
             # Set first, last and used variables
             if self.spec.Quality[i] != 0:
                 spo.used[i] = False
@@ -498,19 +473,6 @@ class OGIPRegion(Region):
 
         return spo
 
-    # Helper function for ogip_to_spo
-    def __read_counts_pha(self, input_pha, outarray, nchan):
-        for i in np.arange(nchan):
-            if input_pha.Datatype == "COUNT":
-                outarray[i] = float(input_pha.Pha[i]) / input_pha.Exposure
-            elif input_pha.Datatype == "RATE":
-                outarray[i] = input_pha.Pha[i]
-            else:
-                message.error("Unknown datatype in source PHA file.")
-                return
-
-        return outarray
-
     # -----------------------------------------------------
     # Return a res object derived from the OGIP data
     # -----------------------------------------------------
@@ -521,7 +483,7 @@ class OGIPRegion(Region):
         method returns a pyspex Res object containing the response matrix."""
 
         try:
-            self.resp.NumberChannels()
+            self.resp.NumberChannels
         except NameError:
             message.error("The OGIP response matrix has not been initialised yet.")
             return 0
@@ -533,7 +495,7 @@ class OGIPRegion(Region):
         res = Res()
 
         # Read the number of energy bins and groups
-        res.nchan = np.append(res.nchan, self.resp.NumberChannels())
+        res.nchan = np.append(res.nchan, self.resp.NumberChannels)
         res.nsector = 1
         res.nregion = 1
         res.sector = np.append(res.sector, 1)
@@ -541,7 +503,7 @@ class OGIPRegion(Region):
         res.resname = None
 
         # Read the total number of groups (which is neg in SPEX format)
-        res.neg = np.append(res.neg, self.resp.NumberTotalGroups())
+        res.neg = np.append(res.neg, self.resp.NumberTotalGroups)
 
         res.eg1 = np.zeros(res.neg, dtype=float)
         res.eg2 = np.zeros(res.neg, dtype=float)
@@ -550,7 +512,7 @@ class OGIPRegion(Region):
         res.ic2 = np.zeros(res.neg, dtype=int)
 
         # Read the total number of matrix elements
-        nm = self.resp.NumberTotalElements()
+        nm = self.resp.NumberTotalElements
         res.resp = np.zeros(nm, dtype=float)
 
         # Set the number of components to 1 (no optimization or re-ordering)
@@ -559,7 +521,7 @@ class OGIPRegion(Region):
         # Read the energy bin boundaries and group information
         g = 0  # Index for the group number
         m = 0  # Index for the matrix element number
-        for i in np.arange(self.resp.NumberEnergyBins()):
+        for i in np.arange(self.resp.NumberEnergyBins):
             # Number of response groups for this energy bin
             ngrp = self.resp.NumberGroups[i]
             for j in np.arange(ngrp):
