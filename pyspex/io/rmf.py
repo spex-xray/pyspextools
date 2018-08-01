@@ -14,6 +14,7 @@ from future import standard_library
 import pyspex.messages as message
 import numpy as np
 import astropy.io.fits as fits
+from pyspex.io.arf import Arf
 
 standard_library.install_aliases()
 
@@ -45,6 +46,8 @@ class Rmf:
         self.ResponseThreshold = 1E-7 #: Minimum value in response
         self.EnergyUnits = ''         #: Units of the energy scale
         self.RMFUnits = ''            #: Units for RMF values
+
+        self.Order = 0                #: Order of the matrix
 
     def read(self,rmffile):
         """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
@@ -81,23 +84,37 @@ class Rmf:
 
         self.Matrix = np.array([],dtype=float)
 
+        try:
+            self.Order = header['ORDER']
+        except:
+            pass
+
         fgroup = 0
         felem = 0
         k=0
+
+        fchan_local = data['F_CHAN']
+        nchan_local = data['N_CHAN']
+        matrix_local = data['MATRIX']
 
         for i in np.arange(self.NumberEnergyBins):
             self.FirstGroup[i] = fgroup
             fgroup = fgroup + self.NumberGroups[i]
 
-            for j in np.arange(self.NumberGroups[i]):
-                self.FirstChannelGroup[k] = data['F_CHAN'][i][j]
-                self.NumberChannelsGroup[k] = data['N_CHAN'][i][j]
-                self.FirstElement[k] = felem
-                felem = felem + self.NumberChannelsGroup[k]
+            if self.NumberGroups[i] != 0:
+                for j in np.arange(self.NumberGroups[i]):
+                    try:
+                        self.FirstChannelGroup[k] = fchan_local[i][j]
+                        self.NumberChannelsGroup[k] = nchan_local[i][j]
+                    except IndexError:
+                        self.FirstChannelGroup[k] = fchan_local[i]
+                        self.NumberChannelsGroup[k] = nchan_local[i]
+                    self.FirstElement[k] = felem
+                    felem = felem + self.NumberChannelsGroup[k]
 
-                k = k + 1
+                    k = k + 1
 
-            self.Matrix = np.append(self.Matrix, data['MATRIX'][i])
+                self.Matrix = np.append(self.Matrix, matrix_local[i])
 
         self.NumberTotalElements = self.Matrix.size
         self.ResponseThreshold = np.amin(self.Matrix)
@@ -158,3 +175,25 @@ class Rmf:
         print("")
 
         return
+
+    def checkCompatibility(self,arf):
+
+        if not isinstance(arf,Arf):
+            message.error("Input arf is not an Arf class instance.")
+            return 1
+
+        if arf.LowEnergy.size != self.LowEnergy.size:
+            message.error("Size of ARF and RMF are not the same.")
+            return 1
+
+        if arf.LowEnergy[0] != self.LowEnergy[0]:
+            message.error("Lower Energies of arrays are not the same.")
+            return 1
+
+        size = arf.HighEnergy.size - 1
+
+        if arf.HighEnergy[size] != self.HighEnergy[size]:
+            message.error("Lower Energies of arrays are not the same.")
+            return 1
+
+        return 0

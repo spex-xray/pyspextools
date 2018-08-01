@@ -28,6 +28,8 @@ class Arf:
 
         self.EnergyUnits = 'keV'                       #: Energy units
         self.arfUnits = 'cm2'
+        self.Order = 0                                 #: Grating order (for grating arrays, else 0)
+        self.Grating = 0                               #: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)
 
     def read(self,arffile):
         """Read the effective area from an OGIP ARF file."""
@@ -46,6 +48,13 @@ class Arf:
             self.arfUnits = 'cm2'
         else:
             message.warning("ARF units are not recognized.")
+
+        try:
+            self.Order = header['TG_M']
+            self.Grating = header['TG_PART']
+        except:
+            self.Order = 0
+            self.Grating = 0
 
         return 0
 

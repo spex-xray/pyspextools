@@ -14,6 +14,7 @@ Using the pyspex scripts
    :maxdepth: 2
 
    tutorials/ogip2spex
+   tutorials/tgcat2spex
 
 
 Using the SPEX user model

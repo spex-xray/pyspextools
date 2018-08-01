@@ -419,8 +419,8 @@ class Res:
             n2=n1+self.neg[i]
             for j in (n1 + np.arange(self.neg[i])):
                 # Update group definition
-                ic2 = self.nchan[i] - self.ic1[j] + 1
-                ic1 = self.nchan[i] - self.ic2[j] + 1
+                ic2 = self.nchan[i] - self.ic1[j] #+ 1
+                ic1 = self.nchan[i] - self.ic2[j] #+ 1
 
                 self.ic1[j] = ic1
                 self.ic2[j] = ic2
@@ -434,6 +434,38 @@ class Res:
 
             n1 = n2 + 1
 
+    # -----------------------------------------------------
+    # Add component to RES file
+    # -----------------------------------------------------
+    def append_component(self,addres,iregion=1,isector=1):
+        """Append a component to the response matrix from another matrix. This is used to add orders to the response
+        file."""
+
+        # Append line to SPEX_RESP_ICOMP
+        self.nchan=np.append(self.nchan,addres.nchan)
+        self.neg = np.append(self.neg,addres.neg)
+        self.sector = np.append(self.sector,isector)
+        self.region = np.append(self.region,iregion)
+        if self.share_comp:
+            self.shcomp = np.append(self.shcomp,addres.shcomp)
+
+        self.ncomp = self.ncomp + addres.ncomp
+
+        # Append response groups (SPEX_RESP_ICOMP)
+        self.eg1 = np.append(self.eg1,addres.eg1)
+        self.eg2 = np.append(self.eg2,addres.eg2)
+        self.ic1 = np.append(self.ic1,addres.ic1)
+        self.ic2 = np.append(self.ic2,addres.ic2)
+        self.nc = np.append(self.nc,addres.nc)
+        if self.area_scal:
+            self.relarea = np.append(self.relarea,addres.relarea)
+
+        # Append
+        self.resp = np.append(self.resp,addres.resp)
+        if self.resp_der:
+            self.dresp = np.append(self.dresp,addres.dresp)
+
+        return 0
 
     # -----------------------------------------------------
     # Function to create a masks for a certain region

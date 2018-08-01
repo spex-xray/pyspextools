@@ -12,8 +12,6 @@ from builtins import str
 from future import standard_library
 
 import pyspex.messages as message
-import numpy as np
-import math
 
 from .region import Region
 from .res import Res
@@ -21,6 +19,8 @@ from .spo import Spo
 from .pha import Pha
 from .rmf import Rmf
 from .arf import Arf
+from .convert import pha_to_spo
+from .convert import rmf_to_res
 
 standard_library.install_aliases()
 
@@ -83,11 +83,21 @@ class OGIPRegion(Region):
             message.error("Check of OGIP files failed.")
             return
 
+        if not self.input_back:
+            self.back = None
+
+        if not self.input_corr:
+            self.corr = None
+
+        if not self.input_area:
+            self.area = None
+
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
             message.proc_start("Convert OGIP spectra to spo format")
-            spo = self.__ogip_to_spo()
-            if spo != 0:
+            spo = pha_to_spo(self.spec,self.resp,back=self.back,corr=self.corr)
+
+            if isinstance(spo,Spo):
                 self.spo = spo
                 message.proc_end(0)
             else:
@@ -96,8 +106,9 @@ class OGIPRegion(Region):
                 return
 
             message.proc_start("Convert OGIP response to res format")
-            res = self.__ogip_to_res()
-            if res != 0:
+            res = rmf_to_res(self.resp,arf=self.area)
+
+            if isinstance(res,Res):
                 self.res = res
                 message.proc_end(0)
             else:
@@ -192,10 +203,6 @@ class OGIPRegion(Region):
             else:
                 self.input_area = True
                 message.proc_end(stat)
-
-            # Check if arf and rmf are compatible
-            #if self.resp.checkCompatibility(self.area) != 0:
-            #    message.error("The ARF is incompatible with the provided response matrix.")
         else:
             message.error("No effective area filename specified.")
 
@@ -288,11 +295,11 @@ class OGIPRegion(Region):
                 print(area)
                 return 1
             # Is the effective area consistent with the response?
-            #area = self.resp.checkCompatibility(self.area)
-            #if area != 0:
-            #    message.proc_end(1)
-            #    print("Error: Effective area file is not consistent with the provided response file.")
-            #    return 1
+            area = self.resp.checkCompatibility(self.area)
+            if area != 0:
+                message.proc_end(1)
+                print("Error: Effective area file is not consistent with the provided response file.")
+                return 1
             message.proc_end(0)
 
         return 0
@@ -332,249 +339,3 @@ class OGIPRegion(Region):
 
         print("===========================================================")
 
-    # -----------------------------------------------------
-    # Return a spo object derived from the OGIP data
-    # -----------------------------------------------------
-
-    def __ogip_to_spo(self):
-        """Convert the source and optional background and correction spectra from OGIP to SPEX format. This
-        method returns a pyspex Spo object containing the source and background rates. Please make sure that
-        all necessary OGIP files are read in before running this method."""
-
-        if not self.input_spec:
-            message.error("Spectrum has not been read in yet.")
-            return
-
-        spo = Spo()
-
-        # Determine number of channels and add to spo
-        nchan = self.spec.NumberChannels()
-        spo.nchan = np.append(spo.nchan, nchan)
-        spo.sponame = None
-        spo.nregion = 1
-
-        # Read source rate per bin (or convert to rate)
-        ochan = self.spec.Rate
-
-        # Read background rate (or convert to rate) if available
-        if self.input_back:
-            mbchan = self.back.Rate
-            dbchan = self.back.StatError
-
-        # Read correction spectrum if available
-        if self.input_corr:
-            corr = self.corr.Rate
-
-        # Create zero arrays of length nchan to fill in the loop later
-        spo.zero_spo(nchan)
-
-        # Loop through all the bins for the relevant spectral arrays
-        for i in np.arange(nchan):
-            spo.tints[i] = self.spec.Exposure * self.spec.AreaScaling[i]
-
-            # Calculate the source rates and errors
-            if spo.tints[i] > 0:
-                spo.ochan[i] = ochan[i] / self.spec.AreaScaling[i]
-                spo.dochan[i] = (spo.dochan[i])**2 / self.spec.AreaScaling[i]  # Add the errors in square later
-            else:
-                spo.ochan[i] = 0.
-                spo.dochan[i] = 0.
-
-            # Subtract background if available
-            if self.input_back:
-                btints = self.back.Exposure * self.back.AreaScaling[i]
-                # Calculate backscale ratio
-                if self.back.BackScaling[i] > 0:
-                    fb = self.spec.BackScaling[i] / self.back.BackScaling[i]
-                else:
-                    fb = 0.
-
-                # Subtract background and calculate errors
-                spo.ochan[i] = spo.ochan[i] - mbchan[i] * fb / self.back.AreaScaling[i]
-                spo.dochan[i] = spo.dochan[i] + (dbchan[i] * fb / self.back.AreaScaling[i]) ** 2
-                spo.mbchan[i] = mbchan[i] * fb / self.back.AreaScaling[i]
-                spo.dbchan[i] = (dbchan[i] * fb / self.back.AreaScaling[i]) ** 2
-
-                # Calculate the Ext_Rate backscale ratio
-                if fb > 0 and self.spec.Exposure > 0:
-                    spo.brat[i] = btints / spo.tints[i] / fb
-                else:
-                    spo.brat[i] = 0.
-
-            # Subtract correction spectrum, if available
-            if self.input_corr:
-                ctints = self.corr.Exposure * self.corr.AreaScaling[i]
-                # Note: The influence of brat on the corr spectrum is not taken into account!
-                if self.corr.BackScaling[i] > 0:
-                    fc = self.spec.BackScaling[i] / self.corr.BackScaling[i]
-                else:
-                    fc = 0.
-
-                # Subtract correction spectrum and calculate errors
-                spo.ochan[i] = spo.ochan[i] - corr[i] * fc / ctints
-                spo.dochan[i] = spo.dochan[i] + corr[i] * (fc / ctints) ** 2
-                spo.mbchan[i] = spo.mbchan[i] + corr[i] * fc / ctints
-                spo.dbchan[i] = spo.dbchan[i] + corr[i] * (fc / ctints) ** 2
-
-            # Set background to zero for zero exposure bins
-            if spo.tints[i] <= 0.:
-                spo.mbchan[i] = 0.
-                spo.dbchan[i] = 0.
-                spo.brat[i] = 0.
-
-            spo.dochan[i] = math.sqrt(spo.dochan[i])
-            spo.dbchan[i] = math.sqrt(spo.dbchan[i])
-
-            # Set first, last and used variables
-            if self.spec.Quality[i] != 0:
-                spo.used[i] = False
-
-            if self.input_back:
-                if self.back.Quality[i] != 0:
-                    spo.used[i] = False
-
-            if self.input_corr:
-                if self.corr.Quality[i] != 0:
-                    spo.used[i] = False
-
-            if self.save_grouping:
-                if self.spec.Grouping[i] == 1:
-                    spo.first[i] = True
-                    spo.last[i] = False
-                if self.spec.Grouping[i] == 0:
-                    spo.first[i] = False
-                    if i < nchan - 1:
-                        if self.spec.Grouping[i + 1] == 1:
-                            spo.last[i] = True
-                    elif i == nchan - 1:
-                        spo.last[i] = True
-                    else:
-                        spo.last[i] = False
-
-            # Get channel boundaries from response
-            # Channel boundary cannot be 0.
-            if self.resp.EnergyUnits != "keV":
-                message.warning("Energy units of keV are expected in the response file!")
-
-            if self.resp.ChannelLowEnergy[i] <= 0.:
-                spo.echan1[i] = 1e-5
-                message.warning("Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.")
-            else:
-                spo.echan1[i] = self.resp.ChannelLowEnergy[i]
-            spo.echan2[i] = self.resp.ChannelHighEnergy[i]
-
-        # Check if channel order needs to be swapped
-        if nchan > 1:
-            if spo.echan1[0] > spo.echan1[1]:
-                spo.swap = True
-                spo.swap_order()
-
-        spo.empty=False
-
-        return spo
-
-    # -----------------------------------------------------
-    # Return a res object derived from the OGIP data
-    # -----------------------------------------------------
-
-    def __ogip_to_res(self):
-        """Convert response matrix from OGIP to SPEX format. The response matrix is translated one-to-one
-        without optimizations. All groups in the OGIP matrix are put into one SPEX response component. This
-        method returns a pyspex Res object containing the response matrix."""
-
-        try:
-            self.resp.NumberChannels
-        except NameError:
-            message.error("The OGIP response matrix has not been initialised yet.")
-            return 0
-
-        if not self.input_resp:
-            message.error("The OGIP response matrix has not been read yet.")
-            return 0
-
-        res = Res()
-
-        # Read the number of energy bins and groups
-        res.nchan = np.append(res.nchan, self.resp.NumberChannels)
-        res.nsector = 1
-        res.nregion = 1
-        res.sector = np.append(res.sector, 1)
-        res.region = np.append(res.region, 1)
-        res.resname = None
-
-        # Read the total number of groups (which is neg in SPEX format)
-        res.neg = np.append(res.neg, self.resp.NumberTotalGroups)
-
-        res.eg1 = np.zeros(res.neg, dtype=float)
-        res.eg2 = np.zeros(res.neg, dtype=float)
-        res.nc = np.zeros(res.neg, dtype=int)
-        res.ic1 = np.zeros(res.neg, dtype=int)
-        res.ic2 = np.zeros(res.neg, dtype=int)
-
-        # Read the total number of matrix elements
-        nm = self.resp.NumberTotalElements
-        res.resp = np.zeros(nm, dtype=float)
-
-        # Set the number of components to 1 (no optimization or re-ordering)
-        res.ncomp = 1
-
-        # Read the energy bin boundaries and group information
-        g = 0  # Index for the group number
-        m = 0  # Index for the matrix element number
-        for i in np.arange(self.resp.NumberEnergyBins):
-            # Number of response groups for this energy bin
-            ngrp = self.resp.NumberGroups[i]
-            for j in np.arange(ngrp):
-                # Energy bin boundaries
-                if self.resp.LowEnergy[i] <= 0.:
-                    res.eg1[g] = 1e-7
-                    message.warning("Lowest energy boundary is 0. Set to 1E-7 to avoid problems.")
-                else:
-                    res.eg1[g] = self.resp.LowEnergy[i]
-
-                res.eg2[g] = self.resp.HighEnergy[i]
-                if res.eg2[g] <= res.eg1[g]:
-                    message.error("Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
-                        i + 1))
-                    return
-
-                res.nc[g] = self.resp.NumberChannelsGroup[g]
-                # Add the start channel to the IC to correct for cases where we start at channel 0/1
-                res.ic1[g] = self.resp.FirstChannelGroup[g] + self.resp.FirstChannel
-                ic2 = res.ic1[g] + res.nc[g] - 1
-                res.ic2[g] = ic2
-
-                if self.input_area:
-                    area=self.area.EffArea[i]
-                else:
-                    area = 1.0
-
-                for k in np.arange(res.nc[g]):
-                    res.resp[m] = self.resp.Matrix[m] * area
-                    m = m + 1
-                g = g + 1
-
-        if g > res.neg:
-            message.error("Mismatch between number of groups.")
-            return 0
-
-        if m > nm:
-            message.error("Mismatch between number of matrix elements.")
-            return 0
-
-        # Convert matrix to m**2 units for SPEX
-        if self.input_area:
-            if self.area.arfUnits == "cm2":
-                res.resp *= 1.E-4
-        else:
-            res.resp *= 1.E-4
-
-        # Check if channel order needs to be swapped
-        if res.nchan > 1:
-            if self.resp.ChannelLowEnergy[0] > self.resp.ChannelLowEnergy[1]:
-                res.swap = True
-                res.swap_order()
-
-        res.empty = False
-
-        return res

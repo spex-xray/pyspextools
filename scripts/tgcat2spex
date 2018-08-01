@@ -1,0 +1,176 @@
+#!/usr/bin/env python
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import os
+import sys
+import glob
+import argparse
+import pyspex
+import pyspex.io
+from pyspex.io.pha2 import Pha2
+from pyspex.io.pha import Pha
+from pyspex.io.rmf import Rmf
+from pyspex.io.res import Res
+from pyspex.io.convert import convert_grating_rmf
+from pyspex.io.convert import pha_to_spo
+from pyspex.data.badchannels import clean_region
+import pyspex.messages as message
+
+from builtins import int
+
+from future import standard_library
+
+standard_library.install_aliases()
+
+
+def main():
+    print("==================================")
+    print(" This is tgcat2spex version {0}".format(pyspex.__version__))
+    print("==================================")
+    print("")
+
+    # Obtain command line arguments
+    parser = tgcat2spex_arguments()
+    args = parser.parse_args()
+
+    # Set color in the terminal
+    message.set_color(args.color)
+
+    # Set the path from the command line
+    path = args.path
+
+    # Add the tgcat2spex command to the file history
+    history = []
+    history.append("TGCAT2SPEX version: {0}".format(pyspex.__version__))
+    command = ''
+    for arg in sys.argv:
+        command = command + ' ' + arg
+    history.append("Command used: {0}".format(command))
+    history.append("Variables derived from commandline:")
+    for arg in vars(args):
+        line = "{0} : {1}".format(arg, getattr(args,arg))
+        history.append(line)
+
+    # Initialize PHA2 object
+    src = Pha2()
+
+    # Is the source spectrum there?
+    message.proc_start("Read source spectrum")
+    if os.path.isfile(path+"/pha2.gz"):
+        stat = src.read(path+"/pha2.gz",background=args.bkgsubtract)
+        if stat != 0:
+            message.proc_end(stat)
+            message.error("Failed to read source spectrum.")
+            sys.exit()
+        else:
+            message.proc_end(stat)
+    else:
+        message.proc_end(1)
+        message.error("Spectrum file pha2.gz not found in path.")
+        sys.exit()
+
+    # Determine grating name
+    if os.path.isfile(path+"/heg_1.rmf.gz"):
+        grating = 1
+        print("Detected grating: Chandra HEG/MEG.")
+    elif os.path.isfile(path+"/leg_1.rmf.gz"):
+        grating = 3
+        print("Detected grating: Chandra LEG.")
+    else:
+        message.error("Chandra grating not recognized.")
+        sys.exit()
+
+    # Combine spectra for each grating
+    message.proc_start("Combining orders of the spectra")
+    if grating == 1:
+        (heg, hegbkg) = src.combine_orders(1)
+        (meg, megbkg) = src.combine_orders(2)
+        if isinstance(heg, Pha) and isinstance(meg, Pha):
+            message.proc_end(0)
+        else:
+            message.proc_end(1)
+    elif grating == 3:
+        (leg, legbkg) = src.combine_orders(3)
+        if isinstance(leg, Pha):
+            message.proc_end(0)
+        else:
+            message.proc_end(1)
+    else:
+        message.proc_end(1)
+        message.error("Illegal grating number '{0}'.".format(grating))
+        sys.exit()
+
+    # Convert spectra and save to spo
+    message.proc_start("Convert to spo and write spo file")
+    if grating == 1:
+        rmf = Rmf()
+        rmf.read(path+"/heg_1.rmf.gz")
+        hegspo = pha_to_spo(heg,rmf,back=hegbkg)
+        hegspo.write_file(path+"/heg.spo", overwrite=args.overwrite, history=history, ext_rate=args.extrate)
+        rmf = Rmf()
+        rmf.read(path+"/meg_1.rmf.gz")
+        megspo = pha_to_spo(meg,rmf,back=megbkg)
+        megspo.write_file(path+"/meg.spo", overwrite=args.overwrite, history=history, ext_rate=args.extrate)
+    elif grating == 3:
+        rmf = Rmf()
+        rmf.read(path+"/leg_1.rmf.gz")
+        megspo = pha_to_spo(leg,rmf,back=legbkg)
+        megspo.write_file(path+"/leg.spo", overwrite=args.overwrite, history=history, ext_rate=args.extrate)
+    message.proc_end(0)
+
+    # Read, combine and write respons(es)
+    if grating == 1:
+        hegres = convert_responses(path,'heg')
+        megres = convert_responses(path,'meg')
+    elif grating == 3:
+        legres = convert_responses(path,'leg')
+
+    # Write res files
+    message.proc_start("Write combined res file")
+    if grating == 1:
+        hegres.write_file(path+"/heg.res", overwrite=args.overwrite, history=history)
+        megres.write_file(path+"/meg.res", overwrite=args.overwrite, history=history)
+    elif grating == 3:
+        legres.write_file(path+"/leg.res", overwrite=args.overwrite, history=history)
+    message.proc_end(0)
+
+
+def convert_responses(path, gname):
+
+    rmflist = glob.glob(path+'/'+gname+'*.rmf.gz')
+    arflist = glob.glob(path+'/'+gname+'*.arf.gz')
+
+    if len(rmflist) != len(arflist):
+        message.error("Lists of RMF and ARF files do not have the same length.")
+        return 1
+
+    rmflist.sort()
+    arflist.sort()
+
+    res = convert_grating_rmf(rmflist, arflist)
+    if not isinstance(res,Res):
+        message.error("Failed to combine response files.")
+        return 1
+
+    return res
+
+# Get command line arguments
+def tgcat2spex_arguments():
+    # Obtain command line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('path', help="Path to the TGCAT observation directory.")
+    parser.add_argument('--bkgsubtract', help="Substract the background spectrum.", action="store_true", default=False)
+    parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
+                        default=False)
+    parser.add_argument('--extrate', help="Write additional Ext_Rate column (SPEX >=3.05.00).", action="store_true",
+                        default=False)
+    parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
+
+    return parser
+
+if __name__ == "__main__":
+    main()

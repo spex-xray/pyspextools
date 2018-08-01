@@ -12,4 +12,6 @@ from .region import Region
 from .dataset import Dataset
 from .ogip import OGIPRegion
 
+from .convert import *
+
 

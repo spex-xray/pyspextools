@@ -50,8 +50,14 @@ class Pha:
         self.bkgfile = None                       #: Associated Background file
         self.corfile = None                       #: Associated Correction spectrum file
 
+        # Only applicable for PHA2 files:
+        self.Pha2Back = False                     #: Is there a PHA2 background available
+        self.BackRate = np.array([], dtype=float) #: PHA2 Background Rate
+        self.BackStatError = np.array([], dtype=float) #: PHA2 Background Error
+        self.Pha2BackScal = 1.0                   #: Backscale value for background
+
     def read(self,filename):
-        """Read a spectrum from a PHA file."""
+        """Read a spectrum from a PHA file. If this function is called by the PHA2 routine"""
 
         # Read the data and header from the SPECTRUM extension
         (data, header) = fits.getdata(filename,'SPECTRUM',header=True)
@@ -82,7 +88,7 @@ class Pha:
                 self.StatError = None
                 message.warning("No Poisson errors, but no STAT_ERR keyword found.")
         else:
-            self.StatError = np.zeros(self.DetChans, dtype=int)
+            self.StatError = np.zeros(self.DetChans, dtype=float)
             for i in np.arange(self.DetChans):
                 self.StatError[i] = math.sqrt(self.Rate[i] / self.Exposure)
 
