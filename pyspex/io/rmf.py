@@ -89,9 +89,10 @@ class Rmf:
         except:
             pass
 
-        fgroup = 0
-        felem = 0
-        k=0
+        fgroup = 0  # Count total number of groups
+        felem = 0   # Count total number of response elements
+        nelem = np.zeros(self.NumberEnergyBins, dtype=int)   # Count number of response elements per energy bin
+        k = 0
 
         fchan_local = data['F_CHAN']
         nchan_local = data['N_CHAN']
@@ -111,10 +112,19 @@ class Rmf:
                         self.NumberChannelsGroup[k] = nchan_local[i]
                     self.FirstElement[k] = felem
                     felem = felem + self.NumberChannelsGroup[k]
+                    nelem[i] = nelem[i] + self.NumberChannelsGroup[k]
 
                     k = k + 1
 
-                self.Matrix = np.append(self.Matrix, matrix_local[i])
+        self.Matrix = np.zeros(felem, dtype=float)
+
+        r = 0
+        for i in np.arange(self.NumberEnergyBins):
+            if nelem[i] != 0:
+                for j in np.arange(nelem[i]):
+                    self.Matrix[r] = matrix_local[i][j]
+                    r=r+1
+
 
         self.NumberTotalElements = self.Matrix.size
         self.ResponseThreshold = np.amin(self.Matrix)
