@@ -158,9 +158,9 @@ def __get_bad_channel_masks(reg):
             if ic > ic2:
                 message.error("Error: Mismatch in number of channels.")
             if reg.res.resp[ir] <= 0.0:
-                chanmask[ic] = False or chanmask[ic]
+                chanmask[ic-1] = False or chanmask[ic-1]
             else:
-                chanmask[ic] = True
+                chanmask[ic-1] = True
 
             ir = ir + 1
 
@@ -178,7 +178,7 @@ def __get_bad_channel_masks(reg):
 
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j
-            if chanmask[ic]:  # If channel is good
+            if chanmask[ic-1]:  # If channel is good
                 newnc = newnc + 1  # Count number of good channels in group
                 if first:  # If this is the first good bin of the group, set ic1
                     first = False

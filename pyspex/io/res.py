@@ -401,6 +401,9 @@ class Res:
             thdulist.writeto(resfile, overwrite=overwrite)
         except IOError:
             print("Error: File {0} already exists. I will not overwrite it!".format(resfile))
+            return 1
+
+        return 0
 
     # -----------------------------------------------------
     # Swap the channel order between wavelength and energy order

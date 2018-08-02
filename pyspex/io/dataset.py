@@ -119,6 +119,16 @@ class Dataset:
             self.regions.append(reg)
 
     # -----------------------------------------------------
+    # Append a region object to the dataset
+    # -----------------------------------------------------
+    def append_region(self,region):
+        """Append a region object to the dataset."""
+
+        nregions=len(self.regions)
+        region.res.region = region.res.region + nregions
+        self.regions.append(region)
+
+    # -----------------------------------------------------
     # Write one region to a spo and res file.
     # -----------------------------------------------------
 
@@ -130,6 +140,9 @@ class Dataset:
             self.regions[iregion - 1].res.write_file(resfile, overwrite=overwrite, history=history)
         else:
             print("Error: region number not found!")
+            return 1
+
+        return 0
 
     # -----------------------------------------------------
     # Write all the regions to a spo and res file.
@@ -146,8 +159,17 @@ class Dataset:
             tres.add_res_region(ireg.res, i)
             i = i + 1
 
-        tspo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
-        tres.write_file(resfile, overwrite=overwrite, history=history)
+        stat=tspo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
+        if stat != 0:
+            message.error("Writing SPO file failed.")
+            return 1
+
+        stat=tres.write_file(resfile, overwrite=overwrite, history=history)
+        if stat != 0:
+            message.error("Writing RES file failed.")
+            return 1
+
+        return 0
 
     # -----------------------------------------------------
     # Show a summary of the dataset, similar to data show in SPEX

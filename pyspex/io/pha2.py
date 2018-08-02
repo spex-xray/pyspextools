@@ -27,6 +27,9 @@ class Pha2:
         self.phalist = []                       #: List of PHA spectra
         self.tg_m = np.array([])                #: Array of order numbers
         self.tg_part = np.array([])             #: Array of grating numbers
+        self.instrument = ''                    #: Instrument name
+        self.telescope = ''                     #: Telescope name
+        self.grating = ''                       #: Grating name
 
         self.gratings = {'1': 'heg', '2': 'meg', '3': 'leg'}
 
@@ -41,6 +44,9 @@ class Pha2:
         self.NumberSpectra = header['NAXIS2']
         self.tg_m = data['TG_M']
         self.tg_part = data['TG_PART']
+        self.instrument = header['INSTRUME']
+        self.telescope = header['TELESCOP']
+        self.grating = header['GRATING']
 
         for i in np.arange(self.NumberSpectra):
             pha = Pha()

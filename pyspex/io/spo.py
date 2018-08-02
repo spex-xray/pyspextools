@@ -360,6 +360,9 @@ class Spo:
             thdulist.writeto(sponame, overwrite=overwrite)
         except IOError:
             print("Error: File {0} already exists. I will not overwrite it!".format(sponame))
+            return 1
+
+        return 0
 
     # -----------------------------------------------------
     # Swap/Flip arrays between energy or wavelength order

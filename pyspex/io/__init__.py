@@ -11,6 +11,7 @@ from .arf import Arf
 from .region import Region
 from .dataset import Dataset
 from .ogip import OGIPRegion
+from .tg import TGRegion
 
 from .convert import *
 
