@@ -109,7 +109,7 @@ def clean_region(reg):
 
     for icomp in np.arange(reg.res.ncomp):
         reg.res.nchan[icomp] = np.sum(chanmask)
-        eg_end = reg.res.neg[icomp]
+        eg_end = reg.res.neg[icomp] + eg_start
         reg.res.neg[icomp] = np.sum(groupmask[eg_start:eg_end])
         eg_start = eg_end + 1
 
@@ -154,13 +154,13 @@ def __get_bad_channel_masks(reg):
         ic1 = reg.res.ic1[ie]  # Original first channel of group
         ic2 = reg.res.ic2[ie]  # Original last channel of group
         for j in np.arange(reg.res.nc[ie]):
-            ic = ic1 + j
-            if ic > ic2:
+            ic = ic1 + j - 1  # -1 because Python array starts at 0, not 1
+            if ic > ic2 - 1:
                 message.error("Error: Mismatch in number of channels.")
             if reg.res.resp[ir] <= 0.0:
-                chanmask[ic-1] = False or chanmask[ic-1]
+                chanmask[ic] = False or chanmask[ic]
             else:
-                chanmask[ic-1] = True
+                chanmask[ic] = True
 
             ir = ir + 1
 
@@ -177,8 +177,8 @@ def __get_bad_channel_masks(reg):
         newnc = 0
 
         for j in np.arange(reg.res.nc[ie]):
-            ic = ic1 + j
-            if chanmask[ic-1]:  # If channel is good
+            ic = ic1 + j - 1
+            if chanmask[ic]:  # If channel is good
                 newnc = newnc + 1  # Count number of good channels in group
                 if first:  # If this is the first good bin of the group, set ic1
                     first = False

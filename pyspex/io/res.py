@@ -422,8 +422,8 @@ class Res:
             n2=n1+self.neg[i]
             for j in (n1 + np.arange(self.neg[i])):
                 # Update group definition
-                ic2 = self.nchan[i] - self.ic1[j] #+ 1
-                ic1 = self.nchan[i] - self.ic2[j] #+ 1
+                ic2 = self.nchan[i] - self.ic1[j] + 1
+                ic1 = self.nchan[i] - self.ic2[j] + 1
 
                 self.ic1[j] = ic1
                 self.ic2[j] = ic2
