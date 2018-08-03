@@ -1,0 +1,268 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pyspex.io.tg &#8212; pyspex 0.2.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyspex.io.tg</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Import stuff for compatibility between python 2 and 3</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pyspex.messages</span> <span class="k">as</span> <span class="nn">message</span>
+
+<span class="kn">from</span> <span class="nn">.region</span> <span class="k">import</span> <span class="n">Region</span>
+<span class="kn">from</span> <span class="nn">.res</span> <span class="k">import</span> <span class="n">Res</span>
+<span class="kn">from</span> <span class="nn">.spo</span> <span class="k">import</span> <span class="n">Spo</span>
+<span class="kn">from</span> <span class="nn">.pha2</span> <span class="k">import</span> <span class="n">Pha2</span>
+<span class="kn">from</span> <span class="nn">.pha</span> <span class="k">import</span> <span class="n">Pha</span>
+<span class="kn">from</span> <span class="nn">.rmf</span> <span class="k">import</span> <span class="n">Rmf</span>
+<span class="kn">from</span> <span class="nn">.arf</span> <span class="k">import</span> <span class="n">Arf</span>
+<span class="kn">from</span> <span class="nn">.convert</span> <span class="k">import</span> <span class="n">rmf_to_res</span>
+<span class="kn">from</span> <span class="nn">.convert</span> <span class="k">import</span> <span class="n">pha_to_spo</span>
+
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="TGRegion"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.tg.TGRegion">[docs]</a><span class="k">class</span> <span class="nc">TGRegion</span><span class="p">(</span><span class="n">Region</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;The TGRegion class contains methods to read Chandra grating data into the pyspex module and convert</span>
+<span class="sd">    these to spo and res format objects.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+        <span class="n">Region</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>   <span class="c1">#: Grating name</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Read a set of Chandra grating files into a region</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="TGRegion.read_region"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.tg.TGRegion.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha2file</span><span class="p">,</span> <span class="n">rmflist</span><span class="p">,</span> <span class="n">arflist</span><span class="p">,</span> <span class="n">grating</span><span class="p">,</span> <span class="n">bkgsubtract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists</span>
+<span class="sd">        are mandatory. The grating option can be either HETG, METG or LETG&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span> <span class="o">=</span> <span class="n">grating</span>
+
+        <span class="c1"># Read the PHA2 file for a particular grating</span>
+        <span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">bkg</span><span class="p">)</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__read_pha2</span><span class="p">(</span><span class="n">pha2file</span><span class="p">,</span> <span class="n">grating</span><span class="p">,</span> <span class="n">bkgsubtract</span><span class="o">=</span><span class="n">bkgsubtract</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span><span class="n">Pha</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to read spectrum file.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Convert the PHA2 file to spo</span>
+
+        <span class="n">rmf</span> <span class="o">=</span> <span class="n">Rmf</span><span class="p">()</span>
+        <span class="n">rmf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rmflist</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">spo</span> <span class="o">=</span> <span class="n">pha_to_spo</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">rmf</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="n">bkg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="p">,</span><span class="n">Spo</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to convert spectrum file.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Convert the responses to res</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__rmflist_to_res</span><span class="p">(</span><span class="n">rmflist</span><span class="p">,</span> <span class="n">arflist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span><span class="n">Res</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to combine and convert response files.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">grating</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+
+    <span class="k">def</span> <span class="nf">__read_pha2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha2file</span><span class="p">,</span> <span class="n">grating</span><span class="p">,</span> <span class="n">bkgsubtract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="c1"># Initialize PHA2 file type</span>
+
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">Pha2</span><span class="p">()</span>
+
+        <span class="c1"># Is the source spectrum there?</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read source spectrum&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">isfile</span><span class="p">(</span><span class="n">pha2file</span><span class="p">):</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">pha2file</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="n">bkgsubtract</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Failed to read source spectrum.&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Spectrum file </span><span class="si">{0}</span><span class="s2"> not found in path.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pha2file</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Convert grating name to number</span>
+        <span class="k">if</span> <span class="n">grating</span> <span class="o">==</span> <span class="s1">&#39;HETG&#39;</span><span class="p">:</span>
+            <span class="n">ngrating</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">grating</span> <span class="o">==</span> <span class="s1">&#39;METG&#39;</span><span class="p">:</span>
+            <span class="n">ngrating</span> <span class="o">=</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">grating</span> <span class="o">==</span> <span class="s1">&#39;LETG&#39;</span><span class="p">:</span>
+            <span class="n">ngrating</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Unsupported grating: &#39;</span><span class="si">{0}</span><span class="s2">&#39;.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">grating</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Combine spectra from a single grating</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Combining orders of the spectrum&quot;</span><span class="p">)</span>
+        <span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">bkg</span><span class="p">)</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">combine_orders</span><span class="p">(</span><span class="n">ngrating</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">Pha</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">bkg</span><span class="p">,</span> <span class="n">Pha</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">src</span><span class="p">,</span> <span class="n">bkg</span>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Return a res object derived from Chandra grating data</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+    <span class="k">def</span> <span class="nf">__rmflist_to_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmflist</span><span class="p">,</span> <span class="n">arflist</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert a list of compatible rmf and arf file into one res file. This is convenient for combining responses</span>
+<span class="sd">        that are provided separately, like the Transmission Grating spectra from Chandra.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rmflist</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arflist</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;ARF list and RMF list do not have the same length.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">0</span>
+
+        <span class="n">rmfobjs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rmflist</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">arfobjs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arflist</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">object</span><span class="p">)</span>
+        <span class="n">rmf_orders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rmflist</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">arf_orders</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">arflist</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">rmflist</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Reading response for order&quot;</span><span class="p">)</span>
+            <span class="n">rmf</span> <span class="o">=</span> <span class="n">Rmf</span><span class="p">()</span>
+            <span class="n">rmf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">rmf_orders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmf</span><span class="o">.</span><span class="n">Order</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">rmf_orders</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">rmf_orders</span> <span class="o">==</span> <span class="n">rmf</span><span class="o">.</span><span class="n">Order</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There are two response files with the same order.&quot;</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">rmfobjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">rmf</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+        <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">arflist</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Reading effective area for order&quot;</span><span class="p">)</span>
+            <span class="n">arf</span> <span class="o">=</span> <span class="n">Arf</span><span class="p">()</span>
+            <span class="n">arf</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+            <span class="n">arf_orders</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arf</span><span class="o">.</span><span class="n">Order</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">arf_orders</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="o">+</span><span class="s2">&quot;  &quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">arf_orders</span> <span class="o">==</span> <span class="n">arf</span><span class="o">.</span><span class="n">Order</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;There are two effective area files for the same order.&quot;</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">arfobjs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">arf</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="n">arfsort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">arf_orders</span><span class="p">)</span>
+        <span class="n">rmfsort</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">rmf_orders</span><span class="p">)</span>
+
+        <span class="c1"># Calculate first response:</span>
+        <span class="n">res</span> <span class="o">=</span> <span class="n">rmf_to_res</span><span class="p">(</span><span class="n">rmfobjs</span><span class="p">[</span><span class="n">rmfsort</span><span class="p">[</span><span class="mi">0</span><span class="p">]],</span><span class="n">arf</span><span class="o">=</span><span class="n">arfobjs</span><span class="p">[</span><span class="n">arfsort</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+
+        <span class="c1"># Append the components from the other responses</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">rmfsort</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span>
+            <span class="n">restmp</span> <span class="o">=</span> <span class="n">rmf_to_res</span><span class="p">(</span><span class="n">rmfobjs</span><span class="p">[</span><span class="n">rmfsort</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span><span class="n">arf</span><span class="o">=</span><span class="n">arfobjs</span><span class="p">[</span><span class="n">arfsort</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span>
+            <span class="n">res</span><span class="o">.</span><span class="n">append_component</span><span class="p">(</span><span class="n">restmp</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">res</span></div>
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

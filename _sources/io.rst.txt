@@ -1,6 +1,6 @@
 .. _iomodule:
 
-pyspex.io: The SPEX data format
+The SPEX data format: pyspex.io
 ===============================
 
 This is a Python class to read, write and manipulate 

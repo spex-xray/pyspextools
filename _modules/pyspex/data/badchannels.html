@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.data.badchannels &#8212; pyspex 0.2.0 documentation</title>
+    <title>pyspex.data.badchannels &#8212; pyspex 0.2.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -156,7 +156,7 @@
 
     <span class="k">for</span> <span class="n">icomp</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ncomp</span><span class="p">):</span>
         <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">icomp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">chanmask</span><span class="p">)</span>
-        <span class="n">eg_end</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">icomp</span><span class="p">]</span>
+        <span class="n">eg_end</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">icomp</span><span class="p">]</span> <span class="o">+</span> <span class="n">eg_start</span>
         <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">icomp</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">groupmask</span><span class="p">[</span><span class="n">eg_start</span><span class="p">:</span><span class="n">eg_end</span><span class="p">])</span>
         <span class="n">eg_start</span> <span class="o">=</span> <span class="n">eg_end</span> <span class="o">+</span> <span class="mi">1</span>
 
@@ -201,8 +201,8 @@
         <span class="n">ic1</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>  <span class="c1"># Original first channel of group</span>
         <span class="n">ic2</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ic2</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>  <span class="c1"># Original last channel of group</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">ie</span><span class="p">]):</span>
-            <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span>
-            <span class="k">if</span> <span class="n">ic</span> <span class="o">&gt;</span> <span class="n">ic2</span><span class="p">:</span>
+            <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># -1 because Python array starts at 0, not 1</span>
+            <span class="k">if</span> <span class="n">ic</span> <span class="o">&gt;</span> <span class="n">ic2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Error: Mismatch in number of channels.&quot;</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">resp</span><span class="p">[</span><span class="n">ir</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
                 <span class="n">chanmask</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span> <span class="o">=</span> <span class="kc">False</span> <span class="ow">or</span> <span class="n">chanmask</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span>
@@ -224,7 +224,7 @@
         <span class="n">newnc</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">ie</span><span class="p">]):</span>
-            <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span>
+            <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
             <span class="k">if</span> <span class="n">chanmask</span><span class="p">[</span><span class="n">ic</span><span class="p">]:</span>  <span class="c1"># If channel is good</span>
                 <span class="n">newnc</span> <span class="o">=</span> <span class="n">newnc</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Count number of good channels in group</span>
                 <span class="k">if</span> <span class="n">first</span><span class="p">:</span>  <span class="c1"># If this is the first good bin of the group, set ic1</span>
@@ -275,7 +275,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

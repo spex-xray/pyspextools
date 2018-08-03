@@ -1,0 +1,296 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>pyspex.io.rmf &#8212; pyspex 0.2.1 documentation</title>
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.1',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyspex.io.rmf</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Import stuff for compatibility between python 2 and 3</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+
+<span class="kn">import</span> <span class="nn">pyspex.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
+<span class="kn">from</span> <span class="nn">pyspex.io.arf</span> <span class="k">import</span> <span class="n">Arf</span>
+
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Rmf"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.rmf.Rmf">[docs]</a><span class="k">class</span> <span class="nc">Rmf</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
+<span class="sd">    Keith Arnaud.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="mi">0</span>                            <span class="c1">#: First channel number</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>            <span class="c1">#: Channel numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>      <span class="c1">#: Number of response groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>        <span class="c1">#: First response group for this energy bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="c1">#: First channel number in this group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span> <span class="c1">#: Number of channels in this group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstElement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>      <span class="c1">#: First response element for this group</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>       <span class="c1">#: Start energy of bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>      <span class="c1">#: End energy of bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>          <span class="c1">#: Matrix elements</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ChannelLowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="c1">#: Start energy of channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ChannelHighEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="c1">#: End energy of channel</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">=</span> <span class="mi">0</span>                          <span class="c1">#: Number of data channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span> <span class="o">=</span> <span class="mi">0</span>                        <span class="c1">#: Number of energy bins</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span> <span class="o">=</span> <span class="mi">0</span>                       <span class="c1">#: Total number of groups</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalElements</span> <span class="o">=</span> <span class="mi">0</span>                     <span class="c1">#: Total number of response elements</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="mf">1.0</span>        <span class="c1">#: Value of EFFAREA keyword</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ResponseThreshold</span> <span class="o">=</span> <span class="mf">1E-7</span> <span class="c1">#: Minimum value in response</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>         <span class="c1">#: Units of the energy scale</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">RMFUnits</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>            <span class="c1">#: Units for RMF values</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="mi">0</span>                <span class="c1">#: Order of the matrix</span>
+
+<div class="viewcode-block" id="Rmf.read"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.rmf.Rmf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">rmffile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
+<span class="sd">        Keith Arnaud.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Read the Ebounds table</span>
+        <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">rmffile</span><span class="p">,</span> <span class="s1">&#39;EBOUNDS&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ChannelLowEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;E_MIN&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ChannelHighEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;E_MAX&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Read the Matrix table</span>
+        <span class="n">rmf</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
+
+        <span class="n">data</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+        <span class="n">header</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_LO&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_HI&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;TUNIT1&#39;</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;N_GRP&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstElement</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;ORDER&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">fgroup</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># Count total number of groups</span>
+        <span class="n">felem</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Count total number of response elements</span>
+        <span class="n">nelem</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>   <span class="c1"># Count number of response elements per energy bin</span>
+        <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">fchan_local</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;F_CHAN&#39;</span><span class="p">]</span>
+        <span class="n">nchan_local</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;N_CHAN&#39;</span><span class="p">]</span>
+        <span class="n">matrix_local</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">FirstGroup</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">fgroup</span>
+            <span class="n">fgroup</span> <span class="o">=</span> <span class="n">fgroup</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">fchan_local</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">nchan_local</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                    <span class="k">except</span> <span class="ne">IndexError</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">fchan_local</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">nchan_local</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">FirstElement</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">felem</span>
+                    <span class="n">felem</span> <span class="o">=</span> <span class="n">felem</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+                    <span class="n">nelem</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">nelem</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">k</span><span class="p">]</span>
+
+                    <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">felem</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">nelem</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nelem</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="p">[</span><span class="n">r</span><span class="p">]</span> <span class="o">=</span> <span class="n">matrix_local</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span>
+                    <span class="n">r</span><span class="o">=</span><span class="n">r</span><span class="o">+</span><span class="mi">1</span>
+
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalElements</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ResponseThreshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span>
+
+        <span class="n">rmf</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Rmf.check"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.rmf.Rmf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check the RMF for internal consistency.&quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of Channels in response is zero.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of Energy bins in response is zero.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="c1"># Check if matrix array is consistent with the indexing</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">):</span>
+            <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]):</span>
+                <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="p">[</span><span class="n">c</span><span class="p">]):</span>
+                    <span class="n">r</span> <span class="o">=</span> <span class="n">r</span> <span class="o">+</span> <span class="mi">1</span>
+                <span class="n">c</span> <span class="o">=</span> <span class="n">c</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">r</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Matrix size does not correspond to index arrays. Response inconsistent.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Rmf.disp"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.rmf.Rmf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display a summary of the RMF object.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMF Response matrix:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstChannel:        </span><span class="si">{0}</span><span class="s2">  First channel number&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberChannels:      </span><span class="si">{0}</span><span class="s2">  Number of data channels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberChannels</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberEnergyBins:    </span><span class="si">{0}</span><span class="s2">  Number of energy bins&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberTotalGroups:   </span><span class="si">{0}</span><span class="s2">  Total number of groups&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalGroups</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberTotalElements: </span><span class="si">{0}</span><span class="s2">  Total number of response elements&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberTotalElements</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AreaScaling          </span><span class="si">{0}</span><span class="s2">  Value of EFFAREA keyword&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ResponseThreshold    </span><span class="si">{0}</span><span class="s2">  Minimum value in response&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ResponseThreshold</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;EnergyUnits          </span><span class="si">{0}</span><span class="s2">  Units of the energy scale&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMFUnits             </span><span class="si">{0}</span><span class="s2">  Units for RMF values&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">RMFUnits</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Arrays:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel              </span><span class="si">{0}</span><span class="s2">  Channel numbers&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ChannelLowEnergy     </span><span class="si">{0}</span><span class="s2">  Start energy of channel&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ChannelHighEnergy    </span><span class="si">{0}</span><span class="s2">  End energy of channel&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ChannelHighEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberGroups         </span><span class="si">{0}</span><span class="s2">  Number of response groups&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstGroup           </span><span class="si">{0}</span><span class="s2">  First response group for this energy bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstGroup</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstChannelGroup    </span><span class="si">{0}</span><span class="s2">  First channel number in this group&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumberChannelsGroup  </span><span class="si">{0}</span><span class="s2">  Number of channels in this group&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberChannelsGroup</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstElement         </span><span class="si">{0}</span><span class="s2">  First response element for this group&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstElement</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LowEnergy            </span><span class="si">{0}</span><span class="s2">  Start energy of bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HighEnergy           </span><span class="si">{0}</span><span class="s2">  End energy of bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Matrix               </span><span class="si">{0}</span><span class="s2">  Matrix elements&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span></div>
+
+    <span class="k">def</span> <span class="nf">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arf</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arf</span><span class="p">,</span><span class="n">Arf</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input arf is not an Arf class instance.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Size of ARF and RMF are not the same.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Lower Energies of arrays are not the same.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="n">size</span> <span class="o">=</span> <span class="n">arf</span><span class="o">.</span><span class="n">HighEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
+
+        <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">size</span><span class="p">]:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Lower Energies of arrays are not the same.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

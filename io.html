@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io: The SPEX data format &#8212; pyspex 0.2.0 documentation</title>
+    <title>The SPEX data format: pyspex.io &#8212; pyspex 0.2.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.0',
+        VERSION:     '0.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pyspex.io.ogip: Importing OGIP files" href="ogip.html" />
+    <link rel="next" title="Importing OGIP spectra" href="ogip.html" />
     <link rel="prev" title="APEC interface for SPEX" href="tutorials/apec.html" /> 
   </head>
   <body>
@@ -37,12 +37,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
+          <a href="ogip.html" title="Importing OGIP spectra"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,8 +51,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pyspex-io-the-spex-data-format">
-<span id="iomodule"></span><h1>pyspex.io: The SPEX data format<a class="headerlink" href="#pyspex-io-the-spex-data-format" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-spex-data-format-pyspex-io">
+<span id="iomodule"></span><h1>The SPEX data format: pyspex.io<a class="headerlink" href="#the-spex-data-format-pyspex-io" title="Permalink to this headline">¶</a></h1>
 <p>This is a Python class to read, write and manipulate
 SPEX spectrum and response file (.spo and .res). The
 format of these FITS files is described in Chapter 5
@@ -87,6 +87,12 @@ can read, write and manipulate spectral datasets.</p>
 <dt id="pyspex.io.Dataset.read_all_regions">
 <code class="descname">read_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read all the regions from a spo and res file and add them to the dataset.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.Dataset.append_region">
+<code class="descname">append_region</code><span class="sig-paren">(</span><em>region</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.append_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.append_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a region object to the dataset.</p>
 </dd></dl>
 
 <dl class="method">
@@ -514,6 +520,13 @@ but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyspex.io.Res.append_component">
+<code class="descname">append_component</code><span class="sig-paren">(</span><em>addres</em>, <em>iregion=1</em>, <em>isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.append_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.append_component" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append a component to the response matrix from another matrix. This is used to add orders to the response
+file.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyspex.io.Res.get_mask">
 <code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create masks to select a particular region in a .res file.</p>
@@ -545,7 +558,7 @@ but must be flipped to energy order in SPEX format.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">pyspex.io: The SPEX data format</a><ul>
+<li><a class="reference internal" href="#">The SPEX data format: pyspex.io</a><ul>
 <li><a class="reference internal" href="#reading-and-writing-datasets">Reading and writing datasets</a></li>
 <li><a class="reference internal" href="#the-region-class">The region class</a></li>
 <li><a class="reference internal" href="#the-spo-class">The spo class</a></li>
@@ -559,7 +572,7 @@ but must be flipped to energy order in SPEX format.</p>
                         title="previous chapter">APEC interface for SPEX</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="ogip.html"
-                        title="next chapter">pyspex.io.ogip: Importing OGIP files</a></p>
+                        title="next chapter">Importing OGIP spectra</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -591,12 +604,12 @@ but must be flipped to energy order in SPEX format.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="ogip.html" title="pyspex.io.ogip: Importing OGIP files"
+          <a href="ogip.html" title="Importing OGIP spectra"
              >next</a> |</li>
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

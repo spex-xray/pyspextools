@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io.ogip: Importing OGIP files &#8212; pyspex 0.2.0 documentation</title>
+    <title>Importing OGIP spectra &#8212; pyspex 0.2.1 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.0',
+        VERSION:     '0.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pyspex.model: Interfaces for SPEX models" href="user.html" />
+    <link rel="next" title="pyspex.data: Data filtering and optimization functions" href="data.html" />
     <link rel="prev" title="pyspex.io: The SPEX data format" href="io.html" /> 
   </head>
   <body>
@@ -37,12 +37,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+          <a href="data.html" title="pyspex.data: Data filtering and optimization functions"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="io.html" title="pyspex.io: The SPEX data format"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -51,16 +51,15 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pyspex-io-ogip-importing-ogip-files">
-<h1>pyspex.io.ogip: Importing OGIP files<a class="headerlink" href="#pyspex-io-ogip-importing-ogip-files" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="importing-ogip-spectra">
+<h1>Importing OGIP spectra<a class="headerlink" href="#importing-ogip-spectra" title="Permalink to this headline">¶</a></h1>
 <p>The pyspex module offers to import OGIP spectral files and convert them to
-SPEX format. The OGIP interface is provided by the HEASP module from NASA’s
-HEASOFT package (Keith Arnaud, <a class="reference external" href="https://heasarc.gsfc.nasa.gov/docs/software/lheasoft/headas/heasp/">HEASP</a>).</p>
-<div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">This functionality depends on the HEASP module, which currently
-only supports Python 2.7!</p>
-</div>
+SPEX format. There are basicly two types of OGIP files: regular type I files,
+which are distributed with most X-ray missions, and type II files distributed
+with the Chandra transmission grating (TG) spectra. Pyspex can handle both
+types.</p>
+<div class="section" id="pyspex-io-ogip-importing-ogip-files">
+<h2>pyspex.io.ogip: Importing OGIP files<a class="headerlink" href="#pyspex-io-ogip-importing-ogip-files" title="Permalink to this headline">¶</a></h2>
 <p>The pyspex OGIPRegion class contains methods to read a source spectrum, background
 spectrum, response file and effective area file, and save them as a SPEX region, which
 can be used by the other methods in the pyspex module. Please note that the
@@ -70,14 +69,33 @@ found in pyspex.data.</p>
 <p>The main method of the OGIPRegion class is read_region. We recommend to use this
 method to read a combination of a spectrum and response matrix. This method will
 do the necessary checks to make sure that the final region object is consistent.
-Since this class depends on the HEASP module, this class is not imported
-automatically, but needs to imported separately, for example:</p>
+The OGIP class can be imported separately if needed:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspex.io.ogip</span> <span class="k">as</span> <span class="nn">ogip</span>
 <span class="n">oregion</span> <span class="o">=</span> <span class="n">ogip</span><span class="o">.</span><span class="n">OGIPRegion</span><span class="p">()</span>
 </pre></div>
 </div>
 <p>The oregion instance above will be an extended version of the parent region class of
 pyspex and will have the same functionality.</p>
+<p>The ‘read_region’ method can be called to read the OGIP spectra and responses and return
+a SPEX region object, which can be written to spo and res files.</p>
+<p>A convenient script called <a class="reference internal" href="tutorials/ogip2spex.html#ogip2spex"><span class="std std-ref">OGIP2spex</span></a> is available to convert OGIP spectra
+and responses to SPEX format.</p>
+</div>
+<div class="section" id="pyspex-io-tg-importing-chandra-grating-files">
+<h2>pyspex.io.tg: Importing Chandra grating files<a class="headerlink" href="#pyspex-io-tg-importing-chandra-grating-files" title="Permalink to this headline">¶</a></h2>
+<p>Spectra from the Chandra gratings are stored in a special format, called PHA2 format,
+and contain the spectra of the specific orders of the spectrum. The TGRegion class allows
+a user to import a Chandra grating spectrum into a SPEX region.</p>
+<p>Similar to the OGIP files, there is also a region class for grating spectra called TGRegion:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspex.io.tg</span> <span class="k">as</span> <span class="nn">tg</span>
+<span class="n">tgregion</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">TGRegion</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The ‘read_region’ method can be called to read the grating spectra and responses and return
+a SPEX region object, which can be written to spo and res files.</p>
+<p>A convenient script called <a class="reference internal" href="tutorials/tg2spex.html#tg2spex"><span class="std std-ref">TG2Spex</span></a> is available to convert one Chandra grating
+observation to SPEX format.</p>
+</div>
 <div class="section" id="notes-about-converting-pha-to-spex-format">
 <h2>Notes about converting PHA to SPEX format<a class="headerlink" href="#notes-about-converting-pha-to-spex-format" title="Permalink to this headline">¶</a></h2>
 <p>The methods in this class perform an almost direct copy of the PHA spectrum files into
@@ -115,8 +133,8 @@ but we did not add this method to this class. This class does a direct copy of a
 of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in
 components is desired, that should be done with other methods in the pyspex module (ref).</p>
 </div>
-<div class="section" id="the-ogip-class-description">
-<h2>The OGIP class description<a class="headerlink" href="#the-ogip-class-description" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="the-ogipregion-class-description">
+<h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyspex.io.ogip.OGIPRegion">
 <em class="property">class </em><code class="descclassname">pyspex.io.ogip.</code><code class="descname">OGIPRegion</code><a class="reference internal" href="_modules/pyspex/io/ogip.html#OGIPRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
@@ -216,6 +234,475 @@ are mandatory. If needed, a background file and effective area file can be added
 </dd></dl>
 
 </div>
+<div class="section" id="the-tgregion-class-description">
+<h2>The TGRegion class description<a class="headerlink" href="#the-tgregion-class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspex.io.tg.TGRegion">
+<em class="property">class </em><code class="descclassname">pyspex.io.tg.</code><code class="descname">TGRegion</code><a class="reference internal" href="_modules/pyspex/io/tg.html#TGRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.tg.TGRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The TGRegion class contains methods to read Chandra grating data into the pyspex module and convert
+these to spo and res format objects.</p>
+<dl class="method">
+<dt id="pyspex.io.tg.TGRegion.read_region">
+<code class="descname">read_region</code><span class="sig-paren">(</span><em>pha2file</em>, <em>rmflist</em>, <em>arflist</em>, <em>grating</em>, <em>bkgsubtract=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/tg.html#TGRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.tg.TGRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists
+are mandatory. The grating option can be either HETG, METG or LETG</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-ogip-file-classes">
+<h2>The OGIP file classes<a class="headerlink" href="#the-ogip-file-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspex.io.pha.Pha">
+<em class="property">class </em><code class="descclassname">pyspex.io.pha.</code><code class="descname">Pha</code><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.FirstChannel">
+<code class="descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.FirstChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>First valid spectral channel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.DetChans">
+<code class="descname">DetChans</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.DetChans" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of legal channels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Channel">
+<code class="descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrum channels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Rate">
+<code class="descname">Rate</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Rate" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrum spectrum count rate</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.StatError">
+<code class="descname">StatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.StatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrum error rate (if exists)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.SysError">
+<code class="descname">SysError</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.SysError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrum systematic error</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Quality">
+<code class="descname">Quality</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Quality" title="Permalink to this definition">¶</a></dt>
+<dd><p>Quality flag</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Grouping">
+<code class="descname">Grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Grouping" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grouping information</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.AreaScaling">
+<code class="descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.AreaScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Areascal keyword/array</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.BackScaling">
+<code class="descname">BackScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.BackScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backscal keyword/array</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.CorrScal">
+<code class="descname">CorrScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.CorrScal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Correction spectrum scaling</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Exposure">
+<code class="descname">Exposure</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Exposure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Exposure time of the spectrum</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Poisserr">
+<code class="descname">Poisserr</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Poisserr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Are the errors Poissonian</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Spectrumtype">
+<code class="descname">Spectrumtype</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Spectrumtype" title="Permalink to this definition">¶</a></dt>
+<dd><p>Spectrumtype (TOTAL, NET or BKG)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.PhaType">
+<code class="descname">PhaType</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.PhaType" title="Permalink to this definition">¶</a></dt>
+<dd><p>Whether the spectrum is in COUNTS or RATE</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.rmffile">
+<code class="descname">rmffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.rmffile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated Response matrix file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.arffile">
+<code class="descname">arffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.arffile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated Effective area file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.bkgfile">
+<code class="descname">bkgfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.bkgfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated Background file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.corfile">
+<code class="descname">corfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.corfile" title="Permalink to this definition">¶</a></dt>
+<dd><p>Associated Correction spectrum file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Pha2Back">
+<code class="descname">Pha2Back</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Pha2Back" title="Permalink to this definition">¶</a></dt>
+<dd><p>Is there a PHA2 background available</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.BackRate">
+<code class="descname">BackRate</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.BackRate" title="Permalink to this definition">¶</a></dt>
+<dd><p>PHA2 Background Rate</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.BackStatError">
+<code class="descname">BackStatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.BackStatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>PHA2 Background Error</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha.Pha.Pha2BackScal">
+<code class="descname">Pha2BackScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha.Pha.Pha2BackScal" title="Permalink to this definition">¶</a></dt>
+<dd><p>Backscale value for background</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha.Pha.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a spectrum from a PHA file. If this function is called by the PHA2 routine</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha.Pha.read_header">
+<code class="descname">read_header</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.read_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.read_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha.Pha.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the object contains the minimum required data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha.Pha.disp">
+<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the PHA file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha.Pha.checkCompatibility">
+<code class="descname">checkCompatibility</code><span class="sig-paren">(</span><em>pha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.checkCompatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.checkCompatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if another PHA object is compatible with the current one in terms of number of channels.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspex.io.pha2.Pha2">
+<em class="property">class </em><code class="descclassname">pyspex.io.pha2.</code><code class="descname">Pha2</code><a class="reference internal" href="_modules/pyspex/io/pha2.html#Pha2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha2.Pha2" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.NumberSpectra">
+<code class="descname">NumberSpectra</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.NumberSpectra" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of spectra in PHAII file</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.phalist">
+<code class="descname">phalist</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.phalist" title="Permalink to this definition">¶</a></dt>
+<dd><p>List of PHA spectra</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.tg_m">
+<code class="descname">tg_m</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.tg_m" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of order numbers</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.tg_part">
+<code class="descname">tg_part</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.tg_part" title="Permalink to this definition">¶</a></dt>
+<dd><p>Array of grating numbers</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.instrument">
+<code class="descname">instrument</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.instrument" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instrument name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.telescope">
+<code class="descname">telescope</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.telescope" title="Permalink to this definition">¶</a></dt>
+<dd><p>Telescope name</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.pha2.Pha2.grating">
+<code class="descname">grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.pha2.Pha2.grating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grating name</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha2.Pha2.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>phafile</em>, <em>force_poisson=True</em>, <em>background=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha2.html#Pha2.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha2.Pha2.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the
+optional ‘force_poisson’ flag is True by default. Set force_poisson to false to obtain the errors from
+the file. If the user wants to subtract the background, the flag ‘subtract_background’ should be set to True.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.pha2.Pha2.combine_orders">
+<code class="descname">combine_orders</code><span class="sig-paren">(</span><em>grating</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha2.html#Pha2.combine_orders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha2.Pha2.combine_orders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspex.io.rmf.Rmf">
+<em class="property">class </em><code class="descclassname">pyspex.io.rmf.</code><code class="descname">Rmf</code><a class="reference internal" href="_modules/pyspex/io/rmf.html#Rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.rmf.Rmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.FirstChannel">
+<code class="descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.FirstChannel" title="Permalink to this definition">¶</a></dt>
+<dd><p>First channel number</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.Channel">
+<code class="descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.Channel" title="Permalink to this definition">¶</a></dt>
+<dd><p>Channel numbers</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberGroups">
+<code class="descname">NumberGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of response groups</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.FirstGroup">
+<code class="descname">FirstGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.FirstGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>First response group for this energy bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.FirstChannelGroup">
+<code class="descname">FirstChannelGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.FirstChannelGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>First channel number in this group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberChannelsGroup">
+<code class="descname">NumberChannelsGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberChannelsGroup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of channels in this group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.FirstElement">
+<code class="descname">FirstElement</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.FirstElement" title="Permalink to this definition">¶</a></dt>
+<dd><p>First response element for this group</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.LowEnergy">
+<code class="descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.LowEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start energy of bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.HighEnergy">
+<code class="descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.HighEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>End energy of bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.Matrix">
+<code class="descname">Matrix</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.Matrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Matrix elements</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.ChannelLowEnergy">
+<code class="descname">ChannelLowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.ChannelLowEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Start energy of channel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.ChannelHighEnergy">
+<code class="descname">ChannelHighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.ChannelHighEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>End energy of channel</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberChannels">
+<code class="descname">NumberChannels</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberChannels" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of data channels</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberEnergyBins">
+<code class="descname">NumberEnergyBins</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberEnergyBins" title="Permalink to this definition">¶</a></dt>
+<dd><p>Number of energy bins</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberTotalGroups">
+<code class="descname">NumberTotalGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberTotalGroups" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of groups</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.NumberTotalElements">
+<code class="descname">NumberTotalElements</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.NumberTotalElements" title="Permalink to this definition">¶</a></dt>
+<dd><p>Total number of response elements</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.AreaScaling">
+<code class="descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.AreaScaling" title="Permalink to this definition">¶</a></dt>
+<dd><p>Value of EFFAREA keyword</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.ResponseThreshold">
+<code class="descname">ResponseThreshold</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.ResponseThreshold" title="Permalink to this definition">¶</a></dt>
+<dd><p>Minimum value in response</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.EnergyUnits">
+<code class="descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Units of the energy scale</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.RMFUnits">
+<code class="descname">RMFUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.RMFUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Units for RMF values</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.rmf.Rmf.Order">
+<code class="descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.rmf.Rmf.Order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Order of the matrix</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.rmf.Rmf.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/rmf.html#Rmf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.rmf.Rmf.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.rmf.Rmf.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/rmf.html#Rmf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.rmf.Rmf.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the RMF for internal consistency.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.rmf.Rmf.disp">
+<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/rmf.html#Rmf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.rmf.Rmf.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the RMF object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspex.io.arf.Arf">
+<em class="property">class </em><code class="descclassname">pyspex.io.arf.</code><code class="descname">Arf</code><a class="reference internal" href="_modules/pyspex/io/arf.html#Arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.arf.Arf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.LowEnergy">
+<code class="descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.LowEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Low Energy of bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.HighEnergy">
+<code class="descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.HighEnergy" title="Permalink to this definition">¶</a></dt>
+<dd><p>High Energy of bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.EffArea">
+<code class="descname">EffArea</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.EffArea" title="Permalink to this definition">¶</a></dt>
+<dd><p>Effective Area of bin</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.EnergyUnits">
+<code class="descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
+<dd><p>Energy units</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.Order">
+<code class="descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.Order" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grating order (for grating arrays, else 0)</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="pyspex.io.arf.Arf.Grating">
+<code class="descname">Grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.arf.Arf.Grating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.arf.Arf.read">
+<code class="descname">read</code><span class="sig-paren">(</span><em>arffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/arf.html#Arf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.arf.Arf.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the effective area from an OGIP ARF file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.arf.Arf.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/arf.html#Arf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.arf.Arf.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the basic information is read in.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.arf.Arf.disp">
+<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/arf.html#Arf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.arf.Arf.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the ARF object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
 </div>
 
 
@@ -226,10 +713,14 @@ are mandatory. If needed, a background file and effective area file can be added
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">pyspex.io.ogip: Importing OGIP files</a><ul>
+<li><a class="reference internal" href="#">Importing OGIP spectra</a><ul>
+<li><a class="reference internal" href="#pyspex-io-ogip-importing-ogip-files">pyspex.io.ogip: Importing OGIP files</a></li>
+<li><a class="reference internal" href="#pyspex-io-tg-importing-chandra-grating-files">pyspex.io.tg: Importing Chandra grating files</a></li>
 <li><a class="reference internal" href="#notes-about-converting-pha-to-spex-format">Notes about converting PHA to SPEX format</a></li>
 <li><a class="reference internal" href="#notes-about-converting-rmf-to-spex-format">Notes about converting RMF to SPEX format</a></li>
-<li><a class="reference internal" href="#the-ogip-class-description">The OGIP class description</a></li>
+<li><a class="reference internal" href="#the-ogipregion-class-description">The OGIPRegion class description</a></li>
+<li><a class="reference internal" href="#the-tgregion-class-description">The TGRegion class description</a></li>
+<li><a class="reference internal" href="#the-ogip-file-classes">The OGIP file classes</a></li>
 </ul>
 </li>
 </ul>
@@ -238,8 +729,8 @@ are mandatory. If needed, a background file and effective area file can be added
   <p class="topless"><a href="io.html"
                         title="previous chapter">pyspex.io: The SPEX data format</a></p>
   <h4>Next topic</h4>
-  <p class="topless"><a href="user.html"
-                        title="next chapter">pyspex.model: Interfaces for SPEX models</a></p>
+  <p class="topless"><a href="data.html"
+                        title="next chapter">pyspex.data: Data filtering and optimization functions</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -271,12 +762,12 @@ are mandatory. If needed, a background file and effective area file can be added
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+          <a href="data.html" title="pyspex.data: Data filtering and optimization functions"
              >next</a> |</li>
         <li class="right" >
           <a href="io.html" title="pyspex.io: The SPEX data format"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.0 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

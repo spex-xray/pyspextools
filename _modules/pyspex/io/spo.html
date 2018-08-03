@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io.spo &#8212; pyspex 0.2.0 documentation</title>
+    <title>pyspex.io.spo &#8212; pyspex 0.2.1 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.2.1',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -406,7 +406,10 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="n">thdulist</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">sponame</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: File </span><span class="si">{0}</span><span class="s2"> already exists. I will not overwrite it!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sponame</span><span class="p">))</span></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: File </span><span class="si">{0}</span><span class="s2"> already exists. I will not overwrite it!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sponame</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Swap/Flip arrays between energy or wavelength order</span>
@@ -529,7 +532,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
