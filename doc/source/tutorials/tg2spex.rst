@@ -17,9 +17,9 @@ Example
 
 Tg2spex detects the standard file names in a directory, so providing the path to the directory
 should be enough. In addition, flags can be provided to, for example, overwrite existing spo and res
-files and subtract the background::
+files::
 
-    linux:~> tg2spex --overwrite --bkgsubtract /data/user/tgcat/obs_11387_tgid_3191
+    linux:~> tg2spex --overwrite /data/user/tgcat/obs_11387_tgid_3191
     ==================================
      This is tg2spex version 0.2.1
     ==================================
