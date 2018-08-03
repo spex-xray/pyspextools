@@ -1,3 +1,5 @@
+.. _ogip2spex:
+
 OGIP2spex
 =========
 

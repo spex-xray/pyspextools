@@ -1,10 +1,15 @@
+Importing OGIP spectra
+======================
+
+The pyspex module offers to import OGIP spectral files and convert them to
+SPEX format. There are basicly two types of OGIP files: regular type I files,
+which are distributed with most X-ray missions, and type II files distributed
+with the Chandra transmission grating (TG) spectra. Pyspex can handle both
+types.
 
 pyspex.io.ogip: Importing OGIP files
-====================================
+------------------------------------
 
-The pyspex module offers to import OGIP spectral files and convert them to 
-SPEX format.
- 
 The pyspex OGIPRegion class contains methods to read a source spectrum, background 
 spectrum, response file and effective area file, and save them as a SPEX region, which 
 can be used by the other methods in the pyspex module. Please note that the
@@ -15,13 +20,37 @@ found in pyspex.data.
 The main method of the OGIPRegion class is read_region. We recommend to use this 
 method to read a combination of a spectrum and response matrix. This method will
 do the necessary checks to make sure that the final region object is consistent.
-The OGIP class can be imported separately if needed:
+The OGIP class can be imported separately if needed::
  
     import pyspex.io.ogip as ogip
     oregion = ogip.OGIPRegion()
 
 The oregion instance above will be an extended version of the parent region class of
-pyspex and will have the same functionality.  
+pyspex and will have the same functionality.
+
+The 'read_region' method can be called to read the OGIP spectra and responses and return
+a SPEX region object, which can be written to spo and res files.
+
+A convenient script called :ref:`ogip2spex` is available to convert OGIP spectra
+and responses to SPEX format.
+
+pyspex.io.tg: Importing Chandra grating files
+---------------------------------------------
+
+Spectra from the Chandra gratings are stored in a special format, called PHA2 format,
+and contain the spectra of the specific orders of the spectrum. The TGRegion class allows
+a user to import a Chandra grating spectrum into a SPEX region.
+
+Similar to the OGIP files, there is also a region class for grating spectra called TGRegion::
+
+    import pyspex.io.tg as tg
+    tgregion = tg.TGRegion()
+
+The 'read_region' method can be called to read the grating spectra and responses and return
+a SPEX region object, which can be written to spo and res files.
+
+A convenient script called :ref:`tg2spex` is available to convert one Chandra grating
+observation to SPEX format.
 
 Notes about converting PHA to SPEX format
 -----------------------------------------
@@ -70,6 +99,12 @@ The OGIPRegion class description
 --------------------------------
 
 .. autoclass:: pyspex.io.ogip.OGIPRegion
+   :members:
+
+The TGRegion class description
+------------------------------
+
+.. autoclass:: pyspex.io.tg.TGRegion
    :members:
 
 The OGIP file classes
