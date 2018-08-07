@@ -16,7 +16,10 @@ Before you start, make sure the following things are installed or set:
 - Install pyspex
 - Install ATOMDB (Coco and line tables.)
 - Install pyatomdb
-- Set ATOMDB environment variable to your local ATOMDB installation.
+- Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions)::
+
+    linux:~> export ATOMDB=/path/to/my/atomdb   (bash shell)
+    linux:~> setenv ATOMDB /path/to/my/atomdb   (c shell)
 
 For more information about installing ATOMDB and pyatomdb see `atomdb.org <http://www.atomdb.org/>`_ 
 

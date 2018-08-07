@@ -80,6 +80,23 @@ with the most compatible versions of the modules that pyspex depends on.</p>
 <p>Make sure that the ‘$HOME/python/lib/pythonx.x/site-packages’ directory
 is in the PYTHONPATH environment variable.</p>
 </div>
+<div class="section" id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
+<p>The install instructions above should take care of all the mandatory dependencies of the module. Pyspex works both in
+Python 2.7 and Python 3, thanks to the backports from the ‘future’ module. We try to keep the dependencies limited to
+ensure the stability of the module. Currently, the dependencies are:</p>
+<ul class="simple">
+<li>numpy</li>
+<li>astropy</li>
+<li>future (provides backward compatibility with Python 2.7)</li>
+</ul>
+<p>For the generation of documentation, the following packages are needed:</p>
+<ul class="simple">
+<li>sphinx</li>
+<li>sphinx-argparse</li>
+</ul>
+<p>For some examples, other packages are used, like pyatomdb, but they are not required for the pyspex module to function.</p>
+</div>
 </div>
 
 
@@ -93,6 +110,7 @@ is in the PYTHONPATH environment variable.</p>
 <li><a class="reference internal" href="#">Install pyspex</a><ul>
 <li><a class="reference internal" href="#install-using-pip-and-github">Install using pip and GitHub</a></li>
 <li><a class="reference internal" href="#install-using-setup-py">Install using setup.py</a></li>
+<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
 </ul>
 </li>
 </ul>
