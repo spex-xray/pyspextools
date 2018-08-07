@@ -29,8 +29,10 @@ the input file from SPEX automatically and initialize the arrays::
  
 **Calculation**
 
-This step needs the creativity of the user. The output spectrum or transmission
-needs to be calculated and written to the 'usr.sener' output array::
+This step needs the creativity of the user. The module reference page :ref:`usermodel` provides an overview of the
+parameters of the user module that can be used in the program. At least, the output spectrum or transmission
+needs to be calculated and written to the 'usr.sener' output array. This array will be passed back to SPEX after
+the calculation::
 
     # For each energy bin in the provided energy grid
     # calculate the spectrum in photons/s/bin:
@@ -38,11 +40,14 @@ needs to be calculated and written to the 'usr.sener' output array::
       usr.sener[i]=1.- usr.par[0]*math.exp(-usr.eg[i])
       usr.wener[i]=0.
       
-The unit for the 'usr.sener' array is 'photons/s/bin' and the bin parameters are
-available in the 'usr' object (see :ref:`usermodel`). The model parameters from
-SPEX can be accessed through the 'usr.par' array. Note the difference between 
-the index of the array and the parameter number in SPEX. The parameter number in
-SPEX is equal to the array index + 1.
+In this case, a simple exponential function is returned as an example, but this
+function can be as simple or complicated as needed. The unit for the 'usr.sener' array is
+'photons/s/bin' and this example function also uses the first model input parameter 'user.par[0]'
+from SPEX and the bin energy `usr.eg` (see :ref:`usermodel` for a full description).
+
+    **NOTE:** There is a difference between the index of the array and the parameter number in SPEX.
+    The parameter number in SPEX is equal to the array index + 1, since Python starts counting
+    at 0 and SPEX at 1.
 
 The 'usr.wener' array can be used to optimize the calculations in SPEX.
 If Delta E = average photon energy within the bin (keV) minus the bin 
