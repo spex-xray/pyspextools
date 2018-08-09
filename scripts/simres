@@ -5,12 +5,12 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import os
 import sys
 import argparse
 import pyspex
 from pyspex.io.ogip import OGIPRegion
 from pyspex.data.badchannels import clean_region
+
 import pyspex.messages as message
 
 from builtins import int
@@ -21,39 +21,62 @@ standard_library.install_aliases()
 
 
 def main():
-    """The OGIP2spex script offers a quick way to convert OGIP type spectra to SPEX format.
-    It reads OGIP PHA type I spectra and responses. After the conversion to SPEX format, the
-    files are filtered for bad channels (optional)."""
+    """The simres program generates a spo and res file from an input arf and rmf file, and optionally a background
+    file. This is particularly useful for simulating spectra for future missions, where the source spectrum file is
+    not supplied."""
 
     print("==================================")
-    print(" This is ogip2spex version {0}".format(pyspex.__version__))
+    print(" This is simres version {0}".format(pyspex.__version__))
     print("==================================")
     print("")
 
     # Obtain command line arguments
-    parser = ogip2spex_arguments()
+    parser = simres_arguments()
     args = parser.parse_args()
 
     # Set color in the terminal
     message.set_color(args.color)
 
-    # Load OGIP spectra and response files
+    # Load OGIP response files and background spectrum if provided
     ogip = OGIPRegion()
 
-    print("Input PHA file: {0}".format(args.phafile))
-    print("Input Background file: {0}".format(args.bkgfile))
-    print("Input Response file: {0}".format(args.rmffile))
-    print("Input Effective area file: {0}".format(args.arffile))
+    # Read the background PHA file if specified:
+    if args.bkgfile is not None:
+        ogip.input_bkg = True
+        ogip.read_background_pha(args.bkgfile)
+    else:
+        ogip.input_bkg = False
+        ogip.back = None
 
-    ogip.read_region(args.phafile,args.rmffile,bkgfile=args.bkgfile,arffile=args.arffile)
+    # Corr spectrum is not used here
+    ogip.corr = None
+
+    # Read the response matrix
+    ogip.read_rmf(args.rmffile)
+
+    # Read the effective area
+    if args.arffile is not None:
+        ogip.input_area = True
+        ogip.read_arf(args.arffile)
+    else:
+        ogip.input_area = False
+        ogip.area = None
+
+    # Generate dummy spectrum based on rmf channels
+    ogip.spec.create_dummy(ogip.resp)
+
+    # Convert spectra and responses to SPEX format
+    stat = ogip.add_region(ogip.spec,ogip.resp,back=ogip.back,corr=ogip.corr,area=ogip.area)
+    if stat != 0:
+        sys.exit()
 
     # Filter for bad channels (if not blocked by command line argument)
     if args.badchan:
         ogip = clean_region(ogip)
 
-    # Add the ogip2spex command to the file history
+    # Add the simres command to the file history
     history = []
-    history.append("OGIP2SPEX version: {0}".format(pyspex.__version__))
+    history.append("SIMRES version: {0}".format(pyspex.__version__))
     command = ''
     for arg in sys.argv:
         command = command + ' ' + arg
@@ -74,13 +97,13 @@ def main():
     print("Writing RES to file: {0}".format(resfile))
     ogip.res.write_file(resfile,overwrite=args.overwrite,history=history)
 
+
 # Get command line arguments
-def ogip2spex_arguments():
+def simres_arguments():
     # Obtain command line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--phafile', help='Input PHA source spectrum (required)', type=str, required=True)
-    parser.add_argument('--bkgfile', help='Input Background spectrum', type=str)
     parser.add_argument('--rmffile', help='Input Response matrix (required)', type=str, required=True)
+    parser.add_argument('--bkgfile', help='Input Background spectrum', type=str)
     parser.add_argument('--arffile', help='Input Effective area file', type=str)
     parser.add_argument('--spofile', help='Output SPEX spectrum file (.spo, required)', type=str, required=True)
     parser.add_argument('--resfile', help='Output SPEX response file (.res, required)', type=str, required=True)

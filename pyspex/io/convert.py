@@ -250,7 +250,7 @@ def rmf_to_res(rmf,arf=None):
 
             res.nc[g] = rmf.NumberChannelsGroup[g]
             # Add the start channel to the IC to correct for cases where we start at channel 0/1
-            res.ic1[g] = rmf.FirstChannelGroup[g] #+ rmf.FirstChannel
+            res.ic1[g] = rmf.FirstChannelGroup[g]
             ic2 = res.ic1[g] + res.nc[g] - 1
             res.ic2[g] = ic2
 

@@ -20,9 +20,11 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import pyspex.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
+import os
 
 # Stuff to import for compatibility between python 2 and 3
 
@@ -517,6 +519,35 @@ class Res:
         return 0
 
     # -----------------------------------------------------
+    # Shift response array
+    # -----------------------------------------------------
+    def channel_shift(self,shift):
+        """Shift the response array indices with an integer number provided by input parameter 'shift'."""
+
+        # Check if input shift is indeed an integer
+        if not isinstance(shift, int):
+            message.error("Entered shift is not an integer number. Not doing anything")
+            return -1
+
+        ic1 = np.zeros(self.eg1.size, dtype=int)
+        ic2 = np.zeros(self.eg2.size, dtype=int)
+
+        for i in np.arange(self.eg1.size):
+            ic1[i] = self.ic1[i] + shift
+            ic2[i] = self.ic2[i] + shift
+            if self.ic2[i] > np.amax(self.nchan):
+                message.error("Maximum channel number is larger than actual channel range!")
+                print("Aborting shift.")
+                return -1
+
+        # Save the shifted channel numbers
+        self.ic1 = ic1
+        self.ic2 = ic2
+
+        return 0
+
+
+    # -----------------------------------------------------
     # Function to check the response arrays
     # -----------------------------------------------------
 
@@ -538,6 +569,23 @@ class Res:
                 return -1
 
         return 0
+
+    # -----------------------------------------------------
+    # Function to check the res file name for correct extension
+    # -----------------------------------------------------
+
+    def check_filename(self,filename):
+        """Check if the output filename has the correct .res extension. The method returns a correct file name."""
+        resname, res_extension = os.path.splitext(filename)
+        if res_extension != ".res":
+            message.warning("Output filename does not have the correct .res extension.")
+            print("Renaming file to end with '.res'.")
+            print("")
+            resfile = resname + '.res'
+        else:
+            resfile = filename
+
+        return resfile
 
     # -----------------------------------------------------
     # Show summary of response file

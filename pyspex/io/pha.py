@@ -15,6 +15,7 @@ import pyspex.messages as message
 import numpy as np
 import math
 import astropy.io.fits as fits
+from .rmf import Rmf
 
 standard_library.install_aliases()
 
@@ -184,6 +185,34 @@ class Pha:
             return 1
 
         return 0
+
+    def create_dummy(self,resp):
+        """Generate dummy spectrum based on rmf channel information."""
+
+        if not isinstance(resp, Rmf):
+            message.error("Input response object is not the required Rmf object.")
+            return
+
+        # First copy the channel information to the PHA object
+        self.Channel = resp.Channel
+        self.FirstChannel= resp.Channel[0]
+        self.DetChans = resp.NumberChannels
+    
+        # Generate a dummy spectrum (obviously not realistic, should be simulated in SPEX later)
+        # Set exposure, statistic and type of spectrum
+        self.Exposure = 1000.0
+        self.Poisserr = True
+        self.Spectrumtype = 'TOTAL'
+    
+        # Generate spectrum values and quality flags
+        self.Rate = np.ones(self.DetChans, dtype=float) / self.Exposure
+        self.StatError = np.ones(self.DetChans, dtype=float) / self.Exposure
+        self.SysError = np.zeros(self.DetChans, dtype=float)
+        self.Quality = np.zeros(self.DetChans, dtype=float)
+        self.Grouping = np.zeros(self.DetChans, dtype=float)
+        self.AreaScaling = np.ones(self.DetChans, dtype=float)
+        self.BackScaling = np.ones(self.DetChans, dtype=float)
+
 
     def disp(self):
         """Display a summary of the PHA file."""

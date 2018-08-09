@@ -56,6 +56,13 @@ class Arf:
             self.Order = 0
             self.Grating = 0
 
+        # Check for NULL values
+        nans = np.isnan(self.EffArea)
+        if np.any(nans):
+            for i in np.arange(self.EffArea.size):
+                if nans[i]:
+                   self.EffArea[i] = 0.0
+
         return 0
 
     def check(self):

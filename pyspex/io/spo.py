@@ -23,9 +23,11 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import pyspex.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
+import os
 
 # Stuff to import for compatibility between python 2 and 3
 
@@ -402,6 +404,23 @@ class Spo:
                 return -1
 
         return 0
+
+    # -----------------------------------------------------
+    # Function to check the spo file name for correct extension
+    # -----------------------------------------------------
+
+    def check_filename(self,filename):
+        """Check if the output filename has the correct .spo extension. The method returns a correct file name."""
+        sponame, spo_extension = os.path.splitext(filename)
+        if spo_extension != ".spo":
+            message.warning("Output filename does not have the correct .spo extension.")
+            print("Renaming file to end with '.spo'.")
+            print("")
+            spofile = sponame + '.spo'
+        else:
+            spofile = filename
+
+        return spofile
 
     # -----------------------------------------------------
     # Create a mask for a spo region selection

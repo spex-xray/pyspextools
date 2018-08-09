@@ -65,8 +65,14 @@ class Rmf:
         # Read the Matrix table
         rmf = fits.open(rmffile)
 
-        data = rmf['MATRIX'].data
-        header = rmf['MATRIX'].header
+        try:
+            data = rmf['MATRIX'].data
+            header = rmf['MATRIX'].header
+        except:
+            data = rmf['SPECRESP MATRIX'].data
+            header = rmf['SPECRESP MATRIX'].header
+            message.warning("This is an RSP file with the effective area included.")
+            print("Do not read an ARF file, unless you know what you are doing.")
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
@@ -188,22 +194,27 @@ class Rmf:
 
     def checkCompatibility(self,arf):
 
+        # Check if arf is really an Arf object
         if not isinstance(arf,Arf):
             message.error("Input arf is not an Arf class instance.")
             return 1
 
+        # Check if the size of the energy arrays is the same.
         if arf.LowEnergy.size != self.LowEnergy.size:
             message.error("Size of ARF and RMF are not the same.")
             return 1
 
-        if arf.LowEnergy[0] != self.LowEnergy[0]:
-            message.error("Lower Energies of arrays are not the same.")
+        # Check if the numbers of the high energy column are the same
+        # Here we check the high values, because sometimes the first low value is different...
+        if arf.HighEnergy[0] != self.HighEnergy[0]:
+            message.error("First high-energy boundaries of arrays are not the same.")
             return 1
 
+        # Check if the last values of the array are similar.
         size = arf.HighEnergy.size - 1
 
         if arf.HighEnergy[size] != self.HighEnergy[size]:
-            message.error("Lower Energies of arrays are not the same.")
+            message.error("Last high-energy boudaries of arrays are not the same.")
             return 1
 
         return 0

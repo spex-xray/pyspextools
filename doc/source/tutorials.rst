@@ -15,6 +15,7 @@ Using the pyspex scripts
 
    tutorials/ogip2spex
    tutorials/tg2spex
+   tutorials/simres
 
 
 Using the SPEX user model
