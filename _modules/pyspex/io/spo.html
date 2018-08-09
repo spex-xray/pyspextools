@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io.spo &#8212; pyspex 0.2.1 documentation</title>
+    <title>pyspex.io.spo &#8212; pyspex 0.2.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.1',
+        VERSION:     '0.2.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -70,9 +70,11 @@
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
 <span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 
+<span class="kn">import</span> <span class="nn">pyspex.messages</span> <span class="k">as</span> <span class="nn">message</span>
 <span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <span class="c1"># Stuff to import for compatibility between python 2 and 3</span>
 
@@ -451,6 +453,23 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Function to check the spo file name for correct extension</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="Spo.check_filename"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.check_filename">[docs]</a>    <span class="k">def</span> <span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .spo extension. The method returns a correct file name.&quot;&quot;&quot;</span>
+        <span class="n">sponame</span><span class="p">,</span> <span class="n">spo_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">spo_extension</span> <span class="o">!=</span> <span class="s2">&quot;.spo&quot;</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Output filename does not have the correct .spo extension.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Renaming file to end with &#39;.spo&#39;.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+            <span class="n">spofile</span> <span class="o">=</span> <span class="n">sponame</span> <span class="o">+</span> <span class="s1">&#39;.spo&#39;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">spofile</span> <span class="o">=</span> <span class="n">filename</span>
+
+        <span class="k">return</span> <span class="n">spofile</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Create a mask for a spo region selection</span>
     <span class="c1">#</span>
     <span class="c1"># Since a spo file lists all the spectra in a single</span>
@@ -532,7 +551,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

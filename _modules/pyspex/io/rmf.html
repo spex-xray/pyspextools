@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io.rmf &#8212; pyspex 0.2.1 documentation</title>
+    <title>pyspex.io.rmf &#8212; pyspex 0.2.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.1',
+        VERSION:     '0.2.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -112,8 +112,14 @@
         <span class="c1"># Read the Matrix table</span>
         <span class="n">rmf</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
 
-        <span class="n">data</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
-        <span class="n">header</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;SPECRESP MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">header</span> <span class="o">=</span> <span class="n">rmf</span><span class="p">[</span><span class="s1">&#39;SPECRESP MATRIX&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;This is an RSP file with the effective area included.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Do not read an ARF file, unless you know what you are doing.&quot;</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_LO&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_HI&#39;</span><span class="p">]</span>
@@ -235,22 +241,27 @@
 
     <span class="k">def</span> <span class="nf">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arf</span><span class="p">):</span>
 
+        <span class="c1"># Check if arf is really an Arf object</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">arf</span><span class="p">,</span><span class="n">Arf</span><span class="p">):</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input arf is not an Arf class instance.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
+        <span class="c1"># Check if the size of the energy arrays is the same.</span>
         <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Size of ARF and RMF are not the same.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Lower Energies of arrays are not the same.&quot;</span><span class="p">)</span>
+        <span class="c1"># Check if the numbers of the high energy column are the same</span>
+        <span class="c1"># Here we check the high values, because sometimes the first low value is different...</span>
+        <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;First high-energy boundaries of arrays are not the same.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
+        <span class="c1"># Check if the last values of the array are similar.</span>
         <span class="n">size</span> <span class="o">=</span> <span class="n">arf</span><span class="o">.</span><span class="n">HighEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span>
 
         <span class="k">if</span> <span class="n">arf</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">size</span><span class="p">]</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">size</span><span class="p">]:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Lower Energies of arrays are not the same.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Last high-energy boudaries of arrays are not the same.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
         <span class="k">return</span> <span class="mi">0</span></div>
@@ -284,7 +295,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

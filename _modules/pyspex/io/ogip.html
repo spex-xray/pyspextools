@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>pyspex.io.ogip &#8212; pyspex 0.2.1 documentation</title>
+    <title>pyspex.io.ogip &#8212; pyspex 0.2.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.1',
+        VERSION:     '0.2.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -104,31 +104,25 @@
 <span class="sd">        are mandatory. If needed, a background file and effective area file can be added.&quot;&quot;&quot;</span>
 
         <span class="c1"># Read the source PHA file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__read_source_pha</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_source_pha</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
 
         <span class="c1"># Read the background PHA file if specified:</span>
         <span class="k">if</span> <span class="n">bkgfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__read_background_pha</span><span class="p">(</span><span class="n">bkgfile</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_background_pha</span><span class="p">(</span><span class="n">bkgfile</span><span class="p">)</span>
 
         <span class="c1"># Read a correction spectrum if specified:</span>
         <span class="k">if</span> <span class="n">corrfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__read_corr</span><span class="p">(</span><span class="n">corrfile</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_corr</span><span class="p">(</span><span class="n">corrfile</span><span class="p">)</span>
 
         <span class="c1"># Read the response matrix</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">__read_rmf</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_rmf</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
 
         <span class="c1"># Read the effective area</span>
         <span class="k">if</span> <span class="n">arffile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">__read_arf</span><span class="p">(</span><span class="n">arffile</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">read_arf</span><span class="p">(</span><span class="n">arffile</span><span class="p">)</span>
 
         <span class="c1"># Should the spectrum grouping remain?</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">save_grouping</span> <span class="o">=</span> <span class="n">grouping</span>
-
-        <span class="c1"># Check the consistency between the OGIP files</span>
-        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_ogip</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Check of OGIP files failed.&quot;</span><span class="p">)</span>
-            <span class="k">return</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">back</span> <span class="o">=</span> <span class="kc">None</span>
@@ -138,6 +132,98 @@
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Do the OGIP to SPEX conversion</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogip_to_spex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to spec conversion failed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Correct for possible shifts in channels if first channel is 0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">correct_possible_shift</span><span class="p">()</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Add OGIP objects to the OGIP region and convert</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="OGIPRegion.add_region"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.add_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">spec</span><span class="p">,</span><span class="n">resp</span><span class="p">,</span><span class="n">back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">corr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">area</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they</span>
+<span class="sd">        need to be added to an OGIP region and converted to spo and res objects.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Load Pha object</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">spec</span><span class="p">,</span> <span class="n">Pha</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">spec</span> <span class="o">=</span> <span class="n">spec</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input spectrum object is not of type Pha.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Load Rmf object</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">Rmf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">resp</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input response object is not of type Rmf.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Load background object (if available)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">back</span><span class="p">,</span> <span class="n">Pha</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">back</span> <span class="o">=</span> <span class="n">back</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input background object is not of type Pha.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Load correction spectrum (if available)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">corr</span><span class="p">,</span> <span class="n">Pha</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corr</span> <span class="o">=</span> <span class="n">corr</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">back</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input correction object is not of type Pha.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Load effective area (if available)</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">area</span><span class="p">,</span> <span class="n">Arf</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">area</span> <span class="o">=</span> <span class="n">area</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="k">elif</span> <span class="n">area</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input effective area object is not of type Arf.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Do the OGIP to SPEX conversion</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ogip_to_spex</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to spec conversion failed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Correct for possible shifts in channels if first channel is 0</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">correct_possible_shift</span><span class="p">()</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Convert the OGIP part of the region to spo and res</span>
+    <span class="c1"># -----------------------------------------------------</span>
+
+<div class="viewcode-block" id="OGIPRegion.ogip_to_spex"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.ogip_to_spex">[docs]</a>    <span class="k">def</span> <span class="nf">ogip_to_spex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Convert the OGIP part of the OGIP region to spo and res objects.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check the consistency between the OGIP files</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check_ogip</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Check of OGIP files failed.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
         <span class="c1"># Convert OGIP spectra to SPO object:</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_spec</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span><span class="p">:</span>
@@ -150,7 +236,7 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to SPO failed.&quot;</span><span class="p">)</span>
-                <span class="k">return</span>
+                <span class="k">return</span> <span class="mi">1</span>
 
             <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Convert OGIP response to res format&quot;</span><span class="p">)</span>
             <span class="n">res</span> <span class="o">=</span> <span class="n">rmf_to_res</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="p">,</span><span class="n">arf</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
@@ -160,28 +246,30 @@
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to RES failed.&quot;</span><span class="p">)</span>
-                <span class="k">return</span>
+                <span class="k">return</span> <span class="mi">1</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Source spectrum or response not specified.&quot;</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
         <span class="c1"># Check output spo object</span>
         <span class="n">checkspo</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">checkspo</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Resulting spo file is not OK.&quot;</span><span class="p">)</span>
-            <span class="k">return</span>
+            <span class="k">return</span> <span class="mi">1</span>
 
         <span class="c1"># Check</span>
         <span class="n">checkres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">checkres</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Resulting res file is not OK.&quot;</span><span class="p">)</span>
-            <span class="k">return</span></div>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP pha file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">__read_source_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_source_pha"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_source_pha">[docs]</a>    <span class="k">def</span> <span class="nf">read_source_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open a pha file containing the source spectrum.&quot;&quot;&quot;</span>
         <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read source PHA spectrum&quot;</span><span class="p">)</span>
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
@@ -197,13 +285,13 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spec</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">False</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">False</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP background file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">__read_background_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bkgfile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_background_pha"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_background_pha">[docs]</a>    <span class="k">def</span> <span class="nf">read_background_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bkgfile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open a pha file containing the background spectrum (if specified).&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">bkgfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read background PHA spectrum&quot;</span><span class="p">)</span>
@@ -216,13 +304,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">input_back</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No background filename specified.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No background filename specified.&quot;</span><span class="p">)</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP rmf file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">__read_rmf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_rmf"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_rmf">[docs]</a>    <span class="k">def</span> <span class="nf">read_rmf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Open rmf file containing the response matrix.&quot;&quot;&quot;</span>
         <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read RMF response matrix&quot;</span><span class="p">)</span>
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rmffile</span><span class="p">)</span>
@@ -232,13 +320,13 @@
             <span class="k">return</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span> <span class="o">=</span> <span class="kc">True</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP arf file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">__read_arf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_arf"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_arf">[docs]</a>    <span class="k">def</span> <span class="nf">read_arf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read arf file containing the effective area.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">arffile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read ARF effective area&quot;</span><span class="p">)</span>
@@ -251,13 +339,13 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">input_area</span> <span class="o">=</span> <span class="kc">True</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No effective area filename specified.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No effective area filename specified.&quot;</span><span class="p">)</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP corr file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">__read_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrfile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_corr"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.read_corr">[docs]</a>    <span class="k">def</span> <span class="nf">read_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrfile</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read correction file if specified.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">corrfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Read correction spectrum&quot;</span><span class="p">)</span>
@@ -270,7 +358,93 @@
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">input_corr</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No correction file specified.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No correction file specified.&quot;</span><span class="p">)</span></div>
+
+    <span class="c1"># -----------------------------------------------------</span>
+    <span class="c1"># Check for possible shifts in response array</span>
+    <span class="c1"># -----------------------------------------------------</span>
+<div class="viewcode-block" id="OGIPRegion.correct_possible_shift"><a class="viewcode-back" href="../../../ogip.html#pyspex.io.ogip.OGIPRegion.correct_possible_shift">[docs]</a>    <span class="k">def</span> <span class="nf">correct_possible_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,</span>
+<span class="sd">        then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first</span>
+<span class="sd">        channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place</span>
+<span class="sd">        and if the first channel in the OGIP spectrum is 0.</span>
+<span class="sd">        The add_region and read_region methods call this function already by default.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="p">,</span><span class="n">Spo</span><span class="p">)</span> <span class="ow">or</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="p">,</span><span class="n">Res</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Could not find spo and res information in this region.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># This code is not prepared for situations where the channel arrays are swapped, like for RGS.</span>
+        <span class="c1"># Luckily, the combination of a 0 first channel and a swapped array are rare.</span>
+        <span class="c1"># In that case, we stop with a warning:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">swap</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Not auto-detecting shifts in the response array. &quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="c1"># Start with the OGIP response object</span>
+        <span class="c1"># Check the channel indices for the first group with useful data</span>
+        <span class="c1"># Find such a group first in OGIP response:</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="c1"># Find an energy bin with at least one response group.</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">NumberGroups</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="c1"># Save the energy boundaries and calculate the average model energy for the group</span>
+        <span class="n">elow</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">ehigh</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">target_energy</span> <span class="o">=</span> <span class="p">(</span><span class="n">elow</span> <span class="o">+</span> <span class="n">ehigh</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="c1"># For this group, save the first channel of the group (F_CHAN)</span>
+        <span class="n">fchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">FirstChannelGroup</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Find the array index for this channel number</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">!=</span> <span class="n">fchan</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">break</span>
+
+        <span class="c1"># For this array index, the corresponding channel energy boundaries should be:</span>
+        <span class="n">lchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelLowEnergy</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">hchan</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">ChannelHighEnergy</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+        <span class="n">target_channel</span> <span class="o">=</span> <span class="p">(</span><span class="n">lchan</span> <span class="o">+</span> <span class="n">hchan</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
+
+        <span class="c1"># Now find the same group and channel in the SPEX format objects</span>
+        <span class="c1"># Find the group in the res object for the same model energy bin (with target_energy):</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">eg1</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target_energy</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">eg2</span><span class="p">[</span><span class="n">s</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target_energy</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">=</span> <span class="n">s</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Find the target channel number in spo file</span>
+        <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">target_channel</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">echan2</span><span class="p">[</span><span class="n">t</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">target_channel</span><span class="p">:</span>
+                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">t</span> <span class="o">=</span> <span class="n">t</span> <span class="o">+</span> <span class="mi">1</span>
+
+        <span class="c1"># Corresponding first channel of this group according to SPEX format</span>
+        <span class="n">ic1</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">s</span><span class="p">]</span>
+
+        <span class="c1"># Calculate the difference between the SPEX channel number and the OGIP one.</span>
+        <span class="n">shift</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">ic1</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">shift</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Shift in response array detected.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Trying to shift indices with </span><span class="si">{0}</span><span class="s2"> &quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">shift</span><span class="p">))</span>
+            <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">channel_shift</span><span class="p">(</span><span class="n">shift</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No shift in response array detected. Continuing...&quot;</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Do a consistency check for the OGIP part</span>
@@ -345,7 +519,7 @@
             <span class="n">area</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">area</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">area</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Effective area file is not consistent with the provided response file.&quot;</span><span class="p">)</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Effective area file is not consistent with the provided response file.&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="mi">1</span>
             <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
@@ -416,7 +590,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.1 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

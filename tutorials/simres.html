@@ -1,0 +1,225 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>SIMRES &#8212; pyspex 0.2.2 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.2',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User model example" href="myusermodel.html" />
+    <link rel="prev" title="TG2Spex" href="tg2spex.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tg2spex.html" title="TG2Spex"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspex module</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="simres">
+<span id="id1"></span><h1>SIMRES<a class="headerlink" href="#simres" title="Permalink to this headline">¶</a></h1>
+<p>Simres is a script to create a SPEX format spo and res file from just an input response file, optionally with an
+effective area file (ARF) and background spectrum. This is very useful to create spo and res files
+for future missions, where only responses and effective area files are provided. The spo and res files can be used
+to simulate spectra in SPEX.</p>
+<p>The parameters of simres can be shown on the command line by the ‘-h’ flag:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simres</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>Suppose we have a response matrix from a future instrument like X-IFU aboard Athena called athena_xifu_A.rsp, then
+we can create a spo and res file with the simres command, and call them xifu.spo and xifu.res:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">simres</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">athena_xifu_A</span><span class="o">.</span><span class="n">rsp</span> <span class="o">--</span><span class="n">spofile</span> <span class="n">xifu</span><span class="o">.</span><span class="n">spo</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">xifu</span><span class="o">.</span><span class="n">res</span>
+<span class="o">==================================</span>
+ <span class="n">This</span> <span class="ow">is</span> <span class="n">simres</span> <span class="n">version</span> <span class="mf">0.2</span><span class="o">.</span><span class="mi">2</span>
+<span class="o">==================================</span>
+
+<span class="n">Read</span> <span class="n">RMF</span> <span class="n">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">WARNING</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">RSP</span> <span class="n">file</span> <span class="k">with</span> <span class="n">the</span> <span class="n">effective</span> <span class="n">area</span> <span class="n">included</span><span class="o">.</span>
+<span class="n">Do</span> <span class="ow">not</span> <span class="n">read</span> <span class="n">an</span> <span class="n">ARF</span> <span class="n">file</span><span class="p">,</span> <span class="n">unless</span> <span class="n">you</span> <span class="n">know</span> <span class="n">what</span> <span class="n">you</span> <span class="n">are</span> <span class="n">doing</span><span class="o">.</span>
+<span class="n">OK</span>
+<span class="n">Check</span> <span class="n">OGIP</span> <span class="n">source</span> <span class="n">spectrum</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Check</span> <span class="n">OGIP</span> <span class="n">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Convert</span> <span class="n">OGIP</span> <span class="n">spectra</span> <span class="n">to</span> <span class="n">spo</span> <span class="nb">format</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Convert</span> <span class="n">OGIP</span> <span class="n">response</span> <span class="n">to</span> <span class="n">res</span> <span class="nb">format</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Identify</span> <span class="n">bad</span> <span class="n">channels</span> <span class="ow">in</span> <span class="n">spectrum</span> <span class="ow">and</span> <span class="n">response</span> <span class="n">matrix</span> <span class="ow">and</span> <span class="n">re</span><span class="o">-</span><span class="n">index</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">good</span> <span class="n">channels</span><span class="p">:</span> <span class="mi">29600</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">bad</span> <span class="n">channels</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Removing</span> <span class="n">bad</span> <span class="n">channels</span> <span class="kn">from</span> <span class="nn">spectral</span> <span class="n">region</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">original</span> <span class="n">groups</span><span class="p">:</span>       <span class="mi">29600</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">zero</span><span class="o">-</span><span class="n">response</span> <span class="n">groups</span><span class="p">:</span>  <span class="mi">0</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">original</span> <span class="n">response</span> <span class="n">elements</span><span class="p">:</span>  <span class="mi">8898275</span>
+<span class="n">Number</span> <span class="n">of</span> <span class="n">bad</span> <span class="n">response</span> <span class="n">elements</span><span class="p">:</span>       <span class="mi">0</span>
+<span class="n">Removing</span> <span class="n">bad</span> <span class="n">channels</span> <span class="kn">from</span> <span class="nn">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
+<span class="n">Writing</span> <span class="n">SPO</span> <span class="n">to</span> <span class="n">file</span><span class="p">:</span> <span class="n">xifu</span><span class="o">.</span><span class="n">spo</span>
+<span class="n">Writing</span> <span class="n">RES</span> <span class="n">to</span> <span class="n">file</span><span class="p">:</span> <span class="n">xifu</span><span class="o">.</span><span class="n">res</span>
+</pre></div>
+</div>
+<p>In this case, an RSP file is provided, which should contain the effective area already. The program issues a warning,
+because usually also separate arf files are provided. This warning cautions the user to not apply the effective area
+correction twice.</p>
+<p>The output spectrum is obviously wrong with a constant count rate across the entire band. The idea is to set up a new
+model in SPEX and simulate a new spectrum with this response matrix to replace the dummy spectrum with something more
+realistic.</p>
+</div>
+<div class="section" id="command-line-arguments">
+<h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">simres</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span>
+              <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span>
+              <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">extrate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--rmffile</kbd></td>
+<td>Input Response matrix (required)</td></tr>
+<tr><td class="option-group">
+<kbd>--bkgfile</kbd></td>
+<td>Input Background spectrum</td></tr>
+<tr><td class="option-group">
+<kbd>--arffile</kbd></td>
+<td>Input Effective area file</td></tr>
+<tr><td class="option-group">
+<kbd>--spofile</kbd></td>
+<td>Output SPEX spectrum file (.spo, required)</td></tr>
+<tr><td class="option-group">
+<kbd>--resfile</kbd></td>
+<td>Output SPEX response file (.res, required)</td></tr>
+<tr><td class="option-group" colspan="2">
+<kbd>--keep-badchannels</kbd></td>
+</tr>
+<tr><td>&#160;</td><td><p class="first">Do not remove bad channels.</p>
+<p class="last">Default: True</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--overwrite</kbd></td>
+<td><p class="first">Overwrite existing spo and res files with same name.</p>
+<p class="last">Default: False</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--extrate</kbd></td>
+<td><p class="first">Write additional Ext_Rate column (SPEX &gt;=3.05.00).</p>
+<p class="last">Default: False</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--no-color</kbd></td>
+<td><p class="first">Suppress color output.</p>
+<p class="last">Default: True</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">SIMRES</a><ul>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a><ul>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tg2spex.html"
+                        title="previous chapter">TG2Spex</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="myusermodel.html"
+                        title="next chapter">User model example</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/simres.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="myusermodel.html" title="User model example"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tg2spex.html" title="TG2Spex"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspex 0.2.2 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspex module</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

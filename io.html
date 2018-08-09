@@ -5,13 +5,13 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>The SPEX data format: pyspex.io &#8212; pyspex 0.2.1 documentation</title>
+    <title>The SPEX data format: pyspex.io &#8212; pyspex 0.2.2 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.1',
+        VERSION:     '0.2.2',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -42,7 +42,7 @@
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.2 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -342,6 +342,12 @@ but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyspex.io.Spo.check_filename">
+<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.check_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the output filename has the correct .spo extension. The method returns a correct file name.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyspex.io.Spo.get_mask">
 <code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a mask to select spectral information for one region only.</p>
@@ -533,9 +539,21 @@ file.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyspex.io.Res.channel_shift">
+<code class="descname">channel_shift</code><span class="sig-paren">(</span><em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.channel_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shift the response array indices with an integer number provided by input parameter ‘shift’.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyspex.io.Res.check">
 <code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a number of checks to see if the response information is consistent.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspex.io.Res.check_filename">
+<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.check_filename" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the output filename has the correct .res extension. The method returns a correct file name.</p>
 </dd></dl>
 
 <dl class="method">
@@ -609,7 +627,7 @@ file.</p>
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.1 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspex 0.2.2 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
