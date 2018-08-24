@@ -84,10 +84,10 @@ class Spo:
         self.last = np.array([], dtype=bool)
 
         # New feature since SPEX 3.05.00
-        self.brat_exist=False                 #: Does the Ext_rate column exist?
+        self.brat_exist = False                 #: Does the Ext_rate column exist?
 
         # Does the channel order need to be swapped?
-        self.swap=False
+        self.swap = False
 
         # Create a dictionary with array names
         self.anames = {'echan1': 'Lower_Energy', 'echan2': 'Upper_Energy', 'tints': 'Exposure_Time',
@@ -103,7 +103,7 @@ class Spo:
     # -----------------------------------------------------
     # Create a spo with zeros and size nchan
     # -----------------------------------------------------
-    def zero_spo(self,nchan):
+    def zero_spo(self, nchan):
         """Creates empty arrays of size nchan."""
         self.echan1 = np.zeros(nchan, dtype=float)
         self.echan2 = np.zeros(nchan, dtype=float)
@@ -231,12 +231,12 @@ class Spo:
         self.last = table['Last']
 
         for col in cols.names:
-           if col == "Exp_Rate":
-               self.brat = table['Exp_Rate']
-               self.brat_exist=True
+            if col == "Exp_Rate":
+                self.brat = table['Exp_Rate']
+                self.brat_exist = True
 
         if not self.brat_exist:
-            self.brat = np.ones(self.ochan.size,dtype=float)
+            self.brat = np.ones(self.ochan.size, dtype=float)
 
         # Close the .spo file
         spofile.close()
@@ -403,7 +403,38 @@ class Spo:
                 print("The actual array length is:              {0}".format(array.size))
                 return -1
 
+        # Check the arrays for consistency
+
+        for ireg in np.arange(self.nregion):
+            fchan = sum(self.nchan[0:ireg]) - self.nchan[ireg]
+            for ichan in np.arange(self.nchan[ireg]) + fchan:
+                if self.echan2[ichan] <= self.echan1[ichan]:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "does not have a positive width.".format(ichan-fchan+1, ireg+1))
+                    return -1
+                if self.echan1[ichan] < 0.0:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "has a negative lower limit.".format(ichan-fchan+1, ireg+1))
+                    return -1
+                if self.dochan[ichan] < 0.0:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "has a negative error.".format(ichan-fchan+1, ireg+1))
+                    return -1
+                if self.ssys[ichan] < 0.0:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "has a negative systematic error.".format(ichan-fchan+1, ireg+1))
+                    return -1
+                if self.bsys[ichan] < 0.0:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "has a negative background systematic error.".format(ichan-fchan+1, ireg+1))
+                    return -1
+                if self.tints[ichan] < 0.0:
+                    message.error("Bin number {0} in spectrum region {1} "
+                                  "has a negative exposure time.".format(ichan-fchan+1, ireg+1))
+                    return -1
+
         return 0
+
 
     # -----------------------------------------------------
     # Function to check the spo file name for correct extension

@@ -24,6 +24,7 @@ import pyspex.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
+import math
 import os
 
 # Stuff to import for compatibility between python 2 and 3
@@ -124,7 +125,7 @@ class Res:
         self.nchan = np.append(self.nchan, origres.nchan[origres.mask_icomp])
         self.neg = np.append(self.neg, origres.neg[origres.mask_icomp])
         self.sector = np.append(self.sector, origres.sector[origres.mask_icomp])
-        self.region = np.append(self.region, origres.region[origres.mask_icomp])
+        self.region = np.append(self.region, origres.region[origres.mask_icomp]+self.nregion)
         if self.share_comp:
             self.shcomp = np.append(self.shcomp, origres.shcomp[origres.mask_icomp])
 
@@ -556,7 +557,7 @@ class Res:
         # Check if the number of indexed channels is equal to the length of the response array
         if sum(self.nc) != self.resp.size:
             print("")
-            print("Error: Number of indexed channels not equal to response array.")
+            message.error("Number of indexed channels not equal to response array.")
             print("Sum of channels in group:  {0}".format(sum(self.nc)))
             print("Length of response array:  {0}".format(self.resp.size))
             return -1
@@ -565,7 +566,39 @@ class Res:
         for j in np.arange(len(self.neg)):
             check = self.ic2[j] - self.ic1[j] + 1
             if check != self.nc[j]:
-                print("Error: Number of group channels not consistent.")
+                message.error("Number of group channels not consistent.")
+                return -1
+
+        # Check if energy grid is monotonous
+        k = 0
+        for i in np.arange(self.ncomp):
+            for j in np.arange(self.neg[i]):
+                if self.eg1[k] >= self.eg2[k]:
+                    message.error("Energy bin size is not positive for"
+                                  "bin {0} of component {1}.".format(j, i))
+                    return -1
+                if j > 1:
+                    if self.eg1[k] < self.eg1[k-1]:
+                        message.error("Energy grid is not increasing for"
+                                      "bin {0} of component {1}.".format(j, i))
+                        return -1
+                if self.nc[k] > 0 and self.ic1[k] < 1:
+                    message.error("For row {0} the first channel is {1}, which is not allowed.".format(k,self.ic1[k]))
+                    return -1
+                elif self.nc[k] > 0 and self.ic2[k] > self.nchan[i]:
+                    message.error("For row {0} the last channel is larger than the number of channels.".format(k))
+                    return -1
+                elif self.ic2[k] < self.ic1[k]:
+                    message.error("For row {0} the last channel is smaller than the first channel.".format(k))
+                    return -1
+                elif self.nc[k] > 0 and self.nc[k] != self.ic2[k] - self.ic1[k] + 1:
+                    message.error("For row {0} the number of channels does not match the limits.".format(k))
+                    return -1
+                k = k + 1
+
+        for i in np.arange(self.resp.size):
+            if self.resp[i] < 0.0:
+                message.error("Negative response value detected in matrix.")
                 return -1
 
         return 0

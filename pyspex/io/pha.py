@@ -58,7 +58,7 @@ class Pha:
         self.Pha2BackScal = 1.0                   #: Backscale value for background
 
     def read(self,filename):
-        """Read a spectrum from a PHA file. If this function is called by the PHA2 routine"""
+        """Read a spectrum from a PHA file."""
 
         # Read the data and header from the SPECTRUM extension
         (data, header) = fits.getdata(filename,'SPECTRUM',header=True)
