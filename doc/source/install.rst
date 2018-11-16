@@ -45,7 +45,7 @@ ensure the stability of the module. Currently, the dependencies are:
 
 For the generation of documentation, the following packages are needed:
 
-- sphinx
+- sphinx (version >= 1.4)
 - sphinx-argparse
 
 For some examples, other packages are used, like pyatomdb, but they are not required for the pyspex module to function.
