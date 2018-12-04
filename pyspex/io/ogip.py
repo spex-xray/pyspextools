@@ -85,16 +85,12 @@ class OGIPRegion(Region):
 
         if not self.input_area:
             self.area = None
-
+        
         # Do the OGIP to SPEX conversion
         stat = self.ogip_to_spex()
         if stat != 0:
-            message.error("OGIP to spec conversion failed.")
+            message.error("OGIP to spex conversion failed.")
             return 1
-
-        # Correct for possible shifts in channels if first channel is 0
-        if self.resp.FirstChannel == 0:
-            self.correct_possible_shift()
 
     # -----------------------------------------------------
     # Add OGIP objects to the OGIP region and convert
@@ -156,12 +152,8 @@ class OGIPRegion(Region):
         # Do the OGIP to SPEX conversion
         stat = self.ogip_to_spex()
         if stat != 0:
-            message.error("OGIP to spec conversion failed.")
+            message.error("OGIP to spex conversion failed.")
             return 1
-
-        # Correct for possible shifts in channels if first channel is 0
-        if self.resp.FirstChannel == 0:
-            self.correct_possible_shift()
 
         return 0
 
@@ -203,6 +195,10 @@ class OGIPRegion(Region):
         else:
             message.error("Source spectrum or response not specified.")
             return 1
+
+        # Correct for possible shifts in channels if first channel is 0
+        if self.resp.FirstChannel == 0:
+            self.correct_possible_shift()
 
         # Check output spo object
         checkspo = self.spo.check()
@@ -321,7 +317,7 @@ class OGIPRegion(Region):
         then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
         channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
         and if the first channel in the OGIP spectrum is 0.
-        The add_region and read_region methods call this function already by default."""
+        The ogip_to_spex method calls this function by default."""
 
         if not isinstance(self.spo,Spo) or not isinstance(self.res,Res):
             message.error("Could not find spo and res information in this region.")
