@@ -190,7 +190,7 @@ def main():
 
     # Write regions to file
     message.proc_start("Write spectra and response to SPEX format")
-    stat = dataset.write_all_regions(spofile, resfile, ext_rate=args.extrate, overwrite=args.overwrite, history=history)
+    stat = dataset.write_all_regions(spofile, resfile, exp_rate=args.exprate, overwrite=args.overwrite, history=history)
     message.proc_end(stat)
 
 
@@ -232,7 +232,7 @@ def tg2spex_arguments():
                         default=True)
     parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
                         default=True)
-    parser.add_argument('--extrate', help="Write additional Ext_Rate column (SPEX >=3.05.00).", action="store_true",
+    parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
                         default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
 

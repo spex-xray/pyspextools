@@ -84,7 +84,7 @@ class Spo:
         self.last = np.array([], dtype=bool)
 
         # New feature since SPEX 3.05.00
-        self.brat_exist = False                 #: Does the Ext_rate column exist?
+        self.brat_exist = False                 #: Does the Exp_rate column exist?
 
         # Does the channel order need to be swapped?
         self.swap = False
@@ -290,9 +290,9 @@ class Spo:
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
-    def write_file(self, sponame, ext_rate=False, overwrite=False, history=None):
+    def write_file(self, sponame, exp_rate=False, overwrite=False, history=None):
         """Function to write the spectrum to a .spo file with the name 'sponame'.
-        The ext_rate flag determines whether the Ext_Rate column is added containing
+        The exp_rate flag determines whether the Exp_Rate column is added containing
         the ratio between the backscales of the source and background spectra. This column
         can only be read by SPEX >=3.05.00."""
 
@@ -333,8 +333,8 @@ class Spo:
         col6 = fits.Column(name='Back_Rate', format='1E', unit='c/s', array=self.mbchan)
         col7 = fits.Column(name='Err_Back_Rate', format='1E', unit='c/s', array=self.dbchan)
 
-        if ext_rate:
-            col8 = fits.Column(name='Ext_rate', format='1E', unit='', array=self.brat)
+        if exp_rate:
+            col8 = fits.Column(name='Exp_Rate', format='1E', unit='', array=self.brat)
             col9 = fits.Column(name='Sys_Source', format='1E', unit='', array=self.ssys)
             col10 = fits.Column(name='Sys_Back', format='1E', unit='', array=self.bsys)
             col11 = fits.Column(name='First', format='1L', unit='', array=self.first)

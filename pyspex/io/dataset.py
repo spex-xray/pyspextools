@@ -132,11 +132,11 @@ class Dataset:
     # Write one region to a spo and res file.
     # -----------------------------------------------------
 
-    def write_region(self, spofile, resfile, iregion, ext_rate=False, overwrite=False, history=None):
+    def write_region(self, spofile, resfile, iregion, exp_rate=False, overwrite=False, history=None):
         """Write one region to a spo and res file."""
 
         if len(self.regions) >= iregion > 0:
-            self.regions[iregion - 1].spo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
+            self.regions[iregion - 1].spo.write_file(spofile, exp_rate=exp_rate, overwrite=overwrite, history=history)
             self.regions[iregion - 1].res.write_file(resfile, overwrite=overwrite, history=history)
         else:
             print("Error: region number not found!")
@@ -148,7 +148,7 @@ class Dataset:
     # Write all the regions to a spo and res file.
     # -----------------------------------------------------
 
-    def write_all_regions(self, spofile, resfile, ext_rate=False, overwrite=False, history=None):
+    def write_all_regions(self, spofile, resfile, exp_rate=False, overwrite=False, history=None):
         """Write all regions in the data object to spo and res. """
         tspo = Spo()
         tres = Res()
@@ -159,7 +159,7 @@ class Dataset:
             tres.add_res_region(ireg.res, i)
             i = i + 1
 
-        stat=tspo.write_file(spofile, ext_rate=ext_rate, overwrite=overwrite, history=history)
+        stat=tspo.write_file(spofile, exp_rate=exp_rate, overwrite=overwrite, history=history)
         if stat != 0:
             message.error("Writing SPO file failed.")
             return 1

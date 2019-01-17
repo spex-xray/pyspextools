@@ -92,7 +92,7 @@ def main():
 
     # Write output spo and res file
     print("Writing SPO to file: {0}".format(spofile))
-    ogip.spo.write_file(spofile,ext_rate=args.extrate,overwrite=args.overwrite,history=history)
+    ogip.spo.write_file(spofile,exp_rate=args.exprate,overwrite=args.overwrite,history=history)
 
     print("Writing RES to file: {0}".format(resfile))
     ogip.res.write_file(resfile,overwrite=args.overwrite,history=history)
@@ -111,7 +111,7 @@ def simres_arguments():
                         default=True)
     parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
                         default=False)
-    parser.add_argument('--extrate', help="Write additional Ext_Rate column (SPEX >=3.05.00).", action="store_true",
+    parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
                         default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
 

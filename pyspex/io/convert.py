@@ -98,7 +98,7 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
             spo.mbchan[i] = back.Rate[i] * fb / back.AreaScaling[i]
             spo.dbchan[i] = (back.StatError[i] * fb / back.AreaScaling[i]) ** 2
 
-            # Calculate the Ext_Rate backscale ratio
+            # Calculate the Exp_Rate backscale ratio
             if fb > 0 and src.Exposure > 0:
                 spo.brat[i] = btints / spo.tints[i] / fb
             else:
