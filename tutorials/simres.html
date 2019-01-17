@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>SIMRES &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
@@ -26,7 +29,7 @@
     <link rel="next" title="User model example" href="myusermodel.html" />
     <link rel="prev" title="TG2Spex" href="tg2spex.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -58,7 +61,7 @@
 effective area file (ARF) and background spectrum. This is very useful to create spo and res files
 for future missions, where only responses and effective area files are provided. The spo and res files can be used
 to simulate spectra in SPEX.</p>
-<p>The parameters of simres can be shown on the command line by the ‘-h’ flag:</p>
+<p>The parameters of simres can be shown on the command line by the &#8216;-h&#8217; flag:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simres</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
@@ -66,29 +69,29 @@ to simulate spectra in SPEX.</p>
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Suppose we have a response matrix from a future instrument like X-IFU aboard Athena called athena_xifu_A.rsp, then
 we can create a spo and res file with the simres command, and call them xifu.spo and xifu.res:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">simres</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">athena_xifu_A</span><span class="o">.</span><span class="n">rsp</span> <span class="o">--</span><span class="n">spofile</span> <span class="n">xifu</span><span class="o">.</span><span class="n">spo</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">xifu</span><span class="o">.</span><span class="n">res</span>
-<span class="o">==================================</span>
- <span class="n">This</span> <span class="ow">is</span> <span class="n">simres</span> <span class="n">version</span> <span class="mf">0.2</span><span class="o">.</span><span class="mi">2</span>
-<span class="o">==================================</span>
+<div class="highlight-none"><div class="highlight"><pre><span></span>linux:~&gt; simres --rmffile athena_xifu_A.rsp --spofile xifu.spo --resfile xifu.res
+==================================
+ This is simres version 0.2.2
+==================================
 
-<span class="n">Read</span> <span class="n">RMF</span> <span class="n">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">WARNING</span> <span class="n">This</span> <span class="ow">is</span> <span class="n">an</span> <span class="n">RSP</span> <span class="n">file</span> <span class="k">with</span> <span class="n">the</span> <span class="n">effective</span> <span class="n">area</span> <span class="n">included</span><span class="o">.</span>
-<span class="n">Do</span> <span class="ow">not</span> <span class="n">read</span> <span class="n">an</span> <span class="n">ARF</span> <span class="n">file</span><span class="p">,</span> <span class="n">unless</span> <span class="n">you</span> <span class="n">know</span> <span class="n">what</span> <span class="n">you</span> <span class="n">are</span> <span class="n">doing</span><span class="o">.</span>
-<span class="n">OK</span>
-<span class="n">Check</span> <span class="n">OGIP</span> <span class="n">source</span> <span class="n">spectrum</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Check</span> <span class="n">OGIP</span> <span class="n">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Convert</span> <span class="n">OGIP</span> <span class="n">spectra</span> <span class="n">to</span> <span class="n">spo</span> <span class="nb">format</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Convert</span> <span class="n">OGIP</span> <span class="n">response</span> <span class="n">to</span> <span class="n">res</span> <span class="nb">format</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Identify</span> <span class="n">bad</span> <span class="n">channels</span> <span class="ow">in</span> <span class="n">spectrum</span> <span class="ow">and</span> <span class="n">response</span> <span class="n">matrix</span> <span class="ow">and</span> <span class="n">re</span><span class="o">-</span><span class="n">index</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">good</span> <span class="n">channels</span><span class="p">:</span> <span class="mi">29600</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">bad</span> <span class="n">channels</span><span class="p">:</span>  <span class="mi">0</span>
-<span class="n">Removing</span> <span class="n">bad</span> <span class="n">channels</span> <span class="kn">from</span> <span class="nn">spectral</span> <span class="n">region</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">original</span> <span class="n">groups</span><span class="p">:</span>       <span class="mi">29600</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">zero</span><span class="o">-</span><span class="n">response</span> <span class="n">groups</span><span class="p">:</span>  <span class="mi">0</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">original</span> <span class="n">response</span> <span class="n">elements</span><span class="p">:</span>  <span class="mi">8898275</span>
-<span class="n">Number</span> <span class="n">of</span> <span class="n">bad</span> <span class="n">response</span> <span class="n">elements</span><span class="p">:</span>       <span class="mi">0</span>
-<span class="n">Removing</span> <span class="n">bad</span> <span class="n">channels</span> <span class="kn">from</span> <span class="nn">response</span> <span class="n">matrix</span><span class="o">...</span> <span class="n">OK</span>
-<span class="n">Writing</span> <span class="n">SPO</span> <span class="n">to</span> <span class="n">file</span><span class="p">:</span> <span class="n">xifu</span><span class="o">.</span><span class="n">spo</span>
-<span class="n">Writing</span> <span class="n">RES</span> <span class="n">to</span> <span class="n">file</span><span class="p">:</span> <span class="n">xifu</span><span class="o">.</span><span class="n">res</span>
+Read RMF response matrix... WARNING This is an RSP file with the effective area included.
+Do not read an ARF file, unless you know what you are doing.
+OK
+Check OGIP source spectrum... OK
+Check OGIP response matrix... OK
+Convert OGIP spectra to spo format... OK
+Convert OGIP response to res format... OK
+Identify bad channels in spectrum and response matrix and re-index matrix... OK
+Number of good channels: 29600
+Number of bad channels:  0
+Removing bad channels from spectral region... OK
+Number of original groups:       29600
+Number of zero-response groups:  0
+Number of original response elements:  8898275
+Number of bad response elements:       0
+Removing bad channels from response matrix... OK
+Writing SPO to file: xifu.spo
+Writing RES to file: xifu.res
 </pre></div>
 </div>
 <p>In this case, an RSP file is provided, which should contain the effective area already. The program issues a warning,
@@ -100,7 +103,7 @@ realistic.</p>
 </div>
 <div class="section" id="command-line-arguments">
 <h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">simres</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span>
+<div class="highlight-python"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">simres</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span>
               <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span>
               <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">extrate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
 </pre></div>
@@ -112,38 +115,38 @@ realistic.</p>
 <col class="description" />
 <tbody valign="top">
 <tr><td class="option-group">
-<kbd>--rmffile</kbd></td>
+<kbd>&#8211;rmffile</kbd></td>
 <td>Input Response matrix (required)</td></tr>
 <tr><td class="option-group">
-<kbd>--bkgfile</kbd></td>
+<kbd>&#8211;bkgfile</kbd></td>
 <td>Input Background spectrum</td></tr>
 <tr><td class="option-group">
-<kbd>--arffile</kbd></td>
+<kbd>&#8211;arffile</kbd></td>
 <td>Input Effective area file</td></tr>
 <tr><td class="option-group">
-<kbd>--spofile</kbd></td>
+<kbd>&#8211;spofile</kbd></td>
 <td>Output SPEX spectrum file (.spo, required)</td></tr>
 <tr><td class="option-group">
-<kbd>--resfile</kbd></td>
+<kbd>&#8211;resfile</kbd></td>
 <td>Output SPEX response file (.res, required)</td></tr>
 <tr><td class="option-group" colspan="2">
-<kbd>--keep-badchannels</kbd></td>
+<kbd>&#8211;keep-badchannels</kbd></td>
 </tr>
 <tr><td>&#160;</td><td><p class="first">Do not remove bad channels.</p>
 <p class="last">Default: True</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>--overwrite</kbd></td>
+<kbd>&#8211;overwrite</kbd></td>
 <td><p class="first">Overwrite existing spo and res files with same name.</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>--extrate</kbd></td>
+<kbd>&#8211;extrate</kbd></td>
 <td><p class="first">Write additional Ext_Rate column (SPEX &gt;=3.05.00).</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>--no-color</kbd></td>
+<kbd>&#8211;no-color</kbd></td>
 <td><p class="first">Suppress color output.</p>
 <p class="last">Default: True</p>
 </td></tr>
@@ -219,7 +222,7 @@ realistic.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

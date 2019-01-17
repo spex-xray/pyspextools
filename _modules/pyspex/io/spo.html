@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>pyspex.io.spo &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -24,7 +27,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -131,10 +134,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 
         <span class="c1"># New feature since SPEX 3.05.00</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">brat_exist</span><span class="o">=</span><span class="kc">False</span>                 <span class="c1">#: Does the Ext_rate column exist?</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">brat_exist</span> <span class="o">=</span> <span class="kc">False</span>                 <span class="c1">#: Does the Exp_rate column exist?</span>
 
         <span class="c1"># Does the channel order need to be swapped?</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">swap</span><span class="o">=</span><span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">swap</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Create a dictionary with array names</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">anames</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;echan1&#39;</span><span class="p">:</span> <span class="s1">&#39;Lower_Energy&#39;</span><span class="p">,</span> <span class="s1">&#39;echan2&#39;</span><span class="p">:</span> <span class="s1">&#39;Upper_Energy&#39;</span><span class="p">,</span> <span class="s1">&#39;tints&#39;</span><span class="p">:</span> <span class="s1">&#39;Exposure_Time&#39;</span><span class="p">,</span>
@@ -150,7 +153,7 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Create a spo with zeros and size nchan</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Spo.zero_spo"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.zero_spo">[docs]</a>    <span class="k">def</span> <span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">nchan</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.zero_spo"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.zero_spo">[docs]</a>    <span class="k">def</span> <span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nchan</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Creates empty arrays of size nchan.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">echan1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">echan2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
@@ -278,12 +281,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="s1">&#39;Last&#39;</span><span class="p">]</span>
 
         <span class="k">for</span> <span class="n">col</span> <span class="ow">in</span> <span class="n">cols</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
-           <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="s2">&quot;Exp_Rate&quot;</span><span class="p">:</span>
-               <span class="bp">self</span><span class="o">.</span><span class="n">brat</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="s1">&#39;Exp_Rate&#39;</span><span class="p">]</span>
-               <span class="bp">self</span><span class="o">.</span><span class="n">brat_exist</span><span class="o">=</span><span class="kc">True</span>
+            <span class="k">if</span> <span class="n">col</span> <span class="o">==</span> <span class="s2">&quot;Exp_Rate&quot;</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">brat</span> <span class="o">=</span> <span class="n">table</span><span class="p">[</span><span class="s1">&#39;Exp_Rate&#39;</span><span class="p">]</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">brat_exist</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">brat_exist</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">brat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ochan</span><span class="o">.</span><span class="n">size</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">brat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ochan</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="c1"># Close the .spo file</span>
         <span class="n">spofile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -337,9 +340,9 @@
     <span class="c1"># Function to write all spectra to a .spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.write_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.write_file"><a class="viewcode-back" href="../../../io.html#pyspex.io.Spo.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to write the spectrum to a .spo file with the name &#39;sponame&#39;.</span>
-<span class="sd">        The ext_rate flag determines whether the Ext_Rate column is added containing</span>
+<span class="sd">        The exp_rate flag determines whether the Exp_Rate column is added containing</span>
 <span class="sd">        the ratio between the backscales of the source and background spectra. This column</span>
 <span class="sd">        can only be read by SPEX &gt;=3.05.00.&quot;&quot;&quot;</span>
 
@@ -380,8 +383,8 @@
         <span class="n">col6</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Back_Rate&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;c/s&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">mbchan</span><span class="p">)</span>
         <span class="n">col7</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Err_Back_Rate&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;c/s&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">dbchan</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="n">ext_rate</span><span class="p">:</span>
-            <span class="n">col8</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Ext_rate&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">brat</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">exp_rate</span><span class="p">:</span>
+            <span class="n">col8</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Exp_Rate&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">brat</span><span class="p">)</span>
             <span class="n">col9</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sys_Source&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">ssys</span><span class="p">)</span>
             <span class="n">col10</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;Sys_Back&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1E&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">bsys</span><span class="p">)</span>
             <span class="n">col11</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;First&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;1L&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">first</span><span class="p">)</span>
@@ -450,7 +453,38 @@
                 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;The actual array length is:              </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">array</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
                 <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
+        <span class="c1"># Check the arrays for consistency</span>
+
+        <span class="k">for</span> <span class="n">ireg</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nregion</span><span class="p">):</span>
+            <span class="n">fchan</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">ireg</span><span class="p">])</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">ireg</span><span class="p">]</span>
+            <span class="k">for</span> <span class="n">ichan</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">ireg</span><span class="p">])</span> <span class="o">+</span> <span class="n">fchan</span><span class="p">:</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">echan2</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="n">ichan</span><span class="p">]:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;does not have a positive width.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">echan1</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;has a negative lower limit.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">dochan</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;has a negative error.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ssys</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;has a negative systematic error.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">bsys</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;has a negative background systematic error.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tints</span><span class="p">[</span><span class="n">ichan</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">:</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Bin number </span><span class="si">{0}</span><span class="s2"> in spectrum region </span><span class="si">{1}</span><span class="s2"> &quot;</span>
+                                  <span class="s2">&quot;has a negative exposure time.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ichan</span><span class="o">-</span><span class="n">fchan</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
         <span class="k">return</span> <span class="mi">0</span></div>
+
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to check the spo file name for correct extension</span>
@@ -557,7 +591,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

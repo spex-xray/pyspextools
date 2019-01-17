@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>The SPEX data format: pyspex.io &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +29,7 @@
     <link rel="next" title="Importing OGIP spectra" href="ogip.html" />
     <link rel="prev" title="APEC interface for SPEX" href="tutorials/apec.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -79,7 +82,7 @@ can read, write and manipulate spectral datasets.</p>
 
 <dl class="method">
 <dt id="pyspex.io.Dataset.read_region">
-<code class="descname">read_region</code><span class="sig-paren">(</span><em>iregion</em>, <em>spofile</em>, <em>resfile</em>, <em>label=u''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
+<code class="descname">read_region</code><span class="sig-paren">(</span><em>iregion</em>, <em>spofile</em>, <em>resfile</em>, <em>label=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one region with number iregion from the two SPEX files and add it to the dataset.</p>
 </dd></dl>
 
@@ -97,13 +100,13 @@ can read, write and manipulate spectral datasets.</p>
 
 <dl class="method">
 <dt id="pyspex.io.Dataset.write_region">
-<code class="descname">write_region</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>iregion</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_region</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>iregion</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write one region to a spo and res file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspex.io.Dataset.write_all_regions">
-<code class="descname">write_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
+<code class="descname">write_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write all regions in the data object to spo and res.</p>
 </dd></dl>
 
@@ -284,7 +287,7 @@ the spectral information.</p>
 <dl class="attribute">
 <dt id="pyspex.io.Spo.brat_exist">
 <code class="descname">brat_exist</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.brat_exist" title="Permalink to this definition">¶</a></dt>
-<dd><p>Does the Ext_rate column exist?</p>
+<dd><p>Does the Exp_rate column exist?</p>
 </dd></dl>
 
 <dl class="method">
@@ -302,7 +305,7 @@ the spectral information.</p>
 <dl class="method">
 <dt id="pyspex.io.Spo.del_spo_region">
 <code class="descname">del_spo_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.del_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove spectrum from region with number ‘iregion’</p>
+<dd><p>Remove spectrum from region with number &#8216;iregion&#8217;</p>
 </dd></dl>
 
 <dl class="method">
@@ -315,14 +318,14 @@ the spectral information.</p>
 <dt id="pyspex.io.Spo.return_region">
 <code class="descname">return_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to return a spo object with containing the
-spectrum of the region with number ‘iregion’.</p>
+spectrum of the region with number &#8216;iregion&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspex.io.Spo.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>sponame</em>, <em>ext_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Function to write the spectrum to a .spo file with the name ‘sponame’.
-The ext_rate flag determines whether the Ext_Rate column is added containing
+<code class="descname">write_file</code><span class="sig-paren">(</span><em>sponame</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to write the spectrum to a .spo file with the name &#8216;sponame&#8217;.
+The exp_rate flag determines whether the Exp_Rate column is added containing
 the ratio between the backscales of the source and background spectra. This column
 can only be read by SPEX &gt;=3.05.00.</p>
 </dd></dl>
@@ -496,7 +499,7 @@ res file. This file can contain multiple responses (regions).</p>
 <dl class="method">
 <dt id="pyspex.io.Res.del_res_region">
 <code class="descname">del_res_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.del_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
-<dd><p>Remove region with number ‘iregion’.</p>
+<dd><p>Remove region with number &#8216;iregion&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
@@ -514,7 +517,7 @@ res file. This file can contain multiple responses (regions).</p>
 <dl class="method">
 <dt id="pyspex.io.Res.write_file">
 <code class="descname">write_file</code><span class="sig-paren">(</span><em>resfile</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write the response information to a .res file with name ‘resfile’.</p>
+<dd><p>Write the response information to a .res file with name &#8216;resfile&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
@@ -541,7 +544,7 @@ file.</p>
 <dl class="method">
 <dt id="pyspex.io.Res.channel_shift">
 <code class="descname">channel_shift</code><span class="sig-paren">(</span><em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.channel_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
-<dd><p>Shift the response array indices with an integer number provided by input parameter ‘shift’.</p>
+<dd><p>Shift the response array indices with an integer number provided by input parameter &#8216;shift&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
@@ -632,7 +635,7 @@ file.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

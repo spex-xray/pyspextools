@@ -14,9 +14,9 @@ arguments directly from the command line::
 A full overview of the arguments is given below in the section `Command-line arguments <ogip2spex_commandline_>`_.
 
 .. NOTE::
-   By default ogip2spex creates spo files without the 'Ext_Rate' column. This column was added in SPEX version 3.05.00.
-   The Ext_Rate column contains the ratio between the backscale values of the source and background spectrum and is
-   used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Ext_Rate
+   By default ogip2spex creates spo files without the 'Exp_Rate' column. This column was added in SPEX version 3.05.00.
+   The Exp_Rate column contains the ratio between the backscale values of the source and background spectrum and is
+   used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Exp_Rate
    column is created.
 
 Example
@@ -79,7 +79,7 @@ At the end of the program, the spo and res files are saved::
 
 One can overwrite existing files by adding the '--overwrite' option to the ogip2spex call.
 
-This spo file does not have an 'Ext_Rate' column. To generate a spo file with such a column, add '--extrate' to the
+This spo file does not have an 'Exp_Rate' column. To generate a spo file with such a column, add '--exprate' to the
 ogip2spex call.
 
 By default, ogip2spex shows colored output for warnings, errors and OKs. If it is hard for you to see, use the

@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>Importing OGIP spectra &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +29,7 @@
     <link rel="next" title="pyspex.data: Data filtering and optimization functions" href="data.html" />
     <link rel="prev" title="The SPEX data format: pyspex.io" href="io.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -76,7 +79,7 @@ The OGIP class can be imported separately if needed:</p>
 </div>
 <p>The oregion instance above will be an extended version of the parent region class of
 pyspex and will have the same functionality.</p>
-<p>The ‘read_region’ method can be called to read the OGIP spectra and responses and return
+<p>The &#8216;read_region&#8217; method can be called to read the OGIP spectra and responses and return
 a SPEX region object, which can be written to spo and res files.</p>
 <p>A convenient script called <a class="reference internal" href="tutorials/ogip2spex.html#ogip2spex"><span class="std std-ref">OGIP2spex</span></a> is available to convert OGIP spectra
 and responses to SPEX format.</p>
@@ -91,7 +94,7 @@ a user to import a Chandra grating spectrum into a SPEX region.</p>
 <span class="n">tgregion</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">TGRegion</span><span class="p">()</span>
 </pre></div>
 </div>
-<p>The ‘read_region’ method can be called to read the grating spectra and responses and return
+<p>The &#8216;read_region&#8217; method can be called to read the grating spectra and responses and return
 a SPEX region object, which can be written to spo and res files.</p>
 <p>A convenient script called <a class="reference internal" href="tutorials/tg2spex.html#tg2spex"><span class="std std-ref">TG2Spex</span></a> is available to convert one Chandra grating
 observation to SPEX format.</p>
@@ -269,7 +272,7 @@ need to be added to an OGIP region and converted to spo and res objects.</p>
 then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
 channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
 and if the first channel in the OGIP spectrum is 0.
-The add_region and read_region methods call this function already by default.</p>
+The ogip_to_spex method calls this function by default.</p>
 </dd></dl>
 
 <dl class="method">
@@ -294,6 +297,12 @@ The add_region and read_region methods call this function already by default.</p
 <em class="property">class </em><code class="descclassname">pyspex.io.tg.</code><code class="descname">TGRegion</code><a class="reference internal" href="_modules/pyspex/io/tg.html#TGRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.tg.TGRegion" title="Permalink to this definition">¶</a></dt>
 <dd><p>The TGRegion class contains methods to read Chandra grating data into the pyspex module and convert
 these to spo and res format objects.</p>
+<dl class="attribute">
+<dt id="pyspex.io.tg.TGRegion.grating">
+<code class="descname">grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.tg.TGRegion.grating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grating name</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="pyspex.io.tg.TGRegion.read_region">
 <code class="descname">read_region</code><span class="sig-paren">(</span><em>pha2file</em>, <em>rmflist</em>, <em>arflist</em>, <em>grating</em>, <em>bkgsubtract=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/tg.html#TGRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.tg.TGRegion.read_region" title="Permalink to this definition">¶</a></dt>
@@ -452,7 +461,7 @@ Keith Arnaud.</p>
 <dl class="method">
 <dt id="pyspex.io.pha.Pha.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha.html#Pha.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
-<dd><p>Read a spectrum from a PHA file. If this function is called by the PHA2 routine</p>
+<dd><p>Read a spectrum from a PHA file.</p>
 </dd></dl>
 
 <dl class="method">
@@ -536,8 +545,8 @@ Keith Arnaud.</p>
 <dt id="pyspex.io.pha2.Pha2.read">
 <code class="descname">read</code><span class="sig-paren">(</span><em>phafile</em>, <em>force_poisson=True</em>, <em>background=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/pha2.html#Pha2.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.pha2.Pha2.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the
-optional ‘force_poisson’ flag is True by default. Set force_poisson to false to obtain the errors from
-the file. If the user wants to subtract the background, the flag ‘subtract_background’ should be set to True.</p>
+optional &#8216;force_poisson&#8217; flag is True by default. Set force_poisson to false to obtain the errors from
+the file. If the user wants to subtract the background, the flag &#8216;subtract_background&#8217; should be set to True.</p>
 </dd></dl>
 
 <dl class="method">
@@ -831,7 +840,7 @@ Keith Arnaud.</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

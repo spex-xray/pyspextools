@@ -15,6 +15,8 @@ The parameters of simres can be shown on the command line by the '-h' flag::
 Example
 -------
 
+.. highlight:: none
+
 Suppose we have a response matrix from a future instrument like X-IFU aboard Athena called athena_xifu_A.rsp, then
 we can create a spo and res file with the simres command, and call them xifu.spo and xifu.res::
 
@@ -49,6 +51,8 @@ correction twice.
 The output spectrum is obviously wrong with a constant count rate across the entire band. The idea is to set up a new
 model in SPEX and simulate a new spectrum with this response matrix to replace the dummy spectrum with something more
 realistic.
+
+.. highlight:: python
 
 Command-line arguments
 ----------------------

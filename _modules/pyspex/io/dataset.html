@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>pyspex.io.dataset &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
@@ -24,7 +27,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -179,11 +182,11 @@
     <span class="c1"># Write one region to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_region">[docs]</a>    <span class="k">def</span> <span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_region">[docs]</a>    <span class="k">def</span> <span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write one region to a spo and res file.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">iregion</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">iregion</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">spofile</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="n">ext_rate</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">iregion</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">spofile</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="n">exp_rate</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">iregion</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: region number not found!&quot;</span><span class="p">)</span>
@@ -195,7 +198,7 @@
     <span class="c1"># Write all the regions to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_all_regions"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_all_regions"><a class="viewcode-back" href="../../../io.html#pyspex.io.Dataset.write_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write all regions in the data object to spo and res. &quot;&quot;&quot;</span>
         <span class="n">tspo</span> <span class="o">=</span> <span class="n">Spo</span><span class="p">()</span>
         <span class="n">tres</span> <span class="o">=</span> <span class="n">Res</span><span class="p">()</span>
@@ -206,7 +209,7 @@
             <span class="n">tres</span><span class="o">.</span><span class="n">add_res_region</span><span class="p">(</span><span class="n">ireg</span><span class="o">.</span><span class="n">res</span><span class="p">,</span> <span class="n">i</span><span class="p">)</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 
-        <span class="n">stat</span><span class="o">=</span><span class="n">tspo</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">spofile</span><span class="p">,</span> <span class="n">ext_rate</span><span class="o">=</span><span class="n">ext_rate</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">)</span>
+        <span class="n">stat</span><span class="o">=</span><span class="n">tspo</span><span class="o">.</span><span class="n">write_file</span><span class="p">(</span><span class="n">spofile</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="n">exp_rate</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="n">history</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Writing SPO file failed.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
@@ -265,7 +268,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>

@@ -1,13 +1,16 @@
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
     <title>pyspex.data: Data filtering and optimization functions &#8212; pyspex 0.2.2 documentation</title>
+    
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
@@ -26,7 +29,7 @@
     <link rel="next" title="pyspex.model: Interfaces for SPEX models" href="user.html" />
     <link rel="prev" title="Importing OGIP spectra" href="ogip.html" /> 
   </head>
-  <body>
+  <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -71,7 +74,7 @@ original region object from the function input and returns a cleaned region. The
 and response are loaded. Then masks are created for several arrays in the spectrum and response files:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Chanmask is a boolean array, based on the ‘used’ array from the spo file, which identifies which spectral channels
+<li>Chanmask is a boolean array, based on the &#8216;used&#8217; array from the spo file, which identifies which spectral channels
 can be used or not. This logical value can be based on the Quality flag in the original OGIP spectrum. The channel
 should be usable if the channel is good in both the source and background spectrum.</li>
 <li>Respmask identifies zero response values in the response array. They are found by looping through the response groups
@@ -150,7 +153,7 @@ filtered region object is returned to the user. Such a call could look like this
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
     </div>
   </body>
 </html>
