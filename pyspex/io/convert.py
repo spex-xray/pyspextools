@@ -180,7 +180,7 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
 # Return a res object derived from the OGIP data
 # -----------------------------------------------------
 
-def rmf_to_res(rmf,arf=None):
+def rmf_to_res(rmf, arf=None):
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one
     without optimizations. Providing an ARF object is optional. All groups in the OGIP matrix are put into one
     SPEX response component. This method returns a pyspex Res object containing the response matrix."""

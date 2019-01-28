@@ -89,10 +89,10 @@ class Res:
     # Function to add a response from another region
     # -----------------------------------------------------
 
-    def add_res_region(self, origres, iregion=1):
+    def add_res_region(self, origres, isector=1, iregion=1):
         """Function to add region(s) to a response."""
 
-        stat = origres.get_mask(iregion)
+        stat = origres.get_mask(isector, iregion)
         if stat != 0:
             print("Error: Cannot select region.")
             return -1
@@ -125,7 +125,7 @@ class Res:
         self.nchan = np.append(self.nchan, origres.nchan[origres.mask_icomp])
         self.neg = np.append(self.neg, origres.neg[origres.mask_icomp])
         self.sector = np.append(self.sector, origres.sector[origres.mask_icomp])
-        self.region = np.append(self.region, origres.region[origres.mask_icomp]+self.nregion)
+        self.region = np.append(self.region, origres.region[origres.mask_icomp])
         if self.share_comp:
             self.shcomp = np.append(self.shcomp, origres.shcomp[origres.mask_icomp])
 
@@ -150,14 +150,15 @@ class Res:
         if self.empty:
             self.empty = False
 
+
     # -----------------------------------------------------
     # Function to remove a region from a response
     # -----------------------------------------------------
 
-    def del_res_region(self, iregion):
+    def del_res_region(self, isector, iregion):
         """Remove region with number 'iregion'."""
 
-        stat = self.get_mask(iregion)
+        stat = self.get_mask(isector,iregion)
         if stat != 0:
             print("Error: Cannot remove region.")
             return -1
@@ -267,12 +268,12 @@ class Res:
     # Function to return a region from a res object
     # -----------------------------------------------------
 
-    def return_region(self, iregion):
+    def return_region(self, isector, iregion):
         """Return a res object with the data from 1 selected region."""
 
-        stat = self.get_mask(iregion)
+        stat = self.get_mask(isector, iregion)
         if stat != 0:
-            print("Error: Cannot select region.")
+            print("Error: Cannot select sector and region.")
             return -1
 
         # Check if object is empty
@@ -304,8 +305,7 @@ class Res:
         resreg.neg = self.neg[mask]
         resreg.sector = self.sector[mask]
         resreg.region = self.region[mask]
-        # Return always a response with Region number 1
-        resreg.region = resreg.region * 0 + 1
+
         if self.share_comp:
             resreg.shcomp = self.shcomp[mask]
 
@@ -317,6 +317,7 @@ class Res:
 
         resreg.empty = False
 
+        # Check the new response
         resreg.check()
 
         return resreg
@@ -477,16 +478,35 @@ class Res:
     # Function to create a masks for a certain region
     # -----------------------------------------------------
 
-    def get_mask(self, iregion):
+    def get_mask(self, isector, iregion):
         """Create masks to select a particular region in a .res file. """
         # Check if iregion is in an allowed range
         if (iregion >= self.nregion) and (iregion < 1):
             print("Error: Requested region not available.")
             return -1
 
+        # Check if isector is in an allowed range
+        if (isector >= self.nsector) and (iregion < 1):
+            print("Error: Requested sector not available.")
+            return -1
+
+        # Check if isector and iregion combination is available
+        ispectrum = 0
+        for i in np.arange(len(self.region)):
+            if (self.sector[i]==isector) and (self.region[i]==iregion):
+                ispectrum = i + 1
+        if ispectrum == 0:
+            print("Error: Requested sector and region not available")
+            return -1
+
         # Find which rows in SPEX_RESP_ICOMP are to be masked
-        icomp_sel_rows = np.where(self.region == iregion)[0]
-        icomp_front_rows = np.where(self.region < iregion)[0]
+        icomp_reg = np.where(self.region == iregion)[0]
+        icomp_sec = np.where(self.sector == isector)[0]
+        icomp_sel_rows = np.where(icomp_reg == icomp_sec)[0]
+
+        icomp_front_sec = np.where(self.sector < isector)[0]
+        icomp_front_reg = np.where(self.region < iregion)[0]
+        icomp_front_rows = max(icomp_front_sec,icomp_front_reg)
 
         # Find which rows in SPEX_RESP_GROUP are to be masked
         # Make sure the +1 is there in the row selection, because otherwise one row too little is selected.
@@ -514,6 +534,7 @@ class Res:
 
         # Select region in SPEX_RESP_ICOMP
         self.mask_icomp = np.full(len(self.neg), False, dtype=bool)
+
         for i in icomp_sel_rows:
             self.mask_icomp[i] = True
 
@@ -624,10 +645,10 @@ class Res:
     # Show summary of response file
     # -----------------------------------------------------
 
-    def show(self, iregion=1):
+    def show(self, iregion=1, isector=1):
         """Show some basic properties of the response file."""
 
-        tres = self.return_region(iregion)
+        tres = self.return_region(isector,iregion)
 
         print(" Original response file name            :  {0}".format(tres.resname))
         print(" Number of data channels in response    :  {0}".format(tres.nchan[0]))

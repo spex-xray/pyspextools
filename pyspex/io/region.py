@@ -84,7 +84,7 @@ class Region:
 
         return 0
 
-    def show(self):
+    def show(self,isector=1,iregion=1):
         """Show a summary of the region metadata."""
 
         print("===========================================================")
@@ -96,5 +96,5 @@ class Region:
         self.spo.show()
 
         print(" --------------------  Response  -------------------------")
-        self.res.show(iregion=self.res.region[0])
+        self.res.show(isector=isector,iregion=iregion)
 

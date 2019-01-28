@@ -136,7 +136,7 @@ def main():
             print("Clean bad channels for HETG:")
             hetg = clean_region(hetg)
 
-        dataset.append_region(hetg)
+        dataset.append_region(hetg, 1, 1)
 
         print("Start METG file conversion:")
         (meg_rmf_list, meg_arf_list) = search_response_files(path,tgcat,input_prefix,'meg')
@@ -154,7 +154,7 @@ def main():
             print("Clean bad channels for METG:")
             metg = clean_region(metg)
 
-        dataset.append_region(metg)
+        dataset.append_region(metg, 1, 2)
 
     elif phaheader['GRATING'] == 'LETG':
 
@@ -176,7 +176,7 @@ def main():
             print("Clean bad channels for LETG:")
             letg = clean_region(letg)
 
-        dataset.append_region(letg)
+        dataset.append_region(letg,1,1)
 
     else:
         message.error("Grating name not recognized.")
