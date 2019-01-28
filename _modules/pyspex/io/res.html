@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyspex.io.res &#8212; pyspex 0.2.3 documentation</title>
+    <title>pyspex.io.res &#8212; pyspex 0.2.4 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.3',
+        VERSION:     '0.2.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -37,7 +37,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -139,10 +139,10 @@
     <span class="c1"># Function to add a response from another region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.&quot;&quot;&quot;</span>
 
-        <span class="n">stat</span> <span class="o">=</span> <span class="n">origres</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="n">origres</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot select region.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -175,7 +175,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">]</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">nregion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">])</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">share_comp</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span><span class="p">,</span> <span class="n">origres</span><span class="o">.</span><span class="n">shcomp</span><span class="p">[</span><span class="n">origres</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">])</span>
 
@@ -200,14 +200,15 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to remove a region from a response</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.&quot;&quot;&quot;</span>
 
-        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span><span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot remove region.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -317,12 +318,12 @@
     <span class="c1"># Function to return a region from a res object</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.&quot;&quot;&quot;</span>
 
-        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot select region.&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot select sector and region.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
         <span class="c1"># Check if object is empty</span>
@@ -354,8 +355,7 @@
         <span class="n">resreg</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
         <span class="n">resreg</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
         <span class="n">resreg</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
-        <span class="c1"># Return always a response with Region number 1</span>
-        <span class="n">resreg</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">resreg</span><span class="o">.</span><span class="n">region</span> <span class="o">*</span> <span class="mi">0</span> <span class="o">+</span> <span class="mi">1</span>
+
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">share_comp</span><span class="p">:</span>
             <span class="n">resreg</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
 
@@ -367,6 +367,7 @@
 
         <span class="n">resreg</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span>
 
+        <span class="c1"># Check the new response</span>
         <span class="n">resreg</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
 
         <span class="k">return</span> <span class="n">resreg</span></div>
@@ -527,16 +528,35 @@
     <span class="c1"># Function to create a masks for a certain region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file. &quot;&quot;&quot;</span>
         <span class="c1"># Check if iregion is in an allowed range</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Requested region not available.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
+        <span class="c1"># Check if isector is in an allowed range</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">isector</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsector</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Requested sector not available.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># Check if isector and iregion combination is available</span>
+        <span class="n">ispectrum</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">isector</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">iregion</span><span class="p">):</span>
+                <span class="n">ispectrum</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">ispectrum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Requested sector and region not available&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
         <span class="c1"># Find which rows in SPEX_RESP_ICOMP are to be masked</span>
-        <span class="n">icomp_sel_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">==</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">icomp_front_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">&lt;</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_reg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">==</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_sec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">==</span> <span class="n">isector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_sel_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icomp_reg</span> <span class="o">==</span> <span class="n">icomp_sec</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="n">icomp_front_sec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">&lt;</span> <span class="n">isector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_front_reg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">&lt;</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_front_rows</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">icomp_front_sec</span><span class="p">,</span><span class="n">icomp_front_reg</span><span class="p">)</span>
 
         <span class="c1"># Find which rows in SPEX_RESP_GROUP are to be masked</span>
         <span class="c1"># Make sure the +1 is there in the row selection, because otherwise one row too little is selected.</span>
@@ -564,6 +584,7 @@
 
         <span class="c1"># Select region in SPEX_RESP_ICOMP</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask_icomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">),</span> <span class="kc">False</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">icomp_sel_rows</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">mask_icomp</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
 
@@ -674,10 +695,10 @@
     <span class="c1"># Show summary of response file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../io.html#pyspex.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.&quot;&quot;&quot;</span>
 
-        <span class="n">tres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">iregion</span><span class="p">)</span>
+        <span class="n">tres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span><span class="n">iregion</span><span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Original response file name            :  </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tres</span><span class="o">.</span><span class="n">resname</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Number of data channels in response    :  </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tres</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
@@ -712,7 +733,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.3 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspex 0.2.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
