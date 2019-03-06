@@ -1,0 +1,10 @@
+# Python compile output
+build
+dist
+*.pyc
+pyspex.egg-info
+**/__pycache__
+doc/build
+
+# Other ignored files
+.idea
