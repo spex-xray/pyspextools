@@ -11,7 +11,7 @@ from builtins import str
 
 from future import standard_library
 
-import pyspex.messages as message
+import pyspextools.messages as message
 import numpy as np
 import math
 import os
@@ -35,7 +35,7 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
     Please also provide an OGIP rmf object from the Rmf class to this function to read the channel energies.
     When the save_grouping flag is true, the grouping information in the PHA file will be copied to the spo file.
     The default behaviour is to ignore the grouping.
-    This method returns a pyspex Spo object containing the source and background rates."""
+    This method returns a pyspextools Spo object containing the source and background rates."""
 
     if not isinstance(src, Pha):
         message.error("Input source spectrum is not a PHA object.")
@@ -183,7 +183,7 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
 def rmf_to_res(rmf, arf=None):
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one
     without optimizations. Providing an ARF object is optional. All groups in the OGIP matrix are put into one
-    SPEX response component. This method returns a pyspex Res object containing the response matrix."""
+    SPEX response component. This method returns a pyspextools Res object containing the response matrix."""
 
     if not isinstance(rmf, Rmf):
         message.error("The input RMF object is not of type Rmf.")

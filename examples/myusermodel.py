@@ -2,7 +2,7 @@
 
 import math  # Import math module
 import numpy  # Import numpy module
-from pyspex.model import User  # Import user from pyspex.model
+from pyspextools.model import User  # Import user from pyspextools.model
 
 
 def main():

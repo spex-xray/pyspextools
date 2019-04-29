@@ -10,13 +10,13 @@ import sys
 import glob
 import argparse
 import astropy.io.fits as fits
-import pyspex
-import pyspex.io
-from pyspex.io.tg import TGRegion
-from pyspex.io.dataset import Dataset
-from pyspex.data.badchannels import clean_region
+import pyspextools
+import pyspextools.io
+from pyspextools.io.tg import TGRegion
+from pyspextools.io.dataset import Dataset
+from pyspextools.data.badchannels import clean_region
 
-import pyspex.messages as message
+import pyspextools.messages as message
 
 from builtins import int
 
@@ -27,7 +27,7 @@ standard_library.install_aliases()
 
 def main():
     print("==================================")
-    print(" This is tg2spex version {0}".format(pyspex.__version__))
+    print(" This is tg2spex version {0}".format(pyspextools.__version__))
     print("==================================")
     print("")
 
@@ -43,7 +43,7 @@ def main():
 
     # Add the tg2spex command to the file history
     history = []
-    history.append("TG2SPEX version: {0}".format(pyspex.__version__))
+    history.append("TG2SPEX version: {0}".format(pyspextools.__version__))
     command = ''
     for arg in sys.argv:
         command = command + ' ' + arg

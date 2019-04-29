@@ -1,14 +1,14 @@
 .. _iomodule:
 
-The SPEX data format: pyspex.io
-===============================
+The SPEX data format: pyspextools.io
+====================================
 
 This is a Python class to read, write and manipulate 
 SPEX spectrum and response file (.spo and .res). The
 format of these FITS files is described in Chapter 5
 of the SPEX manual: http://var.sron.nl/SPEX-doc/ 
 
-.. automodule:: pyspex.io
+.. automodule:: pyspextools.io
 
 Reading and writing datasets
 ----------------------------
@@ -19,7 +19,7 @@ regions. Each combination of a spectrum and response is called a region in SPEX
 (see the region class below). The dataset class is basically a list of regions and 
 allows the user to add and remove regions from a dataset.  
 
-   .. autoclass:: pyspex.io.Dataset
+   .. autoclass:: pyspextools.io.Dataset
       :members:
 
 The region class
@@ -31,7 +31,7 @@ from multiple regions in a spatial image. The region class combines a spo and re
 object into one region and provides tests to see if the spo and res files actually
 belong to each other. 
 
-   .. autoclass:: pyspex.io.Region
+   .. autoclass:: pyspextools.io.Region
       :members:
 
 The spo class
@@ -41,7 +41,7 @@ The SPEX .spo file contains the source and background spectra, including informa
 about systematic uncertainties and grouping. This class manages the reading and writing
 of (regions) in spo files.
 
-   .. autoclass:: pyspex.io.Spo
+   .. autoclass:: pyspextools.io.Spo
       :members:
 
 The res class
@@ -50,5 +50,5 @@ The res class
 The SPEX .res file contains the response matrix and effective area information for a 
 spectrum. This class manages the reading and writing of (regions) in res files.
 
-   .. autoclass:: pyspex.io.Res
+   .. autoclass:: pyspextools.io.Res
       :members:

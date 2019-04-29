@@ -11,7 +11,7 @@ from builtins import str
 
 from future import standard_library
 
-import pyspex.messages as message
+import pyspextools.messages as message
 import numpy as np
 import math
 import astropy.io.fits as fits

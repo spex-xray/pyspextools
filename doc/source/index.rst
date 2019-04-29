@@ -13,7 +13,7 @@ SPEX.
 This page offers the following help and documentation:
 
 Install pyspextools
---------------
+-------------------
 .. toctree::
    :maxdepth: 2
    

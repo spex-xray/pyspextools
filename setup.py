@@ -3,7 +3,7 @@
 from setuptools import setup, find_packages
 import os
 import re
-import pyspex
+import pyspextools
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
 dependencies = ['sphinx','numpy','future','astropy','sphinx-argparse']
@@ -15,8 +15,8 @@ for d, folders, files in os.walk('doc/build/html'):
     datafiles.append((dir_inst, [os.path.join(d,f) for f in files]))
 
 # Do the actual setup
-setup(name='pyspex',
-      version=pyspex.__version__,
+setup(name='pyspextools',
+      version=pyspextools.__version__,
       description='SPEX Python tools',
       author='SPEX development team',
       author_email='j.de.plaa@sron.nl',

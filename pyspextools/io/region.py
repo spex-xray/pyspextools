@@ -14,8 +14,8 @@
 
   Dependencies:
     - numpy:      Array operations
-    - spo:        The spo class from this pyspex data module
-    - res:        The res class from this pyspex data module
+    - spo:        The spo class from this pyspextools data module
+    - res:        The res class from this pyspextools data module
 """
 # =========================================================
 
@@ -33,9 +33,9 @@ from future import standard_library
 
 import numpy as np
 
-from pyspex.io.spo import Spo
-from pyspex.io.res import Res
-import pyspex.messages as message
+from pyspextools.io.spo import Spo
+from pyspextools.io.res import Res
+import pyspextools.messages as message
 
 standard_library.install_aliases()
 

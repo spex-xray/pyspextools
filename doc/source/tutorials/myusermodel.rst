@@ -14,9 +14,9 @@ example to his/her own needs.
 
 The following imports are mandatory::
 
-  import math                    # Import math module
-  import numpy                   # Import numpy module
-  from pyspex.model import User  # Import the user module from pyspex.model
+  import math                         # Import math module
+  import numpy                        # Import numpy module
+  from pyspextools.model import User  # Import the user module from pyspex.model
 
 
 **Initialisation**

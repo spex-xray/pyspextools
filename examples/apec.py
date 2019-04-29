@@ -18,7 +18,7 @@ from future import standard_library
 
 import sys
 import numpy
-from pyspex.model import User
+from pyspextools.model import User
 
 standard_library.install_aliases()
 

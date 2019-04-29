@@ -1,7 +1,7 @@
-pyspex.model: Interfaces for SPEX models
-========================================
+pyspextools.model: Interfaces for SPEX models
+=============================================
 
-.. automodule:: pyspex.model
+.. automodule:: pyspextools.model
 
 The pyspextools module can provide interfaces to SPEX models. Currently, there is only a
 helper class for the SPEX 'user' and 'musr' models, which provides the opportunity for
@@ -35,5 +35,5 @@ in this module. The write_spc function will write the calculated spectrum to an 
 file named, for example, output-01-01.spc. This file will be read again by the SPEX 
 user model and the resulting values will be used in the SPEX fit. 
 
-   .. autoclass:: pyspex.model.User
+   .. autoclass:: pyspextools.model.User
       :members:  

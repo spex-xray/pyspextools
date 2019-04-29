@@ -13,7 +13,7 @@ from future import standard_library
 
 import os
 import numpy as np
-import pyspex.messages as message
+import pyspextools.messages as message
 
 from .region import Region
 from .res import Res
@@ -29,7 +29,7 @@ standard_library.install_aliases()
 
 
 class TGRegion(Region):
-    """The TGRegion class contains methods to read Chandra grating data into the pyspex module and convert
+    """The TGRegion class contains methods to read Chandra grating data into the pyspextools module and convert
     these to spo and res format objects."""
 
     def __init__(self):

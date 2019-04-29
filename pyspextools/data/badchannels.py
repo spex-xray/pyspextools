@@ -5,8 +5,8 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-from pyspex.io.region import Region
-import pyspex.messages as message
+from pyspextools.io.region import Region
+import pyspextools.messages as message
 
 import numpy as np
 

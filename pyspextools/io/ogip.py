@@ -11,7 +11,7 @@ from builtins import str
 
 from future import standard_library
 
-import pyspex.messages as message
+import pyspextools.messages as message
 
 from .region import Region
 from .res import Res
@@ -26,7 +26,7 @@ standard_library.install_aliases()
 
 
 class OGIPRegion(Region):
-    """The OGIPRegion class contains methods to read OGIP data into the pyspex module and convert these to spo and res
+    """The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to spo and res
     format objects."""
 
     def __init__(self):

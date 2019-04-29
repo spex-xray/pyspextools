@@ -8,10 +8,10 @@ from __future__ import unicode_literals
 import os
 import sys
 import argparse
-import pyspex
-from pyspex.io.ogip import OGIPRegion
-from pyspex.data.badchannels import clean_region
-import pyspex.messages as message
+import pyspextools
+from pyspextools.io.ogip import OGIPRegion
+from pyspextools.data.badchannels import clean_region
+import pyspextools.messages as message
 
 from builtins import int
 
@@ -26,7 +26,7 @@ def main():
     files are filtered for bad channels (optional)."""
 
     print("==================================")
-    print(" This is ogip2spex version {0}".format(pyspex.__version__))
+    print(" This is ogip2spex version {0}".format(pyspextools.__version__))
     print("==================================")
     print("")
 
@@ -53,7 +53,7 @@ def main():
 
     # Add the ogip2spex command to the file history
     history = []
-    history.append("OGIP2SPEX version: {0}".format(pyspex.__version__))
+    history.append("OGIP2SPEX version: {0}".format(pyspextools.__version__))
     command = ''
     for arg in sys.argv:
         command = command + ' ' + arg

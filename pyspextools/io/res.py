@@ -20,7 +20,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
-import pyspex.messages as message
+import pyspextools.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
@@ -336,7 +336,7 @@ class Res:
 
         # Create a primary header
         prihdr = fits.Header()
-        prihdr['CREATOR'] = 'pyspex python module'
+        prihdr['CREATOR'] = 'pyspextools python module'
         prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
 
         now = datetime.datetime.now()

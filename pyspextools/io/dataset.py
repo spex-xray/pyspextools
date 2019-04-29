@@ -14,8 +14,8 @@
  
   Dependencies:
     - numpy:      Array operations
-    - spo:        The spo class from this pyspex data module
-    - res:        The res class from this pyspex data module
+    - spo:        The spo class from this pyspextools data module
+    - res:        The res class from this pyspextools data module
 """
 # =========================================================
 
@@ -31,7 +31,7 @@ from builtins import str
 from future import standard_library
 
 import numpy as np
-import pyspex.messages as message
+import pyspextools.messages as message
 
 from .region import Region
 from .spo import Spo

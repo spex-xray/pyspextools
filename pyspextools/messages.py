@@ -14,7 +14,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import sys
-from pyspex.color import Colors
+from pyspextools.color import Colors
 
 # Stuff to import for compatibility between python 2 and 3
 
