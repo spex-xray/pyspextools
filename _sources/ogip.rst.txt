@@ -1,7 +1,7 @@
 Importing OGIP spectra
 ======================
 
-The pyspex module offers to import OGIP spectral files and convert them to
+The pyspextools module offers to import OGIP spectral files and convert them to
 SPEX format. There are basicly two types of OGIP files: regular type I files,
 which are distributed with most X-ray missions, and type II files distributed
 with the Chandra transmission grating (TG) spectra. Pyspex can handle both
@@ -10,9 +10,9 @@ types.
 pyspex.io.ogip: Importing OGIP files
 ------------------------------------
 
-The pyspex OGIPRegion class contains methods to read a source spectrum, background 
+The pyspextools OGIPRegion class contains methods to read a source spectrum, background 
 spectrum, response file and effective area file, and save them as a SPEX region, which 
-can be used by the other methods in the pyspex module. Please note that the
+can be used by the other methods in the pyspextools module. Please note that the
 module does a direct translation of the OGIP files. No filtering of bad channels or
 other optimizations are performed. Bad channel filtering and optimizations can be
 found in pyspex.data.
@@ -26,7 +26,7 @@ The OGIP class can be imported separately if needed::
     oregion = ogip.OGIPRegion()
 
 The oregion instance above will be an extended version of the parent region class of
-pyspex and will have the same functionality.
+pyspextools and will have the same functionality.
 
 The 'read_region' method can be called to read the OGIP spectra and responses and return
 a SPEX region object, which can be written to spo and res files.
@@ -67,7 +67,7 @@ are stored in SPEX format.
    use a model for the background instead. Such alternatives will be implemented from
    SPEX version >=3.05.00.
 
-This method does not yet ignore bad channels. In pyspex this is regarded as additional 
+This method does not yet ignore bad channels. In pyspextools this is regarded as additional 
 filtering of the data and is implemented in a different method (ref). Therefore, this
 method alone could give different results from the SPEX trafo program.
  
