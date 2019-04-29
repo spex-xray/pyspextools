@@ -31,11 +31,11 @@ Example use of the dataset class
 Let's perform a simple operation to read a few existing spo and res files and combine them into one dataset.
 First, start python and then import the pyspex.io module::
 
-    >>> import pyspex.io
+    >>> import pyspextools.io
 
 The pyspex.io module contains a Dataset class that needs to be initiated first::
 
-    >>> data = pyspex.io.Dataset()
+    >>> data = pyspextools.io.Dataset()
 
 The Dataset class contains methods to read spo and res files into a region. Suppose we have two spectra from the
 RGS instrument aboard XMM-Newton. We have two sets of spectra and responses: RGS1.spo, RGS1.res, RGS2.spo and RGS2.res.

@@ -1,12 +1,12 @@
-pyspex.data: Data filtering and optimization functions
-======================================================
+pyspextools.data: Data filtering and optimization functions
+===========================================================
 
 Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
 bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
 calculation speed and statistical accuracy. The pyspex.data module contains functions to filter or optimize
 spectra and response matrices with respect to their originals.
 
-.. currentmodule:: pyspex.data
+.. currentmodule:: pyspextools.data
 
 Filtering for bad channels
 --------------------------

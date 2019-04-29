@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyspex.model: Interfaces for SPEX models &#8212; pyspextools 0.2.4 documentation</title>
+    <title>pyspextools.model: Interfaces for SPEX models &#8212; pyspextools 0.2.5 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.4',
+        VERSION:     '0.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="pyspex.data: Data filtering and optimization functions" href="data.html" /> 
+    <link rel="prev" title="pyspextools.data: Data filtering and optimization functions" href="data.html" /> 
   </head>
   <body role="document">
     <div class="related" role="navigation" aria-label="related navigation">
@@ -39,9 +39,9 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="data.html" title="pyspex.data: Data filtering and optimization functions"
+          <a href="data.html" title="pyspextools.data: Data filtering and optimization functions"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -50,8 +50,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="module-pyspex.model">
-<span id="pyspex-model-interfaces-for-spex-models"></span><h1>pyspex.model: Interfaces for SPEX models<a class="headerlink" href="#module-pyspex.model" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="module-pyspextools.model">
+<span id="pyspextools-model-interfaces-for-spex-models"></span><h1>pyspextools.model: Interfaces for SPEX models<a class="headerlink" href="#module-pyspextools.model" title="Permalink to this headline">¶</a></h1>
 <p>The pyspextools module can provide interfaces to SPEX models. Currently, there is only a
 helper class for the SPEX &#8216;user&#8217; and &#8216;musr&#8217; models, which provides the opportunity for
 users to import their own models into SPEX.</p>
@@ -76,72 +76,72 @@ file named, for example, output-01-01.spc. This file will be read again by the S
 user model and the resulting values will be used in the SPEX fit.</p>
 <blockquote>
 <div><dl class="class">
-<dt id="pyspex.model.User">
-<em class="property">class </em><code class="descclassname">pyspex.model.</code><code class="descname">User</code><a class="reference internal" href="_modules/pyspex/model/user.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.model.User" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User">
+<em class="property">class </em><code class="descclassname">pyspextools.model.</code><code class="descname">User</code><a class="reference internal" href="_modules/pyspextools/model/user.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.model.User" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class structure to contain the input and output parameters of the user function.</p>
 <dl class="attribute">
-<dt id="pyspex.model.User.fprm">
-<code class="descname">fprm</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.fprm" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.fprm">
+<code class="descname">fprm</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.fprm" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input file name</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.fspc">
-<code class="descname">fspc</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.fspc" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.fspc">
+<code class="descname">fspc</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.fspc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Output file name</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.npar">
-<code class="descname">npar</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.model.User.npar" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.npar">
+<code class="descname">npar</code><em class="property"> = 0</em><a class="headerlink" href="#pyspextools.model.User.npar" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of input parameters from SPEX</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.par">
-<code class="descname">par</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.par" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.par">
+<code class="descname">par</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.par" title="Permalink to this definition">¶</a></dt>
 <dd><p>Array containing the parameter values from SPEX (length npar)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.neg">
-<code class="descname">neg</code><em class="property"> = 0</em><a class="headerlink" href="#pyspex.model.User.neg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.neg">
+<code class="descname">neg</code><em class="property"> = 0</em><a class="headerlink" href="#pyspextools.model.User.neg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of bins in the input energy grid from SPEX</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.egb">
-<code class="descname">egb</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.egb" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.egb">
+<code class="descname">egb</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.egb" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upper boundaries of the energy bins (length neg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.eg">
-<code class="descname">eg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.eg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.eg">
+<code class="descname">eg</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.eg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin centroids of the energy bins (length neg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.deg">
-<code class="descname">deg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.deg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.deg">
+<code class="descname">deg</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.deg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Bin widths of the energy bins (length deg)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.sener">
-<code class="descname">sener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.sener" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.sener">
+<code class="descname">sener</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.sener" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum or transmission (e.g. in ph/s/bin)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.model.User.wener">
-<code class="descname">wener</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.model.User.wener" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.wener">
+<code class="descname">wener</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.model.User.wener" title="Permalink to this definition">¶</a></dt>
 <dd><p>If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.model.User.write_spc">
-<code class="descname">write_spc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/model/user.html#User.write_spc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.model.User.write_spc" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.model.User.write_spc">
+<code class="descname">write_spc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/model/user.html#User.write_spc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.model.User.write_spc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the calculated spectrum to the output file for SPEX.
 Make sure that the sener and wener arrays are initialized and 
 filled with a spectrum before calling this function.</p>
@@ -161,7 +161,7 @@ filled with a spectrum before calling this function.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">pyspex.model: Interfaces for SPEX models</a><ul>
+<li><a class="reference internal" href="#">pyspextools.model: Interfaces for SPEX models</a><ul>
 <li><a class="reference internal" href="#spex-user-model-interface-module">SPEX user model interface module</a></li>
 </ul>
 </li>
@@ -169,7 +169,7 @@ filled with a spectrum before calling this function.</p>
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="data.html"
-                        title="previous chapter">pyspex.data: Data filtering and optimization functions</a></p>
+                        title="previous chapter">pyspextools.data: Data filtering and optimization functions</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -201,9 +201,9 @@ filled with a spectrum before calling this function.</p>
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="data.html" title="pyspex.data: Data filtering and optimization functions"
+          <a href="data.html" title="pyspextools.data: Data filtering and optimization functions"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

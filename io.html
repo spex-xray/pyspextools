@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>The SPEX data format: pyspex.io &#8212; pyspextools 0.2.4 documentation</title>
+    <title>The SPEX data format: pyspextools.io &#8212; pyspextools 0.2.5 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.4',
+        VERSION:     '0.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -45,7 +45,7 @@
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -54,13 +54,13 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="the-spex-data-format-pyspex-io">
-<span id="iomodule"></span><h1>The SPEX data format: pyspex.io<a class="headerlink" href="#the-spex-data-format-pyspex-io" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="the-spex-data-format-pyspextools-io">
+<span id="iomodule"></span><h1>The SPEX data format: pyspextools.io<a class="headerlink" href="#the-spex-data-format-pyspextools-io" title="Permalink to this headline">¶</a></h1>
 <p>This is a Python class to read, write and manipulate
 SPEX spectrum and response file (.spo and .res). The
 format of these FITS files is described in Chapter 5
 of the SPEX manual: <a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
-<span class="target" id="module-pyspex.io"></span><div class="section" id="reading-and-writing-datasets">
+<span class="target" id="module-pyspextools.io"></span><div class="section" id="reading-and-writing-datasets">
 <h2>Reading and writing datasets<a class="headerlink" href="#reading-and-writing-datasets" title="Permalink to this headline">¶</a></h2>
 <p>SPEX res and spo files can contain a set of spectra and responses from, for example,
 different instruments used in the same observation or spectra from different spatial
@@ -69,56 +69,56 @@ regions. Each combination of a spectrum and response is called a region in SPEX
 allows the user to add and remove regions from a dataset.</p>
 <blockquote>
 <div><dl class="class">
-<dt id="pyspex.io.Dataset">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Dataset</code><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset">
+<em class="property">class </em><code class="descclassname">pyspextools.io.</code><code class="descname">Dataset</code><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>The dataset class is the most general class containing a 
 dataset with multiple regions. Using this class, users
 can read, write and manipulate spectral datasets.</p>
 <dl class="attribute">
-<dt id="pyspex.io.Dataset.regions">
-<code class="descname">regions</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Dataset.regions" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.regions">
+<code class="descname">regions</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Dataset.regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of regions</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Dataset.config">
-<code class="descname">config</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Dataset.config" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.config">
+<code class="descname">config</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Dataset.config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Response configuration (combinations of sector and region values)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.read_region">
-<code class="descname">read_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em>, <em>spofile</em>, <em>resfile</em>, <em>label=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.read_region">
+<code class="descname">read_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em>, <em>spofile</em>, <em>resfile</em>, <em>label=''</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one region with number iregion from the two SPEX files and add it to the dataset.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.read_all_regions">
-<code class="descname">read_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.read_all_regions">
+<code class="descname">read_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read all the regions from a spo and res file and add them to the dataset.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.append_region">
-<code class="descname">append_region</code><span class="sig-paren">(</span><em>region</em>, <em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.append_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.append_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.append_region">
+<code class="descname">append_region</code><span class="sig-paren">(</span><em>region</em>, <em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.append_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.append_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a region object to the dataset.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.write_region">
-<code class="descname">write_region</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>iregion</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.write_region">
+<code class="descname">write_region</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>iregion</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write one region to a spo and res file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.write_all_regions">
-<code class="descname">write_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.write_all_regions">
+<code class="descname">write_all_regions</code><span class="sig-paren">(</span><em>spofile</em>, <em>resfile</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write all regions in the data object to spo and res.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Dataset.show">
-<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/dataset.html#Dataset.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Dataset.show">
+<code class="descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show a summary for the entire dataset</p>
 </dd></dl>
 
@@ -135,51 +135,51 @@ object into one region and provides tests to see if the spo and res files actual
 belong to each other.</p>
 <blockquote>
 <div><dl class="class">
-<dt id="pyspex.io.Region">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Region</code><a class="reference internal" href="_modules/pyspex/io/region.html#Region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region">
+<em class="property">class </em><code class="descclassname">pyspextools.io.</code><code class="descname">Region</code><a class="reference internal" href="_modules/pyspextools/io/region.html#Region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region" title="Permalink to this definition">¶</a></dt>
 <dd><p>A SPEX region is a spectrum/response combination for a
 specific observation, instrument or region on the sky.
 It combines the spectrum and response file in one object.</p>
 <dl class="attribute">
-<dt id="pyspex.io.Region.spo">
-<code class="descname">spo</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.spo" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.spo">
+<code class="descname">spo</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Region.spo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spo object</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Region.res">
-<code class="descname">res</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.res" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.res">
+<code class="descname">res</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Region.res" title="Permalink to this definition">¶</a></dt>
 <dd><p>Res object</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Region.label">
-<code class="descname">label</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Region.label" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.label">
+<code class="descname">label</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Region.label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Optional region label (will not be written to file). For example: MOS1, annulus2, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Region.change_label">
-<code class="descname">change_label</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.change_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.change_label" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.change_label">
+<code class="descname">change_label</code><span class="sig-paren">(</span><em>label</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.change_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.change_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Region.set_sector">
-<code class="descname">set_sector</code><span class="sig-paren">(</span><em>sector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.set_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.set_sector">
+<code class="descname">set_sector</code><span class="sig-paren">(</span><em>sector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.set_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the sector number for this region.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Region.check">
-<code class="descname">check</code><span class="sig-paren">(</span><em>nregion=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.check" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.check">
+<code class="descname">check</code><span class="sig-paren">(</span><em>nregion=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether spectrum and response are compatible
 and whether the arrays really consist of one region (if nregion flag is set).</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Region.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>isector=1</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/region.html#Region.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Region.show" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Region.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>isector=1</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show a summary of the region metadata.</p>
 </dd></dl>
 
@@ -194,142 +194,142 @@ about systematic uncertainties and grouping. This class manages the reading and 
 of (regions) in spo files.</p>
 <blockquote>
 <div><dl class="class">
-<dt id="pyspex.io.Spo">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Spo</code><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo">
+<em class="property">class </em><code class="descclassname">pyspextools.io.</code><code class="descname">Spo</code><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo" title="Permalink to this definition">¶</a></dt>
 <dd><p>The spo class contains the spectral information for one
 spo file. This file can contain multiple spectra (regions). 
 A call to spo() sets the variables that will contain 
 the spectral information.</p>
 <dl class="attribute">
-<dt id="pyspex.io.Spo.nregion">
-<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.nregion" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.nregion">
+<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.nregion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of regions</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.nchan">
-<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.nchan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.nchan">
+<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.nchan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of channels</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.echan1">
-<code class="descname">echan1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.echan1" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.echan1">
+<code class="descname">echan1</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.echan1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Lower energy bin value (keV)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.echan2">
-<code class="descname">echan2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.echan2" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.echan2">
+<code class="descname">echan2</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.echan2" title="Permalink to this definition">¶</a></dt>
 <dd><p>Upper energy bin value (keV)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.tints">
-<code class="descname">tints</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.tints" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.tints">
+<code class="descname">tints</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.tints" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exposure time (s)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.ochan">
-<code class="descname">ochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.ochan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.ochan">
+<code class="descname">ochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.ochan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Source rate (c/s)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.dochan">
-<code class="descname">dochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.dochan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.dochan">
+<code class="descname">dochan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.dochan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Error Source rate (c/s)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.mbchan">
-<code class="descname">mbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.mbchan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.mbchan">
+<code class="descname">mbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.mbchan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Background rate (c/s)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.dbchan">
-<code class="descname">dbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.dbchan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.dbchan">
+<code class="descname">dbchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.dbchan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Error Background rate (c/s)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.brat">
-<code class="descname">brat</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.brat" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.brat">
+<code class="descname">brat</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.brat" title="Permalink to this definition">¶</a></dt>
 <dd><p>Backscale ratio</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.ssys">
-<code class="descname">ssys</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.ssys" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.ssys">
+<code class="descname">ssys</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.ssys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Systematic error fraction in ochan</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.bsys">
-<code class="descname">bsys</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.bsys" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.bsys">
+<code class="descname">bsys</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.bsys" title="Permalink to this definition">¶</a></dt>
 <dd><p>Systematic error fraction in bchan</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.used">
-<code class="descname">used</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.used" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.used">
+<code class="descname">used</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.used" title="Permalink to this definition">¶</a></dt>
 <dd><p>true if data channel is used in the calculations</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.first">
-<code class="descname">first</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.first" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.first">
+<code class="descname">first</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.first" title="Permalink to this definition">¶</a></dt>
 <dd><p>true if first channel of a binned group, or if it is an unbinned data channel; otherwise false</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.last">
-<code class="descname">last</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.last" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.last">
+<code class="descname">last</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.last" title="Permalink to this definition">¶</a></dt>
 <dd><p>true if last channel of a binned group, or if it is an unbinned data channel; otherwise false</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Spo.brat_exist">
-<code class="descname">brat_exist</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Spo.brat_exist" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.brat_exist">
+<code class="descname">brat_exist</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Spo.brat_exist" title="Permalink to this definition">¶</a></dt>
 <dd><p>Does the Exp_rate column exist?</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.zero_spo">
-<code class="descname">zero_spo</code><span class="sig-paren">(</span><em>nchan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.zero_spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.zero_spo" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.zero_spo">
+<code class="descname">zero_spo</code><span class="sig-paren">(</span><em>nchan</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.zero_spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.zero_spo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates empty arrays of size nchan.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.add_spo_region">
-<code class="descname">add_spo_region</code><span class="sig-paren">(</span><em>origspo</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.add_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.add_spo_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.add_spo_region">
+<code class="descname">add_spo_region</code><span class="sig-paren">(</span><em>origspo</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.add_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.add_spo_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to add spectrum regions to a spo file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.del_spo_region">
-<code class="descname">del_spo_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.del_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.del_spo_region">
+<code class="descname">del_spo_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.del_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove spectrum from region with number &#8216;iregion&#8217;</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.read_file">
-<code class="descname">read_file</code><span class="sig-paren">(</span><em>spofile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.read_file" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.read_file">
+<code class="descname">read_file</code><span class="sig-paren">(</span><em>spofile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.read_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to read a spectrum from a .spo file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.return_region">
-<code class="descname">return_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.return_region">
+<code class="descname">return_region</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to return a spo object with containing the
 spectrum of the region with number &#8216;iregion&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>sponame</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.write_file">
+<code class="descname">write_file</code><span class="sig-paren">(</span><em>sponame</em>, <em>exp_rate=False</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to write the spectrum to a .spo file with the name &#8216;sponame&#8217;.
 The exp_rate flag determines whether the Exp_Rate column is added containing
 the ratio between the backscales of the source and background spectra. This column
@@ -337,34 +337,34 @@ can only be read by SPEX &gt;=3.05.00.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.swap_order">
-<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.swap_order" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.swap_order">
+<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.swap_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap the channel order of the spectrum between wavelength or energy order. This is
 for example helpful for grating spectra, which are originally stored in wavelength order
 but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.check" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform several checks whether the information in the spectrum is consistent.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.check_filename">
-<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.check_filename" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.check_filename">
+<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.check_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the output filename has the correct .spo extension. The method returns a correct file name.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.get_mask">
-<code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.get_mask">
+<code class="descname">get_mask</code><span class="sig-paren">(</span><em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a mask to select spectral information for one region only.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Spo.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/spo.html#Spo.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Spo.show" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Spo.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/spo.html#Spo.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show some basic properties of the spectrum.</p>
 </dd></dl>
 
@@ -378,196 +378,196 @@ but must be flipped to energy order in SPEX format.</p>
 spectrum. This class manages the reading and writing of (regions) in res files.</p>
 <blockquote>
 <div><dl class="class">
-<dt id="pyspex.io.Res">
-<em class="property">class </em><code class="descclassname">pyspex.io.</code><code class="descname">Res</code><a class="reference internal" href="_modules/pyspex/io/res.html#Res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res">
+<em class="property">class </em><code class="descclassname">pyspextools.io.</code><code class="descname">Res</code><a class="reference internal" href="_modules/pyspextools/io/res.html#Res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res" title="Permalink to this definition">¶</a></dt>
 <dd><p>The res class contains the response information for one
 res file. This file can contain multiple responses (regions).</p>
 <dl class="attribute">
-<dt id="pyspex.io.Res.nchan">
-<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nchan" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.nchan">
+<code class="descname">nchan</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.nchan" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of channels</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.neg">
-<code class="descname">neg</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.neg" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.neg">
+<code class="descname">neg</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.neg" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of energy bins</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.sector">
-<code class="descname">sector</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.sector" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.sector">
+<code class="descname">sector</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.sector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Sectors</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.region">
-<code class="descname">region</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.region">
+<code class="descname">region</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Regions</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.shcomp">
-<code class="descname">shcomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.shcomp" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.shcomp">
+<code class="descname">shcomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.shcomp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shared components (optional)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.nsector">
-<code class="descname">nsector</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nsector" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.nsector">
+<code class="descname">nsector</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.nsector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of sectors</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.nregion">
-<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nregion" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.nregion">
+<code class="descname">nregion</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.nregion" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of regions</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.ncomp">
-<code class="descname">ncomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ncomp" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.ncomp">
+<code class="descname">ncomp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.ncomp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of response components</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.share_comp">
-<code class="descname">share_comp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.share_comp" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.share_comp">
+<code class="descname">share_comp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.share_comp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Are there shared components (?)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.area_scal">
-<code class="descname">area_scal</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.area_scal" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.area_scal">
+<code class="descname">area_scal</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.area_scal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is there areascal information (?)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.resp_der">
-<code class="descname">resp_der</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.resp_der" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.resp_der">
+<code class="descname">resp_der</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.resp_der" title="Permalink to this definition">¶</a></dt>
 <dd><p>Are there response derivatives (?)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.eg1">
-<code class="descname">eg1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.eg1" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.eg1">
+<code class="descname">eg1</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.eg1" title="Permalink to this definition">¶</a></dt>
 <dd><p>start energy for group (keV)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.eg2">
-<code class="descname">eg2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.eg2" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.eg2">
+<code class="descname">eg2</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.eg2" title="Permalink to this definition">¶</a></dt>
 <dd><p>end energy for group (keV)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.ic1">
-<code class="descname">ic1</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ic1" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.ic1">
+<code class="descname">ic1</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.ic1" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start channel for response group</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.ic2">
-<code class="descname">ic2</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.ic2" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.ic2">
+<code class="descname">ic2</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.ic2" title="Permalink to this definition">¶</a></dt>
 <dd><p>End channel for response group</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.nc">
-<code class="descname">nc</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.nc" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.nc">
+<code class="descname">nc</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.nc" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of data channels in group</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.relarea">
-<code class="descname">relarea</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.relarea" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.relarea">
+<code class="descname">relarea</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.relarea" title="Permalink to this definition">¶</a></dt>
 <dd><p>Area scaling factors</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.resp">
-<code class="descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.resp" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.resp">
+<code class="descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.resp" title="Permalink to this definition">¶</a></dt>
 <dd><p>response values for group (m**2)</p>
 </dd></dl>
 
 <dl class="attribute">
-<dt id="pyspex.io.Res.dresp">
-<code class="descname">dresp</code><em class="property"> = None</em><a class="headerlink" href="#pyspex.io.Res.dresp" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.dresp">
+<code class="descname">dresp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.Res.dresp" title="Permalink to this definition">¶</a></dt>
 <dd><p>response derivatives for group (optional)</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.add_res_region">
-<code class="descname">add_res_region</code><span class="sig-paren">(</span><em>origres</em>, <em>isector=1</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.add_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.add_res_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.add_res_region">
+<code class="descname">add_res_region</code><span class="sig-paren">(</span><em>origres</em>, <em>isector=1</em>, <em>iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.add_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.add_res_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to add region(s) to a response.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.del_res_region">
-<code class="descname">del_res_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.del_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.del_res_region">
+<code class="descname">del_res_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.del_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove region with number &#8216;iregion&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.read_file">
-<code class="descname">read_file</code><span class="sig-paren">(</span><em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.read_file" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.read_file">
+<code class="descname">read_file</code><span class="sig-paren">(</span><em>resfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.read_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to read a response from a .res file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.return_region">
-<code class="descname">return_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.return_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.return_region">
+<code class="descname">return_region</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.return_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a res object with the data from 1 selected region.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.write_file">
-<code class="descname">write_file</code><span class="sig-paren">(</span><em>resfile</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.write_file">
+<code class="descname">write_file</code><span class="sig-paren">(</span><em>resfile</em>, <em>overwrite=False</em>, <em>history=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the response information to a .res file with name &#8216;resfile&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.swap_order">
-<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.swap_order" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.swap_order">
+<code class="descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.swap_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap the channel order of the response between wavelength or energy order. This is
 for example helpful for grating spectra, which are originally stored in wavelength order
 but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.append_component">
-<code class="descname">append_component</code><span class="sig-paren">(</span><em>addres</em>, <em>iregion=1</em>, <em>isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.append_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.append_component" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.append_component">
+<code class="descname">append_component</code><span class="sig-paren">(</span><em>addres</em>, <em>iregion=1</em>, <em>isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.append_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.append_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a component to the response matrix from another matrix. This is used to add orders to the response
 file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.get_mask">
-<code class="descname">get_mask</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.get_mask">
+<code class="descname">get_mask</code><span class="sig-paren">(</span><em>isector</em>, <em>iregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create masks to select a particular region in a .res file.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.channel_shift">
-<code class="descname">channel_shift</code><span class="sig-paren">(</span><em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.channel_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.channel_shift">
+<code class="descname">channel_shift</code><span class="sig-paren">(</span><em>shift</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.channel_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift the response array indices with an integer number provided by input parameter &#8216;shift&#8217;.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.check" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.check">
+<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a number of checks to see if the response information is consistent.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.check_filename">
-<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.check_filename" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.check_filename">
+<code class="descname">check_filename</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.check_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the output filename has the correct .res extension. The method returns a correct file name.</p>
 </dd></dl>
 
 <dl class="method">
-<dt id="pyspex.io.Res.show">
-<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em>, <em>isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/io/res.html#Res.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.io.Res.show" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.io.Res.show">
+<code class="descname">show</code><span class="sig-paren">(</span><em>iregion=1</em>, <em>isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/res.html#Res.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show some basic properties of the response file.</p>
 </dd></dl>
 
@@ -585,7 +585,7 @@ file.</p>
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">The SPEX data format: pyspex.io</a><ul>
+<li><a class="reference internal" href="#">The SPEX data format: pyspextools.io</a><ul>
 <li><a class="reference internal" href="#reading-and-writing-datasets">Reading and writing datasets</a></li>
 <li><a class="reference internal" href="#the-region-class">The region class</a></li>
 <li><a class="reference internal" href="#the-spo-class">The spo class</a></li>
@@ -636,7 +636,7 @@ file.</p>
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

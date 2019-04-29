@@ -8,7 +8,7 @@ Pyspex can be easily installed with pip using the Github git link::
 
     (myconda) linux:~> pip install git+https://github.com/spex-xray/pyspextools.git
 
-We recommend to install the pyspex module in a virtual environment like conda, so create your
+We recommend to install the pyspextools module in a virtual environment like conda, so create your
 own conda environment (for example, myconda) first
 
 Install using setup.py
@@ -48,4 +48,4 @@ For the generation of documentation, the following packages are needed:
 - sphinx (version >= 1.4)
 - sphinx-argparse
 
-For some examples, other packages are used, like pyatomdb, but they are not required for the pyspex module to function.
+For some examples, other packages are used, like pyatomdb, but they are not required for the pyspextools module to function.

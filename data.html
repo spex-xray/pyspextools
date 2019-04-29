@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>pyspex.data: Data filtering and optimization functions &#8212; pyspextools 0.2.4 documentation</title>
+    <title>pyspextools.data: Data filtering and optimization functions &#8212; pyspextools 0.2.5 documentation</title>
     
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.4',
+        VERSION:     '0.2.5',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,7 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="pyspex.model: Interfaces for SPEX models" href="user.html" />
+    <link rel="next" title="pyspextools.model: Interfaces for SPEX models" href="user.html" />
     <link rel="prev" title="Importing OGIP spectra" href="ogip.html" /> 
   </head>
   <body role="document">
@@ -40,12 +40,12 @@
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+          <a href="user.html" title="pyspextools.model: Interfaces for SPEX models"
              accesskey="N">next</a> |</li>
         <li class="right" >
           <a href="ogip.html" title="Importing OGIP spectra"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -54,8 +54,8 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="pyspex-data-data-filtering-and-optimization-functions">
-<h1>pyspex.data: Data filtering and optimization functions<a class="headerlink" href="#pyspex-data-data-filtering-and-optimization-functions" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="pyspextools-data-data-filtering-and-optimization-functions">
+<h1>pyspextools.data: Data filtering and optimization functions<a class="headerlink" href="#pyspextools-data-data-filtering-and-optimization-functions" title="Permalink to this headline">¶</a></h1>
 <p>Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
 bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
 calculation speed and statistical accuracy. The pyspex.data module contains functions to filter or optimize
@@ -65,8 +65,8 @@ spectra and response matrices with respect to their originals.</p>
 <p>The clean_region function returns a region without bad channels and zero response bins. The function reads the
 original region object from the function input and returns a cleaned region. The function call is quite simple:</p>
 <dl class="function">
-<dt id="pyspex.data.clean_region">
-<code class="descclassname">pyspex.data.</code><code class="descname">clean_region</code><span class="sig-paren">(</span><em>reg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspex/data/badchannels.html#clean_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspex.data.clean_region" title="Permalink to this definition">¶</a></dt>
+<dt id="pyspextools.data.clean_region">
+<code class="descclassname">pyspextools.data.</code><code class="descname">clean_region</code><span class="sig-paren">(</span><em>reg</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/data/badchannels.html#clean_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.data.clean_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove bad channels and channels with zero response from the region.</p>
 </dd></dl>
 
@@ -100,7 +100,7 @@ filtered region object is returned to the user. Such a call could look like this
         <div class="sphinxsidebarwrapper">
   <h3><a href="index.html">Table Of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">pyspex.data: Data filtering and optimization functions</a><ul>
+<li><a class="reference internal" href="#">pyspextools.data: Data filtering and optimization functions</a><ul>
 <li><a class="reference internal" href="#filtering-for-bad-channels">Filtering for bad channels</a></li>
 </ul>
 </li>
@@ -111,7 +111,7 @@ filtered region object is returned to the user. Such a call could look like this
                         title="previous chapter">Importing OGIP spectra</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="user.html"
-                        title="next chapter">pyspex.model: Interfaces for SPEX models</a></p>
+                        title="next chapter">pyspextools.model: Interfaces for SPEX models</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -143,12 +143,12 @@ filtered region object is returned to the user. Such a call could look like this
           <a href="py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="user.html" title="pyspex.model: Interfaces for SPEX models"
+          <a href="user.html" title="pyspextools.model: Interfaces for SPEX models"
              >next</a> |</li>
         <li class="right" >
           <a href="ogip.html" title="Importing OGIP spectra"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.4 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.5 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
