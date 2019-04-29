@@ -20,4 +20,7 @@ Please see the documentation page for tutorials and reference documentation:
 
 [Full documentation of PySPEX tools](https://spex-xray.github.io/pyspextools/)
 
+## Under development
+
+Please note that pyspextools is still under development. Feel free to submit bug reports or feature requests by raising an issue.
 
