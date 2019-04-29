@@ -1,5 +1,5 @@
-Managing datasets in pyspex
-===========================
+Managing datasets in pyspextools
+================================
 
 The best starting point to manipulate SPEX files is to use the Dataset class in pyspex. A dataset can be a collection
 of several spectrum-response combinations, which are called regions. This way, multiple related spectra can be stored

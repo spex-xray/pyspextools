@@ -3,16 +3,16 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyspex's documentation!
-==================================
+Welcome to pyspex tools documentation!
+======================================
 
-Welcome to pyspex, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
+Welcome to pyspex tools, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
 This module offers a growing number of utilities and scripts that can help with analysing X-ray spectra using
 SPEX.
 
 This page offers the following help and documentation:
 
-Install pyspex
+Install pyspextools
 --------------
 .. toctree::
    :maxdepth: 2

@@ -13,7 +13,7 @@ Dependencies
 Before you start, make sure the following things are installed or set:
 
 - Install numpy
-- Install pyspex
+- Install pyspextools
 - Install ATOMDB (Coco and line tables.)
 - Install pyatomdb
 - Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions)::

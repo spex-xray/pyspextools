@@ -52,7 +52,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = 'pyspex'
+project = 'pyspextools'
 copyright = '2018, SRON Netherlands Institute for Space Research'
 author = 'Jelle de Plaa'
 

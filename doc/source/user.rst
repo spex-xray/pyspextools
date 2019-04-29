@@ -3,7 +3,7 @@ pyspex.model: Interfaces for SPEX models
 
 .. automodule:: pyspex.model
 
-The pyspex module can provide interfaces to SPEX models. Currently, there is only a
+The pyspextools module can provide interfaces to SPEX models. Currently, there is only a
 helper class for the SPEX 'user' and 'musr' models, which provides the opportunity for
 users to import their own models into SPEX.
 

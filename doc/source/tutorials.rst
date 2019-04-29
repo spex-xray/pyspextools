@@ -1,5 +1,5 @@
-Using the pyspex module
------------------------
+Using the pyspextools module
+----------------------------
 
 .. toctree::
    :maxdepth: 2
@@ -7,8 +7,8 @@ Using the pyspex module
    tutorials/datasets.rst
 
 
-Using the pyspex scripts
-------------------------
+Using the pyspextools scripts
+-----------------------------
 
 .. toctree::
    :maxdepth: 2
