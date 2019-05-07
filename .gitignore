@@ -2,7 +2,7 @@
 build
 dist
 *.pyc
-pyspex.egg-info
+pyspextools.egg-info
 **/__pycache__
 doc/build
 

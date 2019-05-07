@@ -131,7 +131,7 @@ class OGIPRegion(Region):
         if isinstance(corr, Pha):
             self.corr = corr
             self.input_corr = True
-        elif back is None:
+        elif corr is None:
             self.input_corr = False
         else:
             self.input_corr = False
