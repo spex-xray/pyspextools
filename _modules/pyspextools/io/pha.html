@@ -1,0 +1,354 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>pyspextools.io.pha &#8212; pyspextools 0.2.6 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.6',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for pyspextools.io.pha</h1><div class="highlight"><pre>
+<span></span><span class="ch">#!/usr/bin/env python</span>
+
+<span class="c1"># Import stuff for compatibility between python 2 and 3</span>
+
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
+
+<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
+<span class="kn">from</span> <span class="nn">.rmf</span> <span class="k">import</span> <span class="n">Rmf</span>
+
+<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="Pha"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha">[docs]</a><span class="k">class</span> <span class="nc">Pha</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
+<span class="sd">    Keith Arnaud.&quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c1"># Spectrum arrays</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="mi">0</span>                     <span class="c1">#: First valid spectral channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="mi">0</span>                         <span class="c1">#: Total number of legal channels</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>     <span class="c1">#: Spectrum channels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>      <span class="c1">#: Spectrum spectrum count rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="c1">#: Spectrum error rate (if exists)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Spectrum systematic error</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>     <span class="c1">#: Quality flag</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>    <span class="c1">#: Grouping information</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Areascal keyword/array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Backscal keyword/array</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CorrScal</span> <span class="o">=</span> <span class="mf">1.0</span>                       <span class="c1">#: Correction spectrum scaling</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">=</span> <span class="mf">0.0</span>                       <span class="c1">#: Exposure time of the spectrum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Poisserr</span> <span class="o">=</span> <span class="kc">True</span>                      <span class="c1">#: Are the errors Poissonian</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="s1">&#39;TOTAL&#39;</span>               <span class="c1">#: Spectrumtype (TOTAL, NET or BKG)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="s1">&#39;COUNTS&#39;</span>                   <span class="c1">#: Whether the spectrum is in COUNTS or RATE</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span> <span class="o">=</span> <span class="kc">None</span>                       <span class="c1">#: Associated Response matrix file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span> <span class="o">=</span> <span class="kc">None</span>                       <span class="c1">#: Associated Effective area file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span> <span class="o">=</span> <span class="kc">None</span>                       <span class="c1">#: Associated Background file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span>                       <span class="c1">#: Associated Correction spectrum file</span>
+
+        <span class="c1"># Only applicable for PHA2 files:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pha2Back</span> <span class="o">=</span> <span class="kc">False</span>                     <span class="c1">#: Is there a PHA2 background available</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BackRate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="c1">#: PHA2 Background Rate</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BackStatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="c1">#: PHA2 Background Error</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Pha2BackScal</span> <span class="o">=</span> <span class="mf">1.0</span>                   <span class="c1">#: Backscale value for background</span>
+
+<div class="viewcode-block" id="Pha.read"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read a spectrum from a PHA file.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Read the data and header from the SPECTRUM extension</span>
+        <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span><span class="s1">&#39;SPECTRUM&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+        <span class="c1"># Read the number of channels (outside the header call because of PHAII files).</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;DETCHANS&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Read the header</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_header</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+        <span class="c1"># Read Channel information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># Read the spectrum and convert to rate if necessary</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">==</span> <span class="s1">&#39;RATE&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;RATE&#39;</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;COUNTS&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">])</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span>
+
+        <span class="c1"># See if there are Statistical Errors present</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">Poiserr</span><span class="p">:</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;STAT_ERR&#39;</span><span class="p">]</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="kc">None</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;No Poisson errors, but no STAT_ERR keyword found.&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">math</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span><span class="p">)</span>
+
+        <span class="c1"># Are there systematic errors?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SYS_ERR&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">==</span> <span class="s1">&#39;RATE&#39;</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span>
+
+        <span class="c1"># Are there quality flags?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;QUALITY&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Are there grouping flags?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;GROUPING&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+
+        <span class="c1"># Is there a backscale column?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;BACKSCAL&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;BACKSCAL&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Is there an areascale column?</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;AREASCAL&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;AREASCAL&#39;</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Pha.read_header"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.read_header">[docs]</a>    <span class="k">def</span> <span class="nf">read_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">header</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Read Exposure information</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPOSURE&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Read how the spectrum is stored (COUNTS or RATE)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Read the POISERR keyword</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Poiserr</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;POISSERR&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Poiserr</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Read Correction scaling factor</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">CorrScal</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;CORRSCAL&#39;</span><span class="p">]</span>
+
+        <span class="c1"># Read a background file, if available</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;BACKFILE&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Read an respoonse file, if available</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;RESPFILE&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Read an effective area file, if available</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;ANCRFILE&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Read a correction file, if available</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;CORRFILE&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span></div>
+
+<div class="viewcode-block" id="Pha.check"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the object contains the minimum required data.&quot;&quot;&quot;</span>
+        <span class="c1"># Check exposure value</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Exposure time of spectrum is zero or smaller.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of channels is zero.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Size of rate array is zero.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Pha.create_dummy"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.create_dummy">[docs]</a>    <span class="k">def</span> <span class="nf">create_dummy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">resp</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Generate dummy spectrum based on rmf channel information.&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">resp</span><span class="p">,</span> <span class="n">Rmf</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Input response object is not the required Rmf object.&quot;</span><span class="p">)</span>
+            <span class="k">return</span>
+
+        <span class="c1"># First copy the channel information to the PHA object</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">Channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span><span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">NumberChannels</span>
+    
+        <span class="c1"># Generate a dummy spectrum (obviously not realistic, should be simulated in SPEX later)</span>
+        <span class="c1"># Set exposure, statistic and type of spectrum</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">=</span> <span class="mf">1000.0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Poisserr</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="s1">&#39;TOTAL&#39;</span>
+    
+        <span class="c1"># Generate spectrum values and quality flags</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Rate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">/</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pha.disp"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Display a summary of the PHA file.&quot;&quot;&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstChannel  </span><span class="si">{0}</span><span class="s2">  First valid spectral channel&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;DetChans      </span><span class="si">{0}</span><span class="s2">  Total number of legal channels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Exposure      </span><span class="si">{0}</span><span class="s2">  Exposure time of the spectrum&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Poisserr      </span><span class="si">{0}</span><span class="s2">  Are the errors Poissonian&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Poisserr</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Spectrumtype  </span><span class="si">{0}</span><span class="s2">  Spectrumtype (TOTAL, NET or BKG)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PhaType       </span><span class="si">{0}</span><span class="s2">  Whether the spectrum is in COUNTS or RATE&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;AreaScaling   </span><span class="si">{0}</span><span class="s2">  Areascal keyword/array&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;BackScaling   </span><span class="si">{0}</span><span class="s2">  Backscal keyword/array&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CorrScal      </span><span class="si">{0}</span><span class="s2">  Correction spectrum scaling&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CorrScal</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Arrays:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel       </span><span class="si">{0}</span><span class="s2">  Spectrum channels&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Rate          </span><span class="si">{0}</span><span class="s2">  Spectrum spectrum count rate&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;StatError     </span><span class="si">{0}</span><span class="s2">  Spectrum error rate (if exists)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">StatError</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SysError      </span><span class="si">{0}</span><span class="s2">  Spectrum systematic error&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SysError</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Quality       </span><span class="si">{0}</span><span class="s2">  Quality flag&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Quality</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Grouping      </span><span class="si">{0}</span><span class="s2">  Grouping information&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Associated files:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;rmffile       </span><span class="si">{0}</span><span class="s2">  Associated Response matrix file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;arffile       </span><span class="si">{0}</span><span class="s2">  Associated Effective area file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arffile</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bkgfile       </span><span class="si">{0}</span><span class="s2">  Associated Background file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;corfile       </span><span class="si">{0}</span><span class="s2">  Associated Correction spectrum file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corfile</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="Pha.checkCompatibility"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha.Pha.checkCompatibility">[docs]</a>    <span class="k">def</span> <span class="nf">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">pha</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if another PHA object is compatible with the current one in terms of number of channels.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Check equal number of channels</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">!=</span> <span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">:</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of channels not equal for both PHA files.&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+    <span class="k">def</span> <span class="nf">NumberChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span></div>
+
+
+
+
+
+
+
+
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+    </div>
+  </body>
+</html>
