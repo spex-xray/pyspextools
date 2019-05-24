@@ -44,6 +44,7 @@ def main():
     if args.bkgfile is not None:
         ogip.input_bkg = True
         ogip.read_background_pha(args.bkgfile)
+        ogip.back.BackScaling = ogip.back.BackScaling / args.backscale
     else:
         ogip.input_bkg = False
         ogip.back = None
@@ -113,6 +114,7 @@ def simres_arguments():
                         default=False)
     parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
                         default=False)
+    parser.add_argument('--backscale', help="Set a background scaling factor.", type=float, default=1.0)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
 
     return parser
