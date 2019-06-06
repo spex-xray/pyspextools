@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyspextools'
-copyright = '2018, SRON Netherlands Institute for Space Research'
+copyright = '2018-2019, SRON Netherlands Institute for Space Research'
 author = 'Jelle de Plaa'
 
 # The version info for the project you're documenting, acts as replacement for
@@ -106,7 +106,7 @@ html_static_path = ['_static']
 # -- Options for HTMLHelp output ------------------------------------------
 
 # Output file base name for HTML help builder.
-htmlhelp_basename = 'pyspexdoc'
+htmlhelp_basename = 'pyspextoolsdoc'
 
 
 # -- Options for LaTeX output ---------------------------------------------

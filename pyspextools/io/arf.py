@@ -65,6 +65,49 @@ class Arf:
 
         return 0
 
+    def write(self, arffile, telescop=None, instrume=None, filter=None):
+        '''Write an OGIP compatible ARF file (Non-grating format).'''
+
+        # Write the ARF arrays into FITS column format
+        col1 = fits.Column(name='ENERG_LO', format='D', unit=self.EnergyUnits, array=self.LowEnergy)
+        col2 = fits.Column(name='ENERG_HI', format='D', unit=self.EnergyUnits, array=self.HighEnergy)
+        col3 = fits.Column(name='SPECRESP', format='D', unit=self.arfUnits, array=self.EffArea)
+
+        hdu = fits.BinTableHDU.from_columns([col1, col2, col3])
+
+        hdr = hdu.header
+        hdr.set('EXTNAME','SPECRESP')
+
+        # Set the TELESCOP keyword (optional)
+        if telescop == None:
+            hdr.set('TELESCOP','None','Telescope name')
+        else:
+            hdr.set('TELESCOP',telescop,'Telescope name')
+
+        # Set the INSTRUME keyword (optional)
+        if instrume == None:
+            hdr.set('INSTRUME','None','Instrument name')
+        else:
+            hdr.set('INSTRUME',instrume,'Instrument name')
+
+        # Set the FILTER keyword (optional)
+        if filter == None:
+            hdr.set('FILTER','None','Filter setting')
+        else:
+            hdr.set('FILTER',filter,'Filter setting')
+
+        hdr.set('DETNAM','None')
+        hdr.set('HDUCLASS','OGIP')
+        hdr.set('HDUCLAS1','RESPONSE')
+        hdr.set('HDUCLAS2','SPECRESP')
+        hdr.set('HDUVERS','1.1.0')
+        hdr.set('ORIGIN','SRON')
+
+        hdu.header['HISTORY'] = 'Created by pyspextools.'
+
+        hdu.writeto(arffile)
+
+
     def check(self):
         """Check if the basic information is read in."""
         if self.LowEnergy.size <= 0:
