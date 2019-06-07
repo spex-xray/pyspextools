@@ -46,11 +46,12 @@ class Rmf:
         self.ResponseThreshold = 1E-7 #: Minimum value in response
         self.EnergyUnits = ''         #: Units of the energy scale
         self.RMFUnits = ''            #: Units for RMF values
+        self.AreaIncluded = False     #: Is the effective area included in the response?
 
         self.Order = 0                #: Order of the matrix
 
     def read(self,rmffile):
-        """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+        """Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
         Keith Arnaud."""
 
         # Read the Ebounds table
@@ -73,6 +74,7 @@ class Rmf:
             header = rmf['SPECRESP MATRIX'].header
             message.warning("This is an RSP file with the effective area included.")
             print("Do not read an ARF file, unless you know what you are doing.")
+            self.AreaIncluded = True
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
@@ -136,6 +138,120 @@ class Rmf:
         self.ResponseThreshold = np.amin(self.Matrix)
 
         rmf.close()
+
+        return 0
+
+    def write(self, rmffile, telescop=None, instrume=None, filter=None, overwrite=False):
+        '''Method to write an OGIP format RMF file.'''
+
+        #
+        # Generate warning if there are multiple groups per energy
+        #
+        if (np.amax(self.NumberGroups)!=1):
+            message.warning("This method has not been tested for responses with multiple response groups per energy.")
+
+        #
+        # Create Primary HDU
+        #
+        primary = fits.PrimaryHDU()
+
+        #
+        # Create the EBOUNDS extension
+        #
+        ecol1 = fits.Column(name='CHANNEL', format='J', array=self.Channel)
+        ecol2 = fits.Column(name='E_MIN', format='D', unit=self.EnergyUnits, array=self.ChannelLowEnergy)
+        ecol3 = fits.Column(name='E_MAX', format='D', unit=self.EnergyUnits, array=self.ChannelHighEnergy)
+
+        ebounds = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
+
+        ehdr = ebounds.header
+        ehdr.set('EXTNAME','EBOUNDS')
+
+        # Set the TELESCOP keyword (optional)
+        if telescop == None:
+            ehdr.set('TELESCOP','None','Telescope name')
+        else:
+            ehdr.set('TELESCOP',telescop,'Telescope name')
+
+        # Set the INSTRUME keyword (optional)
+        if instrume == None:
+            ehdr.set('INSTRUME','None','Instrument name')
+        else:
+            ehdr.set('INSTRUME',instrume,'Instrument name')
+
+        # Set the FILTER keyword (optional)
+        if filter == None:
+            ehdr.set('FILTER','None','Filter setting')
+        else:
+            ehdr.set('FILTER',filter,'Filter setting')
+
+        ehdr.set('DETNAM','None')
+        ehdr.set('HDUCLASS','OGIP')
+        ehdr.set('HDUCLAS1','RESPONSE')
+        ehdr.set('HDUCLAS2','EBOUNDS ')
+        ehdr.set('HDUVERS','1.2.0')
+        ehdr.set('ORIGIN','SRON')
+
+        #
+        # Create SPECRESP MATRIX extension
+        #
+        mcol1 = fits.Column(name='ENERG_LO', format='D', unit=self.EnergyUnits, array=self.LowEnergy)
+        mcol2 = fits.Column(name='ENERG_HI', format='D', unit=self.EnergyUnits, array=self.HighEnergy)
+        mcol3 = fits.Column(name='N_GRP', format='J', array=self.NumberGroups)
+        mcol4 = fits.Column(name='F_CHAN', format='J', array=self.FirstChannelGroup)
+        mcol5 = fits.Column(name='N_CHAN', format='J', array=self.NumberChannelsGroup)
+
+        # Determine the width of the matrix
+        width = np.amax(self.NumberChannelsGroup)
+        format = str(width)+'D'
+
+        # Building the MATRIX column
+        newmatrix = np.zeros(self.Matrix.size, dtype=float).reshape(self.NumberEnergyBins,width)
+
+        re = 0
+        for i in np.arange(self.NumberEnergyBins):
+            for j in np.arange(self.NumberGroups[i]):
+                for k in np.arange(self.NumberChannelsGroup[i]):
+                    newmatrix[i,k] = self.Matrix[re]
+                    re = re + 1
+
+        mcol6 = fits.Column(name='MATRIX', format=format, array=newmatrix)
+
+        matrix = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
+
+        mhdr = matrix.header
+
+        if self.AreaIncluded:
+            mhdr.set('EXTNAME','SPECRESP MATRIX')
+        else:
+            mhdr.set('EXTNAME','MATRIX')
+
+        mhdr.set('DETCHANS',self.NumberChannels)
+
+        mhdr.set('HDUCLASS','OGIP')
+        mhdr.set('HDUCLAS1','RESPONSE')
+        mhdr.set('HDUCLAS2','RSP_MATRIX')
+
+        if self.AreaIncluded:
+            mhdr.set('HDUCLAS3','FULL')
+        else:
+            mhdr.set('HDUCLAS3','REDIST')
+        mhdr.set('HDUVERS','1.3.0')
+        mhdr.set('ORIGIN','SRON')
+
+        matrix.header['HISTORY'] = 'Created by pyspextools:'
+        matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
+
+        #
+        # Final HDU List
+        #
+        hdu = fits.HDUList([primary, ebounds, matrix])
+
+        try:
+            hdu.writeto(rmffile, overwrite=overwrite)
+        except IOError:
+            message.error("File {0} already exists. I will not overwrite it!".format(rmffile))
+            return 1
 
         return 0
 

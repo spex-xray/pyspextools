@@ -65,7 +65,7 @@ class Arf:
 
         return 0
 
-    def write(self, arffile, telescop=None, instrume=None, filter=None):
+    def write(self, arffile, telescop=None, instrume=None, filter=None, overwrite=False):
         '''Write an OGIP compatible ARF file (Non-grating format).'''
 
         # Write the ARF arrays into FITS column format
@@ -103,10 +103,16 @@ class Arf:
         hdr.set('HDUVERS','1.1.0')
         hdr.set('ORIGIN','SRON')
 
-        hdu.header['HISTORY'] = 'Created by pyspextools.'
+        hdu.header['HISTORY'] = 'Created by pyspextools:'
+        hdu.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
 
-        hdu.writeto(arffile)
+        try:
+            hdu.writeto(arffile, overwrite=overwrite)
+        except IOError:
+            message.error("File {0} already exists. I will not overwrite it!".format(arffile))
+            return 1
 
+        return 0
 
     def check(self):
         """Check if the basic information is read in."""
