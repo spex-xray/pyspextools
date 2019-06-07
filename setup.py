@@ -24,7 +24,7 @@ setup(name='pyspextools',
       packages=find_packages(),
       include_package_data = True,
       package_data={'':['*.rst']},
-      scripts=['scripts/ogip2spex','scripts/tg2spex','scripts/simres'],
+      scripts=['scripts/ogipgenrsp','scripts/ogip2spex','scripts/simres','scripts/tg2spex'],
       data_files=datafiles,
       install_requires=dependencies,
       )

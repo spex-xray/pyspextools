@@ -166,6 +166,7 @@ class Rmf:
 
         ehdr = ebounds.header
         ehdr.set('EXTNAME','EBOUNDS')
+        ehdr.set('DETCHANS',self.NumberChannels)
 
         # Set the TELESCOP keyword (optional)
         if telescop == None:
@@ -185,12 +186,13 @@ class Rmf:
         else:
             ehdr.set('FILTER',filter,'Filter setting')
 
-        ehdr.set('DETNAM','None')
+        ehdr.set('DETNAM ','None')
+        ehdr.set('CHANTYPE','PI')
         ehdr.set('HDUCLASS','OGIP')
         ehdr.set('HDUCLAS1','RESPONSE')
         ehdr.set('HDUCLAS2','EBOUNDS ')
-        ehdr.set('HDUVERS','1.2.0')
-        ehdr.set('ORIGIN','SRON')
+        ehdr.set('HDUVERS1','1.2.0')
+        ehdr.set('ORIGIN ','SRON')
 
         #
         # Create SPECRESP MATRIX extension
@@ -226,8 +228,28 @@ class Rmf:
         else:
             mhdr.set('EXTNAME','MATRIX')
 
-        mhdr.set('DETCHANS',self.NumberChannels)
+        # Set the TELESCOP keyword (optional)
+        if telescop == None:
+            mhdr.set('TELESCOP','None','Telescope name')
+        else:
+            mhdr.set('TELESCOP',telescop,'Telescope name')
 
+        # Set the INSTRUME keyword (optional)
+        if instrume == None:
+            mhdr.set('INSTRUME','None','Instrument name')
+        else:
+            mhdr.set('INSTRUME',instrume,'Instrument name')
+
+        # Set the FILTER keyword (optional)
+        if filter == None:
+            mhdr.set('FILTER','None','Filter setting')
+        else:
+            mhdr.set('FILTER',filter,'Filter setting')
+
+        mhdr.set('DETCHANS',self.NumberChannels)
+        mhdr.set('LO_THRES',self.ResponseThreshold)
+
+        mhdr.set('CHANTYPE','PI')
         mhdr.set('HDUCLASS','OGIP')
         mhdr.set('HDUCLAS1','RESPONSE')
         mhdr.set('HDUCLAS2','RSP_MATRIX')
@@ -236,8 +258,8 @@ class Rmf:
             mhdr.set('HDUCLAS3','FULL')
         else:
             mhdr.set('HDUCLAS3','REDIST')
-        mhdr.set('HDUVERS','1.3.0')
-        mhdr.set('ORIGIN','SRON')
+        mhdr.set('HDUVERS1','1.3.0')
+        mhdr.set('ORIGIN  ','SRON')
 
         matrix.header['HISTORY'] = 'Created by pyspextools:'
         matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
