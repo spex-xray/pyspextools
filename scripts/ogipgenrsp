@@ -105,12 +105,14 @@ def main():
     for i in np.arange(rsp_out.NumberEnergyBins):
         # The number of channels per group is nbin_group
         rsp_out.NumberChannelsGroup[i] = nbin_group
+
         # Calculate the start channel of the group
-        rsp_out.FirstChannelGroup[i] = 1 + i - nbin_group / 2
+        rsp_out.FirstChannelGroup[i] = int(1 + i - math.ceil(nbin_group / 2))
         if rsp_out.FirstChannelGroup[i] < 1:
             rsp_out.FirstChannelGroup[i] = 1
         if rsp_out.FirstChannelGroup[i] > rsp_out.NumberChannels - nbin_group:
-            rsp_out.FirstChannelGroup[i] = rsp_out.NumberChannels - nbin_group
+            rsp_out.FirstChannelGroup[i] = int(rsp_out.NumberChannels - nbin_group)
+
         # Fill the Matrix
         mu = (rsp_out.ChannelLowEnergy[i] + rsp_out.ChannelHighEnergy[i]) / 2.0
         sum = 0
