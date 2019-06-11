@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>OGIP2spex &#8212; pyspextools 0.2.6 documentation</title>
-    
+    <title>OGIP2spex &#8212; pyspextools 0.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.6',
+        VERSION:     '0.2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +26,7 @@
     <link rel="next" title="TG2Spex" href="tg2spex.html" />
     <link rel="prev" title="Managing datasets in pyspextools" href="datasets.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -45,7 +42,7 @@
         <li class="right" >
           <a href="datasets.html" title="Managing datasets in pyspextools"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -67,7 +64,7 @@ arguments directly from the command line:</p>
 <p>A full overview of the arguments is given below in the section <a class="reference internal" href="#ogip2spex-commandline">Command-line arguments</a>.</p>
 <div class="admonition note">
 <p class="first admonition-title">Note</p>
-<p class="last">By default ogip2spex creates spo files without the &#8216;Exp_Rate&#8217; column. This column was added in SPEX version 3.05.00.
+<p class="last">By default ogip2spex creates spo files without the ‘Exp_Rate’ column. This column was added in SPEX version 3.05.00.
 The Exp_Rate column contains the ratio between the backscale values of the source and background spectrum and is
 used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Exp_Rate
 column is created.</p>
@@ -119,17 +116,17 @@ Removing bad channels from response matrix... OK
 </pre></div>
 </div>
 <p>The removal of bad channels is default behavior. In cases where the bad channels should be kept, one can add the
-&#8216;&#8211;keep-badchannels&#8217; argument to the call to ogip2spex.</p>
+‘–keep-badchannels’ argument to the call to ogip2spex.</p>
 <p>At the end of the program, the spo and res files are saved:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>Writing SPO to file: M1.spo
 Writing RES to file: M1.res
 </pre></div>
 </div>
-<p>One can overwrite existing files by adding the &#8216;&#8211;overwrite&#8217; option to the ogip2spex call.</p>
-<p>This spo file does not have an &#8216;Exp_Rate&#8217; column. To generate a spo file with such a column, add &#8216;&#8211;exprate&#8217; to the
+<p>One can overwrite existing files by adding the ‘–overwrite’ option to the ogip2spex call.</p>
+<p>This spo file does not have an ‘Exp_Rate’ column. To generate a spo file with such a column, add ‘–exprate’ to the
 ogip2spex call.</p>
 <p>By default, ogip2spex shows colored output for warnings, errors and OKs. If it is hard for you to see, use the
-&#8216;&#8211;no-color&#8217; argument to show the output without colors.</p>
+‘–no-color’ argument to show the output without colors.</p>
 </div>
 <div class="section" id="command-line-arguments">
 <span id="ogip2spex-commandline"></span><h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
@@ -145,41 +142,41 @@ ogip2spex call.</p>
 <col class="description" />
 <tbody valign="top">
 <tr><td class="option-group">
-<kbd>&#8211;phafile</kbd></td>
+<kbd>--phafile</kbd></td>
 <td>Input PHA source spectrum (required)</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;bkgfile</kbd></td>
+<kbd>--bkgfile</kbd></td>
 <td>Input Background spectrum</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;rmffile</kbd></td>
+<kbd>--rmffile</kbd></td>
 <td>Input Response matrix (required)</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;arffile</kbd></td>
+<kbd>--arffile</kbd></td>
 <td>Input Effective area file</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;spofile</kbd></td>
+<kbd>--spofile</kbd></td>
 <td>Output SPEX spectrum file (.spo, required)</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;resfile</kbd></td>
+<kbd>--resfile</kbd></td>
 <td>Output SPEX response file (.res, required)</td></tr>
 <tr><td class="option-group" colspan="2">
-<kbd>&#8211;keep-badchannels</kbd></td>
+<kbd>--keep-badchannels</kbd></td>
 </tr>
 <tr><td>&#160;</td><td><p class="first">Do not remove bad channels.</p>
 <p class="last">Default: True</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;overwrite</kbd></td>
+<kbd>--overwrite</kbd></td>
 <td><p class="first">Overwrite existing spo and res files with same name.</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;exprate</kbd></td>
+<kbd>--exprate</kbd></td>
 <td><p class="first">Write additional Exp_Rate column (SPEX &gt;=3.05.00).</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;no-color</kbd></td>
+<kbd>--no-color</kbd></td>
 <td><p class="first">Suppress color output.</p>
 <p class="last">Default: True</p>
 </td></tr>
@@ -249,13 +246,13 @@ ogip2spex call.</p>
         <li class="right" >
           <a href="datasets.html" title="Managing datasets in pyspextools"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

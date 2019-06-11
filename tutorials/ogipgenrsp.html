@@ -1,0 +1,231 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>OGIPGENRSP &#8212; pyspextools 0.2.8 documentation</title>
+    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '0.2.8',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true,
+        SOURCELINK_SUFFIX: '.txt'
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="SIMRES" href="simres.html" />
+    <link rel="prev" title="TG2Spex" href="tg2spex.html" /> 
+  </head>
+  <body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="simres.html" title="SIMRES"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tg2spex.html" title="TG2Spex"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="ogipgenrsp">
+<span id="id1"></span><h1>OGIPGENRSP<a class="headerlink" href="#ogipgenrsp" title="Permalink to this headline">¶</a></h1>
+<p>Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
+and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting
+response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
+new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES</span></a> script in this package with the RSP file from this script as input.</p>
+<p>Since the bin size of the response depends on the input resolution, the original binning of the ARF file may not be
+appropriate. Therefore, this script linearly interpolates the energies from the input ARF array to the new output grid.</p>
+<ul class="simple">
+<li>Please note that this script creates a simple diagonal matrix with a Gaussian distribution function. Although this
+is usually a good approximation, X-ray detectors will have a much more complicated response in reality.</li>
+<li>Please also note that this script creates a square matrix, which is usually not optimal. Optimal binning, as
+explained in <a class="reference external" href="https://ui.adsabs.harvard.edu/abs/2016A%26A...587A.151K/abstract">Kaastra &amp; Bleeker 2016</a>, is still to
+be implemented.</li>
+</ul>
+<p>The parameters of simres can be shown on the command line by the ‘-h’ flag:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ogipgenrsp</span> <span class="o">-</span><span class="n">h</span>
+</pre></div>
+</div>
+<div class="section" id="energy-dependent-resolution">
+<h2>Energy dependent resolution<a class="headerlink" href="#energy-dependent-resolution" title="Permalink to this headline">¶</a></h2>
+<p>Instead of a constant spectral resolution (FWHM) for the entire band, it is also possible to make the resolution
+linearly depend on the energy. The linear dependence is implemented in data/response.py and integrated in the
+gaussrsp function. The resulting FWHM(E) for energy E in keV is calculated as follows:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">FWHM</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">=</span> <span class="n">FWHM</span><span class="p">(</span><span class="nd">@1</span> <span class="n">keV</span><span class="p">)</span> <span class="o">+</span> <span class="n">DELTA_FWHM</span> <span class="o">*</span> <span class="p">(</span><span class="n">E</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The FWHM(&#64; 1keV) is set by the –resolution flag (in eV) and DELTA_FWHM is set by the –resgradient flag (in eV per keV).</p>
+</div>
+<div class="section" id="example">
+<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<p>In the example below, we create a new matrix for new mission with a spectral resolution of 1 eV and an energy range
+of 0.1 to 10 keV:</p>
+<div class="highlight-none"><div class="highlight"><pre><span></span>linux:~&gt; ogipgenrsp --arffile athena.arf --resolution 1.0 --range 0.1:10 --rspfile newmission.rsp --overwrite
+==================================
+ This is ogipgenrsp version 0.2.8
+==================================
+
+Reading ARF file... OK
+Reading ARF file... OK
+Number of energy bins: 49500
+Number of channels per group: 50
+Calculate response matrix... OK
+Check the created RSP matrix... OK
+Write RSP to file... OK
+</pre></div>
+</div>
+<p>The new matrix will contain 49500 bins and each response group will have 50 response elements for which the Gaussian
+response is calculated.</p>
+<p>The resulting response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
+new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES</span></a> script in this package with the RSP file from this script as input.</p>
+</div>
+<div class="section" id="command-line-arguments">
+<h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-none"><div class="highlight"><pre><span></span>usage: ogipgenrsp [-h] --arffile ARFFILE --resolution RESOLUTION
+                  [--resgradient RESGRADIENT] [--range RANGE]
+                  [--sampling SAMPLING] --rspfile RSPFILE [--overwrite]
+                  [--no-color]
+</pre></div>
+</div>
+<div class="section" id="Named Arguments">
+<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<table class="docutils option-list" frame="void" rules="none">
+<col class="option" />
+<col class="description" />
+<tbody valign="top">
+<tr><td class="option-group">
+<kbd>--arffile</kbd></td>
+<td>Input Effective area file (.arf, required).</td></tr>
+<tr><td class="option-group">
+<kbd>--resolution</kbd></td>
+<td>Spectral resolution at 1 keV (FWHM, eV, required).</td></tr>
+<tr><td class="option-group">
+<kbd>--resgradient</kbd></td>
+<td><p class="first">Energy dependence of spectral resolution (in eV per keV, see documentation).</p>
+<p class="last">Default: 0.0</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--range</kbd></td>
+<td><p class="first">Energy range of the response files (in keV), for example –range 0.1:10.</p>
+<p class="last">Default: 0.1:10</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--sampling</kbd></td>
+<td><p class="first">The number of channels per resolution element at 1 keV.</p>
+<p class="last">Default: 5</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--rspfile</kbd></td>
+<td>Output filename for the OGIP RSP file (.rsp required).</td></tr>
+<tr><td class="option-group">
+<kbd>--overwrite</kbd></td>
+<td><p class="first">Overwrite existing rsp files with same name.</p>
+<p class="last">Default: False</p>
+</td></tr>
+<tr><td class="option-group">
+<kbd>--no-color</kbd></td>
+<td><p class="first">Suppress color output.</p>
+<p class="last">Default: True</p>
+</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="../index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">OGIPGENRSP</a><ul>
+<li><a class="reference internal" href="#energy-dependent-resolution">Energy dependent resolution</a></li>
+<li><a class="reference internal" href="#example">Example</a></li>
+<li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a><ul>
+<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tg2spex.html"
+                        title="previous chapter">TG2Spex</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="simres.html"
+                        title="next chapter">SIMRES</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="../_sources/tutorials/ogipgenrsp.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <div><input type="text" name="q" /></div>
+      <div><input type="submit" value="Go" /></div>
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="simres.html" title="SIMRES"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="tg2spex.html" title="TG2Spex"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+    </div>
+  </body>
+</html>

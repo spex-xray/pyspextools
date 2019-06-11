@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>pyspextools.data: Data filtering and optimization functions &#8212; pyspextools 0.2.6 documentation</title>
-    
+    <title>pyspextools.data: Data filtering and optimization functions &#8212; pyspextools 0.2.8 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '0.2.6',
+        VERSION:     '0.2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -29,7 +26,7 @@
     <link rel="next" title="pyspextools.model: Interfaces for SPEX models" href="user.html" />
     <link rel="prev" title="Importing OGIP spectra" href="ogip.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -45,7 +42,7 @@
         <li class="right" >
           <a href="ogip.html" title="Importing OGIP spectra"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -74,7 +71,7 @@ original region object from the function input and returns a cleaned region. The
 and response are loaded. Then masks are created for several arrays in the spectrum and response files:</p>
 <blockquote>
 <div><ul class="simple">
-<li>Chanmask is a boolean array, based on the &#8216;used&#8217; array from the spo file, which identifies which spectral channels
+<li>Chanmask is a boolean array, based on the ‘used’ array from the spo file, which identifies which spectral channels
 can be used or not. This logical value can be based on the Quality flag in the original OGIP spectrum. The channel
 should be usable if the channel is good in both the source and background spectrum.</li>
 <li>Respmask identifies zero response values in the response array. They are found by looping through the response groups
@@ -148,12 +145,12 @@ filtered region object is returned to the user. Such a call could look like this
         <li class="right" >
           <a href="ogip.html" title="Importing OGIP spectra"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.6 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

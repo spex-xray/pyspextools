@@ -1,20 +1,17 @@
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    
-    <title>SIMRES &#8212; pyspextools 0.2.6 documentation</title>
-    
+    <title>SIMRES &#8212; pyspextools 0.2.8 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../',
-        VERSION:     '0.2.6',
+        VERSION:     '0.2.8',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -27,9 +24,9 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="User model example" href="myusermodel.html" />
-    <link rel="prev" title="TG2Spex" href="tg2spex.html" /> 
+    <link rel="prev" title="OGIPGENRSP" href="ogipgenrsp.html" /> 
   </head>
-  <body role="document">
+  <body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -43,9 +40,9 @@
           <a href="myusermodel.html" title="User model example"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tg2spex.html" title="TG2Spex"
+          <a href="ogipgenrsp.html" title="OGIPGENRSP"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -61,7 +58,7 @@
 effective area file (ARF) and background spectrum. This is very useful to create spo and res files
 for future missions, where only responses and effective area files are provided. The spo and res files can be used
 to simulate spectra in SPEX.</p>
-<p>The parameters of simres can be shown on the command line by the &#8216;-h&#8217; flag:</p>
+<p>The parameters of simres can be shown on the command line by the ‘-h’ flag:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">simres</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
@@ -71,7 +68,7 @@ to simulate spectra in SPEX.</p>
 we can create a spo and res file with the simres command, and call them xifu.spo and xifu.res:</p>
 <div class="highlight-none"><div class="highlight"><pre><span></span>linux:~&gt; simres --rmffile athena_xifu_A.rsp --spofile xifu.spo --resfile xifu.res
 ==================================
- This is simres version 0.2.2
+ This is simres version 0.2.8
 ==================================
 
 Read RMF response matrix... WARNING This is an RSP file with the effective area included.
@@ -115,43 +112,43 @@ realistic.</p>
 <col class="description" />
 <tbody valign="top">
 <tr><td class="option-group">
-<kbd>&#8211;rmffile</kbd></td>
+<kbd>--rmffile</kbd></td>
 <td>Input Response matrix (required)</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;bkgfile</kbd></td>
+<kbd>--bkgfile</kbd></td>
 <td>Input Background spectrum</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;arffile</kbd></td>
+<kbd>--arffile</kbd></td>
 <td>Input Effective area file</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;spofile</kbd></td>
+<kbd>--spofile</kbd></td>
 <td>Output SPEX spectrum file (.spo, required)</td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;resfile</kbd></td>
+<kbd>--resfile</kbd></td>
 <td>Output SPEX response file (.res, required)</td></tr>
 <tr><td class="option-group" colspan="2">
-<kbd>&#8211;keep-badchannels</kbd></td>
+<kbd>--keep-badchannels</kbd></td>
 </tr>
 <tr><td>&#160;</td><td><p class="first">Do not remove bad channels.</p>
 <p class="last">Default: True</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;overwrite</kbd></td>
+<kbd>--overwrite</kbd></td>
 <td><p class="first">Overwrite existing spo and res files with same name.</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;exprate</kbd></td>
+<kbd>--exprate</kbd></td>
 <td><p class="first">Write additional Exp_Rate column (SPEX &gt;=3.05.00).</p>
 <p class="last">Default: False</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;backscale</kbd></td>
+<kbd>--backscale</kbd></td>
 <td><p class="first">Set a background scaling factor.</p>
 <p class="last">Default: 1.0</p>
 </td></tr>
 <tr><td class="option-group">
-<kbd>&#8211;no-color</kbd></td>
+<kbd>--no-color</kbd></td>
 <td><p class="first">Suppress color output.</p>
 <p class="last">Default: True</p>
 </td></tr>
@@ -180,8 +177,8 @@ realistic.</p>
 </ul>
 
   <h4>Previous topic</h4>
-  <p class="topless"><a href="tg2spex.html"
-                        title="previous chapter">TG2Spex</a></p>
+  <p class="topless"><a href="ogipgenrsp.html"
+                        title="previous chapter">OGIPGENRSP</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="myusermodel.html"
                         title="next chapter">User model example</a></p>
@@ -219,15 +216,15 @@ realistic.</p>
           <a href="myusermodel.html" title="User model example"
              >next</a> |</li>
         <li class="right" >
-          <a href="tg2spex.html" title="TG2Spex"
+          <a href="ogipgenrsp.html" title="OGIPGENRSP"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.6 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.2.8 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.5.6.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
     </div>
   </body>
 </html>

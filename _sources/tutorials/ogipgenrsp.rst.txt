@@ -1,0 +1,70 @@
+.. _ogipgenrsp:
+
+OGIPGENRSP
+==========
+
+Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
+and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting
+response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
+new matrix, you can run the :ref:`simres` script in this package with the RSP file from this script as input.
+
+Since the bin size of the response depends on the input resolution, the original binning of the ARF file may not be
+appropriate. Therefore, this script linearly interpolates the energies from the input ARF array to the new output grid.
+
+- Please note that this script creates a simple diagonal matrix with a Gaussian distribution function. Although this
+  is usually a good approximation, X-ray detectors will have a much more complicated response in reality.
+
+- Please also note that this script creates a square matrix, which is usually not optimal. Optimal binning, as
+  explained in `Kaastra & Bleeker 2016 <https://ui.adsabs.harvard.edu/abs/2016A%26A...587A.151K/abstract>`_, is still to
+  be implemented.
+
+The parameters of simres can be shown on the command line by the '-h' flag::
+
+    ogipgenrsp -h
+
+Energy dependent resolution
+---------------------------
+
+Instead of a constant spectral resolution (FWHM) for the entire band, it is also possible to make the resolution
+linearly depend on the energy. The linear dependence is implemented in data/response.py and integrated in the
+gaussrsp function. The resulting FWHM(E) for energy E in keV is calculated as follows::
+
+    FWHM(E) = FWHM(@1 keV) + DELTA_FWHM * (E - 1.0)
+
+The FWHM(@ 1keV) is set by the --resolution flag (in eV) and DELTA_FWHM is set by the --resgradient flag (in eV per keV).
+
+
+.. highlight:: none
+
+Example
+-------
+
+In the example below, we create a new matrix for new mission with a spectral resolution of 1 eV and an energy range
+of 0.1 to 10 keV::
+
+    linux:~> ogipgenrsp --arffile athena.arf --resolution 1.0 --range 0.1:10 --rspfile newmission.rsp --overwrite
+    ==================================
+     This is ogipgenrsp version 0.2.8
+    ==================================
+
+    Reading ARF file... OK
+    Reading ARF file... OK
+    Number of energy bins: 49500
+    Number of channels per group: 50
+    Calculate response matrix... OK
+    Check the created RSP matrix... OK
+    Write RSP to file... OK
+
+The new matrix will contain 49500 bins and each response group will have 50 response elements for which the Gaussian
+response is calculated.
+
+The resulting response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
+new matrix, you can run the :ref:`simres` script in this package with the RSP file from this script as input.
+
+Command-line arguments
+----------------------
+
+.. argparse::
+   :filename: scripts/ogipgenrsp
+   :func: genrsp_arguments
+   :prog: ogipgenrsp
