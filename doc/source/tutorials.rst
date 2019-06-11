@@ -15,6 +15,7 @@ Using the pyspextools scripts
 
    tutorials/ogip2spex
    tutorials/tg2spex
+   tutorials/ogipgenrsp
    tutorials/simres
 
 

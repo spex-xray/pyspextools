@@ -22,7 +22,7 @@ we can create a spo and res file with the simres command, and call them xifu.spo
 
     linux:~> simres --rmffile athena_xifu_A.rsp --spofile xifu.spo --resfile xifu.res
     ==================================
-     This is simres version 0.2.2
+     This is simres version 0.2.8
     ==================================
 
     Read RMF response matrix... WARNING This is an RSP file with the effective area included.

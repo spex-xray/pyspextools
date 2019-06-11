@@ -27,7 +27,7 @@ class Arf:
         self.EffArea = np.array([],dtype=float)        #: Effective Area of bin
 
         self.EnergyUnits = 'keV'                       #: Energy units
-        self.arfUnits = 'cm2'
+        self.ARFUnits = 'cm2'
         self.Order = 0                                 #: Grating order (for grating arrays, else 0)
         self.Grating = 0                               #: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)
 
@@ -43,9 +43,9 @@ class Arf:
         self.EnergyUnits = header['TUNIT1']
 
         if header['TUNIT3'] == 'cm**2':
-            self.arfUnits = 'cm2'
+            self.ARFUnits = 'cm2'
         elif header['TUNIT3'] == 'cm2':
-            self.arfUnits = 'cm2'
+            self.ARFUnits = 'cm2'
         else:
             message.warning("ARF units are not recognized.")
 
@@ -71,7 +71,7 @@ class Arf:
         # Write the ARF arrays into FITS column format
         col1 = fits.Column(name='ENERG_LO', format='D', unit=self.EnergyUnits, array=self.LowEnergy)
         col2 = fits.Column(name='ENERG_HI', format='D', unit=self.EnergyUnits, array=self.HighEnergy)
-        col3 = fits.Column(name='SPECRESP', format='D', unit=self.arfUnits, array=self.EffArea)
+        col3 = fits.Column(name='SPECRESP', format='D', unit=self.ARFUnits, array=self.EffArea)
 
         hdu = fits.BinTableHDU.from_columns([col1, col2, col3])
 
@@ -132,7 +132,7 @@ class Arf:
         print("HighEnergy array:  {0}  High Energy of bin".format(self.HighEnergy.size))
         print("EffArea array:     {0}  Effective Area of bin".format(self.EffArea.size))
         print("Energy units:      {0}  Energy units".format(self.EnergyUnits))
-        print("Area units:        {0}  Area units".format(self.arfUnits))
+        print("Area units:        {0}  Area units".format(self.ARFUnits))
 
         return
 

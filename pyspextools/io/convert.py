@@ -276,7 +276,7 @@ def rmf_to_res(rmf, arf=None):
 
     # Convert matrix to m**2 units for SPEX
     if input_area:
-        if arf.arfUnits == "cm2":
+        if arf.ARFUnits == "cm2":
             res.resp *= 1.E-4
     else:
         res.resp *= 1.E-4

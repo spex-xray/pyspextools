@@ -16,6 +16,9 @@ from future import standard_library
 
 standard_library.install_aliases()
 
+import pyspextools.messages as message
+
+
 def gaussrsp(x, mu, fwhm, dfwhm):
     '''Gaussian response function, optionally as a linear function of energy. The inputs are the energy value to
     calculate the response for (x), the center of the Gauss function (mu), the resolution of the detector
@@ -23,6 +26,10 @@ def gaussrsp(x, mu, fwhm, dfwhm):
 
     # FWHM at the center energy of the response
     fwhm_mu = fwhm + dfwhm * (mu - 1.0)
+    if fwhm_mu <= 0.:
+        message.error('The FWHM has become (less than) 0 in the provided energy range. '
+                      'Please check your input gradient.')
+        return -1
 
     # Convert the FWHM to sigma
     sigma = fwhm_mu / (2.0 * math.sqrt(2.0*math.log(2.0)))

@@ -57,6 +57,9 @@ def main():
     rsp_out = Rmf()
 
     rsp_out.NumberEnergyBins = int((high - low) / step)
+    rsp_out.EnergyUnits = arf_in.EnergyUnits
+    rsp_out.AreaIncluded = True
+    rsp_out.RMFUnits = arf_in.ARFUnits
 
     # Calculate new arrays
     rsp_out.LowEnergy = low + step * np.arange(rsp_out.NumberEnergyBins,dtype=float)
@@ -119,7 +122,11 @@ def main():
         for j in np.arange(nbin_group):
             k = rsp_out.FirstChannelGroup[i] + j
             e = (rsp_out.ChannelLowEnergy[k - 1] + rsp_out.ChannelHighEnergy[k - 1]) / 2.0
-            rsp_out.Matrix[r] = gaussrsp(e, mu, args.resolution, args.resgradient) * step
+            resp = gaussrsp(e, mu, args.resolution, args.resgradient)
+            if resp < 0.:
+                message.error('Negative response value detected. Quitting program...')
+                sys.exit(0)
+            rsp_out.Matrix[r] = resp * step
             if (rsp_out.Matrix[r] < rsp_out.ResponseThreshold):
                 rsp_out.Matrix[r] = 0.
             rsp_out.Matrix[r] = rsp_out.Matrix[r] * EffArea[i]
@@ -158,11 +165,12 @@ def genrsp_arguments():
     parser.add_argument('--arffile', help='Input Effective area file (.arf, required).', type=str, required=True)
     parser.add_argument('--resolution', help='Spectral resolution at 1 keV (FWHM, eV, required).', type=float,
                         required=True)
-    parser.add_argument('--resgradient', help='Energy dependency of spectral resolution (see documentation).',
+    parser.add_argument('--resgradient', help='Energy dependence of spectral resolution (in eV per keV, see documentation).',
                         type=float, default=0.0)
     parser.add_argument('--range', help='Energy range of the response files (in keV), for example --range 0.1:10.',
                         type=parserange, default='0.1:10')
-    parser.add_argument('--sampling', help='The number of bins per resolution element at 1 keV.', type=int, default=5)
+    parser.add_argument('--sampling', help='The number of channels per resolution element (FWHM) at 1 keV.',
+                        type=int, default=5)
     parser.add_argument('--rspfile', help='Output filename for the OGIP RSP file (.rsp required).', type=str,
                         required=True)
     parser.add_argument('--overwrite', help="Overwrite existing rsp files with same name.", action="store_true",
