@@ -26,14 +26,14 @@ standard_library.install_aliases()
 
 
 def main():
-    print("==================================")
-    print(" This is tg2spex version {0}".format(pyspextools.__version__))
-    print("==================================")
-    print("")
+    '''Program to convert Chandra grating spectra to SPEX format.'''
 
     # Obtain command line arguments
     parser = tg2spex_arguments()
     args = parser.parse_args()
+
+    # Print message header
+    message.print_header(os.path.basename(__file__))
 
     # Set color in the terminal
     message.set_color(args.color)
@@ -220,7 +220,7 @@ def search_response_files(path,tgcat,prefix,gname):
 # Get command line arguments
 def tg2spex_arguments():
     # Obtain command line arguments
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=message.docs)
     parser.add_argument('path', help="Path to the observation directory where the pha2, arfs and rmfs are.")
     parser.add_argument('--input-prefix', help="Input filename prefix (example: 'hrcf04149_repro_').",
                         dest="input_prefix", default='')
@@ -235,6 +235,7 @@ def tg2spex_arguments():
     parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
                         default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
+    parser.add_argument('--version', action='version', version=message.version)
 
     return parser
 

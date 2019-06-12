@@ -25,14 +25,12 @@ def main():
     It reads OGIP PHA type I spectra and responses. After the conversion to SPEX format, the
     files are filtered for bad channels (optional)."""
 
-    print("==================================")
-    print(" This is ogip2spex version {0}".format(pyspextools.__version__))
-    print("==================================")
-    print("")
-
     # Obtain command line arguments
     parser = ogip2spex_arguments()
     args = parser.parse_args()
+
+    # Print message header
+    message.print_header(os.path.basename(__file__))
 
     # Set color in the terminal
     message.set_color(args.color)
@@ -77,7 +75,7 @@ def main():
 # Get command line arguments
 def ogip2spex_arguments():
     # Obtain command line arguments
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=message.docs)
     parser.add_argument('--phafile', help='Input PHA source spectrum (required)', type=str, required=True)
     parser.add_argument('--bkgfile', help='Input Background spectrum', type=str)
     parser.add_argument('--rmffile', help='Input Response matrix (required)', type=str, required=True)
@@ -91,6 +89,7 @@ def ogip2spex_arguments():
     parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
                         default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
+    parser.add_argument('--version', action='version', version=message.version)
 
     return parser
 

@@ -5,6 +5,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import os
 import sys
 import argparse
 import pyspextools
@@ -25,14 +26,12 @@ def main():
     file. This is particularly useful for simulating spectra for future missions, where the source spectrum file is
     not supplied."""
 
-    print("==================================")
-    print(" This is simres version {0}".format(pyspextools.__version__))
-    print("==================================")
-    print("")
-
     # Obtain command line arguments
     parser = simres_arguments()
     args = parser.parse_args()
+
+    # Print message header
+    message.print_header(os.path.basename(__file__))
 
     # Set color in the terminal
     message.set_color(args.color)
@@ -102,7 +101,7 @@ def main():
 # Get command line arguments
 def simres_arguments():
     # Obtain command line arguments
-    parser = argparse.ArgumentParser()
+    parser = argparse.ArgumentParser(description=message.docs)
     parser.add_argument('--rmffile', help='Input Response matrix (required)', type=str, required=True)
     parser.add_argument('--bkgfile', help='Input Background spectrum', type=str)
     parser.add_argument('--arffile', help='Input Effective area file', type=str)
@@ -116,6 +115,7 @@ def simres_arguments():
                         default=False)
     parser.add_argument('--backscale', help="Set a background scaling factor.", type=float, default=1.0)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
+    parser.add_argument('--version', action='version', version=message.version)
 
     return parser
 
