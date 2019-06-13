@@ -1,15 +1,36 @@
 Install pyspextools
 ===================
 
+Install using pip
+-----------------
+
+We recommend to install the pyspextools module in a virtual environment like conda, so create your
+own conda environment (for example, myconda) first (See this
+`tutorial <https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/>`_).
+Make sure that the dependencies mentioned below are installed.
+In conda, this can be done using the command::
+
+    (myconda) linux:~> conda install future numpy astropy sphinx-argparse
+
+Once the dependencies are installed, pyspextools can be easily installed with pip using the following command::
+
+    (myconda) linux:~> pip install pyspextools
+
 Install using pip and GitHub
 ----------------------------
 
-Pyspex can be easily installed with pip using the Github git link::
+We recommend to install the pyspextools module in a virtual environment like conda, so create your
+own conda environment (for example, myconda) first (See this
+`tutorial <https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/>`_).
+Make sure that the dependencies mentioned below are installed.
+In conda, this can be done using the command::
+
+    (myconda) linux:~> conda install future numpy astropy sphinx-argparse
+
+Once the dependencies are installed, pyspextools can be easily installed with pip using the Github git link::
 
     (myconda) linux:~> pip install git+https://github.com/spex-xray/pyspextools.git
 
-We recommend to install the pyspextools module in a virtual environment like conda, so create your
-own conda environment (for example, myconda) first
 
 Install using setup.py
 ----------------------

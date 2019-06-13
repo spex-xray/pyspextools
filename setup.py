@@ -6,7 +6,7 @@ import re
 import pyspextools
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['future>=0.15','numpy>=1.11','astropy>=2.0','sphinx-argparse>=0.1.15','sphinx']
+dependencies = ['future>=0.15','numpy>=1.11','astropy>=1.1','sphinx-argparse>=0.1.15','sphinx']
 
 # Set up sphinx
 try:
