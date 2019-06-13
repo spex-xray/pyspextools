@@ -6,22 +6,30 @@ import re
 import pyspextools
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['sphinx','numpy','future','astropy','sphinx-argparse']
+dependencies = ['future>=0.15','numpy>=1.11','astropy>=2.0','sphinx-argparse>=0.1.15','sphinx']
 
 # Set up sphinx
 try:
-    from sphinx.setup_command import BuildDoc
-    cmdclass = {'build_sphinx': BuildDoc}
+      from sphinx.setup_command import BuildDoc
+      cmdclass = {'build_sphinx': BuildDoc}
 
 except ImportError:
-    print("Cannot generate documentation. Please install sphinx.")
-    cmdclass = {}
+      print("Cannot generate documentation. Please install sphinx.")
+      cmdclass = {}
 
 name = 'pyspextools'
 
+if os.environ.get('CI_COMMIT_TAG'):
+      version = pyspextools.__version__
+else:
+      if os.environ.get('CI_JOB_ID'):
+            version = pyspextools.__version__+'_'+os.environ['CI_JOB_ID']
+      else:
+            version = pyspextools.__version__
+
 # Do the actual setup
 setup(name=name,
-      version=pyspextools.__version__,
+      version=version,
       description='SPEX Python tools',
       author='SPEX development team',
       author_email='j.de.plaa@sron.nl',
