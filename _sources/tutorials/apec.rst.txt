@@ -1,11 +1,11 @@
 .. _apec-example:
 
 APEC interface for SPEX
-=========================
+=======================
 
-This example program creates an interface between ATOMDB/APEC and
-the SPEX user model. Using this program, the APEC model can be used
-within SPEX. 
+The `apec.py <https://github.com/spex-xray/pyspextools/blob/master/examples/apec.py>`_
+example program creates an interface between ATOMDB/APEC and the SPEX user model.
+Using this program, the APEC model can be used within SPEX.
 
 Dependencies
 ------------

@@ -1,7 +1,7 @@
 .. _tg2spex:
 
-TG2Spex
-=======
+TG2Spex - Transform Chandra grating spectra to SPEX format
+==========================================================
 
 Tg2spex is a script to convert spectra from Chandra grating observations to SPEX format. Tg2spex works
 with input flags from the command line. The '-h' flag shows the help of the tg2spex command::

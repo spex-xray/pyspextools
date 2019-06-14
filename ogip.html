@@ -1,32 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Importing OGIP spectra &#8212; pyspextools 0.2.8 documentation</title>
+    <meta charset="utf-8" />
+    <title>Importing OGIP spectra &#8212; pyspextools 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.2.8',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="pyspextools.data: Data filtering and optimization functions" href="data.html" />
     <link rel="prev" title="The SPEX data format: pyspextools.io" href="io.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +34,7 @@
         <li class="right" >
           <a href="io.html" title="The SPEX data format: pyspextools.io"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -70,7 +62,7 @@ found in pyspextools.data.</p>
 method to read a combination of a spectrum and response matrix. This method will
 do the necessary checks to make sure that the final region object is consistent.
 The OGIP class can be imported separately if needed:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.ogip</span> <span class="k">as</span> <span class="nn">ogip</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.ogip</span> <span class="k">as</span> <span class="nn">ogip</span>
 <span class="n">oregion</span> <span class="o">=</span> <span class="n">ogip</span><span class="o">.</span><span class="n">OGIPRegion</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -87,7 +79,7 @@ and responses to SPEX format.</p>
 and contain the spectra of the specific orders of the spectrum. The TGRegion class allows
 a user to import a Chandra grating spectrum into a SPEX region.</p>
 <p>Similar to the OGIP files, there is also a region class for grating spectra called TGRegion:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.tg</span> <span class="k">as</span> <span class="nn">tg</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.tg</span> <span class="k">as</span> <span class="nn">tg</span>
 <span class="n">tgregion</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">TGRegion</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -104,8 +96,8 @@ source and background rates with errors is relatively straightforward. The areas
 backscal values from the PHA file are used to scale the spectral rates and errors as they
 are stored in SPEX format.</p>
 <div class="admonition note">
-<p class="first admonition-title">Note</p>
-<p class="last">The method of subtracting the background from a spectrum provides wrong
+<p class="admonition-title">Note</p>
+<p>The method of subtracting the background from a spectrum provides wrong
 results in case of Poisson distributed data and C-statistics. It would be better to
 use a model for the background instead. Such alternatives will be implemented from
 SPEX version &gt;=3.05.00.</p>
@@ -137,134 +129,134 @@ components is desired, that should be done with other methods in the pyspextools
 <h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyspextools.io.ogip.OGIPRegion">
-<em class="property">class </em><code class="descclassname">pyspextools.io.ogip.</code><code class="descname">OGIPRegion</code><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.ogip.</code><code class="sig-name descname">OGIPRegion</code><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
 <dd><p>The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to spo and res
 format objects.</p>
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.spec">
-<code class="descname">spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input PHA source spectrum.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.back">
-<code class="descname">back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.back" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.back" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input PHA background spectrum (optional).</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.resp">
-<code class="descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.resp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.resp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input RMF response matrix.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.area">
-<code class="descname">area</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.area" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">area</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input ARF effective area (optional).</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.corr">
-<code class="descname">corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.corr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Input CORR correction file (optional).</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.input_spec">
-<code class="descname">input_spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_spec" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">input_spec</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_spec" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is a source spectrum read in?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.input_back">
-<code class="descname">input_back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_back" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">input_back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_back" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is a background spectrum specified?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.input_resp">
-<code class="descname">input_resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_resp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">input_resp</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_resp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is a response matrix read in?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.input_area">
-<code class="descname">input_area</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_area" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">input_area</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_area" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is an effective area file specified?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.input_corr">
-<code class="descname">input_corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_corr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">input_corr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.input_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is a correction file specified?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.first_channel_zero">
-<code class="descname">first_channel_zero</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.first_channel_zero" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">first_channel_zero</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.first_channel_zero" title="Permalink to this definition">¶</a></dt>
 <dd><p>If the first channel is 0, then matrix data needs shift since SPEX starts at 1.</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.ogip.OGIPRegion.save_grouping">
-<code class="descname">save_grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.save_grouping" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">save_grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.save_grouping" title="Permalink to this definition">¶</a></dt>
 <dd><p>By default no grouping of data</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_region">
-<code class="descname">read_region</code><span class="sig-paren">(</span><em>phafile</em>, <em>rmffile</em>, <em>bkgfile=None</em>, <em>arffile=None</em>, <em>corrfile=None</em>, <em>grouping=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_region</code><span class="sig-paren">(</span><em class="sig-param">phafile</em>, <em class="sig-param">rmffile</em>, <em class="sig-param">bkgfile=None</em>, <em class="sig-param">arffile=None</em>, <em class="sig-param">corrfile=None</em>, <em class="sig-param">grouping=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
 are mandatory. If needed, a background file and effective area file can be added.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.add_region">
-<code class="descname">add_region</code><span class="sig-paren">(</span><em>spec</em>, <em>resp</em>, <em>back=None</em>, <em>corr=None</em>, <em>area=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.add_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.add_region" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">add_region</code><span class="sig-paren">(</span><em class="sig-param">spec</em>, <em class="sig-param">resp</em>, <em class="sig-param">back=None</em>, <em class="sig-param">corr=None</em>, <em class="sig-param">area=None</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.add_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.add_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they
 need to be added to an OGIP region and converted to spo and res objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.ogip_to_spex">
-<code class="descname">ogip_to_spex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.ogip_to_spex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.ogip_to_spex" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ogip_to_spex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.ogip_to_spex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.ogip_to_spex" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert the OGIP part of the OGIP region to spo and res objects.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_source_pha">
-<code class="descname">read_source_pha</code><span class="sig-paren">(</span><em>phafile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_source_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_source_pha" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_source_pha</code><span class="sig-paren">(</span><em class="sig-param">phafile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_source_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_source_pha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a pha file containing the source spectrum.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_background_pha">
-<code class="descname">read_background_pha</code><span class="sig-paren">(</span><em>bkgfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_background_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_background_pha" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_background_pha</code><span class="sig-paren">(</span><em class="sig-param">bkgfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_background_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_background_pha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a pha file containing the background spectrum (if specified).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_rmf">
-<code class="descname">read_rmf</code><span class="sig-paren">(</span><em>rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_rmf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_rmf</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_rmf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open rmf file containing the response matrix.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_arf">
-<code class="descname">read_arf</code><span class="sig-paren">(</span><em>arffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_arf" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_arf</code><span class="sig-paren">(</span><em class="sig-param">arffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_arf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read arf file containing the effective area.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.read_corr">
-<code class="descname">read_corr</code><span class="sig-paren">(</span><em>corrfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_corr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_corr</code><span class="sig-paren">(</span><em class="sig-param">corrfile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.read_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_corr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read correction file if specified.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.correct_possible_shift">
-<code class="descname">correct_possible_shift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.correct_possible_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.correct_possible_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">correct_possible_shift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.correct_possible_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.correct_possible_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,
 then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
 channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
@@ -274,13 +266,13 @@ The ogip_to_spex method calls this function by default.</p>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.check_ogip">
-<code class="descname">check_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.check_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.check_ogip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.check_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.check_ogip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check consistency of the OGIP files in this class.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.show_ogip">
-<code class="descname">show_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.show_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.show_ogip" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">show_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/ogip.html#OGIPRegion.show_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.show_ogip" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shows a summary of the loaded OGIP data.</p>
 </dd></dl>
 
@@ -291,12 +283,18 @@ The ogip_to_spex method calls this function by default.</p>
 <h2>The TGRegion class description<a class="headerlink" href="#the-tgregion-class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyspextools.io.tg.TGRegion">
-<em class="property">class </em><code class="descclassname">pyspextools.io.tg.</code><code class="descname">TGRegion</code><a class="reference internal" href="_modules/pyspextools/io/tg.html#TGRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.tg.</code><code class="sig-name descname">TGRegion</code><a class="reference internal" href="_modules/pyspextools/io/tg.html#TGRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion" title="Permalink to this definition">¶</a></dt>
 <dd><p>The TGRegion class contains methods to read Chandra grating data into the pyspextools module and convert
 these to spo and res format objects.</p>
+<dl class="attribute">
+<dt id="pyspextools.io.tg.TGRegion.grating">
+<code class="sig-name descname">grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.tg.TGRegion.grating" title="Permalink to this definition">¶</a></dt>
+<dd><p>Grating name</p>
+</dd></dl>
+
 <dl class="method">
 <dt id="pyspextools.io.tg.TGRegion.read_region">
-<code class="descname">read_region</code><span class="sig-paren">(</span><em>pha2file</em>, <em>rmflist</em>, <em>arflist</em>, <em>grating</em>, <em>bkgsubtract=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/tg.html#TGRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_region</code><span class="sig-paren">(</span><em class="sig-param">pha2file</em>, <em class="sig-param">rmflist</em>, <em class="sig-param">arflist</em>, <em class="sig-param">grating</em>, <em class="sig-param">bkgsubtract=True</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/tg.html#TGRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists
 are mandatory. The grating option can be either HETG, METG or LETG</p>
 </dd></dl>
@@ -308,180 +306,180 @@ are mandatory. The grating option can be either HETG, METG or LETG</p>
 <h2>The OGIP file classes<a class="headerlink" href="#the-ogip-file-classes" title="Permalink to this headline">¶</a></h2>
 <dl class="class">
 <dt id="pyspextools.io.pha.Pha">
-<em class="property">class </em><code class="descclassname">pyspextools.io.pha.</code><code class="descname">Pha</code><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha.</code><code class="sig-name descname">Pha</code><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by
 Keith Arnaud.</p>
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.FirstChannel">
-<code class="descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.FirstChannel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.FirstChannel" title="Permalink to this definition">¶</a></dt>
 <dd><p>First valid spectral channel</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.DetChans">
-<code class="descname">DetChans</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.DetChans" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">DetChans</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.DetChans" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total number of legal channels</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Channel">
-<code class="descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Channel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Channel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum channels</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Rate">
-<code class="descname">Rate</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Rate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Rate</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Rate" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum spectrum count rate</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.StatError">
-<code class="descname">StatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.StatError" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">StatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.StatError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum error rate (if exists)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.SysError">
-<code class="descname">SysError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.SysError" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">SysError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.SysError" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrum systematic error</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Quality">
-<code class="descname">Quality</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Quality" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Quality</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Quality" title="Permalink to this definition">¶</a></dt>
 <dd><p>Quality flag</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Grouping">
-<code class="descname">Grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Grouping" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Grouping</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Grouping" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grouping information</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.AreaScaling">
-<code class="descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.AreaScaling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.AreaScaling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Areascal keyword/array</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.BackScaling">
-<code class="descname">BackScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackScaling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BackScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackScaling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Backscal keyword/array</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.CorrScal">
-<code class="descname">CorrScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.CorrScal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">CorrScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.CorrScal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Correction spectrum scaling</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Exposure">
-<code class="descname">Exposure</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Exposure" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Exposure</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Exposure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Exposure time of the spectrum</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Poisserr">
-<code class="descname">Poisserr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Poisserr" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Poisserr</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Poisserr" title="Permalink to this definition">¶</a></dt>
 <dd><p>Are the errors Poissonian</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Spectrumtype">
-<code class="descname">Spectrumtype</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Spectrumtype" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Spectrumtype</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Spectrumtype" title="Permalink to this definition">¶</a></dt>
 <dd><p>Spectrumtype (TOTAL, NET or BKG)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.PhaType">
-<code class="descname">PhaType</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.PhaType" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">PhaType</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.PhaType" title="Permalink to this definition">¶</a></dt>
 <dd><p>Whether the spectrum is in COUNTS or RATE</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.rmffile">
-<code class="descname">rmffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.rmffile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">rmffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.rmffile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Associated Response matrix file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.arffile">
-<code class="descname">arffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.arffile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">arffile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.arffile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Associated Effective area file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.bkgfile">
-<code class="descname">bkgfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.bkgfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">bkgfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.bkgfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Associated Background file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.corfile">
-<code class="descname">corfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.corfile" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">corfile</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.corfile" title="Permalink to this definition">¶</a></dt>
 <dd><p>Associated Correction spectrum file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Pha2Back">
-<code class="descname">Pha2Back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Pha2Back" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Pha2Back</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Pha2Back" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is there a PHA2 background available</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.BackRate">
-<code class="descname">BackRate</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackRate" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BackRate</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackRate" title="Permalink to this definition">¶</a></dt>
 <dd><p>PHA2 Background Rate</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.BackStatError">
-<code class="descname">BackStatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackStatError" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">BackStatError</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.BackStatError" title="Permalink to this definition">¶</a></dt>
 <dd><p>PHA2 Background Error</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha.Pha.Pha2BackScal">
-<code class="descname">Pha2BackScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Pha2BackScal" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Pha2BackScal</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha.Pha.Pha2BackScal" title="Permalink to this definition">¶</a></dt>
 <dd><p>Backscale value for background</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a spectrum from a PHA file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.read_header">
-<code class="descname">read_header</code><span class="sig-paren">(</span><em>header</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.read_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read_header" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read_header</code><span class="sig-paren">(</span><em class="sig-param">header</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.read_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read_header" title="Permalink to this definition">¶</a></dt>
 <dd><p>Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the object contains the minimum required data.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.create_dummy">
-<code class="descname">create_dummy</code><span class="sig-paren">(</span><em>resp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.create_dummy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.create_dummy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">create_dummy</code><span class="sig-paren">(</span><em class="sig-param">resp</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.create_dummy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.create_dummy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Generate dummy spectrum based on rmf channel information.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.disp">
-<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.disp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.disp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display a summary of the PHA file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha.Pha.checkCompatibility">
-<code class="descname">checkCompatibility</code><span class="sig-paren">(</span><em>pha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.checkCompatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.checkCompatibility" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">checkCompatibility</code><span class="sig-paren">(</span><em class="sig-param">pha</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha.html#Pha.checkCompatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.checkCompatibility" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if another PHA object is compatible with the current one in terms of number of channels.</p>
 </dd></dl>
 
@@ -489,52 +487,52 @@ Keith Arnaud.</p>
 
 <dl class="class">
 <dt id="pyspextools.io.pha2.Pha2">
-<em class="property">class </em><code class="descclassname">pyspextools.io.pha2.</code><code class="descname">Pha2</code><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha2.</code><code class="sig-name descname">Pha2</code><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.NumberSpectra">
-<code class="descname">NumberSpectra</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.NumberSpectra" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberSpectra</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.NumberSpectra" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of spectra in PHAII file</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.phalist">
-<code class="descname">phalist</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.phalist" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">phalist</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.phalist" title="Permalink to this definition">¶</a></dt>
 <dd><p>List of PHA spectra</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.tg_m">
-<code class="descname">tg_m</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.tg_m" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tg_m</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.tg_m" title="Permalink to this definition">¶</a></dt>
 <dd><p>Array of order numbers</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.tg_part">
-<code class="descname">tg_part</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.tg_part" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">tg_part</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.tg_part" title="Permalink to this definition">¶</a></dt>
 <dd><p>Array of grating numbers</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.instrument">
-<code class="descname">instrument</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.instrument" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">instrument</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.instrument" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instrument name</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.telescope">
-<code class="descname">telescope</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.telescope" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">telescope</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.telescope" title="Permalink to this definition">¶</a></dt>
 <dd><p>Telescope name</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.pha2.Pha2.grating">
-<code class="descname">grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.grating" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.pha2.Pha2.grating" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grating name</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.pha2.Pha2.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>phafile</em>, <em>force_poisson=True</em>, <em>background=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.read" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">phafile</em>, <em class="sig-param">force_poisson=True</em>, <em class="sig-param">background=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the
 optional ‘force_poisson’ flag is True by default. Set force_poisson to false to obtain the errors from
 the file. If the user wants to subtract the background, the flag ‘subtract_background’ should be set to True.</p>
@@ -542,7 +540,7 @@ the file. If the user wants to subtract the background, the flag ‘subtract_bac
 
 <dl class="method">
 <dt id="pyspextools.io.pha2.Pha2.combine_orders">
-<code class="descname">combine_orders</code><span class="sig-paren">(</span><em>grating</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2.combine_orders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.combine_orders" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">combine_orders</code><span class="sig-paren">(</span><em class="sig-param">grating</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/pha2.html#Pha2.combine_orders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.combine_orders" title="Permalink to this definition">¶</a></dt>
 <dd><p>Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).</p>
 </dd></dl>
 
@@ -550,163 +548,163 @@ the file. If the user wants to subtract the background, the flag ‘subtract_bac
 
 <dl class="class">
 <dt id="pyspextools.io.rmf.Rmf">
-<em class="property">class </em><code class="descclassname">pyspextools.io.rmf.</code><code class="descname">Rmf</code><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.rmf.</code><code class="sig-name descname">Rmf</code><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
 Keith Arnaud.</p>
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.FirstChannel">
-<code class="descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstChannel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">FirstChannel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstChannel" title="Permalink to this definition">¶</a></dt>
 <dd><p>First channel number</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.Channel">
-<code class="descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Channel" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Channel</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Channel" title="Permalink to this definition">¶</a></dt>
 <dd><p>Channel numbers</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberGroups">
-<code class="descname">NumberGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberGroups" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberGroups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of response groups</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.FirstGroup">
-<code class="descname">FirstGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstGroup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">FirstGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>First response group for this energy bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.FirstChannelGroup">
-<code class="descname">FirstChannelGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstChannelGroup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">FirstChannelGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstChannelGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>First channel number in this group</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberChannelsGroup">
-<code class="descname">NumberChannelsGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberChannelsGroup" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberChannelsGroup</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberChannelsGroup" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of channels in this group</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.FirstElement">
-<code class="descname">FirstElement</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstElement" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">FirstElement</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.FirstElement" title="Permalink to this definition">¶</a></dt>
 <dd><p>First response element for this group</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.LowEnergy">
-<code class="descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.LowEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.LowEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start energy of bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.HighEnergy">
-<code class="descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.HighEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.HighEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>End energy of bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.Matrix">
-<code class="descname">Matrix</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Matrix" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Matrix</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Matrix" title="Permalink to this definition">¶</a></dt>
 <dd><p>Matrix elements</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.ChannelLowEnergy">
-<code class="descname">ChannelLowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ChannelLowEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ChannelLowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ChannelLowEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Start energy of channel</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.ChannelHighEnergy">
-<code class="descname">ChannelHighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ChannelHighEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ChannelHighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ChannelHighEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>End energy of channel</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberChannels">
-<code class="descname">NumberChannels</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberChannels" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberChannels</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberChannels" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of data channels</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberEnergyBins">
-<code class="descname">NumberEnergyBins</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberEnergyBins" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberEnergyBins</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberEnergyBins" title="Permalink to this definition">¶</a></dt>
 <dd><p>Number of energy bins</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberTotalGroups">
-<code class="descname">NumberTotalGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberTotalGroups" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberTotalGroups</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberTotalGroups" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total number of groups</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.NumberTotalElements">
-<code class="descname">NumberTotalElements</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberTotalElements" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">NumberTotalElements</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.NumberTotalElements" title="Permalink to this definition">¶</a></dt>
 <dd><p>Total number of response elements</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.AreaScaling">
-<code class="descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.AreaScaling" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">AreaScaling</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.AreaScaling" title="Permalink to this definition">¶</a></dt>
 <dd><p>Value of EFFAREA keyword</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.ResponseThreshold">
-<code class="descname">ResponseThreshold</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ResponseThreshold" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">ResponseThreshold</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.ResponseThreshold" title="Permalink to this definition">¶</a></dt>
 <dd><p>Minimum value in response</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.EnergyUnits">
-<code class="descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Units of the energy scale</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.RMFUnits">
-<code class="descname">RMFUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.RMFUnits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">RMFUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.RMFUnits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Units for RMF values</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.AreaIncluded">
-<code class="descname">AreaIncluded</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.AreaIncluded" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">AreaIncluded</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.AreaIncluded" title="Permalink to this definition">¶</a></dt>
 <dd><p>Is the effective area included in the response?</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.rmf.Rmf.Order">
-<code class="descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Order" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.rmf.Rmf.Order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Order of the matrix</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.rmf.Rmf.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.read" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
 Keith Arnaud.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.rmf.Rmf.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>rmffile</em>, <em>telescop=None</em>, <em>instrume=None</em>, <em>filter=None</em>, <em>overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.write" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em>, <em class="sig-param">telescop=None</em>, <em class="sig-param">instrume=None</em>, <em class="sig-param">filter=None</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Method to write an OGIP format RMF file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.rmf.Rmf.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check the RMF for internal consistency.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.rmf.Rmf.disp">
-<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.disp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/rmf.html#Rmf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.disp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display a summary of the RMF object.</p>
 </dd></dl>
 
@@ -714,66 +712,66 @@ Keith Arnaud.</p>
 
 <dl class="class">
 <dt id="pyspextools.io.arf.Arf">
-<em class="property">class </em><code class="descclassname">pyspextools.io.arf.</code><code class="descname">Arf</code><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf" title="Permalink to this definition">¶</a></dt>
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.arf.</code><code class="sig-name descname">Arf</code><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf" title="Permalink to this definition">¶</a></dt>
 <dd><p>Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by
 Keith Arnaud.</p>
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.LowEnergy">
-<code class="descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.LowEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">LowEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.LowEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>Low Energy of bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.HighEnergy">
-<code class="descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.HighEnergy" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">HighEnergy</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.HighEnergy" title="Permalink to this definition">¶</a></dt>
 <dd><p>High Energy of bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.EffArea">
-<code class="descname">EffArea</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.EffArea" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">EffArea</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.EffArea" title="Permalink to this definition">¶</a></dt>
 <dd><p>Effective Area of bin</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.EnergyUnits">
-<code class="descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">EnergyUnits</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.EnergyUnits" title="Permalink to this definition">¶</a></dt>
 <dd><p>Energy units</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.Order">
-<code class="descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.Order" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Order</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.Order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grating order (for grating arrays, else 0)</p>
 </dd></dl>
 
 <dl class="attribute">
 <dt id="pyspextools.io.arf.Arf.Grating">
-<code class="descname">Grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.Grating" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">Grating</code><em class="property"> = None</em><a class="headerlink" href="#pyspextools.io.arf.Arf.Grating" title="Permalink to this definition">¶</a></dt>
 <dd><p>Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.arf.Arf.read">
-<code class="descname">read</code><span class="sig-paren">(</span><em>arffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.read" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">arffile</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the effective area from an OGIP ARF file.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.arf.Arf.write">
-<code class="descname">write</code><span class="sig-paren">(</span><em>arffile</em>, <em>telescop=None</em>, <em>instrume=None</em>, <em>filter=None</em>, <em>overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.write" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">arffile</em>, <em class="sig-param">telescop=None</em>, <em class="sig-param">instrume=None</em>, <em class="sig-param">filter=None</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.write" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write an OGIP compatible ARF file (Non-grating format).</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.arf.Arf.check">
-<code class="descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.check" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the basic information is read in.</p>
 </dd></dl>
 
 <dl class="method">
 <dt id="pyspextools.io.arf.Arf.disp">
-<code class="descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.disp" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/arf.html#Arf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.disp" title="Permalink to this definition">¶</a></dt>
 <dd><p>Display a summary of the ARF object.</p>
 </dd></dl>
 
@@ -788,7 +786,7 @@ Keith Arnaud.</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Importing OGIP spectra</a><ul>
 <li><a class="reference internal" href="#pyspextools-io-ogip-importing-ogip-files">pyspextools.io.ogip: Importing OGIP files</a></li>
@@ -816,13 +814,13 @@ Keith Arnaud.</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -844,12 +842,12 @@ Keith Arnaud.</p>
         <li class="right" >
           <a href="io.html" title="The SPEX data format: pyspextools.io"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
     </div>
   </body>
 </html>

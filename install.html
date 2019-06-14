@@ -1,32 +1,24 @@
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Install pyspextools &#8212; pyspextools 0.2.8 documentation</title>
+    <meta charset="utf-8" />
+    <title>Install pyspextools &#8212; pyspextools 0.3.0 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    <script type="text/javascript">
-      var DOCUMENTATION_OPTIONS = {
-        URL_ROOT:    './',
-        VERSION:     '0.2.8',
-        COLLAPSE_INDEX: false,
-        FILE_SUFFIX: '.html',
-        HAS_SOURCE:  true,
-        SOURCELINK_SUFFIX: '.txt'
-      };
-    </script>
+    
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Using the pyspextools module" href="tutorials.html" />
     <link rel="prev" title="Welcome to pyspex tools documentation!" href="index.html" /> 
-  </head>
-  <body>
+  </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
       <ul>
@@ -42,7 +34,7 @@
         <li class="right" >
           <a href="index.html" title="Welcome to pyspex tools documentation!"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -53,49 +45,86 @@
             
   <div class="section" id="install-pyspextools">
 <h1>Install pyspextools<a class="headerlink" href="#install-pyspextools" title="Permalink to this headline">¶</a></h1>
-<div class="section" id="install-using-pip-and-github">
-<h2>Install using pip and GitHub<a class="headerlink" href="#install-using-pip-and-github" title="Permalink to this headline">¶</a></h2>
-<p>Pyspex can be easily installed with pip using the Github git link:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">myconda</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">spex</span><span class="o">-</span><span class="n">xray</span><span class="o">/</span><span class="n">pyspextools</span><span class="o">.</span><span class="n">git</span>
+<div class="section" id="before-you-install">
+<h2>Before you install<a class="headerlink" href="#before-you-install" title="Permalink to this headline">¶</a></h2>
+<p>We recommend to install the pyspextools module in a virtual environment like conda to manage the dependencies.
+To do so, create your own conda environment first (See this
+<a class="reference external" href="https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/">tutorial</a>).
+In the example below, we create the conda environment <cite>spex</cite> assuming you already have installed conda successfully.
+The commands below create a new conda environment and activate it in your shell:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">spex</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">anaconda</span>
+<span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">spex</span>
+<span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span>
 </pre></div>
 </div>
-<p>We recommend to install the pyspextools module in a virtual environment like conda, so create your
-own conda environment (for example, myconda) first</p>
+<p>To use pyspextools later, each time you open a terminal, you need to activate the conda spex environment
+using the <cite>conda activate spex</cite> command.</p>
+<div class="section" id="non-conda-environments">
+<h3>Non-conda environments<a class="headerlink" href="#non-conda-environments" title="Permalink to this headline">¶</a></h3>
+<p>It is also possible to install pyspextools natively on your operating system (Linux and Mac OS). To avoid dependency
+issues, make sure you have installed the python modules that pyspextools depends on. On Linux, that can be done using
+<cite>apt-get install</cite> commands for Debian-like systems and <cite>yum install</cite> for RedHat-like systems. For Debian-like systems,
+the following command should install all dependencies for python 3:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">sudo</span> <span class="n">apt</span><span class="o">-</span><span class="n">get</span> <span class="n">install</span> <span class="n">python3</span><span class="o">-</span><span class="n">future</span> <span class="n">python3</span><span class="o">-</span><span class="n">numpy</span> <span class="n">python3</span><span class="o">-</span><span class="n">astropy</span> <span class="n">python3</span><span class="o">-</span><span class="n">sphinx</span><span class="o">-</span><span class="n">argparse</span>
+</pre></div>
+</div>
+<p>If you have installed <cite>pip</cite>, then you can try to just run the <cite>pip install</cite> commands below and hope there are no
+dependency conflicts.</p>
+</div>
+</div>
+<div class="section" id="install">
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<p>Pyspextools can be easily installed with pip using the following command (with or without conda environment):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyspextools</span>
+</pre></div>
+</div>
+<div class="section" id="install-from-github">
+<h3>Install from GitHub<a class="headerlink" href="#install-from-github" title="Permalink to this headline">¶</a></h3>
+<p>Pyspextools can also be installed with pip using the Github git link to get the latest (bleeding edge) version:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">spex</span><span class="o">-</span><span class="n">xray</span><span class="o">/</span><span class="n">pyspextools</span><span class="o">.</span><span class="n">git</span>
+</pre></div>
+</div>
 </div>
 <div class="section" id="install-using-setup-py">
-<h2>Install using setup.py<a class="headerlink" href="#install-using-setup-py" title="Permalink to this headline">¶</a></h2>
-<p>Download the pyspextools source code from Github and, if necessary, extract it in a
-convenient directory.</p>
-<p>Before you continue, please think about where you want to install pyspextools. It
-may be wise to create an Anaconda environment where pyspextools can be compiled
-with the most compatible versions of the modules that pyspextools depends on.</p>
+<h3>Install using setup.py<a class="headerlink" href="#install-using-setup-py" title="Permalink to this headline">¶</a></h3>
+<p>Download the pyspextools source code from Github and, if necessary, extract it in a convenient directory.</p>
+<p>Before you continue, please think about where you want to install pyspextools. If you have a
+dedicated conda environment, conda will take care of this. Otherwise, you need to specify a
+suitable directory to install pyspextools in.</p>
 <p>Within a conda environment, install pyspextools as follows:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">conda</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~/</span><span class="n">pyspextools</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~/</span><span class="n">pyspextools</span><span class="o">&gt;</span> <span class="n">python</span> <span class="n">setup</span><span class="o">.</span><span class="n">py</span> <span class="n">install</span>
 </pre></div>
 </div>
 <p>If you do not have conda, install it in a local python module directory:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>linux:~/pyspextools&gt; python setup.py install --prefix=$HOME/python
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>linux:~/pyspextools&gt; python setup.py install --prefix=$HOME/python
 </pre></div>
 </div>
-<p>Make sure that the ‘$HOME/python/lib/pythonx.x/site-packages’ directory
-is in the PYTHONPATH environment variable.</p>
+<p>In that case, make sure that the ‘$HOME/python/lib/pythonx.x/site-packages’ directory
+is mentioned in the PYTHONPATH environment variable.</p>
 </div>
-<div class="section" id="dependencies">
-<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
-<p>The install instructions above should take care of all the mandatory dependencies of the module. Pyspextools works both in
-Python 2.7 and Python 3, thanks to the backports from the ‘future’ module. We try to keep the dependencies limited to
-ensure the stability of the module. Currently, the dependencies are:</p>
+</div>
+<div class="section" id="dependency-issues">
+<h2>Dependency issues<a class="headerlink" href="#dependency-issues" title="Permalink to this headline">¶</a></h2>
+<p>The install instructions above should take care of all the mandatory dependencies of the module. If not,
+then please consider to create a fresh conda environment to install pyspextools in. If that does not help, create
+an issue report on our <a class="reference external" href="https://github.com/spex-xray/pyspextools/issues">Github issues page</a> and describe the problem.</p>
+<div class="section" id="notes-on-the-pyspextools-dependencies">
+<h3>Notes on the pyspextools dependencies<a class="headerlink" href="#notes-on-the-pyspextools-dependencies" title="Permalink to this headline">¶</a></h3>
+<p>Pyspextools works both in Python 2.7 and Python 3, thanks to the backports from the ‘future’ module. We try to keep
+the dependencies limited to ensure the stability of the module. Currently, the dependencies are:</p>
 <ul class="simple">
-<li>numpy</li>
-<li>astropy</li>
-<li>future (provides backward compatibility with Python 2.7)</li>
+<li><p>numpy</p></li>
+<li><p>astropy</p></li>
+<li><p>future (provides backward compatibility with Python 2.7)</p></li>
 </ul>
 <p>For the generation of documentation, the following packages are needed:</p>
 <ul class="simple">
-<li>sphinx (version &gt;= 1.4)</li>
-<li>sphinx-argparse</li>
+<li><p>sphinx (version &gt;= 1.4)</p></li>
+<li><p>sphinx-argparse</p></li>
 </ul>
-<p>For some examples, other packages are used, like pyatomdb, but they are not required for the pyspextools module to function.</p>
+<p>For some of the examples, other packages are used, like pyatomdb, but they are not required for the pyspextools
+module to function.</p>
+</div>
 </div>
 </div>
 
@@ -105,12 +134,22 @@ ensure the stability of the module. Currently, the dependencies are:</p>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table Of Contents</a></h3>
+  <h3><a href="index.html">Table of Contents</a></h3>
   <ul>
 <li><a class="reference internal" href="#">Install pyspextools</a><ul>
-<li><a class="reference internal" href="#install-using-pip-and-github">Install using pip and GitHub</a></li>
+<li><a class="reference internal" href="#before-you-install">Before you install</a><ul>
+<li><a class="reference internal" href="#non-conda-environments">Non-conda environments</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#install">Install</a><ul>
+<li><a class="reference internal" href="#install-from-github">Install from GitHub</a></li>
 <li><a class="reference internal" href="#install-using-setup-py">Install using setup.py</a></li>
-<li><a class="reference internal" href="#dependencies">Dependencies</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#dependency-issues">Dependency issues</a><ul>
+<li><a class="reference internal" href="#notes-on-the-pyspextools-dependencies">Notes on the pyspextools dependencies</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -129,13 +168,13 @@ ensure the stability of the module. Currently, the dependencies are:</p>
     </ul>
    </div>
 <div id="searchbox" style="display: none" role="search">
-  <h3>Quick search</h3>
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
     <form class="search" action="search.html" method="get">
-      <div><input type="text" name="q" /></div>
-      <div><input type="submit" value="Go" /></div>
-      <input type="hidden" name="check_keywords" value="yes" />
-      <input type="hidden" name="area" value="default" />
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
     </form>
+    </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
         </div>
@@ -157,12 +196,12 @@ ensure the stability of the module. Currently, the dependencies are:</p>
         <li class="right" >
           <a href="index.html" title="Welcome to pyspex tools documentation!"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.2.8 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.0 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.6.5.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
     </div>
   </body>
 </html>

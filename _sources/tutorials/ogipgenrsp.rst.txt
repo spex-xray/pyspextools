@@ -1,9 +1,9 @@
 .. _ogipgenrsp:
 
-OGIPGENRSP
-==========
+OGIPGenrsp - Generate new response matrix
+=========================================
 
-Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
+OGIPGenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
 and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting
 response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
 new matrix, you can run the :ref:`simres` script in this package with the RSP file from this script as input.
