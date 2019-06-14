@@ -24,7 +24,7 @@ Please see the documentation pages for tutorials and reference documentation:
 ## Scientific citations
 
 If pyspextools and SPEX were useful for your scientific paper, please cite these packages with their DOIs on Zenodo:
-- [Pyspextools publication on Zenodo (through the SRON community page)](https://zenodo.org/communities/sron/?page=1&size=20)
+- [Pyspextools publication on Zenodo](https://doi.org/10.5281/zenodo.3245804)
 - [SPEX publication on Zenodo](https://doi.org/10.5281/zenodo.1924563)
 
 ## Under development
