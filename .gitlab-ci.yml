@@ -18,9 +18,11 @@ deploy_staging:
     TWINE_PASSWORD: $STAGING_PASSWORD
   script:
     - twine upload --repository-url $PYPITEST_REPOSITORY_URL dist/*
+  only:
+    - master
   except:
     - tags
-
+  
 deploy_production:
   stage: deploy
   variables:
