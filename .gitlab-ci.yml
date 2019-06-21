@@ -17,6 +17,8 @@ deploy_staging:
     TWINE_USERNAME: $STAGING_USERNAME
     TWINE_PASSWORD: $STAGING_PASSWORD
   script:
+    - echo $STAGING_USERNAME
+    - echo $TWINE_USERNAME
     - twine upload --repository-url $PYPITEST_REPOSITORY_URL dist/*
   only:
     - master

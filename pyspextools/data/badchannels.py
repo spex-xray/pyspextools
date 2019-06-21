@@ -23,7 +23,7 @@ def clean_region(reg):
 
     if not isinstance(reg, Region):
         message.error("The input object is not of type Region.")
-        return 1
+        return -1
 
     if reg.spo.empty:
         message.error("The input spo object is empty.")
@@ -37,6 +37,9 @@ def clean_region(reg):
 
     (chanmask, groupmask, respmask) = __get_bad_channel_masks(reg)
 
+    if not isinstance(chanmask, np.ndarray):
+        return -1
+
     message.proc_end(0)
 
     # Print number of good and bad channels
@@ -45,6 +48,10 @@ def clean_region(reg):
 
     print("Number of good channels: {0}".format(goodchan))
     print("Number of bad channels:  {0}".format(badchan))
+
+    if goodchan == 0:
+        message.error("All channels appear to be bad. Please check your input files.")
+        return -1
 
     message.proc_start("Removing bad channels from spectral region")
 
@@ -128,25 +135,25 @@ def __get_bad_channel_masks(reg):
 
     if reg.spo.nchan != reg.spo.used.size:
         message.error("Mismatch in number of channels in spo object.")
-        return 1
+        return -1
 
     if chanmask.size != reg.res.nchan[0]:
         message.error("Mismatch in number of channels between res and spo object.")
-        return 1
+        return -1
 
     # Create a mask array for the number of groups (all true)
     groupmask = np.ones(reg.res.nc.size, dtype=bool)
 
     if groupmask.size != np.sum(reg.res.neg):
         message.error("Mismatch between the number of groups in the ICOMP and GROUP extensions.")
-        return 1
+        return -1
 
     # Create a mask array for the number of response elements (all true)
     respmask = np.ones(reg.res.resp.size, dtype=bool)
 
     if respmask.size != np.sum(reg.res.nc):
         message.error("Mismatch between the number of response elements in the GROUP and RESP extensions.")
-        return 1
+        return -1
 
     ir = 0
     # Loop over groups to find zero response elements and finalize channel mask

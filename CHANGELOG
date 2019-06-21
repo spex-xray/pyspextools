@@ -1,0 +1,9 @@
+Pyspextools change log
+
+Version 0.3.0:
+ - Initial release of pyspextools
+
+Version 0.3.1:
+ - Fixed issue reading PHA files without HDUCLAS2 and HDUCLAS3 keywords.
+ - Fixed issue with using setup.py on Python 2.
+ - Produce an error message in rare cases where all detector channels are bad.

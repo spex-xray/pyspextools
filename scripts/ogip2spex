@@ -48,6 +48,8 @@ def main():
     # Filter for bad channels (if not blocked by command line argument)
     if args.badchan:
         ogip = clean_region(ogip)
+        if not isinstance(ogip, OGIPRegion):
+            sys.exit(1)
 
     # Add the ogip2spex command to the file history
     history = []
