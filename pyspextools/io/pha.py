@@ -135,8 +135,17 @@ class Pha:
         self.Exposure = header['EXPOSURE']
 
         # Read how the spectrum is stored (COUNTS or RATE)
-        self.Spectrumtype = header['HDUCLAS2']
-        self.PhaType = header['HDUCLAS3']
+        try:
+            self.Spectrumtype = header['HDUCLAS2']
+        except KeyError:
+            self.Spectrumtype = 'TOTAL'
+            message.warning("HDUCLAS2 keyword not found. Assuming spectrumtype is TOTAL.")
+
+        try:
+            self.PhaType = header['HDUCLAS3']
+        except KeyError:
+            self.PhaType = 'COUNTS'
+            message.warning("HDUCLAS3 keyword not found. Assuming PHA type is COUNTS.")
 
         # Read the POISERR keyword
         try:
