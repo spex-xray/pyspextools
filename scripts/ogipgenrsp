@@ -128,7 +128,8 @@ def main():
             rsp_out.Matrix[r] = resp * step
             if (rsp_out.Matrix[r] < rsp_out.ResponseThreshold):
                 rsp_out.Matrix[r] = 0.
-            rsp_out.Matrix[r] = rsp_out.Matrix[r] * EffArea[i]
+            if not args.noarea:
+                rsp_out.Matrix[r] = rsp_out.Matrix[r] * EffArea[i]
             sum = sum + rsp_out.Matrix[r]
             r = r + 1
 
@@ -172,6 +173,8 @@ def genrsp_arguments():
                         type=int, default=5)
     parser.add_argument('--rspfile', help='Output filename for the OGIP RSP file (.rsp required).', type=str,
                         required=True)
+    parser.add_argument('--no-area', help="Do NOT include effective area in response file.", dest="noarea", 
+                        action="store_true", default=False)
     parser.add_argument('--overwrite', help="Overwrite existing rsp files with same name.", action="store_true",
                         default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
