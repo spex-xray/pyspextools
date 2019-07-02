@@ -57,8 +57,13 @@ def main():
 
     rsp_out.NumberEnergyBins = int((high - low) / step)
     rsp_out.EnergyUnits = arf_in.EnergyUnits
-    rsp_out.AreaIncluded = True
-    rsp_out.RMFUnits = arf_in.ARFUnits
+    
+    if args.noarea:
+        rsp_out.AreaIncluded = False
+        rsp_out.RMFUnits = ''
+    else:
+        rsp_out.AreaIncluded = True
+        rsp_out.RMFUnits = arf_in.ARFUnits
 
     # Calculate new arrays
     rsp_out.LowEnergy = low + step * np.arange(rsp_out.NumberEnergyBins,dtype=float)
@@ -137,13 +142,17 @@ def main():
     rsp_out.NumberTotalElements = r
     message.proc_end(0)
 
+    if args.noarea:
+        if os.path.splitext(args.rspfile)[1] == '.rsp':
+            message.warning("You are creating a .rsp file without area. Rename output file extension to .rmf.")
+
     # Check the created matrix
-    message.proc_start('Check the created RSP matrix')
+    message.proc_start('Check the created RSP/RMF matrix')
     stat = rsp_out.check()
     message.proc_end(stat)
 
     # Write the new matrix to file
-    message.proc_start('Write RSP to file')
+    message.proc_start('Write RSP/RMF to file')
     stat = rsp_out.write(args.rspfile,overwrite=args.overwrite)
     message.proc_end(stat)
 
@@ -173,7 +182,7 @@ def genrsp_arguments():
                         type=int, default=5)
     parser.add_argument('--rspfile', help='Output filename for the OGIP RSP file (.rsp required).', type=str,
                         required=True)
-    parser.add_argument('--no-area', help="Do NOT include effective area in response file.", dest="noarea", 
+    parser.add_argument('--no-area', help="Do NOT include effective area in response file (create .rmf).", dest="noarea", 
                         action="store_true", default=False)
     parser.add_argument('--overwrite', help="Overwrite existing rsp files with same name.", action="store_true",
                         default=False)
