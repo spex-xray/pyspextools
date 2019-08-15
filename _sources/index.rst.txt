@@ -3,19 +3,12 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyspextools documentation!
-=====================================
+Welcome to pyspex tools documentation!
+======================================
 
 Welcome to pyspex tools, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
 This module offers a growing number of utilities and scripts that can help with analysing X-ray spectra using
 SPEX.
-
-Currently, the toolbox provides the following tools:
-
-- Transformation of OGIP files to SPEX format,
-- Generation of 'fake' spectra and responses for simulations,
-- Programming interfaces to manipulate SPEX and OGIP fits files,
-- Programming interface for using the SPEX user model.
 
 This page offers the following help and documentation:
 
@@ -26,20 +19,15 @@ Install pyspextools
    
    install
 
-Pyspextools tutorials
----------------------
-How to use the programming interface of pyspextools, use its scripts to convert OGIP spectra to SPEX format and the
-simulation tools.
-
+Pyspex tutorials
+----------------
 .. toctree::
    :maxdepth: 2
 
    tutorials
 
-Programming interface refererence
----------------------------------
-Reference documentation for the pyspextools API.
-
+Module Refererence
+------------------
 .. toctree::
    :maxdepth: 2
 
@@ -51,11 +39,7 @@ Reference documentation for the pyspextools API.
 
    user
 
-References
-==========
 
-When pyspextools is useful for your scientific paper, please cite pyspextools on Zenodo:
-`DOI: 10.5281/zenodo.3245804 <https://doi.org/10.5281/zenodo.3245804>`_.
 
 Indices and tables
 ==================

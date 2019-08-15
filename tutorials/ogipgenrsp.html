@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>OGIPGenrsp - Generate new response matrix &#8212; pyspextools 0.3.0 documentation</title>
+    <title>OGIPGENRSP &#8212; pyspextools 0.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -16,8 +16,8 @@
     
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="SIMRES - Create simulation files" href="simres.html" />
-    <link rel="prev" title="TG2Spex - Transform Chandra grating spectra to SPEX format" href="tg2spex.html" /> 
+    <link rel="next" title="SIMRES" href="simres.html" />
+    <link rel="prev" title="TG2Spex" href="tg2spex.html" /> 
   </head><body>
     <div class="related" role="navigation" aria-label="related navigation">
       <h3>Navigation</h3>
@@ -29,12 +29,12 @@
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="simres.html" title="SIMRES - Create simulation files"
+          <a href="simres.html" title="SIMRES"
              accesskey="N">next</a> |</li>
         <li class="right" >
-          <a href="tg2spex.html" title="TG2Spex - Transform Chandra grating spectra to SPEX format"
+          <a href="tg2spex.html" title="TG2Spex"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -44,12 +44,12 @@
         <div class="bodywrapper">
           <div class="body" role="main">
             
-  <div class="section" id="ogipgenrsp-generate-new-response-matrix">
-<span id="ogipgenrsp"></span><h1>OGIPGenrsp - Generate new response matrix<a class="headerlink" href="#ogipgenrsp-generate-new-response-matrix" title="Permalink to this headline">¶</a></h1>
-<p>OGIPGenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
+  <div class="section" id="ogipgenrsp">
+<span id="id1"></span><h1>OGIPGENRSP<a class="headerlink" href="#ogipgenrsp" title="Permalink to this headline">¶</a></h1>
+<p>Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
 and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting
 response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
-new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES - Create simulation files</span></a> script in this package with the RSP file from this script as input.</p>
+new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES</span></a> script in this package with the RSP file from this script as input.</p>
 <p>Since the bin size of the response depends on the input resolution, the original binning of the ARF file may not be
 appropriate. Therefore, this script linearly interpolates the energies from the input ARF array to the new output grid.</p>
 <ul class="simple">
@@ -94,7 +94,7 @@ Write RSP to file... OK
 <p>The new matrix will contain 49500 bins and each response group will have 50 response elements for which the Gaussian
 response is calculated.</p>
 <p>The resulting response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
-new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES - Create simulation files</span></a> script in this package with the RSP file from this script as input.</p>
+new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES</span></a> script in this package with the RSP file from this script as input.</p>
 </div>
 <div class="section" id="command-line-arguments">
 <h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
@@ -102,8 +102,8 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
 </p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: ogipgenrsp [-h] --arffile ARFFILE --resolution RESOLUTION
                   [--resgradient RESGRADIENT] [--range RANGE]
-                  [--sampling SAMPLING] --rspfile RSPFILE [--overwrite]
-                  [--no-color] [--version]
+                  [--sampling SAMPLING] --rspfile RSPFILE [--no-area]
+                  [--overwrite] [--no-color] [--version]
 </pre></div>
 </div>
 <div class="section" id="Named Arguments">
@@ -130,6 +130,10 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
 <dt><kbd>--rspfile</kbd></dt>
 <dd><p>Output filename for the OGIP RSP file (.rsp required).</p>
 </dd>
+<dt><kbd>--no-area</kbd></dt>
+<dd><p>Do NOT include effective area in response file (create .rmf).</p>
+<p>Default: False</p>
+</dd>
 <dt><kbd>--overwrite</kbd></dt>
 <dd><p>Overwrite existing rsp files with same name.</p>
 <p>Default: False</p>
@@ -154,7 +158,7 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
         <div class="sphinxsidebarwrapper">
   <h3><a href="../index.html">Table of Contents</a></h3>
   <ul>
-<li><a class="reference internal" href="#">OGIPGenrsp - Generate new response matrix</a><ul>
+<li><a class="reference internal" href="#">OGIPGENRSP</a><ul>
 <li><a class="reference internal" href="#energy-dependent-resolution">Energy dependent resolution</a></li>
 <li><a class="reference internal" href="#example">Example</a></li>
 <li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a><ul>
@@ -167,10 +171,10 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
 
   <h4>Previous topic</h4>
   <p class="topless"><a href="tg2spex.html"
-                        title="previous chapter">TG2Spex - Transform Chandra grating spectra to SPEX format</a></p>
+                        title="previous chapter">TG2Spex</a></p>
   <h4>Next topic</h4>
   <p class="topless"><a href="simres.html"
-                        title="next chapter">SIMRES - Create simulation files</a></p>
+                        title="next chapter">SIMRES</a></p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
@@ -202,12 +206,12 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
           <a href="../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
         <li class="right" >
-          <a href="simres.html" title="SIMRES - Create simulation files"
+          <a href="simres.html" title="SIMRES"
              >next</a> |</li>
         <li class="right" >
-          <a href="tg2spex.html" title="TG2Spex - Transform Chandra grating spectra to SPEX format"
+          <a href="tg2spex.html" title="TG2Spex"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>

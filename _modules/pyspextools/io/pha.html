@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pyspextools.io.pha &#8212; pyspextools 0.3.0 documentation</title>
+    <title>pyspextools.io.pha &#8212; pyspextools 0.3.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -174,8 +174,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;EXPOSURE&#39;</span><span class="p">]</span>
 
         <span class="c1"># Read how the spectrum is stored (COUNTS or RATE)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span> <span class="o">=</span> <span class="s1">&#39;TOTAL&#39;</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;HDUCLAS2 keyword not found. Assuming spectrumtype is TOTAL.&quot;</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="s1">&#39;COUNTS&#39;</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;HDUCLAS3 keyword not found. Assuming PHA type is COUNTS.&quot;</span><span class="p">)</span>
 
         <span class="c1"># Read the POISERR keyword</span>
         <span class="k">try</span><span class="p">:</span>
@@ -331,7 +340,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>

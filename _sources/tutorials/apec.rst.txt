@@ -1,11 +1,11 @@
 .. _apec-example:
 
 APEC interface for SPEX
-=======================
+=========================
 
-The `apec.py <https://github.com/spex-xray/pyspextools/blob/master/examples/apec.py>`_
-example program creates an interface between ATOMDB/APEC and the SPEX user model.
-Using this program, the APEC model can be used within SPEX.
+This example program creates an interface between ATOMDB/APEC and
+the SPEX user model. Using this program, the APEC model can be used
+within SPEX. 
 
 Dependencies
 ------------
@@ -13,9 +13,9 @@ Dependencies
 Before you start, make sure the following things are installed or set:
 
 - Install numpy
-- Install pyspextools
+- Install pyspextools (pip install pyspextools)
 - Install ATOMDB (Coco and line tables.)
-- Install pyatomdb
+- Install pyatomdb (pip install pyatomdb)
 - Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions)::
 
     linux:~> export ATOMDB=/path/to/my/atomdb   (bash shell)
@@ -23,7 +23,8 @@ Before you start, make sure the following things are installed or set:
 
 For more information about installing ATOMDB and pyatomdb see `atomdb.org <http://www.atomdb.org/>`_ 
 
-Please note that pyATOMDB does not support Python 3 yet!
+.. note:: pyATOMDB only supports Python 3 from version 0.6.0 onwards. If you are using Python 2,
+          you need to install an older pyATOMDB version.
 
 Usage
 -----
@@ -43,6 +44,11 @@ If apec.py is located somewhere else, provide the full path::
 The ATOMDB environment variable needs to be set to the ATOMDB installation at all times. 
 Please note that by default, ATOMDB uses solar abundances by Anders & Grevesse (1989).
 
+The SPEX user model also needs the number of parameters in the model. For APEC this needs to be set to 30::
+
+    SPEX> par 1 1 npar v 30
+
+The APEC model is now ready for use. See the table below for the parameter information.
 
 Parameters
 ----------

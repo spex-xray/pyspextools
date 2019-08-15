@@ -3,8 +3,7 @@
 User model example
 ==================
 
-The `myusermodel.py <https://github.com/spex-xray/pyspextools/blob/master/examples/myusermodel.py>`_
-file in the examples directory contains a basic program
+The myusermodel.py file in the examples directory contains a basic program
 that interacts with the user or musr model in SPEX. It reads the input energy
 grid and model parameters from SPEX, calculates a spectrum or transmission, and
 returns the calculated values by writing a text file. The user can adapt this

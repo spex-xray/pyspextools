@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>APEC interface for SPEX &#8212; pyspextools 0.3.0 documentation</title>
+    <title>APEC interface for SPEX &#8212; pyspextools 0.3.2 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="myusermodel.html" title="User model example"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -46,17 +46,17 @@
             
   <div class="section" id="apec-interface-for-spex">
 <span id="apec-example"></span><h1>APEC interface for SPEX<a class="headerlink" href="#apec-interface-for-spex" title="Permalink to this headline">¶</a></h1>
-<p>The <a class="reference external" href="https://github.com/spex-xray/pyspextools/blob/master/examples/apec.py">apec.py</a>
-example program creates an interface between ATOMDB/APEC and the SPEX user model.
-Using this program, the APEC model can be used within SPEX.</p>
+<p>This example program creates an interface between ATOMDB/APEC and
+the SPEX user model. Using this program, the APEC model can be used
+within SPEX.</p>
 <div class="section" id="dependencies">
 <h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this headline">¶</a></h2>
 <p>Before you start, make sure the following things are installed or set:</p>
 <ul>
 <li><p>Install numpy</p></li>
-<li><p>Install pyspextools</p></li>
+<li><p>Install pyspextools (pip install pyspextools)</p></li>
 <li><p>Install ATOMDB (Coco and line tables.)</p></li>
-<li><p>Install pyatomdb</p></li>
+<li><p>Install pyatomdb (pip install pyatomdb)</p></li>
 <li><p>Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">export</span> <span class="n">ATOMDB</span><span class="o">=/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">atomdb</span>   <span class="p">(</span><span class="n">bash</span> <span class="n">shell</span><span class="p">)</span>
 <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">setenv</span> <span class="n">ATOMDB</span> <span class="o">/</span><span class="n">path</span><span class="o">/</span><span class="n">to</span><span class="o">/</span><span class="n">my</span><span class="o">/</span><span class="n">atomdb</span>   <span class="p">(</span><span class="n">c</span> <span class="n">shell</span><span class="p">)</span>
@@ -65,7 +65,11 @@ Using this program, the APEC model can be used within SPEX.</p>
 </li>
 </ul>
 <p>For more information about installing ATOMDB and pyatomdb see <a class="reference external" href="http://www.atomdb.org/">atomdb.org</a></p>
-<p>Please note that pyATOMDB does not support Python 3 yet!</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>pyATOMDB only supports Python 3 from version 0.6.0 onwards. If you are using Python 2,
+you need to install an older pyATOMDB version.</p>
+</div>
 </div>
 <div class="section" id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
@@ -83,6 +87,11 @@ Using this program, the APEC model can be used within SPEX.</p>
 </div>
 <p>The ATOMDB environment variable needs to be set to the ATOMDB installation at all times.
 Please note that by default, ATOMDB uses solar abundances by Anders &amp; Grevesse (1989).</p>
+<p>The SPEX user model also needs the number of parameters in the model. For APEC this needs to be set to 30:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SPEX</span><span class="o">&gt;</span> <span class="n">par</span> <span class="mi">1</span> <span class="mi">1</span> <span class="n">npar</span> <span class="n">v</span> <span class="mi">30</span>
+</pre></div>
+</div>
+<p>The APEC model is now ready for use. See the table below for the parameter information.</p>
 </div>
 <div class="section" id="parameters">
 <h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this headline">¶</a></h2>
@@ -287,7 +296,7 @@ script</p></th>
         <li class="right" >
           <a href="myusermodel.html" title="User model example"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>

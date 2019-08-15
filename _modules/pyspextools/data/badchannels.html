@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pyspextools.data.badchannels &#8212; pyspextools 0.3.0 documentation</title>
+    <title>pyspextools.data.badchannels &#8212; pyspextools 0.3.2 documentation</title>
     <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     
@@ -26,7 +26,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
       </ul>
     </div>  
@@ -62,7 +62,7 @@
 
     <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">reg</span><span class="p">,</span> <span class="n">Region</span><span class="p">):</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The input object is not of type Region.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">reg</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The input spo object is empty.&quot;</span><span class="p">)</span>
@@ -76,6 +76,9 @@
 
     <span class="p">(</span><span class="n">chanmask</span><span class="p">,</span> <span class="n">groupmask</span><span class="p">,</span> <span class="n">respmask</span><span class="p">)</span> <span class="o">=</span> <span class="n">__get_bad_channel_masks</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
 
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">chanmask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
     <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 
     <span class="c1"># Print number of good and bad channels</span>
@@ -84,6 +87,10 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of good channels: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">goodchan</span><span class="p">))</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Number of bad channels:  </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">badchan</span><span class="p">))</span>
+
+    <span class="k">if</span> <span class="n">goodchan</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;All channels appear to be bad. Please check your input files.&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Removing bad channels from spectral region&quot;</span><span class="p">)</span>
 
@@ -167,25 +174,25 @@
 
     <span class="k">if</span> <span class="n">reg</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">nchan</span> <span class="o">!=</span> <span class="n">reg</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">used</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch in number of channels in spo object.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="k">if</span> <span class="n">chanmask</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch in number of channels between res and spo object.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="c1"># Create a mask array for the number of groups (all true)</span>
     <span class="n">groupmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">groupmask</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">neg</span><span class="p">):</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch between the number of groups in the ICOMP and GROUP extensions.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="c1"># Create a mask array for the number of response elements (all true)</span>
     <span class="n">respmask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">respmask</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">):</span>
         <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Mismatch between the number of response elements in the GROUP and RESP extensions.&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="n">ir</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="c1"># Loop over groups to find zero response elements and finalize channel mask</span>
@@ -267,7 +274,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.0 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
       </ul>
     </div>
