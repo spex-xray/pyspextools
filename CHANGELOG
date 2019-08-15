@@ -7,3 +7,7 @@ Version 0.3.1:
  - Fixed issue reading PHA files without HDUCLAS2 and HDUCLAS3 keywords.
  - Fixed issue with using setup.py on Python 2.
  - Produce an error message in rare cases where all detector channels are bad.
+
+Version 0.3.2:
+ - Updated apec.py example script for pyATOMDB >= 0.6.0 (only supports Python 3 now).
+   (Thanks to Francois Mernier for reporting.)

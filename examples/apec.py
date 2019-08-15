@@ -22,10 +22,12 @@ from pyspextools.model import User
 
 standard_library.install_aliases()
 
-if sys.version_info[0] < 3:
+try:
     import pyatomdb
-else:
-    raise Exception("pyATOMDB does not support Python 3 yet...")
+except ImportError:
+    print("This SPEX user model depends on the pyATOMDB module. Please install"
+          "pyATOMDB through the command 'pip install pyatomdb'. ")
+    print("Note that from version 0.6.0 onwards pyATOMDB only supports Python 3.")
 
 """
 User model parameter translation table:
@@ -65,9 +67,6 @@ p30	usr.par[29]	30 Zn
 def main():
     # Initialize the IO class. The input file from SPEX will be read automatically.
     usr = User()
-
-    if sys.version_info[0] > 2:
-        raise Exception("pyATOMDB does not support Python 3 yet...")
 
     if usr.npar != 30:
         print("Please set 'npar' parameter to 30 for this model")
