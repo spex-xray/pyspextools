@@ -11,3 +11,4 @@ Version 0.3.1:
 Version 0.3.2:
  - Updated apec.py example script for pyATOMDB >= 0.6.0 (only supports Python 3 now).
    (Thanks to Francois Mernier for reporting.)
+ - Added no-area option to the ogipgenrsp script.
