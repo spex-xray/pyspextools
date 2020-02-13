@@ -1,12 +1,12 @@
-.. pyspex documentation master file, created by
+.. pyspextools documentation master file, created by
    sphinx-quickstart on Fri Nov  3 10:18:23 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to pyspex tools documentation!
-======================================
+Welcome to pyspextools documentation!
+=====================================
 
-Welcome to pyspex tools, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
+Welcome to pyspextools, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
 This module offers a growing number of utilities and scripts that can help with analysing X-ray spectra using
 SPEX.
 
@@ -19,8 +19,8 @@ Install pyspextools
    
    install
 
-Pyspex tutorials
-----------------
+Pyspextools tutorials
+---------------------
 .. toctree::
    :maxdepth: 2
 

@@ -6,7 +6,7 @@ Pyspextools is a collection of python tools for the SPEX X-ray spectral fitting 
 ## Install
 
 Installing pyspextools can be done directly using pip. Before you continue, please think about where you want 
-to install pyspex tools. It may be wise to create an Anaconda environment where pyspextools can be compiled with 
+to install pyspextools. It may be wise to create an Anaconda environment where pyspextools can be compiled with 
 the most compatible versions of the modules that pyspextools depends on.
 
 Install pyspextools as follows:
