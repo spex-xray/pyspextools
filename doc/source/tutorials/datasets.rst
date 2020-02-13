@@ -1,9 +1,9 @@
 Managing datasets in pyspextools
 ================================
 
-The best starting point to manipulate SPEX files is to use the Dataset class in pyspex. A dataset can be a collection
-of several spectrum-response combinations, which are called regions. This way, multiple related spectra can be stored
-in a spo and res file.
+The best starting point to manipulate SPEX files is to use the Dataset class in pyspextools. A dataset can be a
+collection of several spectrum-response combinations, which are called regions. This way, multiple related spectra can
+be stored in a spo and res file.
 
 The different spectra and responses inside a dataset can be related to each other in multiple ways. To distinguish
 between different cases, each spectrum-response combination can have a sector and region number. These numbers are
@@ -29,11 +29,11 @@ Example use of the dataset class
 --------------------------------
 
 Let's perform a simple operation to read a few existing spo and res files and combine them into one dataset.
-First, start python and then import the pyspex.io module::
+First, start python and then import the pyspextools.io module::
 
     >>> import pyspextools.io
 
-The pyspex.io module contains a Dataset class that needs to be initiated first::
+The pyspextools.io module contains a Dataset class that needs to be initiated first::
 
     >>> data = pyspextools.io.Dataset()
 

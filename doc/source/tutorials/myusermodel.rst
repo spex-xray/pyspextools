@@ -16,12 +16,12 @@ The following imports are mandatory::
 
   import math                         # Import math module
   import numpy                        # Import numpy module
-  from pyspextools.model import User  # Import the user module from pyspex.model
+  from pyspextools.model import User  # Import the user module from pyspextools.model
 
 
 **Initialisation**
 
-The user module from pyspex.model needs to be initialized first. This will read in
+The user module from pyspextools.model needs to be initialized first. This will read in
 the input file from SPEX automatically and initialize the arrays::
 
     usr=User()
