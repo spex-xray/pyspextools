@@ -287,7 +287,7 @@ class Res:
         mask = self.mask_resp
         resreg.resp = self.resp[mask]
         if self.resp_der:
-            self.dresp = self.dresp[mask]
+            resreg.dresp = self.dresp[mask]
 
         # Remove groups in SPEX_RESP_GROUP
         mask = self.mask_group
@@ -502,11 +502,11 @@ class Res:
         # Find which rows in SPEX_RESP_ICOMP are to be masked
         icomp_reg = np.where(self.region == iregion)[0]
         icomp_sec = np.where(self.sector == isector)[0]
-        icomp_sel_rows = np.where(icomp_reg == icomp_sec)[0]
+        icomp_sel_rows = np.intersect1d(icomp_reg, icomp_sec)
 
         icomp_front_sec = np.where(self.sector < isector)[0]
         icomp_front_reg = np.where(self.region < iregion)[0]
-        icomp_front_rows = max(icomp_front_sec,icomp_front_reg)
+        icomp_front_rows = np.unique(np.append(icomp_front_reg, icomp_front_sec))
 
         # Find which rows in SPEX_RESP_GROUP are to be masked
         # Make sure the +1 is there in the row selection, because otherwise one row too little is selected.

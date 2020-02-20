@@ -86,6 +86,9 @@ class Dataset:
         # Add region to list of regions
         self.regions.append(reg)
 
+        # Add the sector and region to the config variable of this dataset
+        self.config = np.append(self.config, [[isector, iregion]], axis=0)
+
     # -----------------------------------------------------
     # Read all the regions from a spo and res file.
     # -----------------------------------------------------
@@ -106,20 +109,32 @@ class Dataset:
             return
 
         # Read the response configuration
-        self.read_config(tres)
+        config = self.read_config(tres)
+
+        # Update the response configuration
+        if self.config.size == 0:
+            self.config = config
+            regmax = 0
+            secmax = 0
+        else:
+            secmax, regmax = np.amax(self.config, axis=0)
 
         for i in np.arange(tspo.nregion):
             # Initialize a new region
             reg = Region()
 
-            reg.spo = tspo.return_region(self.config[i,1])
-            reg.res = tres.return_region(self.config[i,0],self.config[i,1])
+            reg.spo = tspo.return_region(config[i, 1])
+            reg.res = tres.return_region(config[i, 0], config[i, 1])
 
             # Run consistency checks
             reg.check()
 
             # Add region to list of regions
             self.regions.append(reg)
+
+            reg.increase_region(regmax)
+
+        self.update_config()
 
     # -----------------------------------------------------
     # Append a region object to the dataset
@@ -185,16 +200,18 @@ class Dataset:
     # Function to read the response configuration
     # -----------------------------------------------------
 
-    def read_config(self,res):
-        self.config = np.empty(shape=[0,2], dtype=int)
-        pregion = 0   # Set previous region
-        psector = 0   # Set previous sector
+    def read_config(self, res):
+        config = np.empty(shape=[0,2], dtype=int)
+        psector = 0
+        pregion = 0
         for i in np.arange(res.ncomp):
             # Loop through components to find sector-region combinations
             if (res.region[i] != pregion) or (res.sector[i] != psector):
-                self.config = np.append(self.config, [[res.sector[i], res.region[i]]], axis=0)
-                pregion = res.region[i]
+                config = np.append(config, [[res.sector[i], res.region[i]]], axis=0)
                 psector = res.sector[i]
+                pregion = res.region[i]
+
+        return config
 
     # -----------------------------------------------------
     # Function to update the response configuration
@@ -210,8 +227,8 @@ class Dataset:
                 self.config = np.append(self.config, [[reg.res.sector[0], reg.res.region[0]]], axis=0)
                 pregion = reg.res.region[0]
                 psector = reg.res.sector[0]
-        else:
-            message.error("Double sector and region identification.")
+            else:
+                message.error("Double sector and region identification.")
 
     # -----------------------------------------------------
     # Show a summary of the dataset, similar to data show in SPEX
@@ -222,5 +239,5 @@ class Dataset:
         for ireg in np.arange(len(self.regions)):
             print("===========================================================")
             print(" Part {0}".format(ireg+1))
-            self.regions[ireg].show(isector=self.config[ireg,0],iregion=self.config[ireg,1])
+            self.regions[ireg].show(isector=self.config[ireg, 0], iregion=self.config[ireg, 1])
             print("")

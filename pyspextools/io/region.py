@@ -58,12 +58,17 @@ class Region:
         """Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc."""
         self.label = str(label)
 
-    def set_sector(self,sector):
+    def set_sector(self, sector):
         """Set the sector number for this region."""
 
         for i in np.arange(self.res.sector.size):
             self.res.sector[i]=sector
 
+    def increase_region(self, amount):
+        """Increase the region numbers by an integer amount."""
+
+        for i in np.arange(self.res.region.size):
+            self.res.region[i] = self.res.region[i] + amount
 
     def check(self, nregion=False):
         """Check whether spectrum and response are compatible
