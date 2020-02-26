@@ -97,12 +97,17 @@
         <span class="sd">&quot;&quot;&quot;Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">sector</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Set the sector number for this region.&quot;&quot;&quot;</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">=</span><span class="n">sector</span></div>
 
+<div class="viewcode-block" id="Region.increase_region"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Region.increase_region">[docs]</a>    <span class="k">def</span> <span class="nf">increase_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Increase the region numbers by an integer amount.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">amount</span></div>
 
 <div class="viewcode-block" id="Region.check"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Region.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check whether spectrum and response are compatible</span>
@@ -173,7 +178,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

@@ -326,7 +326,7 @@
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_resp</span>
         <span class="n">resreg</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp_der</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
+            <span class="n">resreg</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span>
 
         <span class="c1"># Remove groups in SPEX_RESP_GROUP</span>
         <span class="n">mask</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mask_group</span>
@@ -541,11 +541,11 @@
         <span class="c1"># Find which rows in SPEX_RESP_ICOMP are to be masked</span>
         <span class="n">icomp_reg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">==</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">icomp_sec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">==</span> <span class="n">isector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">icomp_sel_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">icomp_reg</span> <span class="o">==</span> <span class="n">icomp_sec</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">icomp_sel_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">intersect1d</span><span class="p">(</span><span class="n">icomp_reg</span><span class="p">,</span> <span class="n">icomp_sec</span><span class="p">)</span>
 
         <span class="n">icomp_front_sec</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">&lt;</span> <span class="n">isector</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">icomp_front_reg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">&lt;</span> <span class="n">iregion</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">icomp_front_rows</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">icomp_front_sec</span><span class="p">,</span><span class="n">icomp_front_reg</span><span class="p">)</span>
+        <span class="n">icomp_front_rows</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">icomp_front_reg</span><span class="p">,</span> <span class="n">icomp_front_sec</span><span class="p">))</span>
 
         <span class="c1"># Find which rows in SPEX_RESP_GROUP are to be masked</span>
         <span class="c1"># Make sure the +1 is there in the row selection, because otherwise one row too little is selected.</span>
@@ -728,7 +728,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

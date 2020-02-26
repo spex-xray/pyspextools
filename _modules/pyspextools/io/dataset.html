@@ -123,7 +123,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="n">label</span>
 
         <span class="c1"># Add region to list of regions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+
+        <span class="c1"># Add the sector and region to the config variable of this dataset</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="p">[[</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read all the regions from a spo and res file.</span>
@@ -145,20 +148,32 @@
             <span class="k">return</span>
 
         <span class="c1"># Read the response configuration</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">read_config</span><span class="p">(</span><span class="n">tres</span><span class="p">)</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_config</span><span class="p">(</span><span class="n">tres</span><span class="p">)</span>
+
+        <span class="c1"># Update the response configuration</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">config</span>
+            <span class="n">regmax</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">secmax</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">secmax</span><span class="p">,</span> <span class="n">regmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">nregion</span><span class="p">):</span>
             <span class="c1"># Initialize a new region</span>
             <span class="n">reg</span> <span class="o">=</span> <span class="n">Region</span><span class="p">()</span>
 
-            <span class="n">reg</span><span class="o">.</span><span class="n">spo</span> <span class="o">=</span> <span class="n">tspo</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
-            <span class="n">reg</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">tres</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">reg</span><span class="o">.</span><span class="n">spo</span> <span class="o">=</span> <span class="n">tspo</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+            <span class="n">reg</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">tres</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">config</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
             <span class="c1"># Run consistency checks</span>
             <span class="n">reg</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
 
             <span class="c1"># Add region to list of regions</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">reg</span><span class="p">)</span>
+
+            <span class="n">reg</span><span class="o">.</span><span class="n">increase_region</span><span class="p">(</span><span class="n">regmax</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">()</span></div>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Append a region object to the dataset</span>
@@ -224,16 +239,18 @@
     <span class="c1"># Function to read the response configuration</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">res</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
-        <span class="n">pregion</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Set previous region</span>
-        <span class="n">psector</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Set previous sector</span>
+    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span><span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="n">psector</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">pregion</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">ncomp</span><span class="p">):</span>
             <span class="c1"># Loop through components to find sector-region combinations</span>
             <span class="k">if</span> <span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">pregion</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">!=</span> <span class="n">psector</span><span class="p">):</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="p">[[</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-                <span class="n">pregion</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">config</span><span class="p">,</span> <span class="p">[[</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">psector</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="n">pregion</span> <span class="o">=</span> <span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+        <span class="k">return</span> <span class="n">config</span>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to update the response configuration</span>
@@ -249,8 +266,8 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="p">[[</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
                 <span class="n">pregion</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="n">psector</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Double sector and region identification.&quot;</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Double sector and region identification.&quot;</span><span class="p">)</span>
 
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Show a summary of the dataset, similar to data show in SPEX</span>
@@ -261,7 +278,7 @@
         <span class="k">for</span> <span class="n">ireg</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">)):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Part </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">ireg</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">isector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span><span class="mi">0</span><span class="p">],</span><span class="n">iregion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span><span class="mi">1</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">ireg</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">isector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iregion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div></div>
 </pre></div>
 
@@ -299,7 +316,7 @@
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

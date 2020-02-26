@@ -46,9 +46,9 @@
             
   <div class="section" id="managing-datasets-in-pyspextools">
 <h1>Managing datasets in pyspextools<a class="headerlink" href="#managing-datasets-in-pyspextools" title="Permalink to this headline">¶</a></h1>
-<p>The best starting point to manipulate SPEX files is to use the Dataset class in pyspex. A dataset can be a collection
-of several spectrum-response combinations, which are called regions. This way, multiple related spectra can be stored
-in a spo and res file.</p>
+<p>The best starting point to manipulate SPEX files is to use the Dataset class in pyspextools. A dataset can be a
+collection of several spectrum-response combinations, which are called regions. This way, multiple related spectra can
+be stored in a spo and res file.</p>
 <p>The different spectra and responses inside a dataset can be related to each other in multiple ways. To distinguish
 between different cases, each spectrum-response combination can have a sector and region number. These numbers are
 defined as follows:</p>
@@ -70,11 +70,11 @@ See the <a class="reference external" href="http://var.sron.nl/SPEX-doc/cookbook
 <div class="section" id="example-use-of-the-dataset-class">
 <h2>Example use of the dataset class<a class="headerlink" href="#example-use-of-the-dataset-class" title="Permalink to this headline">¶</a></h2>
 <p>Let’s perform a simple operation to read a few existing spo and res files and combine them into one dataset.
-First, start python and then import the pyspex.io module:</p>
+First, start python and then import the pyspextools.io module:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyspextools.io</span>
 </pre></div>
 </div>
-<p>The pyspex.io module contains a Dataset class that needs to be initiated first:</p>
+<p>The pyspextools.io module contains a Dataset class that needs to be initiated first:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span> <span class="o">=</span> <span class="n">pyspextools</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -225,7 +225,7 @@ the created structure to one spo and res file:</p>
     </div>
     <div class="footer" role="contentinfo">
         &#169; Copyright 2018-2019, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.1.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
     </div>
   </body>
 </html>

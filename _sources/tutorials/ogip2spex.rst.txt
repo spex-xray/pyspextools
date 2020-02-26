@@ -6,7 +6,7 @@ OGIP2spex
 OGIP2spex is a script that converts OGIP spectra and responses to SPEX format, similar to the trafo program in SPEX.
 
 The ogip2spex works with command-line arguments to gather all the input, contrary to trafo, which asks questions
-interactively. When pyspex is installed, the ogip2spex program can show an overview of the available command-line
+interactively. When pyspextools is installed, the ogip2spex program can show an overview of the available command-line
 arguments directly from the command line::
 
     ogip2spex -h
