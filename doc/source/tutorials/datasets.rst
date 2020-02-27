@@ -49,7 +49,7 @@ one region, so by reading them in both, we have now two parts of the dataset::
 
     >>> data.show()
     ===========================================================
-     Part 0
+     Part 1
     ===========================================================
      Sector:            1  =>  Region:            1
      Label:
@@ -64,7 +64,7 @@ one region, so by reading them in both, we have now two parts of the dataset::
      Number of response components          :  8
 
     ===========================================================
-     Part 1
+     Part 2
     ===========================================================
      Sector:            1  =>  Region:            2
      Label:
@@ -78,13 +78,15 @@ one region, so by reading them in both, we have now two parts of the dataset::
      Number of data channels in response    :  2728
      Number of response components          :  8
 
+
+
 Suppose one wants to apply a different model for RGS2 than for RGS1 and put RGS2 in a different sector, then we can do
 that as follows::
 
-    >>> data.regions[1].set_sector(2)
+    >>> data.assign_sector(2,2)
     >>> data.show()
     ===========================================================
-     Part 0
+     Part 1
     ===========================================================
      Sector:            1  =>  Region:            1
      Label:
@@ -99,7 +101,7 @@ that as follows::
      Number of response components          :  8
 
     ===========================================================
-     Part 1
+     Part 2
     ===========================================================
      Sector:            2  =>  Region:            2
      Label:
@@ -113,9 +115,9 @@ that as follows::
      Number of data channels in response    :  2728
      Number of response components          :  8
 
-In the data.show() command, the part with the RGS2 spectrum (Part 1) has now sector 2 assigned to it. We can now save
+In the data.show() command, the part with the RGS2 spectrum (Part 2) has now sector 2 assigned to it. We can now save
 the created structure to one spo and res file::
 
     >>> data.write_all_regions("RGS.spo","RGS.res")
 
-The dataset has been succesfully written to RGS.spo and RGS.res.
+The dataset has been successfully written to RGS.spo and RGS.res.

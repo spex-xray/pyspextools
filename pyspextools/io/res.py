@@ -648,7 +648,7 @@ class Res:
     def show(self, iregion=1, isector=1):
         """Show some basic properties of the response file."""
 
-        tres = self.return_region(isector,iregion)
+        tres = self.return_region(isector, iregion)
 
         print(" Original response file name            :  {0}".format(tres.resname))
         print(" Number of data channels in response    :  {0}".format(tres.nchan[0]))

@@ -231,6 +231,46 @@ class Dataset:
                 message.error("Double sector and region identification.")
 
     # -----------------------------------------------------
+    # Function to assign a new sector number to a region
+    # -----------------------------------------------------
+
+    def assign_sector(self, iregion, newsector):
+        """Assign a new sector number to a specific region."""
+        if len(self.regions) >= iregion > 0:
+            self.regions[iregion-1].set_sector(newsector)
+            self.update_config()
+        else:
+            print("Error: region number not found!")
+            return 1
+
+    # -----------------------------------------------------
+    # Function to assign a new region number to a region
+    # -----------------------------------------------------
+
+    def assign_region(self, iregion, newregion):
+        """Assign a new sector number to a specific region."""
+        if len(self.regions) >= iregion > 0:
+            self.regions[iregion-1].set_region(newregion)
+            self.update_config()
+        else:
+            print("Error: region number not found!")
+            return 1
+
+    # -----------------------------------------------------
+    # Function to assign a new region number to a region
+    # -----------------------------------------------------
+
+    def assign_sector_region(self, iregion, newsector, newregion):
+        """Assign a new sector and region number to a specific region."""
+        if len(self.regions) >= iregion > 0:
+            self.regions[iregion-1].set_sector(newsector)
+            self.regions[iregion-1].set_region(newregion)
+            self.update_config()
+        else:
+            print("Error: region number not found!")
+            return 1
+
+    # -----------------------------------------------------
     # Show a summary of the dataset, similar to data show in SPEX
     # -----------------------------------------------------
 

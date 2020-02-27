@@ -62,7 +62,13 @@ class Region:
         """Set the sector number for this region."""
 
         for i in np.arange(self.res.sector.size):
-            self.res.sector[i]=sector
+            self.res.sector[i] = sector
+
+    def set_region(self, region):
+        """Set the region number for this region."""
+
+        for i in np.arange(self.res.region.size):
+            self.res.region[i] = region
 
     def increase_region(self, amount):
         """Increase the region numbers by an integer amount."""
@@ -89,7 +95,7 @@ class Region:
 
         return 0
 
-    def show(self,isector=1,iregion=1):
+    def show(self, isector=1, iregion=1):
         """Show a summary of the region metadata."""
 
         print("===========================================================")
