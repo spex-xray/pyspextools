@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>OGIPGENRSP &#8212; pyspextools 0.3.2 documentation</title>
+    <title>OGIPGENRSP &#8212; pyspextools 0.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="tg2spex.html" title="TG2Spex"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -68,7 +68,7 @@ be implemented.</p></li>
 <p>Instead of a constant spectral resolution (FWHM) for the entire band, it is also possible to make the resolution
 linearly depend on the energy. The linear dependence is implemented in data/response.py and integrated in the
 gaussrsp function. The resulting FWHM(E) for energy E in keV is calculated as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FWHM</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">=</span> <span class="n">FWHM</span><span class="p">(</span><span class="nd">@1</span> <span class="n">keV</span><span class="p">)</span> <span class="o">+</span> <span class="n">DELTA_FWHM</span> <span class="o">*</span> <span class="p">(</span><span class="n">E</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">FWHM</span><span class="p">(</span><span class="n">E</span><span class="p">)</span> <span class="o">=</span> <span class="n">FWHM</span><span class="p">(</span><span class="o">@</span><span class="mi">1</span> <span class="n">keV</span><span class="p">)</span> <span class="o">+</span> <span class="n">DELTA_FWHM</span> <span class="o">*</span> <span class="p">(</span><span class="n">E</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>The FWHM(&#64; 1keV) is set by the –resolution flag (in eV) and DELTA_FWHM is set by the –resgradient flag (in eV per keV).</p>
@@ -211,7 +211,7 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
         <li class="right" >
           <a href="tg2spex.html" title="TG2Spex"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>

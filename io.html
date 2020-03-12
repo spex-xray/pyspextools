@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>The SPEX data format: pyspextools.io &#8212; pyspextools 0.3.2 documentation</title>
+    <title>The SPEX data format: pyspextools.io &#8212; pyspextools 0.3.4 documentation</title>
     <link rel="stylesheet" href="_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>  
 
@@ -106,6 +106,24 @@ can read, write and manipulate spectral datasets.</p>
 </dd></dl>
 
 <dl class="method">
+<dt id="pyspextools.io.Dataset.assign_sector">
+<code class="sig-name descname">assign_sector</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newsector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.assign_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a new sector number to a specific region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.Dataset.assign_region">
+<code class="sig-name descname">assign_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.assign_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a new sector number to a specific region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.Dataset.assign_sector_region">
+<code class="sig-name descname">assign_sector_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newsector</em>, <em class="sig-param">newregion</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.assign_sector_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Assign a new sector and region number to a specific region.</p>
+</dd></dl>
+
+<dl class="method">
 <dt id="pyspextools.io.Dataset.show">
 <code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/dataset.html#Dataset.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show a summary for the entire dataset</p>
@@ -157,6 +175,12 @@ It combines the spectrum and response file in one object.</p>
 <dt id="pyspextools.io.Region.set_sector">
 <code class="sig-name descname">set_sector</code><span class="sig-paren">(</span><em class="sig-param">sector</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.set_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the sector number for this region.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.Region.set_region">
+<code class="sig-name descname">set_region</code><span class="sig-paren">(</span><em class="sig-param">region</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/pyspextools/io/region.html#Region.set_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.set_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the region number for this region.</p>
 </dd></dl>
 
 <dl class="method">
@@ -631,7 +655,7 @@ file.</p>
         <li class="right" >
           <a href="tutorials/apec.html" title="APEC interface for SPEX"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.2 documentation</a> &#187;</li> 
+        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.4 documentation</a> &#187;</li> 
       </ul>
     </div>
     <div class="footer" role="contentinfo">

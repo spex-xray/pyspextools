@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>Managing datasets in pyspextools &#8212; pyspextools 0.3.2 documentation</title>
+    <title>Managing datasets in pyspextools &#8212; pyspextools 0.3.4 documentation</title>
     <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     
@@ -34,7 +34,7 @@
         <li class="right" >
           <a href="../tutorials.html" title="Using the pyspextools module"
              accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>  
@@ -89,7 +89,7 @@ We can read them into the dataset easily using the read_all_regions method:</p>
 one region, so by reading them in both, we have now two parts of the dataset:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="go">===========================================================</span>
-<span class="go"> Part 0</span>
+<span class="go"> Part 1</span>
 <span class="go">===========================================================</span>
 <span class="go"> Sector:            1  =&gt;  Region:            1</span>
 <span class="go"> Label:</span>
@@ -104,7 +104,7 @@ one region, so by reading them in both, we have now two parts of the dataset:</p
 <span class="go"> Number of response components          :  8</span>
 
 <span class="go">===========================================================</span>
-<span class="go"> Part 1</span>
+<span class="go"> Part 2</span>
 <span class="go">===========================================================</span>
 <span class="go"> Sector:            1  =&gt;  Region:            2</span>
 <span class="go"> Label:</span>
@@ -121,10 +121,10 @@ one region, so by reading them in both, we have now two parts of the dataset:</p
 </div>
 <p>Suppose one wants to apply a different model for RGS2 than for RGS1 and put RGS2 in a different sector, then we can do
 that as follows:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">set_sector</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">assign_sector</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 <span class="go">===========================================================</span>
-<span class="go"> Part 0</span>
+<span class="go"> Part 1</span>
 <span class="go">===========================================================</span>
 <span class="go"> Sector:            1  =&gt;  Region:            1</span>
 <span class="go"> Label:</span>
@@ -139,7 +139,7 @@ that as follows:</p>
 <span class="go"> Number of response components          :  8</span>
 
 <span class="go">===========================================================</span>
-<span class="go"> Part 1</span>
+<span class="go"> Part 2</span>
 <span class="go">===========================================================</span>
 <span class="go"> Sector:            2  =&gt;  Region:            2</span>
 <span class="go"> Label:</span>
@@ -154,12 +154,12 @@ that as follows:</p>
 <span class="go"> Number of response components          :  8</span>
 </pre></div>
 </div>
-<p>In the data.show() command, the part with the RGS2 spectrum (Part 1) has now sector 2 assigned to it. We can now save
+<p>In the data.show() command, the part with the RGS2 spectrum (Part 2) has now sector 2 assigned to it. We can now save
 the created structure to one spo and res file:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">data</span><span class="o">.</span><span class="n">write_all_regions</span><span class="p">(</span><span class="s2">&quot;RGS.spo&quot;</span><span class="p">,</span><span class="s2">&quot;RGS.res&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>The dataset has been succesfully written to RGS.spo and RGS.res.</p>
+<p>The dataset has been successfully written to RGS.spo and RGS.res.</p>
 </div>
 </div>
 
@@ -219,7 +219,7 @@ the created structure to one spo and res file:</p>
         <li class="right" >
           <a href="../tutorials.html" title="Using the pyspextools module"
              >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.2 documentation</a> &#187;</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
           <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
       </ul>
     </div>
