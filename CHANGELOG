@@ -12,3 +12,11 @@ Version 0.3.2:
  - Updated apec.py example script for pyATOMDB >= 0.6.0 (only supports Python 3 now).
    (Thanks to Francois Mernier for reporting.)
  - Added no-area option to the ogipgenrsp script.
+
+Version 0.3.3:
+ - Not released.
+
+Version 0.3.4:
+ - Fixed issue with reading multiple res and spo files.
+ - Consistently changed pyspex to pyspextools in anticipation of the pyspex release with SPEX 3.06.00.
+(Thanks to Anna Ogorzałek for reporting these issues).
