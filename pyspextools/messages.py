@@ -25,7 +25,7 @@ standard_library.install_aliases()
 
 # Set general messages for argument parsing
 docs = 'See full documentation at: https://spex-xray.github.io/pyspextools'
-version = '%(prog)s {:s} (C) 2018-2019, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
+version = '%(prog)s {:s} (C) 2018-2020, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
           'Apache 2.0 License'.format(pyspextools.__version__)
 
 # Initialize colors
