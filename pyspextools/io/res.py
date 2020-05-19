@@ -6,7 +6,7 @@
   SPEX res files contain the response matrix and effective area
   See this page for the format specification: 
       
-    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+    https://spex-xray.github.io/spex-help/theory/response.html
   
   This file contains the res class
  
@@ -46,7 +46,66 @@ class Res:
        res file. This file can contain multiple responses (regions)."""
 
     def __init__(self):
+        """Initialize a SPEX response object.
 
+        :ivar resname: Name of the res file.
+        :vartype resname: str
+        :ivar empty: Is the object still empty? (True/False)
+        :vartype empty: bool
+
+        :ivar nchan: Number of energy channels.
+        :vartype nchan: numpy.ndarray
+        :ivar neg: Number of energy bins.
+        :vartype neg: numpy.ndarray
+        :ivar sector: Array containing sector numbers.
+        :vartype sector: numpy.ndarray
+        :ivar region: Array containing region numbers.
+        :vartype region: numpy.ndarray
+        :ivar shcomp: Array containing shared components.
+        :vartype shcomp: numpy.ndarray
+
+        :ivar nsector: Number of sectors.
+        :vartype nsector: int
+        :ivar nregion: Number of regions.
+        :vartype nregion: int
+        :ivar ncom: Number of response components
+        :vartype ncom: int
+
+        :ivar share_comp: Are there any shared components?
+        :vartype share_comp: bool
+        :ivar area_scal: Is there areascal information?
+        :vartype area_scal: bool
+        :ivar resp_der: Are there response derivatives?
+        :vartype resp_der: bool
+
+        :ivar eg1: Start energies for response group.
+        :vartype eg1: numpy.ndarray
+        :ivar eg2: End energies for response group.
+        :vartype eg2: numpy.ndarray
+        :ivar ic1: Start channel for response group.
+        :vartype ic1: numpy.ndarray
+        :ivar ic2: End channel for response group.
+        :vartype ic2: numpy.ndarray
+        :ivar nc: Number of data channels in the group.
+        :vartype nc: numpy.ndarray
+        :ivar relarea: Area scaling factors.
+        :vartype relarea: numpy.ndarray
+
+        :ivar resp: Response values for group (m**2).
+        :vartype resp: numpy.ndarray
+        :ivar dresp: Response derivatives for group (optional).
+        :vartype dresp: numpy.ndarray
+
+        :ivar mask_resp: Mask array used to select certain response values.
+        :vartype mask_resp: numpy.ndarray
+        :ivar mask_group: Mask array used to select certain groups.
+        :vartype mask_group: numpy.ndarray
+        :ivar mask_icomp: Mask array used to select certain components.
+        :vartype mask_icomp: numpy.ndarray
+
+        :ivar swap: Should the channel order be swapped?
+        :vartype swap: bool
+        """
         self.resname = ''
         self.empty = True
 
@@ -90,7 +149,15 @@ class Res:
     # -----------------------------------------------------
 
     def add_res_region(self, origres, isector=1, iregion=1):
-        """Function to add region(s) to a response."""
+        """Function to add region(s) to a response.
+
+        :param origres: Response object to be added to this one.
+        :type origres: pyspextools.io.res.Res
+        :param isector: Sector number of the response object to add.
+        :type isector: int
+        :param iregion: Region number of the response object to add.
+        :type iregion: int
+        """
 
         stat = origres.get_mask(isector, iregion)
         if stat != 0:
@@ -150,15 +217,20 @@ class Res:
         if self.empty:
             self.empty = False
 
-
     # -----------------------------------------------------
     # Function to remove a region from a response
     # -----------------------------------------------------
 
     def del_res_region(self, isector, iregion):
-        """Remove region with number 'iregion'."""
+        """Remove region with number 'iregion'.
 
-        stat = self.get_mask(isector,iregion)
+        :param isector: Sector number of the region to be removed.
+        :type isector: int
+        :param iregion: Region number of the region to be removed.
+        :type iregion: int
+        """
+
+        stat = self.get_mask(isector, iregion)
         if stat != 0:
             print("Error: Cannot remove region.")
             return -1
@@ -201,7 +273,11 @@ class Res:
     # -----------------------------------------------------
 
     def read_file(self, resfile):
-        """Function to read a response from a .res file."""
+        """Function to read a response from a .res file.
+
+        :param resfile: Response filename to be read.
+        :type resfile: str
+        """
 
         # The filename is saved in the data object for reference.
         self.resname = resfile
@@ -269,7 +345,13 @@ class Res:
     # -----------------------------------------------------
 
     def return_region(self, isector, iregion):
-        """Return a res object with the data from 1 selected region."""
+        """Return a res object with the data from 1 selected region.
+
+        :param isector: Sector number of the region to be returned.
+        :type isector: int
+        :param iregion: Region number of the region to be returned.
+        :type iregion: int
+        """
 
         stat = self.get_mask(isector, iregion)
         if stat != 0:
@@ -327,7 +409,15 @@ class Res:
     # -----------------------------------------------------
 
     def write_file(self, resfile, overwrite=False, history=None):
-        """Write the response information to a .res file with name 'resfile'."""
+        """Write the response information to a .res file with name 'resfile'.
+
+        :param resfile: Name of the response file to write to.
+        :type resfile: str
+        :param overwrite: Should we overwrite existing files?
+        :type overwrite: bool
+        :param history: History information
+        :type history: List/Array of strings
+        """
 
         check = self.check()
         if check != 0:
@@ -419,11 +509,11 @@ class Res:
         but must be flipped to energy order in SPEX format."""
 
         # Loop over components to swap the channel numbers
-        n1=0   # Lowest channel number
-        r1=0   # Index of response array
+        n1 = 0   # Lowest channel number
+        r1 = 0   # Index of response array
 
         for i in np.arange(self.ncomp):
-            n2=n1+self.neg[i]
+            n2 = n1 + self.neg[i]
             for j in (n1 + np.arange(self.neg[i])):
                 # Update group definition
                 ic2 = self.nchan[i] - self.ic1[j] + 1
@@ -444,33 +534,41 @@ class Res:
     # -----------------------------------------------------
     # Add component to RES file
     # -----------------------------------------------------
-    def append_component(self,addres,iregion=1,isector=1):
+    def append_component(self, addres, iregion=1, isector=1):
         """Append a component to the response matrix from another matrix. This is used to add orders to the response
-        file."""
+        file for Chandra grating data.
+
+        :param addres: Response object to extract response information from.
+        :type addres: pyspextools.io.res.Res
+        :param iregion: Region number to add to the response.
+        :type iregion: int
+        :param isector: Sector number to add to the response.
+        :type isector: int
+        """
 
         # Append line to SPEX_RESP_ICOMP
-        self.nchan=np.append(self.nchan,addres.nchan)
-        self.neg = np.append(self.neg,addres.neg)
-        self.sector = np.append(self.sector,isector)
-        self.region = np.append(self.region,iregion)
+        self.nchan = np.append(self.nchan, addres.nchan)
+        self.neg = np.append(self.neg, addres.neg)
+        self.sector = np.append(self.sector, isector)
+        self.region = np.append(self.region, iregion)
         if self.share_comp:
-            self.shcomp = np.append(self.shcomp,addres.shcomp)
+            self.shcomp = np.append(self.shcomp, addres.shcomp)
 
         self.ncomp = self.ncomp + addres.ncomp
 
         # Append response groups (SPEX_RESP_ICOMP)
-        self.eg1 = np.append(self.eg1,addres.eg1)
-        self.eg2 = np.append(self.eg2,addres.eg2)
-        self.ic1 = np.append(self.ic1,addres.ic1)
-        self.ic2 = np.append(self.ic2,addres.ic2)
-        self.nc = np.append(self.nc,addres.nc)
+        self.eg1 = np.append(self.eg1, addres.eg1)
+        self.eg2 = np.append(self.eg2, addres.eg2)
+        self.ic1 = np.append(self.ic1, addres.ic1)
+        self.ic2 = np.append(self.ic2, addres.ic2)
+        self.nc = np.append(self.nc, addres.nc)
         if self.area_scal:
-            self.relarea = np.append(self.relarea,addres.relarea)
+            self.relarea = np.append(self.relarea, addres.relarea)
 
         # Append
-        self.resp = np.append(self.resp,addres.resp)
+        self.resp = np.append(self.resp, addres.resp)
         if self.resp_der:
-            self.dresp = np.append(self.dresp,addres.dresp)
+            self.dresp = np.append(self.dresp, addres.dresp)
 
         return 0
 
@@ -479,7 +577,14 @@ class Res:
     # -----------------------------------------------------
 
     def get_mask(self, isector, iregion):
-        """Create masks to select a particular region in a .res file. """
+        """Create masks to select a particular region in a .res file.
+
+        :param isector: Sector number to create mask for.
+        :type isector: int
+        :param iregion: Region number to create mask for.
+        :type iregion: int
+        """
+
         # Check if iregion is in an allowed range
         if (iregion >= self.nregion) and (iregion < 1):
             print("Error: Requested region not available.")
@@ -493,7 +598,7 @@ class Res:
         # Check if isector and iregion combination is available
         ispectrum = 0
         for i in np.arange(len(self.region)):
-            if (self.sector[i]==isector) and (self.region[i]==iregion):
+            if (self.sector[i] == isector) and (self.region[i] == iregion):
                 ispectrum = i + 1
         if ispectrum == 0:
             print("Error: Requested sector and region not available")
@@ -543,8 +648,12 @@ class Res:
     # -----------------------------------------------------
     # Shift response array
     # -----------------------------------------------------
-    def channel_shift(self,shift):
-        """Shift the response array indices with an integer number provided by input parameter 'shift'."""
+    def channel_shift(self, shift):
+        """Shift the response array indices with an integer number provided by input parameter 'shift'.
+
+        :param shift: Number of channels to shift the spectrum with.
+        :type shift: int
+        """
 
         # Check if input shift is indeed an integer
         if not isinstance(shift, int):
@@ -567,7 +676,6 @@ class Res:
         self.ic2 = ic2
 
         return 0
-
 
     # -----------------------------------------------------
     # Function to check the response arrays
@@ -604,7 +712,7 @@ class Res:
                                       "bin {0} of component {1}.".format(j, i))
                         return -1
                 if self.nc[k] > 0 and self.ic1[k] < 1:
-                    message.error("For row {0} the first channel is {1}, which is not allowed.".format(k,self.ic1[k]))
+                    message.error("For row {0} the first channel is {1}, which is not allowed.".format(k, self.ic1[k]))
                     return -1
                 elif self.nc[k] > 0 and self.ic2[k] > self.nchan[i]:
                     message.error("For row {0} the last channel is larger than the number of channels.".format(k))
@@ -628,8 +736,12 @@ class Res:
     # Function to check the res file name for correct extension
     # -----------------------------------------------------
 
-    def check_filename(self,filename):
-        """Check if the output filename has the correct .res extension. The method returns a correct file name."""
+    def check_filename(self, filename):
+        """Check if the output filename has the correct .res extension. The method returns a correct file name.
+
+        :param filename: File name to check.
+        :type filename: str
+        """
         resname, res_extension = os.path.splitext(filename)
         if res_extension != ".res":
             message.warning("Output filename does not have the correct .res extension.")
@@ -646,7 +758,13 @@ class Res:
     # -----------------------------------------------------
 
     def show(self, iregion=1, isector=1):
-        """Show some basic properties of the response file."""
+        """Show some basic properties of the response file.
+
+        :param iregion: Region number to show.
+        :type iregion: int
+        :param isector: Sector number to show.
+        :type isector: int
+        """
 
         tres = self.return_region(isector, iregion)
 

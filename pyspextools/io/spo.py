@@ -6,7 +6,7 @@
   SPEX spo files contain (background subtracted) spectra
   See this page for the format specification: 
       
-    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+    https://spex-xray.github.io/spex-help/theory/response.html
   
   This file contains the spo class
  
@@ -56,7 +56,60 @@ class Spo:
     #
 
     def __init__(self):
+        """Initialize the SPEX spectrum object.
 
+        :ivar sponame: File name of .spo file
+        :vartype sponame: str
+        :ivar empty: Is this object file empty?
+        :vartype empty: bool
+
+        :ivar nregion: Number of regions in file
+        :vartype nregion: int
+        :ivar nchan: Number of channels
+        :vartype nchan: numpy.ndarray
+
+        :ivar echan1: Lower energy bin value (keV).
+        :vartype echan1: numpy.ndarray
+        :ivar echan2: Upper energy bin value (keV).
+        :vartype echan2: numpy.ndarray
+        :ivar tints: Exposure time (s).
+        :vartype tints: numpy.ndarray
+        :ivar ochan: Source rate (c/s).
+        :vartype ochan: numpy.ndarray
+        :ivar dochan: Error Source rate (c/s).
+        :vartype dochan: numpy.ndarray
+        :ivar mbchan: Background rate (c/s).
+        :vartype mbchan: numpy.ndarray
+        :ivar dbchan: Error Background rate (c/s).
+        :vartype dbchan: numpy.ndarray
+        :ivar brat: Backscale ratio.
+        :vartype brat: numpy.ndarray
+        :ivar ssys: Systematic error fraction in ochan.
+        :vartype ssys: numpy.ndarray
+        :ivar bsys: Systematic error fraction in bchan.
+        :vartype bsys: numpy.ndarray
+        :ivar used: True if data channel is used in the calculations.
+        :vartype used: numpy.ndarray
+
+        :ivar first: True if first channel of a binned group, or if it is an unbinned data channel; otherwise false.
+        :vartype first: numpy.ndarray
+        :ivar last: True if last channel of a binned group, or if it is an unbinned data channel; otherwise false.
+        :vartype last: numpy.ndarray
+
+        :ivar brat_exist: Does the Exp_rate column exist?
+        :vartype brat_exist: bool
+
+        :ivar swap: Does the channel order need to be swapped?
+        :vartype swap: bool
+
+        :ivar anames: Dictionary with column names.
+        :vartype anames: dict
+
+        :ivar mask_region: Mask for region selection.
+        :vartype mask_region: numpy.ndarray
+        :ivar mask_spectrum: Mask for spectrum selection.
+        :vartype mask_spectrum: numpy.ndarray
+        """
         # Initialize spo filename
         self.sponame = ''
         self.empty = True
@@ -99,12 +152,15 @@ class Spo:
         self.mask_region = np.array([], dtype=bool)
         self.mask_spectrum = np.array([], dtype=bool)
 
-
     # -----------------------------------------------------
     # Create a spo with zeros and size nchan
     # -----------------------------------------------------
     def zero_spo(self, nchan):
-        """Creates empty arrays of size nchan."""
+        """Creates empty arrays of size nchan.
+
+        :param nchan: Number of channels to create.
+        :type nchan: int
+        """
         self.echan1 = np.zeros(nchan, dtype=float)
         self.echan2 = np.zeros(nchan, dtype=float)
         self.tints = np.zeros(nchan, dtype=float)
@@ -124,7 +180,13 @@ class Spo:
     # -----------------------------------------------------
 
     def add_spo_region(self, origspo, iregion=1):
-        """Function to add spectrum regions to a spo file."""
+        """Function to add spectrum regions to a spo file.
+
+        :param origspo: Spo object to import region from.
+        :type origspo: pyspextools.io.spo.Spo
+        :param iregion: Region number to select from spo object.
+        :type iregion: int
+        """
 
         stat = origspo.get_mask(iregion)
         if stat != 0:
@@ -156,7 +218,11 @@ class Spo:
     # -----------------------------------------------------
 
     def del_spo_region(self, iregion):
-        """Remove spectrum from region with number 'iregion'"""
+        """Remove spectrum from region with number 'iregion'
+
+        :param iregion: Region number to delete from spo object.
+        :type iregion: int
+        """
 
         stat = self.get_mask(iregion)
         if stat != 0:
@@ -191,7 +257,11 @@ class Spo:
     # -----------------------------------------------------
 
     def read_file(self, spofile):
-        """ Function to read a spectrum from a .spo file."""
+        """ Function to read a spectrum from a .spo file.
+
+        :param spofile: File name of .spo file.
+        :type spofile: str
+        """
 
         # The filename is saved in the data object for reference.
         self.sponame = spofile
@@ -249,7 +319,11 @@ class Spo:
 
     def return_region(self, iregion):
         """Function to return a spo object with containing the
-           spectrum of the region with number 'iregion'. """
+           spectrum of the region with number 'iregion'.
+
+        :param iregion: Region number to return.
+        :type iregion: int
+        """
         stat = self.get_mask(iregion)
         if stat != 0:
             print("Error: Cannot select region.")
@@ -294,7 +368,17 @@ class Spo:
         """Function to write the spectrum to a .spo file with the name 'sponame'.
         The exp_rate flag determines whether the Exp_Rate column is added containing
         the ratio between the backscales of the source and background spectra. This column
-        can only be read by SPEX >=3.05.00."""
+        can only be read by SPEX >=3.05.00.
+
+        :param sponame: File name of the .spo file to write.
+        :type sponame: str
+        :param exp_rate: Create an Ext_rate column (yes/no)?
+        :type exp_rate: bool
+        :param overwrite: Overwrite existing files (yes/no)?
+        :type overwrite: bool
+        :param history: History strings to be added to the file.
+        :type history: str
+        """
 
         # First check whether object is complete and consistent
         good = self.check()
@@ -435,13 +519,16 @@ class Spo:
 
         return 0
 
-
     # -----------------------------------------------------
     # Function to check the spo file name for correct extension
     # -----------------------------------------------------
 
-    def check_filename(self,filename):
-        """Check if the output filename has the correct .spo extension. The method returns a correct file name."""
+    def check_filename(self, filename):
+        """Check if the output filename has the correct .spo extension. The method returns a correct file name.
+
+        :param filename: File name to check.
+        :type filename: str
+        """
         sponame, spo_extension = os.path.splitext(filename)
         if spo_extension != ".spo":
             message.warning("Output filename does not have the correct .spo extension.")
@@ -462,7 +549,11 @@ class Spo:
     # -----------------------------------------------------
 
     def get_mask(self, iregion):
-        """Create a mask to select spectral information for one region only. """
+        """Create a mask to select spectral information for one region only.
+
+        :param iregion: Region number to create mask for.
+        :type iregion: int
+        """
         # Python counts from 0, so create adequate counter
         ireg = iregion - 1
 
@@ -496,7 +587,11 @@ class Spo:
     # -----------------------------------------------------
 
     def show(self, iregion=1):
-        """Show some basic properties of the spectrum."""
+        """Show some basic properties of the spectrum.
+
+        :param iregion: Region number to show.
+        :type iregion: int
+        """
 
         tspo = self.return_region(iregion)
 
