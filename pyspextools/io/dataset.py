@@ -5,7 +5,7 @@
   Python module to read and write SPEX res and spo files.
   See this page for the format specification: 
       
-    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2
+    https://spex-xray.github.io/spex-help/theory/response.html
   
   This module contains the data class:
  
@@ -46,19 +46,38 @@ standard_library.install_aliases()
 
 class Dataset:
     """The dataset class is the most general class containing a 
-       dataset with multiple regions. Using this class, users
-       can read, write and manipulate spectral datasets."""
+    dataset with multiple regions. Using this class, users
+    can read, write and manipulate spectral datasets.
+
+    :ivar regions: List of regions.
+    :vartype regions: list
+    :ivar config: Response configuration (combinations of sector and region values).
+    :vartype config: numpy.ndarray
+    """
 
     def __init__(self):
-        self.regions = []  #: List of regions
-        self.config = np.empty(shape=[0,2], dtype=int)  #: Response configuration (combinations of sector and region values)
+        """Initialise a SPEX dataset."""
+        self.regions = []
+        self.config = np.empty(shape=[0, 2], dtype=int)
 
     # -----------------------------------------------------
     # Read one region from a spo and res file.
     # -----------------------------------------------------
 
     def read_region(self, isector, iregion, spofile, resfile, label=""):
-        """Read one region with number iregion from the two SPEX files and add it to the dataset."""
+        """Read one region with number iregion from the two SPEX files and add it to the dataset.
+
+        :param isector: Sector number associated with the region to select.
+        :type isector: int
+        :param iregion: Region number to select.
+        :type iregion: int
+        :param spofile: File name of the .spo file.
+        :type spofile: str
+        :param resfile: File name of the .res file.
+        :type resfile: str
+        :param label: Text string to identify the region (optional).
+        :type label: str
+        """
 
         # Read the spo and res files in a temporary object
         tspo = Spo()
@@ -94,7 +113,13 @@ class Dataset:
     # -----------------------------------------------------
 
     def read_all_regions(self, spofile, resfile):
-        """Read all the regions from a spo and res file and add them to the dataset."""
+        """Read all the regions from a spo and res file and add them to the dataset.
+
+        :param spofile: File name of the input .spo file.
+        :type spofile: str
+        :param resfile: File name of the input .res file.
+        :type resfile: str
+        """
 
         # Read the spo and res files in a temporary object
         tspo = Spo()
@@ -140,7 +165,15 @@ class Dataset:
     # Append a region object to the dataset
     # -----------------------------------------------------
     def append_region(self, region, isector, iregion):
-        """Append a region object to the dataset."""
+        """Append a region object to the dataset.
+
+        :param region: Input region object.
+        :type region: pyspextools.io.Region
+        :param isector: Sector number to be selected from the region object.
+        :type isector: int
+        :param iregion: Region number to be selected from the region object.
+        :type iregion: int
+        """
 
         # Reset sector and region for incoming region
         for i in np.arange(len(region.res.region)):
@@ -158,7 +191,21 @@ class Dataset:
     # -----------------------------------------------------
 
     def write_region(self, spofile, resfile, iregion, exp_rate=False, overwrite=False, history=None):
-        """Write one region to a spo and res file."""
+        """Write one region to a spo and res file.
+
+        :param spofile: File name of the input .spo file.
+        :type spofile: str
+        :param resfile: File name of the input .res file.
+        :type resfile: str
+        :param iregion: Region number to be selected from the region object.
+        :type iregion: int
+        :param exp_rate: Write an EXP_RATE column or not.
+        :type exp_rate: bool
+        :param overwrite: Should we overwrite existing files?
+        :type overwrite: bool
+        :param history: History information.
+        :type history: List/Array of strings
+        """
 
         if len(self.regions) >= iregion > 0:
             self.regions[iregion - 1].spo.write_file(spofile, exp_rate=exp_rate, overwrite=overwrite, history=history)
@@ -174,22 +221,34 @@ class Dataset:
     # -----------------------------------------------------
 
     def write_all_regions(self, spofile, resfile, exp_rate=False, overwrite=False, history=None):
-        """Write all regions in the data object to spo and res. """
+        """Write all regions in the data object to spo and res.
+
+        :param spofile: File name of the input .spo file.
+        :type spofile: str
+        :param resfile: File name of the input .res file.
+        :type resfile: str
+        :param exp_rate: Write an EXP_RATE column or not.
+        :type exp_rate: bool
+        :param overwrite: Should we overwrite existing files?
+        :type overwrite: bool
+        :param history: History information.
+        :type history: List/Array of strings
+        """
         tspo = Spo()
         tres = Res()
 
         i = 0
         for ireg in self.regions:
             tspo.add_spo_region(ireg.spo)
-            tres.add_res_region(ireg.res, isector=self.config[i,0], iregion=self.config[i,1])
+            tres.add_res_region(ireg.res, isector=self.config[i, 0], iregion=self.config[i, 1])
             i = i + 1
 
-        stat=tspo.write_file(spofile, exp_rate=exp_rate, overwrite=overwrite, history=history)
+        stat = tspo.write_file(spofile, exp_rate=exp_rate, overwrite=overwrite, history=history)
         if stat != 0:
             message.error("Writing SPO file failed.")
             return 1
 
-        stat=tres.write_file(resfile, overwrite=overwrite, history=history)
+        stat = tres.write_file(resfile, overwrite=overwrite, history=history)
         if stat != 0:
             message.error("Writing RES file failed.")
             return 1
@@ -201,7 +260,12 @@ class Dataset:
     # -----------------------------------------------------
 
     def read_config(self, res):
-        config = np.empty(shape=[0,2], dtype=int)
+        """Read the response configuration.
+
+        :param res: SPEX response object.
+        :type res: pyspextools.io.res.Res
+        """
+        config = np.empty(shape=[0, 2], dtype=int)
         psector = 0
         pregion = 0
         for i in np.arange(res.ncomp):
@@ -218,7 +282,8 @@ class Dataset:
     # -----------------------------------------------------
 
     def update_config(self):
-        self.config = np.empty(shape=[0,2], dtype=int)
+        """Update the response configuration."""
+        self.config = np.empty(shape=[0, 2], dtype=int)
         pregion = 0   # Set previous region
         psector = 0   # Set previous sector
         for reg in self.regions:
@@ -235,7 +300,13 @@ class Dataset:
     # -----------------------------------------------------
 
     def assign_sector(self, iregion, newsector):
-        """Assign a new sector number to a specific region."""
+        """Assign a new sector number to a specific region.
+
+        :param iregion: Region number to assign new sector number for.
+        :type iregion: int
+        :param newsector: New sector number.
+        :type newsector: int
+        """
         if len(self.regions) >= iregion > 0:
             self.regions[iregion-1].set_sector(newsector)
             self.update_config()
@@ -248,7 +319,13 @@ class Dataset:
     # -----------------------------------------------------
 
     def assign_region(self, iregion, newregion):
-        """Assign a new sector number to a specific region."""
+        """Assign a new region number to a specific region.
+
+        :param iregion: Region number to assign new number for.
+        :type iregion: int
+        :param newregion: New region number.
+        :type newregion: int
+        """
         if len(self.regions) >= iregion > 0:
             self.regions[iregion-1].set_region(newregion)
             self.update_config()
@@ -261,7 +338,15 @@ class Dataset:
     # -----------------------------------------------------
 
     def assign_sector_region(self, iregion, newsector, newregion):
-        """Assign a new sector and region number to a specific region."""
+        """Assign a new sector and region number to a specific region.
+
+        :param iregion: Region number to assign new sector number for.
+        :type iregion: int
+        :param newsector: New sector number.
+        :type newsector: int
+        :param newregion: New region number.
+        :type newregion: int
+        """
         if len(self.regions) >= iregion > 0:
             self.regions[iregion-1].set_sector(newsector)
             self.regions[iregion-1].set_region(newregion)

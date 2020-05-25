@@ -26,27 +26,55 @@ standard_library.install_aliases()
 
 
 class OGIPRegion(Region):
-    """The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to spo and res
-    format objects."""
+    """The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to
+    spo and res format objects.
+
+    :ivar spec: Input PHA source spectrum.
+    :vartype spec: pyspextools.io.pha.Pha
+    :ivar back: Input PHA background spectrum (optional).
+    :vartype back: pyspextools.io.pha.Pha
+    :ivar resp: Input RMF response matrix.
+    :vartype resp: pyspextools.io.rmf.Rmf
+    :ivar area: Input ARF effective area (optional).
+    :vartype area: pyspextools.io.arf.Arf
+    :ivar corr: Input CORR correction file (optional).
+    :vartype corr: pyspextools.io.pha.Pha
+
+    :ivar input_spec: Is a source spectrum read in?
+    :vartype input_spec: bool
+    :ivar input_back: Is a background spectrum specified?
+    :vartype input_back: bool
+    :ivar input_resp: Is a response matrix read in?
+    :vartype input_resp: bool
+    :ivar input_area: Is an effective area file specified?
+    :vartype input_area: bool
+    :ivar input_corr: Is a correction file specified?
+    :vartype input_corr: bool
+
+    :ivar first_channel_zero: If the first channel is 0, then matrix data needs shift since SPEX starts at 1.
+    :vartype first_channel_zero: bool
+    :ivar save_grouping: Save the grouping of the spectra (Default: no).
+    :vartype save_grouping: bool
+    """
 
     def __init__(self):
 
         Region.__init__(self)
 
-        self.spec = Pha()  #: Input PHA source spectrum.
-        self.back = Pha()  #: Input PHA background spectrum (optional).
-        self.resp = Rmf()  #: Input RMF response matrix.
-        self.area = Arf()  #: Input ARF effective area (optional).
-        self.corr = Pha()  #: Input CORR correction file (optional).
+        self.spec = Pha()  # Input PHA source spectrum.
+        self.back = Pha()  # Input PHA background spectrum (optional).
+        self.resp = Rmf()  # Input RMF response matrix.
+        self.area = Arf()  # Input ARF effective area (optional).
+        self.corr = Pha()  # Input CORR correction file (optional).
 
-        self.input_spec = False  #: Is a source spectrum read in?
-        self.input_back = False  #: Is a background spectrum specified?
-        self.input_resp = False  #: Is a response matrix read in?
-        self.input_area = False  #: Is an effective area file specified?
-        self.input_corr = False  #: Is a correction file specified?
+        self.input_spec = False  # Is a source spectrum read in?
+        self.input_back = False  # Is a background spectrum specified?
+        self.input_resp = False  # Is a response matrix read in?
+        self.input_area = False  # Is an effective area file specified?
+        self.input_corr = False  # Is a correction file specified?
 
-        self.first_channel_zero = False  #: If the first channel is 0, then matrix data needs shift since SPEX starts at 1.
-        self.save_grouping = False  #: By default no grouping of data
+        self.first_channel_zero = False  # If the first channel is 0, then matrix data needs shift.
+        self.save_grouping = False       # By default no grouping of data
 
     # -----------------------------------------------------
     # Read a set of OGIP files into a region
@@ -54,7 +82,21 @@ class OGIPRegion(Region):
 
     def read_region(self, phafile, rmffile, bkgfile=None, arffile=None, corrfile=None, grouping=False):
         """Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
-        are mandatory. If needed, a background file and effective area file can be added."""
+        are mandatory. If needed, a background file and effective area file can be added.
+
+        :param phafile: Name of the PHA file to read.
+        :type phafile: str
+        :param rmffile: Name of the RMF file to read.
+        :type rmffile: str
+        :param bkgfile: Name of the background PHA file to read (optional).
+        :type bkgfile: str
+        :param arffile: Name of the ARF file to read (optional).
+        :type arffile: str
+        :param corrfile: Name of the Correction file to read (optional).
+        :type corrfile: str
+        :param grouping: Keep the grouping information?
+        :type grouping: bool
+        """
 
         # Read the source PHA file
         self.read_source_pha(phafile)
@@ -96,9 +138,21 @@ class OGIPRegion(Region):
     # Add OGIP objects to the OGIP region and convert
     # -----------------------------------------------------
 
-    def add_region(self,spec,resp,back=None,corr=None,area=None):
+    def add_region(self, spec, resp, back=None, corr=None, area=None):
         """Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they
-        need to be added to an OGIP region and converted to spo and res objects."""
+        need to be added to an OGIP region and converted to spo and res objects.
+
+        :param spec: PHA object to add.
+        :type spec: pyspextools.io.pha.Pha
+        :param resp: RMF object to add.
+        :type resp: pyspextools.io.rmf.Rmf
+        :param back: PHA background object to add.
+        :type back: pyspextools.io.pha.Pha
+        :param corr: PHA correction spectrum to add.
+        :type corr: pyspextools.io.pha.Pha
+        :param area: ARF effective area object to add.
+        :type area: pyspextools.io.arf.Arf
+        """
 
         # Load Pha object
         if isinstance(spec, Pha):
@@ -173,9 +227,9 @@ class OGIPRegion(Region):
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
             message.proc_start("Convert OGIP spectra to spo format")
-            spo = pha_to_spo(self.spec,self.resp,back=self.back,corr=self.corr)
+            spo = pha_to_spo(self.spec, self.resp, back=self.back, corr=self.corr)
 
-            if isinstance(spo,Spo):
+            if isinstance(spo, Spo):
                 self.spo = spo
                 message.proc_end(0)
             else:
@@ -184,9 +238,9 @@ class OGIPRegion(Region):
                 return 1
 
             message.proc_start("Convert OGIP response to res format")
-            res = rmf_to_res(self.resp,arf=self.area)
+            res = rmf_to_res(self.resp, arf=self.area)
 
-            if isinstance(res,Res):
+            if isinstance(res, Res):
                 self.res = res
                 message.proc_end(0)
             else:
@@ -219,7 +273,12 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
 
     def read_source_pha(self, phafile):
-        """Open a pha file containing the source spectrum."""
+        """Open a pha file containing the source spectrum.
+
+        :param phafile: PHA file name of source spectrum to read.
+        :type phafile: str
+        """
+
         message.proc_start("Read source PHA spectrum")
         stat = self.spec.read(phafile)
         if stat != 0:
@@ -241,7 +300,12 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
 
     def read_background_pha(self, bkgfile):
-        """Open a pha file containing the background spectrum (if specified)."""
+        """Open a pha file containing the background spectrum (if specified).
+
+        :param bkgfile: PHA file name of background spectrum to read.
+        :type bkgfile: str
+        """
+
         if bkgfile is not None:
             message.proc_start("Read background PHA spectrum")
             stat = self.back.read(bkgfile)
@@ -260,7 +324,11 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
 
     def read_rmf(self, rmffile):
-        """Open rmf file containing the response matrix."""
+        """Open rmf file containing the response matrix.
+
+        :param rmffile: RMF file name to read.
+        :type rmffile: str
+        """
         message.proc_start("Read RMF response matrix")
         stat = self.resp.read(rmffile)
         if stat != 0:
@@ -276,7 +344,12 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
 
     def read_arf(self, arffile):
-        """Read arf file containing the effective area."""
+        """Read arf file containing the effective area.
+
+        :param arffile: ARF file name to read.
+        :type arffile: str
+        """
+
         if arffile is not None:
             message.proc_start("Read ARF effective area")
             stat = self.area.read(arffile)
@@ -295,7 +368,12 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
 
     def read_corr(self, corrfile):
-        """Read correction file if specified."""
+        """Read correction file if specified.
+
+        :param corrfile: PHA correction file name to read.
+        :type corrfile: str
+        """
+
         if corrfile is not None:
             message.proc_start("Read correction spectrum")
             stat = self.corr.read(corrfile)
@@ -319,7 +397,7 @@ class OGIPRegion(Region):
         and if the first channel in the OGIP spectrum is 0.
         The ogip_to_spex method calls this function by default."""
 
-        if not isinstance(self.spo,Spo) or not isinstance(self.res,Res):
+        if not isinstance(self.spo, Spo) or not isinstance(self.res, Res):
             message.error("Could not find spo and res information in this region.")
             return 1
 
@@ -508,4 +586,3 @@ class OGIPRegion(Region):
             print("")
 
         print("===========================================================")
-

@@ -21,38 +21,91 @@ standard_library.install_aliases()
 
 class Rmf:
     """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-    Keith Arnaud."""
+    Keith Arnaud.
+
+    :ivar FirstChannel: First channel number.
+    :vartype FirstChannel: int
+    :ivar Channel: Channel numbers.
+    :vartype Channel: numpy.ndarray
+    :ivar NumberGroups: Number of response groups.
+    :vartype NumberGroups: numpy.ndarray
+    :ivar FirstGroup: First response group for this energy bin.
+    :vartype FirstGroup: numpy.ndarray
+    :ivar FirstChannelGroup: First channel number in this group.
+    :vartype FirstChannelGroup: numpy.ndarray
+    :ivar NumberChannelsGroup: Number of channels in this group.
+    :vartype NumberChannelsGroup: numpy.ndarray
+    :ivar FirstElement: First response element for this group.
+    :vartype FirstElement: numpy.ndarray
+    :ivar LowEnergy: Start energy of bin.
+    :vartype LowEnergy: numpy.ndarray
+    :ivar HighEnergy: End energy of bin.
+    :vartype HighEnergy: numpy.ndarray
+    :ivar Matrix: Response matrix elements.
+    :vartype Matrix: numpy.ndarray
+    :ivar ChannelLowEnergy: Start energy of channel.
+    :vartype ChannelLowEnergy: numpy.ndarray
+    :ivar ChannelHighEnergy: End energy of channel.
+    :vartype ChannelHighEnergy: numpy.ndarray
+
+    :ivar NumberChannels: Number of data channels.
+    :vartype NumberChannels: int
+    :ivar NumberEnergyBins: Number of energy bins.
+    :vartype NumberEnergyBins: int
+    :ivar NumberTotalGroups: Total number of groups.
+    :vartype NumberTotalGroups: int
+    :ivar NumberTotalElements: Total number of response elements.
+    :vartype NumberTotalElements: int
+
+    :ivar AreaScaling: Value of EFFAREA keyword.
+    :vartype AreaScaling: float
+    :ivar ResponseThreshold: Minimum value in response.
+    :vartype ResponseThreshold: float
+    :ivar EnergyUnits: Units of the energy scale.
+    :vartype EnergyUnits: str
+    :ivar RMFUnits: Units for RMF values.
+    :vartype RMFUnits: str
+    :ivar AreaIncluded: Is the effective area included in the response?
+    :vartype AreaIncluded: bool
+
+    :ivar Order: Order of the matrix.
+    :vartype Order: int
+    """
 
     def __init__(self):
-        self.FirstChannel = 0                            #: First channel number
-        self.Channel = np.array([],dtype=int)            #: Channel numbers
-        self.NumberGroups = np.array([], dtype=int)      #: Number of response groups
-        self.FirstGroup = np.array([], dtype=int)        #: First response group for this energy bin
-        self.FirstChannelGroup = np.array([], dtype=int) #: First channel number in this group
-        self.NumberChannelsGroup = np.array([], dtype=int) #: Number of channels in this group
-        self.FirstElement = np.array([], dtype=int)      #: First response element for this group
-        self.LowEnergy = np.array([], dtype=float)       #: Start energy of bin
-        self.HighEnergy = np.array([], dtype=float)      #: End energy of bin
-        self.Matrix = np.array([], dtype=float)          #: Matrix elements
-        self.ChannelLowEnergy = np.array([], dtype=float) #: Start energy of channel
-        self.ChannelHighEnergy = np.array([], dtype=float) #: End energy of channel
+        self.FirstChannel = 0                               # First channel number
+        self.Channel = np.array([], dtype=int)              # Channel numbers
+        self.NumberGroups = np.array([], dtype=int)         # Number of response groups
+        self.FirstGroup = np.array([], dtype=int)           # First response group for this energy bin
+        self.FirstChannelGroup = np.array([], dtype=int)    # First channel number in this group
+        self.NumberChannelsGroup = np.array([], dtype=int)  # Number of channels in this group
+        self.FirstElement = np.array([], dtype=int)         # First response element for this group
+        self.LowEnergy = np.array([], dtype=float)          # Start energy of bin
+        self.HighEnergy = np.array([], dtype=float)         # End energy of bin
+        self.Matrix = np.array([], dtype=float)             # Matrix elements
+        self.ChannelLowEnergy = np.array([], dtype=float)   # Start energy of channel
+        self.ChannelHighEnergy = np.array([], dtype=float)  # End energy of channel
 
-        self.NumberChannels = 0                          #: Number of data channels
-        self.NumberEnergyBins = 0                        #: Number of energy bins
-        self.NumberTotalGroups = 0                       #: Total number of groups
-        self.NumberTotalElements = 0                     #: Total number of response elements
+        self.NumberChannels = 0                             # Number of data channels
+        self.NumberEnergyBins = 0                           # Number of energy bins
+        self.NumberTotalGroups = 0                          # Total number of groups
+        self.NumberTotalElements = 0                        # Total number of response elements
 
-        self.AreaScaling = 1.0        #: Value of EFFAREA keyword
-        self.ResponseThreshold = 1E-7 #: Minimum value in response
-        self.EnergyUnits = ''         #: Units of the energy scale
-        self.RMFUnits = ''            #: Units for RMF values
-        self.AreaIncluded = False     #: Is the effective area included in the response?
+        self.AreaScaling = 1.0                              # Value of EFFAREA keyword
+        self.ResponseThreshold = 1E-7                       # Minimum value in response
+        self.EnergyUnits = ''                               # Units of the energy scale
+        self.RMFUnits = ''                                  # Units for RMF values
+        self.AreaIncluded = False                           # Is the effective area included in the response?
 
-        self.Order = 0                #: Order of the matrix
+        self.Order = 0                                      # Order of the matrix
 
-    def read(self,rmffile):
+    def read(self, rmffile):
         """Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-        Keith Arnaud."""
+        Keith Arnaud.
+
+        :param rmffile: RMF file name to read.
+        :type rmffile: str
+        """
 
         # Read the Ebounds table
         (data, header) = fits.getdata(rmffile, 'EBOUNDS', header=True)
@@ -69,7 +122,7 @@ class Rmf:
         try:
             data = rmf['MATRIX'].data
             header = rmf['MATRIX'].header
-        except:
+        except KeyError:
             data = rmf['SPECRESP MATRIX'].data
             header = rmf['SPECRESP MATRIX'].header
             message.warning("This is an RSP file with the effective area included.")
@@ -90,11 +143,11 @@ class Rmf:
         self.NumberChannelsGroup = np.zeros(self.NumberTotalGroups, dtype=int)
         self.FirstElement = np.zeros(self.NumberTotalGroups, dtype=int)
 
-        self.Matrix = np.array([],dtype=float)
+        self.Matrix = np.array([], dtype=float)
 
         try:
             self.Order = header['ORDER']
-        except:
+        except KeyError:
             pass
 
         fgroup = 0  # Count total number of groups
@@ -131,8 +184,7 @@ class Rmf:
             if nelem[i] != 0:
                 for j in np.arange(nelem[i]):
                     self.Matrix[r] = matrix_local[i][j]
-                    r=r+1
-
+                    r = r + 1
 
         self.NumberTotalElements = self.Matrix.size
         self.ResponseThreshold = np.amin(self.Matrix)
@@ -141,13 +193,25 @@ class Rmf:
 
         return 0
 
-    def write(self, rmffile, telescop=None, instrume=None, filter=None, overwrite=False):
-        '''Method to write an OGIP format RMF file.'''
+    def write(self, rmffile, telescop=None, instrume=None, filterkey=None, overwrite=False):
+        """Method to write an OGIP format RMF file.
+
+        :param rmffile: RMF file name to write.
+        :type rmffile: str
+        :param telescop: Name of the telescope to be put in the TELESCOP keyword.
+        :type telescop: str
+        :param instrume: Name of the instrument to be put in the INSTRUME keyword.
+        :type instrume: str
+        :param filterkey: Name of the filter to be put in the FILTER keyword.
+        :type filterkey: str
+        :param overwrite: Overwrite existing file names? (True/False)
+        :type overwrite: bool
+        """
 
         #
         # Generate warning if there are multiple groups per energy
         #
-        if (np.amax(self.NumberGroups)!=1):
+        if np.amax(self.NumberGroups) != 1:
             message.warning("This method has not been tested for responses with multiple response groups per energy.")
 
         #
@@ -165,34 +229,34 @@ class Rmf:
         ebounds = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
 
         ehdr = ebounds.header
-        ehdr.set('EXTNAME','EBOUNDS')
-        ehdr.set('DETCHANS',self.NumberChannels)
+        ehdr.set('EXTNAME', 'EBOUNDS')
+        ehdr.set('DETCHANS', self.NumberChannels)
 
         # Set the TELESCOP keyword (optional)
-        if telescop == None:
-            ehdr.set('TELESCOP','None','Telescope name')
+        if telescop is None:
+            ehdr.set('TELESCOP', 'None', 'Telescope name')
         else:
-            ehdr.set('TELESCOP',telescop,'Telescope name')
+            ehdr.set('TELESCOP', telescop, 'Telescope name')
 
         # Set the INSTRUME keyword (optional)
-        if instrume == None:
-            ehdr.set('INSTRUME','None','Instrument name')
+        if instrume is None:
+            ehdr.set('INSTRUME', 'None', 'Instrument name')
         else:
-            ehdr.set('INSTRUME',instrume,'Instrument name')
+            ehdr.set('INSTRUME', instrume, 'Instrument name')
 
         # Set the FILTER keyword (optional)
-        if filter == None:
-            ehdr.set('FILTER','None','Filter setting')
+        if filterkey is None:
+            ehdr.set('FILTER', 'None', 'Filter setting')
         else:
-            ehdr.set('FILTER',filter,'Filter setting')
+            ehdr.set('FILTER', filterkey, 'Filter setting')
 
-        ehdr.set('DETNAM ','None')
-        ehdr.set('CHANTYPE','PI')
-        ehdr.set('HDUCLASS','OGIP')
-        ehdr.set('HDUCLAS1','RESPONSE')
-        ehdr.set('HDUCLAS2','EBOUNDS ')
-        ehdr.set('HDUVERS1','1.2.0')
-        ehdr.set('ORIGIN ','SRON')
+        ehdr.set('DETNAM ', 'None')
+        ehdr.set('CHANTYPE', 'PI')
+        ehdr.set('HDUCLASS', 'OGIP')
+        ehdr.set('HDUCLAS1', 'RESPONSE')
+        ehdr.set('HDUCLAS2', 'EBOUNDS ')
+        ehdr.set('HDUVERS1', '1.2.0')
+        ehdr.set('ORIGIN ', 'SRON')
 
         #
         # Create SPECRESP MATRIX extension
@@ -205,61 +269,61 @@ class Rmf:
 
         # Determine the width of the matrix
         width = np.amax(self.NumberChannelsGroup)
-        format = str(width)+'D'
+        formatstr = str(width)+'D'
 
         # Building the MATRIX column
-        newmatrix = np.zeros(self.Matrix.size, dtype=float).reshape(self.NumberEnergyBins,width)
+        newmatrix = np.zeros(self.Matrix.size, dtype=float).reshape(self.NumberEnergyBins, width)
 
         re = 0
         for i in np.arange(self.NumberEnergyBins):
             for j in np.arange(self.NumberGroups[i]):
                 for k in np.arange(self.NumberChannelsGroup[i]):
-                    newmatrix[i,k] = self.Matrix[re]
+                    newmatrix[i, k] = self.Matrix[re]
                     re = re + 1
 
-        mcol6 = fits.Column(name='MATRIX', format=format, array=newmatrix)
+        mcol6 = fits.Column(name='MATRIX', format=formatstr, array=newmatrix)
 
         matrix = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
 
         mhdr = matrix.header
 
         if self.AreaIncluded:
-            mhdr.set('EXTNAME','SPECRESP MATRIX')
+            mhdr.set('EXTNAME', 'SPECRESP MATRIX')
         else:
-            mhdr.set('EXTNAME','MATRIX')
+            mhdr.set('EXTNAME', 'MATRIX')
 
         # Set the TELESCOP keyword (optional)
-        if telescop == None:
-            mhdr.set('TELESCOP','None','Telescope name')
+        if telescop is None:
+            mhdr.set('TELESCOP', 'None', 'Telescope name')
         else:
-            mhdr.set('TELESCOP',telescop,'Telescope name')
+            mhdr.set('TELESCOP', telescop, 'Telescope name')
 
         # Set the INSTRUME keyword (optional)
-        if instrume == None:
-            mhdr.set('INSTRUME','None','Instrument name')
+        if instrume is None:
+            mhdr.set('INSTRUME', 'None', 'Instrument name')
         else:
-            mhdr.set('INSTRUME',instrume,'Instrument name')
+            mhdr.set('INSTRUME', instrume, 'Instrument name')
 
         # Set the FILTER keyword (optional)
-        if filter == None:
-            mhdr.set('FILTER','None','Filter setting')
+        if filterkey is None:
+            mhdr.set('FILTER', 'None', 'Filter setting')
         else:
-            mhdr.set('FILTER',filter,'Filter setting')
+            mhdr.set('FILTER', filterkey, 'Filter setting')
 
-        mhdr.set('DETCHANS',self.NumberChannels)
-        mhdr.set('LO_THRES',self.ResponseThreshold)
+        mhdr.set('DETCHANS', self.NumberChannels)
+        mhdr.set('LO_THRES', self.ResponseThreshold)
 
-        mhdr.set('CHANTYPE','PI')
-        mhdr.set('HDUCLASS','OGIP')
-        mhdr.set('HDUCLAS1','RESPONSE')
-        mhdr.set('HDUCLAS2','RSP_MATRIX')
+        mhdr.set('CHANTYPE', 'PI')
+        mhdr.set('HDUCLASS', 'OGIP')
+        mhdr.set('HDUCLAS1', 'RESPONSE')
+        mhdr.set('HDUCLAS2', 'RSP_MATRIX')
 
         if self.AreaIncluded:
-            mhdr.set('HDUCLAS3','FULL')
+            mhdr.set('HDUCLAS3', 'FULL')
         else:
-            mhdr.set('HDUCLAS3','REDIST')
-        mhdr.set('HDUVERS1','1.3.0')
-        mhdr.set('ORIGIN  ','SRON')
+            mhdr.set('HDUCLAS3', 'REDIST')
+        mhdr.set('HDUVERS1', '1.3.0')
+        mhdr.set('ORIGIN  ', 'SRON')
 
         matrix.header['HISTORY'] = 'Created by pyspextools:'
         matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
@@ -330,10 +394,15 @@ class Rmf:
 
         return
 
-    def checkCompatibility(self,arf):
+    def checkCompatibility(self, arf):
+        """Check whether the input arf object is really an ARF object with data and consistent with this RMF file.
+
+        :param arf: Input arf object to check.
+        :type arf: pyspextools.io.Arf
+        """
 
         # Check if arf is really an Arf object
-        if not isinstance(arf,Arf):
+        if not isinstance(arf, Arf):
             message.error("Input arf is not an Arf class instance.")
             return 1
 
@@ -352,7 +421,7 @@ class Rmf:
         size = arf.HighEnergy.size - 1
 
         if arf.HighEnergy[size] != self.HighEnergy[size]:
-            message.error("Last high-energy boudaries of arrays are not the same.")
+            message.error("Last high-energy boundaries of arrays are not the same.")
             return 1
 
         return 0

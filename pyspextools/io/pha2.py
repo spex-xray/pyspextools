@@ -20,23 +20,53 @@ from .pha import Pha
 
 standard_library.install_aliases()
 
+
 class Pha2:
+    """ Class to read PHA2 type OGIP spectra.
+
+    :ivar NumberSpectra: Number of spectra in PHAII file.
+    :vartype NumberSpectra: int
+    :ivar phalist: List of PHA spectra.
+    :vartype phalist: list
+    :ivar tg_m: Array of order numbers.
+    :vartype tg_m: numpy.ndarray
+    :ivar tg_part: Array of grating numbers.
+    :vartype tg_part: numpy.ndarray
+    :ivar instrument: Instrument name.
+    :vartype instrument: str
+    :ivar telescope: Telescope name.
+    :vartype telescope: str
+    :ivar grating: Grating name
+    :vartype grating: str
+
+    :ivar gratings: Dictionary of grating names.
+    :vartype gratings: dict
+    """
 
     def __init__(self):
-        self.NumberSpectra = 0                  #: Number of spectra in PHAII file
-        self.phalist = []                       #: List of PHA spectra
-        self.tg_m = np.array([])                #: Array of order numbers
-        self.tg_part = np.array([])             #: Array of grating numbers
-        self.instrument = ''                    #: Instrument name
-        self.telescope = ''                     #: Telescope name
-        self.grating = ''                       #: Grating name
+        self.NumberSpectra = 0                  # Number of spectra in PHAII file
+        self.phalist = []                       # List of PHA spectra
+        self.tg_m = np.array([])                # Array of order numbers
+        self.tg_part = np.array([])             # Array of grating numbers
+        self.instrument = ''                    # Instrument name
+        self.telescope = ''                     # Telescope name
+        self.grating = ''                       # Grating name
 
         self.gratings = {'1': 'heg', '2': 'meg', '3': 'leg'}
 
-    def read(self,phafile,force_poisson=True,background=False):
+    def read(self, phafile, force_poisson=True, background=False):
         """Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the
         optional 'force_poisson' flag is True by default. Set force_poisson to false to obtain the errors from
-        the file. If the user wants to subtract the background, the flag 'subtract_background' should be set to True."""
+        the file. If the user wants to subtract the background, the flag 'background' should be set to True.
+
+        :param phafile: Name of the type II PHA file.
+        :type phafile: str
+        :param force_poisson: Flag to set the enforcement of Poisson errors.
+        :type force_poisson: bool
+        :param background: Subtract the background (True/False)?
+        :type background: bool
+        """
+
         file = fits.open(phafile)
         header = file['SPECTRUM'].header
         data = file['SPECTRUM'].data
@@ -76,7 +106,7 @@ class Pha2:
             if not poisson:
                 try:
                     pha.StatError = data['STAT_ERR'][i]
-                except:
+                except KeyError:
                     pha.StatError = None
                     message.error("No Poisson errors, but no STAT_ERR keyword found.")
                     return 1
@@ -88,7 +118,7 @@ class Pha2:
             # Are there systematic errors?
             try:
                 pha.SysError = data['SYS_ERR'][i]
-            except:
+            except KeyError:
                 pha.SysError = np.zeros(pha.DetChans, dtype=float)
 
             if pha.PhaType == 'RATE':
@@ -97,25 +127,25 @@ class Pha2:
             # Are there quality flags?
             try:
                 pha.Quality = data['QUALITY'][i]
-            except:
+            except KeyError:
                 pha.Quality = np.zeros(pha.DetChans, dtype=int)
 
             # Are there grouping flags?
             try:
                 pha.Grouping = data['GROUPING'][i]
-            except:
+            except KeyError:
                 pha.Grouping = np.zeros(pha.DetChans, dtype=int)
 
             # Is there a backscale column?
             try:
                 pha.BackScaling = data['BACKSCAL'][i]
-            except:
+            except KeyError:
                 pha.BackScaling = np.ones(pha.DetChans, dtype=float) * header['BACKSCAL']
 
             # Is there an areascale column?
             try:
                 pha.AreaScaling = data['AREASCAL'][i]
-            except:
+            except KeyError:
                 pha.AreaScaling = np.ones(pha.DetChans, dtype=float) * header['AREASCAL']
 
             if background:
@@ -127,8 +157,8 @@ class Pha2:
                 pha.Pha2BackScal = header['BACKSCUP'] + header['BACKSCDN']
             else:
                 pha.Pha2Back = False
-                pha.BackRate = np.zeros(pha.DetChans,dtype=float)
-                pha.BackStatError = np.zeros(pha.DetChans,dtype=float)
+                pha.BackRate = np.zeros(pha.DetChans, dtype=float)
+                pha.BackStatError = np.zeros(pha.DetChans, dtype=float)
                 pha.Pha2BackScal = 1.0
 
             self.phalist.append(pha)
@@ -136,8 +166,12 @@ class Pha2:
         file.close()
         return 0
 
-    def combine_orders(self,grating):
-        """Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG)."""
+    def combine_orders(self, grating):
+        """Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).
+
+        :param grating: Grating number to combine the orders for.
+        :type grating: int
+        """
 
         # Select rows to combine
         tocombine = np.where(self.tg_part == grating)[0]
@@ -146,7 +180,7 @@ class Pha2:
             message.error("Grating number not found in dataset.")
             return 1
 
-        if tocombine.size== 1:
+        if tocombine.size == 1:
             message.error("Only a single order found. No combining will be done.")
             return 1
 
@@ -179,14 +213,12 @@ class Pha2:
             srcpha.BackScaling = srcpha.BackScaling + ipha.BackScaling
 
         # Calculate the average AreaScaling and BackScaling (Probably wrong!)
-        srcpha.AreaScaling =  srcpha.AreaScaling / tocombine.size
-        srcpha.BackScaling =  srcpha.BackScaling / tocombine.size
+        srcpha.AreaScaling = srcpha.AreaScaling / tocombine.size
+        srcpha.BackScaling = srcpha.BackScaling / tocombine.size
 
         bkgpha.AreaScaling = np.ones(srcpha.DetChans, dtype=float)
         bkgpha.BackScaling = srcpha.Pha2BackScal * np.ones(srcpha.DetChans, dtype=float)
         bkgpha.Quality = np.zeros(srcpha.DetChans, dtype=int)
         bkgpha.Exposure = srcpha.Exposure
 
-
         return srcpha, bkgpha
-

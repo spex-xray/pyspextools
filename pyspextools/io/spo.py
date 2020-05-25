@@ -45,9 +45,62 @@ standard_library.install_aliases()
 
 class Spo:
     """The spo class contains the spectral information for one
-       spo file. This file can contain multiple spectra (regions). 
-       A call to spo() sets the variables that will contain 
-       the spectral information."""
+    spo file. This file can contain multiple spectra (regions).
+    A call to spo() sets the variables that will contain
+    the spectral information.
+
+    :ivar sponame: File name of .spo file
+    :vartype sponame: str
+    :ivar empty: Is this object file empty?
+    :vartype empty: bool
+
+    :ivar nregion: Number of regions in file
+    :vartype nregion: int
+    :ivar nchan: Number of channels
+    :vartype nchan: numpy.ndarray
+
+    :ivar echan1: Lower energy bin value (keV).
+    :vartype echan1: numpy.ndarray
+    :ivar echan2: Upper energy bin value (keV).
+    :vartype echan2: numpy.ndarray
+    :ivar tints: Exposure time (s).
+    :vartype tints: numpy.ndarray
+    :ivar ochan: Source rate (c/s).
+    :vartype ochan: numpy.ndarray
+    :ivar dochan: Error Source rate (c/s).
+    :vartype dochan: numpy.ndarray
+    :ivar mbchan: Background rate (c/s).
+    :vartype mbchan: numpy.ndarray
+    :ivar dbchan: Error Background rate (c/s).
+    :vartype dbchan: numpy.ndarray
+    :ivar brat: Backscale ratio.
+    :vartype brat: numpy.ndarray
+    :ivar ssys: Systematic error fraction in ochan.
+    :vartype ssys: numpy.ndarray
+    :ivar bsys: Systematic error fraction in bchan.
+    :vartype bsys: numpy.ndarray
+    :ivar used: True if data channel is used in the calculations.
+    :vartype used: numpy.ndarray
+
+    :ivar first: True if first channel of a binned group, or if it is an unbinned data channel; otherwise false.
+    :vartype first: numpy.ndarray
+    :ivar last: True if last channel of a binned group, or if it is an unbinned data channel; otherwise false.
+    :vartype last: numpy.ndarray
+
+    :ivar brat_exist: Does the Exp_rate column exist?
+    :vartype brat_exist: bool
+
+    :ivar swap: Does the channel order need to be swapped?
+    :vartype swap: bool
+
+    :ivar anames: Dictionary with column names.
+    :vartype anames: dict
+
+    :ivar mask_region: Mask for region selection.
+    :vartype mask_region: numpy.ndarray
+    :ivar mask_spectrum: Mask for spectrum selection.
+    :vartype mask_spectrum: numpy.ndarray
+    """
 
     # -----------------------------------------------------
     # Function to initialize the spo object
@@ -56,88 +109,34 @@ class Spo:
     #
 
     def __init__(self):
-        """Initialize the SPEX spectrum object.
+        """Initialize the SPEX spectrum object."""
 
-        :ivar sponame: File name of .spo file
-        :vartype sponame: str
-        :ivar empty: Is this object file empty?
-        :vartype empty: bool
-
-        :ivar nregion: Number of regions in file
-        :vartype nregion: int
-        :ivar nchan: Number of channels
-        :vartype nchan: numpy.ndarray
-
-        :ivar echan1: Lower energy bin value (keV).
-        :vartype echan1: numpy.ndarray
-        :ivar echan2: Upper energy bin value (keV).
-        :vartype echan2: numpy.ndarray
-        :ivar tints: Exposure time (s).
-        :vartype tints: numpy.ndarray
-        :ivar ochan: Source rate (c/s).
-        :vartype ochan: numpy.ndarray
-        :ivar dochan: Error Source rate (c/s).
-        :vartype dochan: numpy.ndarray
-        :ivar mbchan: Background rate (c/s).
-        :vartype mbchan: numpy.ndarray
-        :ivar dbchan: Error Background rate (c/s).
-        :vartype dbchan: numpy.ndarray
-        :ivar brat: Backscale ratio.
-        :vartype brat: numpy.ndarray
-        :ivar ssys: Systematic error fraction in ochan.
-        :vartype ssys: numpy.ndarray
-        :ivar bsys: Systematic error fraction in bchan.
-        :vartype bsys: numpy.ndarray
-        :ivar used: True if data channel is used in the calculations.
-        :vartype used: numpy.ndarray
-
-        :ivar first: True if first channel of a binned group, or if it is an unbinned data channel; otherwise false.
-        :vartype first: numpy.ndarray
-        :ivar last: True if last channel of a binned group, or if it is an unbinned data channel; otherwise false.
-        :vartype last: numpy.ndarray
-
-        :ivar brat_exist: Does the Exp_rate column exist?
-        :vartype brat_exist: bool
-
-        :ivar swap: Does the channel order need to be swapped?
-        :vartype swap: bool
-
-        :ivar anames: Dictionary with column names.
-        :vartype anames: dict
-
-        :ivar mask_region: Mask for region selection.
-        :vartype mask_region: numpy.ndarray
-        :ivar mask_spectrum: Mask for spectrum selection.
-        :vartype mask_spectrum: numpy.ndarray
-        """
         # Initialize spo filename
         self.sponame = ''
         self.empty = True
 
         # Initialize the 'SPEX_REGIONS' table
-        self.nregion = 0  #: Number of regions
-        self.nchan = np.array([], dtype=int)  #: Number of channels
+        self.nregion = 0
+        self.nchan = np.array([], dtype=int)
 
         # Initialize the 'SPEX_SPECTRUM' table
-        self.echan1 = np.array([], dtype=float)  #: Lower energy bin value (keV)
-        self.echan2 = np.array([], dtype=float)  #: Upper energy bin value (keV)
-        self.tints = np.array([], dtype=float)  #: Exposure time (s)
-        self.ochan = np.array([], dtype=float)  #: Source rate (c/s)
-        self.dochan = np.array([], dtype=float)  #: Error Source rate (c/s)
-        self.mbchan = np.array([], dtype=float)  #: Background rate (c/s)
-        self.dbchan = np.array([], dtype=float)  #: Error Background rate (c/s)
-        self.brat = np.array([], dtype=float)   #: Backscale ratio
-        self.ssys = np.array([], dtype=float)  #: Systematic error fraction in ochan
-        self.bsys = np.array([], dtype=float)  #: Systematic error fraction in bchan
-        self.used = np.array([], dtype=bool)  #: true if data channel is used in the calculations
+        self.echan1 = np.array([], dtype=float)
+        self.echan2 = np.array([], dtype=float)
+        self.tints = np.array([], dtype=float)
+        self.ochan = np.array([], dtype=float)
+        self.dochan = np.array([], dtype=float)
+        self.mbchan = np.array([], dtype=float)
+        self.dbchan = np.array([], dtype=float)
+        self.brat = np.array([], dtype=float)
+        self.ssys = np.array([], dtype=float)
+        self.bsys = np.array([], dtype=float)
+        self.used = np.array([], dtype=bool)
 
-        #: true if first channel of a binned group, or if it is an unbinned data channel; otherwise false
         self.first = np.array([], dtype=bool)
-        #: true if last channel of a binned group, or if it is an unbinned data channel; otherwise false
         self.last = np.array([], dtype=bool)
 
         # New feature since SPEX 3.05.00
-        self.brat_exist = False                 #: Does the Exp_rate column exist?
+        self.brat_exist = False
 
         # Does the channel order need to be swapped?
         self.swap = False
@@ -183,7 +182,7 @@ class Spo:
         """Function to add spectrum regions to a spo file.
 
         :param origspo: Spo object to import region from.
-        :type origspo: pyspextools.io.spo.Spo
+        :type origspo: pyspextools.io.Spo
         :param iregion: Region number to select from spo object.
         :type iregion: int
         """

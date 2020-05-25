@@ -30,12 +30,25 @@ standard_library.install_aliases()
 # Return a spo object derived from the OGIP data
 # -----------------------------------------------------
 
-def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
+
+def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
     """Convert the source (src) and optional background (back) and correction spectra (corr) from OGIP to SPEX format. 
     Please also provide an OGIP rmf object from the Rmf class to this function to read the channel energies.
     When the save_grouping flag is true, the grouping information in the PHA file will be copied to the spo file.
     The default behaviour is to ignore the grouping.
-    This method returns a pyspextools Spo object containing the source and background rates."""
+    This method returns a pyspextools Spo object containing the source and background rates.
+
+    :param src: Input PHA source spectrum object.
+    :type src: pyspextools.io.Pha
+    :param rmf: Input RMF response matrix object.
+    :type rmf: pyspextools.io.Rmf
+    :param back: Input PHA background spectrum object (optional).
+    :type back: pyspextools.io.Pha
+    :param corr: Input PHA correction spectrum object (optional).
+    :type corr: pyspextools.io.Pha
+    :param save_grouping: Save the group information (True/False)
+    :type save_grouping: bool
+    """
 
     if not isinstance(src, Pha):
         message.error("Input source spectrum is not a PHA object.")
@@ -172,7 +185,7 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
             spo.swap = True
             spo.swap_order()
 
-    spo.empty=False
+    spo.empty = False
 
     return spo
 
@@ -180,10 +193,17 @@ def pha_to_spo(src,rmf,back=None,corr=None,save_grouping=False):
 # Return a res object derived from the OGIP data
 # -----------------------------------------------------
 
+
 def rmf_to_res(rmf, arf=None):
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one
     without optimizations. Providing an ARF object is optional. All groups in the OGIP matrix are put into one
-    SPEX response component. This method returns a pyspextools Res object containing the response matrix."""
+    SPEX response component. This method returns a pyspextools Res object containing the response matrix.
+
+    :param rmf: Input RMF response object.
+    :type rmf: pyspextools.io.Rmf
+    :param arf: Input ARF effective area object.
+    :type arf: pyspextools.io.Arf
+    """
 
     if not isinstance(rmf, Rmf):
         message.error("The input RMF object is not of type Rmf.")
@@ -255,7 +275,7 @@ def rmf_to_res(rmf, arf=None):
             res.ic2[g] = ic2
 
             if input_area:
-                area=arf.EffArea[i]
+                area = arf.EffArea[i]
             else:
                 area = 1.0
 
@@ -290,4 +310,3 @@ def rmf_to_res(rmf, arf=None):
     res.empty = False
 
     return res
-

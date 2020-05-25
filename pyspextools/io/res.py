@@ -43,98 +43,99 @@ standard_library.install_aliases()
 
 class Res:
     """The res class contains the response information for one
-       res file. This file can contain multiple responses (regions)."""
+    res file. This file can contain multiple responses (regions).
+
+    :ivar resname: Name of the res file.
+    :vartype resname: str
+    :ivar empty: Is the object still empty? (True/False)
+    :vartype empty: bool
+
+    :ivar nchan: Number of energy channels.
+    :vartype nchan: numpy.ndarray
+    :ivar neg: Number of energy bins.
+    :vartype neg: numpy.ndarray
+    :ivar sector: Array containing sector numbers.
+    :vartype sector: numpy.ndarray
+    :ivar region: Array containing region numbers.
+    :vartype region: numpy.ndarray
+    :ivar shcomp: Array containing shared components.
+    :vartype shcomp: numpy.ndarray
+
+    :ivar nsector: Number of sectors.
+    :vartype nsector: int
+    :ivar nregion: Number of regions.
+    :vartype nregion: int
+    :ivar ncom: Number of response components
+    :vartype ncom: int
+
+    :ivar share_comp: Are there any shared components?
+    :vartype share_comp: bool
+    :ivar area_scal: Is there areascal information?
+    :vartype area_scal: bool
+    :ivar resp_der: Are there response derivatives?
+    :vartype resp_der: bool
+
+    :ivar eg1: Start energies for response group.
+    :vartype eg1: numpy.ndarray
+    :ivar eg2: End energies for response group.
+    :vartype eg2: numpy.ndarray
+    :ivar ic1: Start channel for response group.
+    :vartype ic1: numpy.ndarray
+    :ivar ic2: End channel for response group.
+    :vartype ic2: numpy.ndarray
+    :ivar nc: Number of data channels in the group.
+    :vartype nc: numpy.ndarray
+    :ivar relarea: Area scaling factors.
+    :vartype relarea: numpy.ndarray
+
+    :ivar resp: Response values for group (m**2).
+    :vartype resp: numpy.ndarray
+    :ivar dresp: Response derivatives for group (optional).
+    :vartype dresp: numpy.ndarray
+
+    :ivar mask_resp: Mask array used to select certain response values.
+    :vartype mask_resp: numpy.ndarray
+    :ivar mask_group: Mask array used to select certain groups.
+    :vartype mask_group: numpy.ndarray
+    :ivar mask_icomp: Mask array used to select certain components.
+    :vartype mask_icomp: numpy.ndarray
+
+    :ivar swap: Should the channel order be swapped?
+    :vartype swap: bool
+    """
 
     def __init__(self):
-        """Initialize a SPEX response object.
+        """Initialize a SPEX response object."""
 
-        :ivar resname: Name of the res file.
-        :vartype resname: str
-        :ivar empty: Is the object still empty? (True/False)
-        :vartype empty: bool
-
-        :ivar nchan: Number of energy channels.
-        :vartype nchan: numpy.ndarray
-        :ivar neg: Number of energy bins.
-        :vartype neg: numpy.ndarray
-        :ivar sector: Array containing sector numbers.
-        :vartype sector: numpy.ndarray
-        :ivar region: Array containing region numbers.
-        :vartype region: numpy.ndarray
-        :ivar shcomp: Array containing shared components.
-        :vartype shcomp: numpy.ndarray
-
-        :ivar nsector: Number of sectors.
-        :vartype nsector: int
-        :ivar nregion: Number of regions.
-        :vartype nregion: int
-        :ivar ncom: Number of response components
-        :vartype ncom: int
-
-        :ivar share_comp: Are there any shared components?
-        :vartype share_comp: bool
-        :ivar area_scal: Is there areascal information?
-        :vartype area_scal: bool
-        :ivar resp_der: Are there response derivatives?
-        :vartype resp_der: bool
-
-        :ivar eg1: Start energies for response group.
-        :vartype eg1: numpy.ndarray
-        :ivar eg2: End energies for response group.
-        :vartype eg2: numpy.ndarray
-        :ivar ic1: Start channel for response group.
-        :vartype ic1: numpy.ndarray
-        :ivar ic2: End channel for response group.
-        :vartype ic2: numpy.ndarray
-        :ivar nc: Number of data channels in the group.
-        :vartype nc: numpy.ndarray
-        :ivar relarea: Area scaling factors.
-        :vartype relarea: numpy.ndarray
-
-        :ivar resp: Response values for group (m**2).
-        :vartype resp: numpy.ndarray
-        :ivar dresp: Response derivatives for group (optional).
-        :vartype dresp: numpy.ndarray
-
-        :ivar mask_resp: Mask array used to select certain response values.
-        :vartype mask_resp: numpy.ndarray
-        :ivar mask_group: Mask array used to select certain groups.
-        :vartype mask_group: numpy.ndarray
-        :ivar mask_icomp: Mask array used to select certain components.
-        :vartype mask_icomp: numpy.ndarray
-
-        :ivar swap: Should the channel order be swapped?
-        :vartype swap: bool
-        """
         self.resname = ''
         self.empty = True
 
         # Response components (SPEX_RESP_ICOMP)
-        self.nchan = np.array([], dtype=int)  #: Number of channels
-        self.neg = np.array([], dtype=int)  #: Number of energy bins
-        self.sector = np.array([], dtype=int)  #: Sectors
-        self.region = np.array([], dtype=int)  #: Regions
-        self.shcomp = np.array([], dtype=int)  #: Shared components (optional)
+        self.nchan = np.array([], dtype=int)
+        self.neg = np.array([], dtype=int)
+        self.sector = np.array([], dtype=int)
+        self.region = np.array([], dtype=int)
+        self.shcomp = np.array([], dtype=int)
 
-        self.nsector = 0  #: Number of sectors
-        self.nregion = 0  #: Number of regions
-        self.ncomp = 0  #: Number of response components
+        self.nsector = 0
+        self.nregion = 0
+        self.ncomp = 0
 
-        self.share_comp = False  #: Are there shared components (?)
-        self.area_scal = False  #: Is there areascal information (?)
-        self.resp_der = False  #: Are there response derivatives (?)
+        self.share_comp = False
+        self.area_scal = False
+        self.resp_der = False
 
         # Response groups (SPEX_RESP_GROUP)
-        self.eg1 = np.array([], dtype=float)  #: start energy for group (keV)
-        self.eg2 = np.array([], dtype=float)  #: end energy for group (keV)
-        self.ic1 = np.array([], dtype=int)  #: Start channel for response group
-        self.ic2 = np.array([], dtype=int)  #: End channel for response group
-        self.nc = np.array([], dtype=int)  #: Number of data channels in group
-        self.relarea = np.array([], dtype=float)  #: Area scaling factors
+        self.eg1 = np.array([], dtype=float)
+        self.eg2 = np.array([], dtype=float)
+        self.ic1 = np.array([], dtype=int)
+        self.ic2 = np.array([], dtype=int)
+        self.nc = np.array([], dtype=int)
+        self.relarea = np.array([], dtype=float)
 
         # Response values (SPEX_RESP_RESP)
-        self.resp = np.array([], dtype=float)  #: response values for group (m**2)
-        self.dresp = np.array([], dtype=float)  #: response derivatives for group (optional)
+        self.resp = np.array([], dtype=float)
+        self.dresp = np.array([], dtype=float)
 
         # Mask arrays
         self.mask_resp = np.array([], dtype=bool)
@@ -152,7 +153,7 @@ class Res:
         """Function to add region(s) to a response.
 
         :param origres: Response object to be added to this one.
-        :type origres: pyspextools.io.res.Res
+        :type origres: pyspextools.io.Res
         :param isector: Sector number of the response object to add.
         :type isector: int
         :param iregion: Region number of the response object to add.
@@ -539,7 +540,7 @@ class Res:
         file for Chandra grating data.
 
         :param addres: Response object to extract response information from.
-        :type addres: pyspextools.io.res.Res
+        :type addres: pyspextools.io.Res
         :param iregion: Region number to add to the response.
         :type iregion: int
         :param isector: Sector number to add to the response.

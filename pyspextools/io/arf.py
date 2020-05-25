@@ -17,24 +17,48 @@ import astropy.io.fits as fits
 
 standard_library.install_aliases()
 
+
 class Arf:
     """Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by
-    Keith Arnaud."""
+    Keith Arnaud.
+
+    :ivar LowEnergy: Low Energy boundary of bin
+    :vartype LowEnergy: numpy.ndarray
+    :ivar HighEnergy: High Energy boundary of bin
+    :vartype HighEnergy: numpy.ndarray
+    :ivar EffArea: Effective area of bin
+    :vartype EffArea: numpy.ndarray
+
+    :ivar EnergyUnits: Energy units
+    :vartype EnergyUnits: str
+    :ivar ARFUnits: Unit of effective area
+    :vartype ARFUnits: str
+    :ivar Order: Grating order (for grating arrays, else 0)
+    :vartype Order: int
+    :ivar Grating: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)
+    :vartype Grating: int
+    """
 
     def __init__(self):
-        self.LowEnergy = np.array([],dtype=float)      #: Low Energy of bin
-        self.HighEnergy = np.array([],dtype=float)     #: High Energy of bin
-        self.EffArea = np.array([],dtype=float)        #: Effective Area of bin
+        """Initialize an ARF object."""
 
-        self.EnergyUnits = 'keV'                       #: Energy units
+        self.LowEnergy = np.array([], dtype=float)      # Low Energy of bin
+        self.HighEnergy = np.array([], dtype=float)     # High Energy of bin
+        self.EffArea = np.array([], dtype=float)        # Effective Area of bin
+
+        self.EnergyUnits = 'keV'                        # Energy units
         self.ARFUnits = 'cm2'
-        self.Order = 0                                 #: Grating order (for grating arrays, else 0)
-        self.Grating = 0                               #: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)
+        self.Order = 0                                  # Grating order (for grating arrays, else 0)
+        self.Grating = 0                                # Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)
 
-    def read(self,arffile):
-        """Read the effective area from an OGIP ARF file."""
+    def read(self, arffile):
+        """Read the effective area from an OGIP ARF file.
 
-        (data, header) = fits.getdata(arffile,'SPECRESP',header=True)
+        :param arffile: Effective area file name (FITS/OGIP format)
+        :type arffile: str
+        """
+
+        (data, header) = fits.getdata(arffile, 'SPECRESP', header=True)
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
@@ -52,7 +76,7 @@ class Arf:
         try:
             self.Order = header['TG_M']
             self.Grating = header['TG_PART']
-        except:
+        except KeyError:
             self.Order = 0
             self.Grating = 0
 
@@ -66,7 +90,19 @@ class Arf:
         return 0
 
     def write(self, arffile, telescop=None, instrume=None, filter=None, overwrite=False):
-        '''Write an OGIP compatible ARF file (Non-grating format).'''
+        """Write an OGIP compatible ARF file (Non-grating format).
+
+        :param arffile: Effective area file name to write (FITS/OGIP format)
+        :type arffile: str
+        :param telescop: Telescope name (optional)
+        :type telescop: str
+        :param instrume: Instrument name (optional)
+        :type instrume: str
+        :param filter: Filter setting (optional)
+        :type filter: str
+        :param overwrite: Overwrite existing file? (True/False)
+        :type overwrite: bool
+        """
 
         # Write the ARF arrays into FITS column format
         col1 = fits.Column(name='ENERG_LO', format='D', unit=self.EnergyUnits, array=self.LowEnergy)
@@ -76,32 +112,32 @@ class Arf:
         hdu = fits.BinTableHDU.from_columns([col1, col2, col3])
 
         hdr = hdu.header
-        hdr.set('EXTNAME','SPECRESP')
+        hdr.set('EXTNAME', 'SPECRESP')
 
         # Set the TELESCOP keyword (optional)
         if telescop == None:
-            hdr.set('TELESCOP','None','Telescope name')
+            hdr.set('TELESCOP', 'None', 'Telescope name')
         else:
-            hdr.set('TELESCOP',telescop,'Telescope name')
+            hdr.set('TELESCOP', telescop, 'Telescope name')
 
         # Set the INSTRUME keyword (optional)
         if instrume == None:
-            hdr.set('INSTRUME','None','Instrument name')
+            hdr.set('INSTRUME', 'None', 'Instrument name')
         else:
-            hdr.set('INSTRUME',instrume,'Instrument name')
+            hdr.set('INSTRUME', instrume, 'Instrument name')
 
         # Set the FILTER keyword (optional)
-        if filter == None:
-            hdr.set('FILTER','None','Filter setting')
+        if filter is None:
+            hdr.set('FILTER', 'None', 'Filter setting')
         else:
-            hdr.set('FILTER',filter,'Filter setting')
+            hdr.set('FILTER', filter, 'Filter setting')
 
-        hdr.set('DETNAM','None')
-        hdr.set('HDUCLASS','OGIP')
-        hdr.set('HDUCLAS1','RESPONSE')
-        hdr.set('HDUCLAS2','SPECRESP')
-        hdr.set('HDUVERS','1.1.0')
-        hdr.set('ORIGIN','SRON')
+        hdr.set('DETNAM', 'None')
+        hdr.set('HDUCLASS', 'OGIP')
+        hdr.set('HDUCLAS1', 'RESPONSE')
+        hdr.set('HDUCLAS2', 'SPECRESP')
+        hdr.set('HDUVERS', '1.1.0')
+        hdr.set('ORIGIN', 'SRON')
 
         hdu.header['HISTORY'] = 'Created by pyspextools:'
         hdu.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'

@@ -22,46 +22,104 @@ standard_library.install_aliases()
 
 class Pha:
     """Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by
-    Keith Arnaud."""
+    Keith Arnaud.    
+  
+    :ivar FirstChannel: First valid spectral channel.
+    :vartype FirstChannel: int
+    :ivar DetChans: Total number of legal channels.
+    :vartype DetChans: int
+
+    :ivar Channel: Spectrum channels.
+    :vartype Channel: numpy.ndarray
+    :ivar Rate: Spectrum spectrum count rate.
+    :vartype Rate: numpy.ndarray
+    :ivar StatError: Spectrum error rate (if exists).
+    :vartype StatError: numpy.ndarray
+    :ivar SysError: Spectrum systematic error.
+    :vartype SysError: numpy.ndarray
+
+    :ivar Quality: Quality flag.
+    :vartype Quality: numpy.ndarray
+    :ivar Grouping: Grouping information.
+    :vartype Grouping: numpy.ndarray
+
+    :ivar AreaScaling: Areascal keyword/array.
+    :vartype AreaScaling: numpy.ndarray
+    :ivar BackScaling: Backscal keyword/array.
+    :vartype BackScaling: numpy.ndarray
+    :ivar CorrScal: Correction spectrum scaling.
+    :vartype CorrScal: float
+
+    :ivar Exposure: Exposure time of the spectrum.
+    :vartype Exposure: float
+    :ivar Poisserr: Are the errors Poissonian.
+    :vartype Poisserr: bool
+    :ivar Spectrumtype: Spectrumtype (TOTAL, NET or BKG).
+    :vartype SpectrumType: str
+    :ivar PhaType: Whether the spectrum is in COUNTS or RATE.
+    :vartype PhaType: str
+
+    :ivar rmffile: Associated Response matrix file.
+    :vartype rmffile: str
+    :ivar arffile: Associated Effective area file.
+    :vartype arffile: str
+    :ivar bkgfile: Associated Background file.
+    :vartype bkgfile: str
+    :ivar corfile: Associated Correction spectrum file.
+    :vartype corfile: str
+
+    :ivar Pha2Back: Is there a PHA2 background available?
+    :vartype Pha2Back: bool
+    :ivar BackRate: PHA2 Background Rate.
+    :vartype BackRate: numpy.ndarray
+    :ivar BackStatError: PHA2 Background Error.
+    :vartype BackStatError: numpy.ndarray
+    :ivar Pha2BackScal: Backscale value for background.
+    :vartype Pha2BackScal: float
+    """
 
     def __init__(self):
         # Spectrum arrays
-        self.FirstChannel = 0                     #: First valid spectral channel
-        self.DetChans = 0                         #: Total number of legal channels
+        self.FirstChannel = 0                       # First valid spectral channel
+        self.DetChans = 0                           # Total number of legal channels
 
-        self.Channel = np.array([],dtype=int)     #: Spectrum channels
-        self.Rate = np.array([],dtype=float)      #: Spectrum spectrum count rate
-        self.StatError = np.array([],dtype=float) #: Spectrum error rate (if exists)
-        self.SysError = np.array([],dtype=float)  #: Spectrum systematic error
+        self.Channel = np.array([], dtype=int)      # Spectrum channels
+        self.Rate = np.array([], dtype=float)       # Spectrum spectrum count rate
+        self.StatError = np.array([], dtype=float)  # Spectrum error rate (if exists)
+        self.SysError = np.array([], dtype=float)   # Spectrum systematic error
 
-        self.Quality = np.array([],dtype=int)     #: Quality flag
-        self.Grouping = np.array([],dtype=int)    #: Grouping information
+        self.Quality = np.array([], dtype=int)      # Quality flag
+        self.Grouping = np.array([], dtype=int)     # Grouping information
 
-        self.AreaScaling = np.array([],dtype=float)  #: Areascal keyword/array
-        self.BackScaling = np.array([],dtype=float)  #: Backscal keyword/array
-        self.CorrScal = 1.0                       #: Correction spectrum scaling
+        self.AreaScaling = np.array([], dtype=float)  # Areascal keyword/array
+        self.BackScaling = np.array([], dtype=float)  # Backscal keyword/array
+        self.CorrScal = 1.0                         # Correction spectrum scaling
 
-        self.Exposure = 0.0                       #: Exposure time of the spectrum
-        self.Poisserr = True                      #: Are the errors Poissonian
-        self.Spectrumtype = 'TOTAL'               #: Spectrumtype (TOTAL, NET or BKG)
-        self.PhaType = 'COUNTS'                   #: Whether the spectrum is in COUNTS or RATE
+        self.Exposure = 0.0                         # Exposure time of the spectrum
+        self.Poisserr = True                        # Are the errors Poissonian
+        self.Spectrumtype = 'TOTAL'                 # Spectrumtype (TOTAL, NET or BKG)
+        self.PhaType = 'COUNTS'                     # Whether the spectrum is in COUNTS or RATE
 
-        self.rmffile = None                       #: Associated Response matrix file
-        self.arffile = None                       #: Associated Effective area file
-        self.bkgfile = None                       #: Associated Background file
-        self.corfile = None                       #: Associated Correction spectrum file
+        self.rmffile = None                         # Associated Response matrix file
+        self.arffile = None                         # Associated Effective area file
+        self.bkgfile = None                         # Associated Background file
+        self.corfile = None                         # Associated Correction spectrum file
 
         # Only applicable for PHA2 files:
-        self.Pha2Back = False                     #: Is there a PHA2 background available
-        self.BackRate = np.array([], dtype=float) #: PHA2 Background Rate
-        self.BackStatError = np.array([], dtype=float) #: PHA2 Background Error
-        self.Pha2BackScal = 1.0                   #: Backscale value for background
+        self.Pha2Back = False                           # Is there a PHA2 background available
+        self.BackRate = np.array([], dtype=float)       # PHA2 Background Rate
+        self.BackStatError = np.array([], dtype=float)  # PHA2 Background Error
+        self.Pha2BackScal = 1.0                         # Backscale value for background
 
-    def read(self,filename):
-        """Read a spectrum from a PHA file."""
+    def read(self, filename):
+        """Read a spectrum from a PHA file.
+
+        :param filename: PHA file name to be read.
+        :type filename: str
+        """
 
         # Read the data and header from the SPECTRUM extension
-        (data, header) = fits.getdata(filename,'SPECTRUM',header=True)
+        (data, header) = fits.getdata(filename, 'SPECTRUM', header=True)
 
         # Read the number of channels (outside the header call because of PHAII files).
         self.DetChans = header['DETCHANS']
@@ -82,10 +140,10 @@ class Pha:
                 self.Rate[i] = float(data['COUNTS'][i]) / self.Exposure
 
         # See if there are Statistical Errors present
-        if not self.Poiserr:
+        if not self.Poisserr:
             try:
                 self.StatError = data['STAT_ERR']
-            except:
+            except KeyError:
                 self.StatError = None
                 message.warning("No Poisson errors, but no STAT_ERR keyword found.")
         else:
@@ -96,7 +154,7 @@ class Pha:
         # Are there systematic errors?
         try:
             self.SysError = data['SYS_ERR']
-        except:
+        except KeyError:
             self.SysError = np.zeros(self.DetChans, dtype=float)
 
         if self.PhaType == 'RATE':
@@ -105,31 +163,35 @@ class Pha:
         # Are there quality flags?
         try:
             self.Quality = data['QUALITY']
-        except:
+        except KeyError:
             self.Quality = np.zeros(self.DetChans, dtype=int)
 
         # Are there grouping flags?
         try:
             self.Grouping = data['GROUPING']
-        except:
+        except KeyError:
             self.Grouping = np.zeros(self.DetChans, dtype=int)
 
         # Is there a backscale column?
         try:
             self.BackScaling = data['BACKSCAL']
-        except:
+        except KeyError:
             self.BackScaling = np.ones(self.DetChans, dtype=float) * header['BACKSCAL']
 
         # Is there an areascale column?
         try:
             self.AreaScaling = data['AREASCAL']
-        except:
+        except KeyError:
             self.AreaScaling = np.ones(self.DetChans, dtype=float) * header['AREASCAL']
 
         return 0
 
-    def read_header(self,header):
-        """Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files."""
+    def read_header(self, header):
+        """Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.
+
+        :param header: Header of the SPECTRUM extension.
+        :type header: astropy.io.fits.Header
+        """
 
         # Read Exposure information
         self.Exposure = header['EXPOSURE']
@@ -149,9 +211,9 @@ class Pha:
 
         # Read the POISERR keyword
         try:
-            self.Poiserr = header['POISSERR']
-        except:
-            self.Poiserr = False
+            self.Poisserr = header['POISSERR']
+        except KeyError:
+            self.Poisserr = False
 
         # Read Correction scaling factor
         self.CorrScal = header['CORRSCAL']
@@ -159,25 +221,25 @@ class Pha:
         # Read a background file, if available
         try:
             self.bkgfile = header['BACKFILE']
-        except:
+        except KeyError:
             self.bkgfile = None
 
         # Read an respoonse file, if available
         try:
             self.rmffile = header['RESPFILE']
-        except:
+        except KeyError:
             self.rmffile = None
 
         # Read an effective area file, if available
         try:
             self.arffile = header['ANCRFILE']
-        except:
+        except KeyError:
             self.arffile = None
 
         # Read a correction file, if available
         try:
             self.corfile = header['CORRFILE']
-        except:
+        except KeyError:
             self.corfile = None
 
     def check(self):
@@ -195,8 +257,12 @@ class Pha:
 
         return 0
 
-    def create_dummy(self,resp):
-        """Generate dummy spectrum based on rmf channel information."""
+    def create_dummy(self, resp):
+        """Generate dummy spectrum based on rmf channel information.
+
+        :param resp: Input RMF response object.
+        :type resp: pyspextools.io.rmf.Rmf
+        """
 
         if not isinstance(resp, Rmf):
             message.error("Input response object is not the required Rmf object.")
@@ -204,7 +270,7 @@ class Pha:
 
         # First copy the channel information to the PHA object
         self.Channel = resp.Channel
-        self.FirstChannel= resp.Channel[0]
+        self.FirstChannel = resp.Channel[0]
         self.DetChans = resp.NumberChannels
     
         # Generate a dummy spectrum (obviously not realistic, should be simulated in SPEX later)
@@ -221,7 +287,6 @@ class Pha:
         self.Grouping = np.zeros(self.DetChans, dtype=float)
         self.AreaScaling = np.ones(self.DetChans, dtype=float)
         self.BackScaling = np.ones(self.DetChans, dtype=float)
-
 
     def disp(self):
         """Display a summary of the PHA file."""
@@ -251,8 +316,12 @@ class Pha:
         print("corfile       {0}  Associated Correction spectrum file".format(self.corfile))
         print("")
 
-    def checkCompatibility(self,pha):
-        """Check if another PHA object is compatible with the current one in terms of number of channels."""
+    def checkCompatibility(self, pha):
+        """Check if another PHA object is compatible with the current one in terms of number of channels.
+
+        :param pha: PHA object to check compatibility for.
+        :type pha: pyspextools.io.pha.Pha
+        """
 
         # Check equal number of channels
         if self.DetChans != pha.DetChans:
@@ -263,11 +332,3 @@ class Pha:
 
     def NumberChannels(self):
         return self.DetChans
-
-
-
-
-
-
-
-
