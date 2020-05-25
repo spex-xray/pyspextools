@@ -23,41 +23,59 @@ import numpy
 standard_library.install_aliases()
 
 
-class User(object):
-    """Class structure to contain the input and output parameters of the user function. """
+class User:
+    """Class structure to contain the input and output parameters of the user function.
 
-    # Input parameters:
+    :ivar npar: Numper of model input parameters from SPEX.
+    :vartype npar: int
+    :ivar par: Array containing the parameter values from SPEX (length npar).
+    :vartype par: numpy.ndarray
+    :ivar neg: Number of bins in the input energy grid from SPEX.
+    :vartype neg: int
+    :ivar egb: Upper boundaries of the energy bins (length neg).
+    :vartype egb: numpy.ndarray
+    :ivar eg: Bin centroids of the energy bins (length neg).
+    :vartype eg: numpy.ndarray
+    :ivar deg: Bin widths of the energy bins (length deg).
+    :vartype deg: numpy.ndarray
 
-    #: Number of input parameters from SPEX
-    npar = 0
-    #: Array containing the parameter values from SPEX (length npar)
-    par = None
-    #: Number of bins in the input energy grid from SPEX
-    neg = 0
-    #: Upper boundaries of the energy bins (length neg)
-    egb = None
-    #: Bin centroids of the energy bins (length neg)
-    eg = None
-    #: Bin widths of the energy bins (length deg)
-    deg = None
+    :ivar sener: Spectrum or transmission (e.g. in ph/s/bin)
+    :vartype sener: numpy.ndarray
+    :ivar wener: If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E
+    :vartype wener: numpy.ndarray
 
-    # Output parameters:
-
-    #: Spectrum or transmission (e.g. in ph/s/bin)
-    sener = None
-    #: If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E
-    wener = None
-
-    # Filenames:
-
-    #: Input file name
-    fprm = None
-    #: Output file name
-    fspc = None
+    :ivar fprm: Input file name from command line.
+    :vartype fprm: str
+    :ivar fspc: Output file name from command line.
+    :vartype fspc: str
+    """
 
     def __init__(self):
         """Read the input file names from command line. Then read in the input parameters 
         and energy grid from the SPEX provided input file."""
+
+        # Input parameters:
+        self.npar = 0                              # Number of input parameters from SPEX
+        self.par = numpy.array([], dtype=float)    # Array containing the parameter values from SPEX (length npar)
+        self.neg = 0                               # Number of bins in the input energy grid from SPEX
+        self.egb = numpy.array([], dtype=float)    # Upper boundaries of the energy bins (length neg)
+        self.eg = numpy.array([], dtype=float)     # Bin centroids of the energy bins (length neg)
+        self.deg = numpy.array([], dtype=float)    # Bin widths of the energy bins (length deg)
+
+        # Output parameters:
+        self.sener = numpy.array([], dtype=float)  # Spectrum or transmission (e.g. in ph/s/bin)
+        self.wener = numpy.array([], dtype=float)  # If Delta E = average photon energy within the bin (keV) minus
+        # the bin centroid then wener = sener * Delta E
+
+        # Filenames:
+        self.fprm = ''        # Input file name
+        self.fspc = ''        # Output file name
+
+        self.read_prm()
+
+    def read_prm(self):
+        """Read the parameter file that SPEX creates at the beginning of the model evaluation. This is done
+        automatically when the User class is initialised."""
 
         try:
             self.fprm = sys.argv[1]
@@ -80,7 +98,7 @@ class User(object):
             print("Error: Input file does not exist...")
             sys.exit(1)
 
-            # Read the number of parameters
+        # Read the number of parameters
         self.npar = int(f.readline())
 
         # Allocate an array containing the parameters

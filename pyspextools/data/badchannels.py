@@ -19,7 +19,11 @@ standard_library.install_aliases()
 
 
 def clean_region(reg):
-    """Remove bad channels and channels with zero response from the region."""
+    """Remove bad channels and channels with zero response from the region.
+
+    :param reg: Input Region object.
+    :type reg: pyspextools.io.Region
+    """
 
     if not isinstance(reg, Region):
         message.error("The input object is not of type Region.")
@@ -128,7 +132,11 @@ def clean_region(reg):
 
 
 def __get_bad_channel_masks(reg):
-    """Identify channels with zero response."""
+    """Identify channels with zero response.
+
+    :param reg: Input Region object.
+    :type reg: pyspextools.io.Region
+    """
 
     # Get the amount of channels and create a channel chanmask with that size
     chanmask = np.zeros(reg.spo.used.size, dtype=bool)
