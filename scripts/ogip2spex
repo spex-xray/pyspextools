@@ -43,7 +43,7 @@ def main():
     print("Input Response file: {0}".format(args.rmffile))
     print("Input Effective area file: {0}".format(args.arffile))
 
-    ogip.read_region(args.phafile,args.rmffile,bkgfile=args.bkgfile,arffile=args.arffile)
+    ogip.read_region(args.phafile, args.rmffile, bkgfile=args.bkgfile, arffile=args.arffile)
 
     # Filter for bad channels (if not blocked by command line argument)
     if args.badchan:
@@ -60,7 +60,7 @@ def main():
     history.append("Command used: {0}".format(command))
     history.append("Variables derived from commandline:")
     for arg in vars(args):
-        line = "{0} : {1}".format(arg, getattr(args,arg))
+        line = "{0} : {1}".format(arg, getattr(args, arg))
         history.append(line)
 
     # Check output file names
@@ -69,10 +69,11 @@ def main():
 
     # Write output spo and res file
     print("Writing SPO to file: {0}".format(spofile))
-    ogip.spo.write_file(spofile,exp_rate=args.exprate,overwrite=args.overwrite,history=history)
+    ogip.spo.write_file(spofile, exp_rate=args.exprate, overwrite=args.overwrite, history=history)
 
     print("Writing RES to file: {0}".format(resfile))
-    ogip.res.write_file(resfile,overwrite=args.overwrite,history=history)
+    ogip.res.write_file(resfile, overwrite=args.overwrite, history=history)
+
 
 # Get command line arguments
 def ogip2spex_arguments():
@@ -88,12 +89,13 @@ def ogip2spex_arguments():
                         default=True)
     parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
                         default=False)
-    parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
-                        default=False)
+    parser.add_argument('--no-exprate', help="Do not write additional Exp_Rate column (SPEX <=3.04.00).",
+                        dest="exprate", action="store_false", default=True)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
     parser.add_argument('--version', action='version', version=message.version)
 
     return parser
+
 
 if __name__ == "__main__":
     main()

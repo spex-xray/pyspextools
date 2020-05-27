@@ -136,7 +136,7 @@ class Spo:
         self.last = np.array([], dtype=bool)
 
         # New feature since SPEX 3.05.00
-        self.brat_exist = False
+        self.brat_exist = True
 
         # Does the channel order need to be swapped?
         self.swap = False
@@ -303,6 +303,8 @@ class Spo:
             if col == "Exp_Rate":
                 self.brat = table['Exp_Rate']
                 self.brat_exist = True
+            else:
+                self.brat_exist = False
 
         if not self.brat_exist:
             self.brat = np.ones(self.ochan.size, dtype=float)
@@ -363,7 +365,7 @@ class Spo:
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
-    def write_file(self, sponame, exp_rate=False, overwrite=False, history=None):
+    def write_file(self, sponame, exp_rate=True, overwrite=False, history=None):
         """Function to write the spectrum to a .spo file with the name 'sponame'.
         The exp_rate flag determines whether the Exp_Rate column is added containing
         the ratio between the backscales of the source and background spectra. This column

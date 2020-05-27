@@ -190,7 +190,7 @@ class Dataset:
     # Write one region to a spo and res file.
     # -----------------------------------------------------
 
-    def write_region(self, spofile, resfile, iregion, exp_rate=False, overwrite=False, history=None):
+    def write_region(self, spofile, resfile, iregion, exp_rate=True, overwrite=False, history=None):
         """Write one region to a spo and res file.
 
         :param spofile: File name of the input .spo file.
@@ -220,7 +220,7 @@ class Dataset:
     # Write all the regions to a spo and res file.
     # -----------------------------------------------------
 
-    def write_all_regions(self, spofile, resfile, exp_rate=False, overwrite=False, history=None):
+    def write_all_regions(self, spofile, resfile, exp_rate=True, overwrite=False, history=None):
         """Write all regions in the data object to spo and res.
 
         :param spofile: File name of the input .spo file.

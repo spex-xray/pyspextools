@@ -37,42 +37,42 @@ def main():
     message.set_color(args.color)
 
     # Load OGIP response files and background spectrum if provided
-    ogip = OGIPRegion()
+    ogipreg = OGIPRegion()
 
     # Read the background PHA file if specified:
     if args.bkgfile is not None:
-        ogip.input_bkg = True
-        ogip.read_background_pha(args.bkgfile)
-        ogip.back.BackScaling = ogip.back.BackScaling / args.backscale
+        ogipreg.input_bkg = True
+        ogipreg.read_background_pha(args.bkgfile)
+        ogipreg.back.BackScaling = ogipreg.back.BackScaling / args.backscale
     else:
-        ogip.input_bkg = False
-        ogip.back = None
+        ogipreg.input_bkg = False
+        ogipreg.back = None
 
     # Corr spectrum is not used here
-    ogip.corr = None
+    ogipreg.corr = None
 
     # Read the response matrix
-    ogip.read_rmf(args.rmffile)
+    ogipreg.read_rmf(args.rmffile)
 
     # Read the effective area
     if args.arffile is not None:
-        ogip.input_area = True
-        ogip.read_arf(args.arffile)
+        ogipreg.input_area = True
+        ogipreg.read_arf(args.arffile)
     else:
-        ogip.input_area = False
-        ogip.area = None
+        ogipreg.input_area = False
+        ogipreg.area = None
 
     # Generate dummy spectrum based on rmf channels
-    ogip.spec.create_dummy(ogip.resp)
+    ogipreg.spec.create_dummy(ogipreg.resp)
 
     # Convert spectra and responses to SPEX format
-    stat = ogip.add_region(ogip.spec,ogip.resp,back=ogip.back,corr=ogip.corr,area=ogip.area)
+    stat = ogipreg.add_region(ogipreg.spec, ogipreg.resp, back=ogipreg.back, corr=ogipreg.corr, area=ogipreg.area)
     if stat != 0:
         sys.exit()
 
     # Filter for bad channels (if not blocked by command line argument)
     if args.badchan:
-        ogip = clean_region(ogip)
+        ogipreg = clean_region(ogipreg)
 
     # Add the simres command to the file history
     history = []
@@ -83,19 +83,19 @@ def main():
     history.append("Command used: {0}".format(command))
     history.append("Variables derived from commandline:")
     for arg in vars(args):
-        line = "{0} : {1}".format(arg, getattr(args,arg))
+        line = "{0} : {1}".format(arg, getattr(args, arg))
         history.append(line)
 
     # Check output file names
-    spofile = ogip.spo.check_filename(args.spofile)
-    resfile = ogip.res.check_filename(args.resfile)
+    spofile = ogipreg.spo.check_filename(args.spofile)
+    resfile = ogipreg.res.check_filename(args.resfile)
 
     # Write output spo and res file
     print("Writing SPO to file: {0}".format(spofile))
-    ogip.spo.write_file(spofile,exp_rate=args.exprate,overwrite=args.overwrite,history=history)
+    ogipreg.spo.write_file(spofile, exp_rate=args.exprate, overwrite=args.overwrite, history=history)
 
     print("Writing RES to file: {0}".format(resfile))
-    ogip.res.write_file(resfile,overwrite=args.overwrite,history=history)
+    ogipreg.res.write_file(resfile, overwrite=args.overwrite, history=history)
 
 
 # Get command line arguments
@@ -111,13 +111,14 @@ def simres_arguments():
                         default=True)
     parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
                         default=False)
-    parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
-                        default=False)
+    parser.add_argument('--no-exprate', help="Do not write additional Exp_Rate column (SPEX <=3.04.00).",
+                        dest='exprate', action="store_false", default=True)
     parser.add_argument('--backscale', help="Set a background scaling factor.", type=float, default=1.0)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
     parser.add_argument('--version', action='version', version=message.version)
 
     return parser
+
 
 if __name__ == "__main__":
     main()

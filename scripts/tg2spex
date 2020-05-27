@@ -26,7 +26,7 @@ standard_library.install_aliases()
 
 
 def main():
-    '''Program to convert Chandra grating spectra to SPEX format.'''
+    """Program to convert Chandra grating spectra to SPEX format."""
 
     # Obtain command line arguments
     parser = tg2spex_arguments()
@@ -50,13 +50,12 @@ def main():
     history.append("Command used: {0}".format(command))
     history.append("Variables derived from commandline:")
     for arg in vars(args):
-        line = "{0} : {1}".format(arg, getattr(args,arg))
+        line = "{0} : {1}".format(arg, getattr(args, arg))
         history.append(line)
 
     # Find out the origin of the observation (CIAO or TGCAT) and set filename mode.
     print("Origin of the observation is: ", end='')
-    tgcat = False
-    input_prefix=args.input_prefix
+    input_prefix = args.input_prefix
 
     # Check if default TGCAT filenames are there
     if os.path.isfile(path+"/pha2.gz"):
@@ -85,19 +84,19 @@ def main():
                 sys.exit()
         else:
             # If there is no prefix specified, do a detection
-            list = glob.glob(path+"/*pha2.fits")
-            if len(list) > 1:
+            filelist = glob.glob(path+"/*pha2.fits")
+            if len(filelist) > 1:
                 # If there are more pha2 files, ask for a more detailed specification.
                 message.error("More than one pha2 files found. Please provide the input prefix through the "
                               "'--input-prefix' flag.")
                 sys.exit()
-            elif len(list) == 1:
+            elif len(filelist) == 1:
                 # If there is one pha2 file, this is probably the right one:
-                phafile = list[0]
+                phafile = filelist[0]
                 print("Found PHA2 file at: {0}".format(phafile))
                 # Deduce input_prefix from
-                input_prefix = phafile.replace(path+"/",'')
-                input_prefix = input_prefix.replace('pha2.fits','')
+                input_prefix = phafile.replace(path+"/", '')
+                input_prefix = input_prefix.replace('pha2.fits', '')
                 print("Autodetected input file prefix to be: {0}".format(input_prefix))
             else:
                 # If there is no pha2 file, we are obviously looking in the wrong place.
@@ -122,7 +121,7 @@ def main():
 
         # Obtain rmf and arf file list for hetg and metg
         print("Start HETG file conversion:")
-        (heg_rmf_list, heg_arf_list) = search_response_files(path,tgcat,input_prefix,'heg')
+        (heg_rmf_list, heg_arf_list) = search_response_files(path, tgcat, input_prefix, 'heg')
         if len(heg_rmf_list) == 0:
             message.error("HETG response list generation failed.")
             sys.exit()
@@ -139,7 +138,7 @@ def main():
         dataset.append_region(hetg, 1, 1)
 
         print("Start METG file conversion:")
-        (meg_rmf_list, meg_arf_list) = search_response_files(path,tgcat,input_prefix,'meg')
+        (meg_rmf_list, meg_arf_list) = search_response_files(path, tgcat, input_prefix, 'meg')
         if len(meg_rmf_list) == 0:
             message.error("METG response list generation failed.")
             sys.exit()
@@ -162,7 +161,7 @@ def main():
 
         # Obtain rmf and arf file list for letg
         print("Start LETG file conversion:")
-        (leg_rmf_list, leg_arf_list) = search_response_files(path,tgcat,input_prefix,'leg')
+        (leg_rmf_list, leg_arf_list) = search_response_files(path, tgcat, input_prefix, 'leg')
         if len(leg_rmf_list) == 0:
             message.error("LETG response list generation failed.")
             sys.exit()
@@ -176,7 +175,7 @@ def main():
             print("Clean bad channels for LETG:")
             letg = clean_region(letg)
 
-        dataset.append_region(letg,1,1)
+        dataset.append_region(letg, 1, 1)
 
     else:
         message.error("Grating name not recognized.")
@@ -195,7 +194,7 @@ def main():
 
 
 # Search RMF and ARF files for certain grating
-def search_response_files(path,tgcat,prefix,gname):
+def search_response_files(path, tgcat, prefix, gname):
     """Search the accompanying response file for a certain grating. gname can be 'heg', 'meg' or 'leg'."""
 
     if tgcat:
@@ -217,6 +216,7 @@ def search_response_files(path,tgcat,prefix,gname):
 
     return rmflist, arflist
 
+
 # Get command line arguments
 def tg2spex_arguments():
     # Obtain command line arguments
@@ -232,12 +232,13 @@ def tg2spex_arguments():
                         default=True)
     parser.add_argument('--overwrite', help="Overwrite existing spo and res files with same name.", action="store_true",
                         default=True)
-    parser.add_argument('--exprate', help="Write additional Exp_Rate column (SPEX >=3.05.00).", action="store_true",
-                        default=False)
+    parser.add_argument('--no-exprate', help="Do not write additional Exp_Rate column (SPEX <=3.04.00).",
+                        dest="exprate", action="store_false", default=True)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
     parser.add_argument('--version', action='version', version=message.version)
 
     return parser
+
 
 if __name__ == "__main__":
     main()
