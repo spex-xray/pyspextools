@@ -12,32 +12,12 @@ SPEX.
 
 This page offers the following help and documentation:
 
-Install pyspextools
--------------------
 .. toctree::
    :maxdepth: 2
    
    install
-
-Pyspextools tutorials
----------------------
-.. toctree::
-   :maxdepth: 2
-
    tutorials
-
-Module Refererence
-------------------
-.. toctree::
-   :maxdepth: 2
-
-   io
-
-   ogip
-
-   data
-
-   user
+   reference
 
 
 

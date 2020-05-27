@@ -1,17 +1,17 @@
 .. _iomodule:
 
-The SPEX data format: pyspextools.io
-====================================
+SPEX data format support
+========================
 
-This is a Python class to read, write and manipulate 
+``pyspextools.io`` is a Python submodule to read, write and manipulate
 SPEX spectrum and response file (.spo and .res). The
 format of these FITS files is described in Chapter 5
 of the SPEX manual: http://var.sron.nl/SPEX-doc/ 
 
 .. automodule:: pyspextools.io
 
-Reading and writing datasets
-----------------------------
+Reading/writing datasets
+------------------------
 
 SPEX res and spo files can contain a set of spectra and responses from, for example,
 different instruments used in the same observation or spectra from different spatial 

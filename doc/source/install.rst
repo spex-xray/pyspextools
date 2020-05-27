@@ -10,7 +10,7 @@ To do so, create your own conda environment first (See this
 In the example below, we create the conda environment `spex` assuming you already have installed conda successfully.
 The commands below create a new conda environment and activate it in your shell::
 
-    linux:~> conda create -n spex python=3.6 anaconda
+    linux:~> conda create -n spex python=3.6 numpy astropy future
     linux:~> conda activate spex
     (spex) linux:~>
 

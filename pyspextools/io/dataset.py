@@ -263,7 +263,7 @@ class Dataset:
         """Read the response configuration.
 
         :param res: SPEX response object.
-        :type res: pyspextools.io.res.Res
+        :type res: pyspextools.io.Res
         """
         config = np.empty(shape=[0, 2], dtype=int)
         psector = 0

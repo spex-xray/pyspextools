@@ -1,5 +1,5 @@
-Importing OGIP spectra
-======================
+OGIP data format support
+========================
 
 The pyspextools module offers to import OGIP spectral files and convert them to
 SPEX format. There are basicly two types of OGIP files: regular type I files,

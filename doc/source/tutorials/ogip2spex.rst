@@ -1,7 +1,7 @@
 .. _ogip2spex:
 
-OGIP2spex
-=========
+OGIP2spex - Convert OGIP files to SPEX format
+=============================================
 
 OGIP2spex is a script that converts OGIP spectra and responses to SPEX format, similar to the trafo program in SPEX.
 

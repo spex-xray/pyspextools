@@ -1,5 +1,5 @@
-pyspextools.data: Data filtering and optimization functions
-===========================================================
+Data filtering and optimization
+===============================
 
 Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
 bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
