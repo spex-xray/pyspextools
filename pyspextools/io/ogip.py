@@ -227,7 +227,7 @@ class OGIPRegion(Region):
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
             message.proc_start("Convert OGIP spectra to spo format")
-            spo = pha_to_spo(self.spec, self.resp, back=self.back, corr=self.corr)
+            spo = pha_to_spo(self.spec, self.resp, back=self.back, corr=self.corr, save_grouping=self.save_grouping)
 
             if isinstance(spo, Spo):
                 self.spo = spo

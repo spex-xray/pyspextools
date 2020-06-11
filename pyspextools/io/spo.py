@@ -489,7 +489,6 @@ class Spo:
                 return -1
 
         # Check the arrays for consistency
-
         for ireg in np.arange(self.nregion):
             fchan = sum(self.nchan[0:ireg]) - self.nchan[ireg]
             for ichan in np.arange(self.nchan[ireg]) + fchan:
