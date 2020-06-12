@@ -242,6 +242,48 @@ class Pha:
         except KeyError:
             self.corfile = None
 
+    def write(self, filename, overwrite=False):
+        """Write a simple pha file with the minimum required keywords.
+
+        :param filename: PHA file name to be read.
+        :type filename: str
+        :param overwrite: Overwrite existing file?
+        :type overwrite: bool
+        """
+
+        primary_hdu = fits.PrimaryHDU()
+
+        c1 = fits.Column(name='CHANNEL', array=self.Channel, format='J')
+        c2 = fits.Column(name='RATE', array=self.Rate, format='E')
+        c3 = fits.Column(name='STAT_ERR', array=self.StatError, format='E')
+        c4 = fits.Column(name="SYS_ERR", array=self.SysError, format='E')
+        c5 = fits.Column(name="QUALITY", array=self.Quality, format='E')
+        c6 = fits.Column(name="GROUPING", array=self.Grouping, format='I')
+        c7 = fits.Column(name="AREASCAL", array=self.AreaScaling, format='E')
+        c8 = fits.Column(name="BACKSCAL", array=self.BackScaling, format='E')
+
+        table_hdu = fits.BinTableHDU.from_columns([c1, c2, c3, c4, c5, c6, c7, c8])
+
+        hdr = table_hdu.header
+
+        hdr['EXTNAME'] = "SPECTRUM"
+        hdr['EXPOSURE'] = (self.Exposure, 'Exposure time')
+        hdr['POISSERR'] = (self.Poisserr, 'Are the errors Poissonian?')
+        hdr['CORRSCAL'] = (self.CorrScal, 'Correction scaling factor')
+        hdr['HDUCLASS'] = "OGIP"
+        hdr['HDUCLAS1'] = "SPECTRUM"
+        hdr['HDUVERS'] = '1.2.1'
+        hdr['HDUCLAS2'] = self.Spectrumtype
+        hdr['HDUCLAS3'] = self.PhaType
+        hdr['BACKFILE'] = self.bkgfile
+        hdr['RESPFILE'] = self.rmffile
+        hdr['ANCRFILE'] = self.arffile
+        hdr['CORRFILE'] = self.corfile
+
+        hdul = fits.HDUList([primary_hdu, table_hdu])
+
+        hdul.writeto(filename, overwrite=overwrite)
+
     def check(self):
         """Check if the object contains the minimum required data."""
         # Check exposure value
