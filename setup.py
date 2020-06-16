@@ -6,7 +6,8 @@ import os
 import pyspextools
 
 # Set dependencies, we need sphinx to build doc and numpy for arrays
-dependencies = ['future>=0.15', 'numpy>=1.11', 'astropy>=1.1', 'sphinx-argparse>=0.1.15', 'sphinx']
+dependencies = ['future>=0.15', 'numpy>=1.11', 'astropy>=1.1', 'sphinx-argparse>=0.1.15', 'sphinx', 'scipy>=1.0',
+                'matplotlib>=2.0']
 
 # Set up sphinx
 try:
@@ -46,7 +47,7 @@ setup(name=name,
       long_description_content_type='text/markdown',
       packages=find_packages(),
       include_package_data=True,
-      scripts=['scripts/ogipgenrsp', 'scripts/ogip2spex', 'scripts/simres', 'scripts/tg2spex'],
+      scripts=['scripts/ogipgenrsp', 'scripts/ogip2spex', 'scripts/simres', 'scripts/tg2spex', 'scripts/bkgsmooth'],
       install_requires=dependencies,
       cmdclass=cmdclass,
       command_options={

@@ -1,0 +1,123 @@
+#!/usr/bin/env python
+
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
+from __future__ import unicode_literals
+
+import os
+import sys
+import cmd
+import pyspextools
+from pyspextools.io.pha import Pha
+from pyspextools.data.bkgsmooth import Filter
+import matplotlib.pyplot as plt
+
+from builtins import int
+
+from future import standard_library
+
+standard_library.install_aliases()
+
+
+class BkgSmooth(cmd.Cmd):
+    intro = 'Welcome to the pyspextools PHA background smoothing tool.\n' \
+            'Jelle de Plaa, SRON Netherlands Institute for Space Research (2020).\n' \
+            'Type `help` or visit https://spex-xray.github.io/pyspextools/.\n\n'
+    prompt = 'BKGSMOOTH> '
+    file = None
+    filt = Filter()
+    pha = Pha()
+    plot = None
+
+    def do_read(self, arg):
+        """
+        Read a pha file.
+
+            read <filename.pha>
+
+        Usage:
+            BKGSMOOTH> read Example.pha
+        """
+        self.pha.read(arg)
+        self.filt.read_pha(self.pha)
+        self.plot = Bkgplot(self.filt.channel, self.filt.original, self.filt.error)
+
+    def do_savgol(self, arg):
+        """
+        Apply a Savitzky-Golay filter to the spectrum.
+
+            savgol <window_length> <polyorder>
+
+        <window_length>: sets the window length of the filter (positive odd integer).
+        <polyorder>: sets the polyorder of the filter (integer smaller than the window length).
+
+        Usage:
+            BKGSMOOTH> savgol 9 5
+        """
+        self.filt.savgol(*parse(arg))
+        self.plot.update(self.filt.channel, self.filt.filtered)
+
+    def do_wiener(self, arg):
+        """
+        Apply a Wiener filter to the spectrum
+
+            wiener <mysize> noise=<noise>
+
+        <mysize>: size of the Wiener filter window (odd integer).
+        <noise>: noise power to use. If None, the noise power is calculated.
+
+        Usage:
+            BKGSMOOTH> wiener 11
+        """
+        self.filt.wiener(*parse(arg))
+        self.plot.update(self.filt.channel, self.filt.filtered)
+
+    def do_write(self, arg):
+        """
+        Write the output back to a PHA file
+
+            write <filename.pha>
+
+        Usage:
+            BKGSMOOTH> write bkgsmooth.pha
+        """
+        self.filt.write_pha(self.pha, arg)
+
+    def do_quit(self, arg):
+        """
+        End program.
+
+        Usage:
+            BKGSMOOTH> quit
+        """
+        return True
+
+
+def parse(arg):
+    """Convert a series of zero or more numbers to an argument tuple."""
+    return tuple(map(int, arg.split()))
+
+
+class Bkgplot:
+
+    def __init__(self, x, y, dy):
+        plt.ion()
+        self.fig = plt.figure()
+        self.ax = plt.subplot(1, 1, 1)
+        self.ax.set_xlabel('Channel')
+        self.ax.set_ylabel('Rate (c/s)')
+        self.ax.plot(x, y, 'ko')
+        self.ax.errorbar(x, y, yerr=dy, marker='', ls='', c='k')
+        self.ax.plot(x, y, '-r')
+        self.fig.show()
+
+    def update(self, x, y):
+        self.ax.lines[2].set_data(x, y)  # set plot data
+        self.ax.relim()                  # recompute the data limits
+        self.ax.autoscale_view()         # automatic axis scaling
+        self.fig.canvas.flush_events()   # update the plot and take care of window events (like resizing etc.)
+
+
+if __name__ == '__main__':
+    BkgSmooth().cmdloop()

@@ -267,6 +267,7 @@ class Pha:
         hdr = table_hdu.header
 
         hdr['EXTNAME'] = "SPECTRUM"
+        hdr['DETCHANS'] = self.DetChans
         hdr['EXPOSURE'] = (self.Exposure, 'Exposure time')
         hdr['POISSERR'] = (self.Poisserr, 'Are the errors Poissonian?')
         hdr['CORRSCAL'] = (self.CorrScal, 'Correction scaling factor')
