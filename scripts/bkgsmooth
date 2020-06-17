@@ -11,6 +11,8 @@ import cmd
 import pyspextools
 from pyspextools.io.pha import Pha
 from pyspextools.data.bkgsmooth import Filter
+import pyspextools.messages as message
+
 import matplotlib.pyplot as plt
 
 from builtins import int
@@ -21,9 +23,7 @@ standard_library.install_aliases()
 
 
 class BkgSmooth(cmd.Cmd):
-    intro = 'Welcome to the pyspextools PHA background smoothing tool.\n' \
-            'Jelle de Plaa, SRON Netherlands Institute for Space Research (2020).\n' \
-            'Type `help` or visit https://spex-xray.github.io/pyspextools/.\n\n'
+    intro = message.print_header(os.path.basename(__file__))
     prompt = 'BKGSMOOTH> '
     file = None
     filt = Filter()
