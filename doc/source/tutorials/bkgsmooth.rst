@@ -103,6 +103,11 @@ Where ``<window_length>`` is the window length and ``<polyorder>`` the polynomia
 The window length should strictly be an odd positive integer and the polynomial order
 should be an integer less than the window length.
 
+.. Warning:: The Savitzky-Golay filter does not conserve flux. If the smoothed curve
+   follows the original data well, then the flux difference will usually be within
+   the original uncertainties. Please check the flux of your smoothed spectrum if
+   you are unsure or if you need high flux accuracy.
+
 Wiener filter
 '''''''''''''
 
