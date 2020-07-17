@@ -121,3 +121,17 @@ Where ``<window_length>`` is a positive integer.
 
 .. warning:: The Wiener filter tends to smooth out spectral lines as well. If there are
    spectral lines in your spectrum, please use the Savitzky-Golay filter.
+
+Gaussian filter
+'''''''''''''''
+
+A Gaussian filter is just a convolution with a normal distribution with a given standard
+deviation. Gaussian convolution is a very common algorithm to smooth noisy datasets.
+The Gaussian filter is called with a standard deviation like this::
+
+    BKGSMOOTH> gauss <stddev>
+
+Where ``<stddev>`` is a positive floating point number.
+
+.. warning:: The Gaussian filter tends to smooth out spectral lines as well. If there are
+   spectral lines in your spectrum, please use the Savitzky-Golay filter.

@@ -73,6 +73,20 @@ class BkgSmooth(cmd.Cmd):
         self.filt.wiener(*parse(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
 
+    def do_gauss(self, arg):
+        """
+        Apply a Gaussian convulution to the spectrum
+
+            gauss <stddev>
+
+        <stddev>: Standard deviation of the Gauss function to convolve with.
+
+        Usage:
+            BKGSMOOTH> gauss 25
+        """
+        self.filt.gauss(*parse_float(arg))
+        self.plot.update(self.filt.channel, self.filt.filtered)
+
     def do_write(self, arg):
         """
         Write the output back to a PHA file
@@ -97,6 +111,11 @@ class BkgSmooth(cmd.Cmd):
 def parse(arg):
     """Convert a series of zero or more numbers to an argument tuple."""
     return tuple(map(int, arg.split()))
+
+
+def parse_float(arg):
+    """Convert a series of zero or more floats to an argument tuple."""
+    return tuple(map(float, arg.split()))
 
 
 class Bkgplot:

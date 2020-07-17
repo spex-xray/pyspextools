@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import numpy as np
 from scipy.signal import savgol_filter, wiener
+from astropy.convolution import convolve_fft, Gaussian1DKernel
 import pyspextools.messages as message
 
 # Stuff to import for compatibility between python 2 and 3
@@ -39,6 +40,9 @@ class Filter:
         self.original = np.array([])
         self.error = np.array([])
         self.filtered = np.array([])
+        self.instrument = None
+        self.chanmin = np.array([])
+        self.chanmax = np.array([])
 
     def read_pha(self, pha):
         """Read the background spectrum from a Pha object.
@@ -51,6 +55,30 @@ class Filter:
         self.original = pha.Rate
         self.error = pha.StatError
         self.filtered = np.zeros(self.nchan, dtype=float)
+        self.instrument = pha.Instrument
+
+        self.chanmin = np.array([0])
+        self.chanmax = np.array([self.nchan])
+
+        # Detect CCD boundaries for RGS
+        if self.instrument == 'RGS1' or self.instrument == 'RGS2':
+            self.chanmin = np.zeros(18, dtype=int)
+            self.chanmax = self.nchan * np.ones(18, dtype=int)
+            ccd = -1
+            ingap = True
+            for i in np.arange(self.nchan):
+                if pha.Quality[i] == 1 and pha.AreaScaling[i] == 1.0:
+                    if not ingap:
+                        self.chanmax[ccd] = i - 1
+                        ingap = True
+                else:
+                    if ingap:
+                        ccd = ccd + 1
+                        self.chanmin[ccd] = i
+                        ingap = False
+
+            self.chanmin = self.chanmin[0:ccd+1]
+            self.chanmax = self.chanmax[0:ccd+1]
 
     def read_spo(self, spo, iregion=1):
         """Read the background spectrum from a spo file.
@@ -83,11 +111,12 @@ class Filter:
             message.error("No spectrum loaded. Please load a spectrum.")
             return
 
-        try:
-            self.filtered = savgol_filter(self.original, window_length, polyorder)
-        except ValueError:
-            message.error("The window length (first number) needs to be a positive odd integer and \n"
-                          "the polyorder (second number) needs to be an integer smaller than the window length.")
+        for i in np.arange(self.chanmin.size):
+            try:
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = savgol_filter(self.original[self.chanmin[i]:self.chanmax[i]], window_length, polyorder)
+            except ValueError:
+                message.error("The window length (first number) needs to be a positive odd integer and \n"
+                              "the polyorder (second number) needs to be an integer smaller than the window length.")
 
     def wiener(self, mysize, noise=None):
         """Apply a Wiener filter to the spectrum. See the `wiener
@@ -104,10 +133,29 @@ class Filter:
             message.error("No spectrum loaded. Please load a spectrum.")
             return
 
-        try:
-            self.filtered = wiener(self.original, mysize, noise=noise)
-        except ValueError:
-            message.error("Input filter window size and noise should be integer.")
+        for i in np.arange(self.chanmin.size):
+            try:
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = wiener(self.original[self.chanmin[i]:self.chanmax[i]], mysize, noise=noise)
+            except ValueError:
+                message.error("Input filter window size and noise should be integer.")
+
+    def gauss(self, stddev):
+        """Apply a Gaussian convolution to the spectrum.
+
+        :param stddev: Standard deviation of the Gaussian kernel to apply.
+        :type stddev: int
+        """
+        if self.nchan == 0:
+            message.error("No spectrum loaded. Please load a spectrum.")
+            return
+
+        for i in np.arange(self.chanmin.size):
+            try:
+                gaussfunc = Gaussian1DKernel(stddev=stddev)
+                data_ave = np.mean(self.original[self.chanmin[i]:self.chanmax[i]])
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = convolve_fft(self.original[self.chanmin[i]:self.chanmax[i]], gaussfunc, boundary='fill', fill_value=data_ave, normalize_kernel=True)
+            except:
+                message.error("Please provide a positive standard deviation.")
 
     def write_pha(self, pha, filename):
         """Write a simple PHA file"""

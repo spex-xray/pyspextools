@@ -68,6 +68,11 @@ class Pha:
     :ivar corfile: Associated Correction spectrum file.
     :vartype corfile: str
 
+    :ivar Telescope: Name of the observatory.
+    :vartype Telescope: str
+    :ivar Instrument: Name of the instrument.
+    :vartype Instrument: str
+
     :ivar Pha2Back: Is there a PHA2 background available?
     :vartype Pha2Back: bool
     :ivar BackRate: PHA2 Background Rate.
@@ -104,6 +109,9 @@ class Pha:
         self.arffile = None                         # Associated Effective area file
         self.bkgfile = None                         # Associated Background file
         self.corfile = None                         # Associated Correction spectrum file
+
+        self.Telescope = None                       # Name of the observatory
+        self.Instrument = None                      # Name of the instrument
 
         # Only applicable for PHA2 files:
         self.Pha2Back = False                           # Is there a PHA2 background available
@@ -242,6 +250,18 @@ class Pha:
         except KeyError:
             self.corfile = None
 
+        # Read the observatory name if available
+        try:
+            self.Telescope = header['TELESCOP']
+        except KeyError:
+            self.Telescope = None
+
+        # Read the instrument name if available
+        try:
+            self.Instrument = header['INSTRUME']
+        except KeyError:
+            self.Instrument = None
+
     def write(self, filename, overwrite=False):
         """Write a simple pha file with the minimum required keywords.
 
@@ -257,7 +277,7 @@ class Pha:
         c2 = fits.Column(name='RATE', array=self.Rate, format='E')
         c3 = fits.Column(name='STAT_ERR', array=self.StatError, format='E')
         c4 = fits.Column(name="SYS_ERR", array=self.SysError, format='E')
-        c5 = fits.Column(name="QUALITY", array=self.Quality, format='E')
+        c5 = fits.Column(name="QUALITY", array=self.Quality, format='I')
         c6 = fits.Column(name="GROUPING", array=self.Grouping, format='I')
         c7 = fits.Column(name="AREASCAL", array=self.AreaScaling, format='E')
         c8 = fits.Column(name="BACKSCAL", array=self.BackScaling, format='E')
@@ -280,6 +300,8 @@ class Pha:
         hdr['RESPFILE'] = self.rmffile
         hdr['ANCRFILE'] = self.arffile
         hdr['CORRFILE'] = self.corfile
+        hdr['TELESCOP'] = self.Telescope
+        hdr['INSTRUME'] = self.Instrument
 
         hdul = fits.HDUList([primary_hdu, table_hdu])
 
@@ -358,6 +380,9 @@ class Pha:
         print("bkgfile       {0}  Associated Background file".format(self.bkgfile))
         print("corfile       {0}  Associated Correction spectrum file".format(self.corfile))
         print("")
+        print("Observatory and instrument:")
+        print("Telescope     {0}".format(self.Telescope))
+        print("Instrument    {0}".format(self.Instrument))
 
     def checkCompatibility(self, pha):
         """Check if another PHA object is compatible with the current one in terms of number of channels.
