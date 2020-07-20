@@ -57,6 +57,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.savgol(*parse(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
+        self.filt.counts()
 
     def do_wiener(self, arg):
         """
@@ -72,6 +73,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.wiener(*parse(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
+        self.filt.counts()
 
     def do_gauss(self, arg):
         """
@@ -86,6 +88,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.gauss(*parse_float(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
+        self.filt.counts()
 
     def do_write(self, arg):
         """

@@ -30,8 +30,14 @@ class Filter:
     :ivar filtered: Array containing the filtered spectrum.
     :vartype filtered: np.ndarray
 
-    :ivar method: Which method to use?
-    :vartype method: str
+    :ivar exposure: Exposure time of background.
+    :vartype exposure: float
+    :ivar instrument: Name of the used instrument.
+    :vartype instrument: str
+    :ivar chanmin: Minimal channel boundary(ies) for the interval(s) to smooth.
+    :vartype chanmin: np.ndarray
+    :ivar chanmax: Maximal channel boundary(ies) for the interval(s) to smooth.
+    :vartype chanmax: np.ndarray
     """
 
     def __init__(self):
@@ -40,6 +46,7 @@ class Filter:
         self.original = np.array([])
         self.error = np.array([])
         self.filtered = np.array([])
+        self.exposure = 0.
         self.instrument = None
         self.chanmin = np.array([])
         self.chanmax = np.array([])
@@ -56,6 +63,7 @@ class Filter:
         self.error = pha.StatError
         self.filtered = np.zeros(self.nchan, dtype=float)
         self.instrument = pha.Instrument
+        self.exposure = pha.Exposure
 
         self.chanmin = np.array([0])
         self.chanmax = np.array([self.nchan])
@@ -156,6 +164,11 @@ class Filter:
                 self.filtered[self.chanmin[i]:self.chanmax[i]] = convolve_fft(self.original[self.chanmin[i]:self.chanmax[i]], gaussfunc, boundary='fill', fill_value=data_ave, normalize_kernel=True)
             except:
                 message.error("Please provide a positive standard deviation.")
+
+    def counts(self):
+        """Calculate the total number of counts in the background before and after filtering."""
+        print("Total number of counts before smoothing: {0:.2f}".format(np.sum(self.original)*self.exposure))
+        print("Total number of counts after smoothing: {0:.2f}".format(np.sum(self.filtered)*self.exposure))
 
     def write_pha(self, pha, filename):
         """Write a simple PHA file"""
