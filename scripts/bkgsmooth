@@ -43,6 +43,21 @@ class BkgSmooth(cmd.Cmd):
         self.filt.read_pha(self.pha)
         self.plot = Bkgplot(self.filt.channel, self.filt.original, self.filt.error)
 
+    def do_select(self, arg):
+        """
+        Select the channel range to filter by providing the minimum and maximum channel number
+        to take into account.
+
+            select <chanmin> <chanmax>
+
+        <chanmin>: Minimum channel number.
+        <chanmax>: Maximum channel number.
+
+        Usage:
+            BKGSMOOTH> select 10 750
+        """
+        self.filt.select_channels(*parse(arg))
+
     def do_savgol(self, arg):
         """
         Apply a Savitzky-Golay filter to the spectrum.
@@ -57,7 +72,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.savgol(*parse(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
-        self.filt.counts()
+        self.filt.renormalize()
 
     def do_wiener(self, arg):
         """
@@ -73,7 +88,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.wiener(*parse(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
-        self.filt.counts()
+        self.filt.renormalize()
 
     def do_gauss(self, arg):
         """
@@ -88,7 +103,7 @@ class BkgSmooth(cmd.Cmd):
         """
         self.filt.gauss(*parse_float(arg))
         self.plot.update(self.filt.channel, self.filt.filtered)
-        self.filt.counts()
+        self.filt.renormalize()
 
     def do_write(self, arg):
         """

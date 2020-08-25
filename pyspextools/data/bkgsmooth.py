@@ -102,6 +102,34 @@ class Filter:
         self.original = regspo.mbchan
         self.filtered = np.zeros(self.nchan, dtype=float)
 
+    def select_channels(self, chanmin, chanmax):
+        """Select the channel interval to filter. This allows the user to ignore bad data at the
+        low or high end of the spectrum. The chanmin and chanmax values should contain the lowest
+        and highest channel respectively of the interval to smooth. Please note that for the RGS
+        instrument the channel limits are set automatically.
+
+        :param chanmin: Minimum channel number of interval to filter.
+        :type chanmin: int
+        :param chanmax: Maximum channel number of interval to filter.
+        type chanmax: int
+        """
+        cmin = np.where(self.channel == chanmin)
+        if len(cmin) != 1:
+            message.error("Minimum channel number not found. No selection is done.")
+            return
+
+        cmax = np.where(self.channel == chanmax)
+        if len(cmax) != 1:
+            message.error("Maximum channel number not found. No selection is done.")
+            return
+
+        self.chanmin = cmin[0]
+        self.chanmax = cmax[0]
+        for i in np.arange(self.nchan):
+            self.filtered[i] = self.original[i]
+        print("Next time, the spectrum is filtered between channel {0} and {1}.".format(int(cmin[0]), int(cmax[0])))
+        print("Outside the interval, the original background is assumed.")
+
     def savgol(self, window_length, polyorder):
         """Apply a Savitzky-Golay filter to the spectrum. See the `savgol_filter
         <https://docs.scipy.org/doc/scipy/reference/generated/scipy.signal.savgol_filter.html>`_
@@ -121,7 +149,8 @@ class Filter:
 
         for i in np.arange(self.chanmin.size):
             try:
-                self.filtered[self.chanmin[i]:self.chanmax[i]] = savgol_filter(self.original[self.chanmin[i]:self.chanmax[i]], window_length, polyorder)
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = \
+                    savgol_filter(self.original[self.chanmin[i]:self.chanmax[i]], window_length, polyorder)
             except ValueError:
                 message.error("The window length (first number) needs to be a positive odd integer and \n"
                               "the polyorder (second number) needs to be an integer smaller than the window length.")
@@ -133,7 +162,8 @@ class Filter:
 
         :param mysize: A scalar giving the size of the Wiener filter window in one dimension.
         :type mysize: int
-        :param noise: The noise-power to use. If None, then noise is estimated as the average of the local variance of the input.
+        :param noise: The noise-power to use. If None, then noise is estimated as the average of the local
+        variance of the input.
         :type noise: int
         """
 
@@ -143,7 +173,8 @@ class Filter:
 
         for i in np.arange(self.chanmin.size):
             try:
-                self.filtered[self.chanmin[i]:self.chanmax[i]] = wiener(self.original[self.chanmin[i]:self.chanmax[i]], mysize, noise=noise)
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = wiener(self.original[self.chanmin[i]:self.chanmax[i]],
+                                                                        mysize, noise=noise)
             except ValueError:
                 message.error("Input filter window size and noise should be integer.")
 
@@ -161,14 +192,20 @@ class Filter:
             try:
                 gaussfunc = Gaussian1DKernel(stddev=stddev)
                 data_ave = np.mean(self.original[self.chanmin[i]:self.chanmax[i]])
-                self.filtered[self.chanmin[i]:self.chanmax[i]] = convolve_fft(self.original[self.chanmin[i]:self.chanmax[i]], gaussfunc, boundary='fill', fill_value=data_ave, normalize_kernel=True)
+                self.filtered[self.chanmin[i]:self.chanmax[i]] = \
+                    convolve_fft(self.original[self.chanmin[i]:self.chanmax[i]], gaussfunc, boundary='fill',
+                                 fill_value=data_ave, normalize_kernel=True)
             except:
                 message.error("Please provide a positive standard deviation.")
 
-    def counts(self):
-        """Calculate the total number of counts in the background before and after filtering."""
-        print("Total number of counts before smoothing: {0:.2f}".format(np.sum(self.original)*self.exposure))
-        print("Total number of counts after smoothing: {0:.2f}".format(np.sum(self.filtered)*self.exposure))
+    def renormalize(self):
+        """Renormalize the spectrum based on the total number of counts."""
+        sorig = np.sum(self.original) * self.exposure
+        sfilt = np.sum(self.filtered) * self.exposure
+
+        self.filtered = self.filtered * (sorig/sfilt)
+
+        print("Spectrum renormalized with factor: {0:.3f}".format(sorig/sfilt))
 
     def write_pha(self, pha, filename):
         """Write a simple PHA file"""

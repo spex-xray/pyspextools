@@ -46,6 +46,18 @@ line connecting the data points.
 .. image:: bkgsmooth_1.png
   :alt: Background spectrum
 
+Many times, the low- or high end of the spectrum contains non-usable data because
+of instrument effects and/or calibration difficulties. To select the good parts
+of the spectrum, one can use the ``select`` function to set the channel range to
+smooth::
+
+    BKGSMOOTH> select 11 799
+    Next time, the spectrum is filtered between channel 11 and 799.
+    Outside the interval, the original background is assumed.
+
+This way, the bad regions are not touched and do not interfere with the renormalization
+of the spectrum done after filtering.
+
 ``bkgsmooth`` contains a couple of filters to apply to the background spectrum.
 Currently, one can only apply one filter at the time. Each time, the filter is
 applied to the original spectrum. In this example, we apply the `Savitzky-Golay
