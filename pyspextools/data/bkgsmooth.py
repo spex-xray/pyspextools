@@ -207,11 +207,11 @@ class Filter:
 
         print("Spectrum renormalized with factor: {0:.3f}".format(sorig/sfilt))
 
-    def write_pha(self, pha, filename):
+    def write_pha(self, pha, filename, overwrite=False):
         """Write a simple PHA file"""
 
         pha.Rate = self.filtered
         pha.StatError = pha.StatError * 0.
         pha.Poisserr = False
         pha.PhaType = 'RATE'
-        pha.write(filename)
+        pha.write(filename, overwrite=overwrite)
