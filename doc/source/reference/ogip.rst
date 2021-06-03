@@ -92,7 +92,12 @@ However, the RMF files do not contain information about the physical response co
 There are methods to detect similar groups in an RMF file and organise them in a component,
 but we did not add this method to this class. This class does a direct copy of all the groups 
 of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in 
-components is desired, that should be done with other methods in the pyspextools module (ref). 
+components is desired, that should be done with other methods in the pyspextools module (ref).
+
+**Update (version 0.4.0)**: There is a new type of RMF file that contains two MATRIX extensions
+in the fits file that both model different components of the instrument response. Pyspextools can
+convert these spectra now and in the resulting SPEX format the separate MATRIX extensions are
+translated into SPEX response components.
 
 
 The OGIPRegion class description
