@@ -170,9 +170,9 @@ class TGRegion(Region):
             message.proc_start("Reading response for order")
             rmf = Rmf()
             rmf.read(file)
-            rmf_orders[i] = rmf.Order
+            rmf_orders[i] = rmf.matrix[0].Order
             print(str(rmf_orders[i])+"  ", end='')
-            if len(np.where(rmf_orders == rmf.Order)) != 1:
+            if len(np.where(rmf_orders == rmf.matrix[0].Order)) != 1:
                 message.error("There are two response files with the same order.")
                 message.proc_end(1)
                 return 1

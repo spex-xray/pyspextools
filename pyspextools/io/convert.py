@@ -171,15 +171,15 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
 
         # Get channel boundaries from response
         # Channel boundary cannot be 0.
-        if rmf.EnergyUnits != "keV":
+        if rmf.ebounds.EnergyUnits != "keV":
             message.warning("Energy units of keV are expected in the response file!")
 
-        if rmf.ChannelLowEnergy[i] <= 0.:
+        if rmf.ebounds.ChannelLowEnergy[i] <= 0.:
             spo.echan1[i] = 1e-5
             message.warning("Lowest channel boundary energy is 0. Set to 1E-5 to avoid problems.")
         else:
-            spo.echan1[i] = rmf.ChannelLowEnergy[i]
-        spo.echan2[i] = rmf.ChannelHighEnergy[i]
+            spo.echan1[i] = rmf.ebounds.ChannelLowEnergy[i]
+        spo.echan2[i] = rmf.ebounds.ChannelHighEnergy[i]
 
     # Check if channel order needs to be swapped
     if src.DetChans > 1:
@@ -195,8 +195,7 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
 # Return a res object derived from the OGIP data
 # -----------------------------------------------------
 
-
-def rmf_to_res(rmf, arf=None):
+def rmf_to_res(rmf, matext=0, arf=None):
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one
     without optimizations. Providing an ARF object is optional. All groups in the OGIP matrix are put into one
     SPEX response component. This method returns a pyspextools Res object containing the response matrix.
@@ -205,10 +204,16 @@ def rmf_to_res(rmf, arf=None):
     :type rmf: pyspextools.io.Rmf
     :param arf: Input ARF effective area object.
     :type arf: pyspextools.io.Arf
+    :param matext: RMF matrix number to convert (start counting at 0)
+    :type matext: int
     """
 
     if not isinstance(rmf, Rmf):
         message.error("The input RMF object is not of type Rmf.")
+        return 1
+
+    if matext >= rmf.NumberMatrixExt or matext < 0:
+        message.error("The supplied matrix extension number is not available.")
         return 1
 
     if arf is not None:
@@ -219,7 +224,7 @@ def rmf_to_res(rmf, arf=None):
         input_area = False
 
     try:
-        rmf.NumberChannels
+        rmf.ebounds.NumberChannels
     except NameError:
         message.error("The OGIP response matrix has not been initialised yet.")
         return 0
@@ -227,7 +232,7 @@ def rmf_to_res(rmf, arf=None):
     res = Res()
 
     # Read the number of energy bins and groups
-    res.nchan = np.append(res.nchan, rmf.NumberChannels)
+    res.nchan = np.append(res.nchan, rmf.ebounds.NumberChannels)
     res.nsector = 1
     res.nregion = 1
     res.sector = np.append(res.sector, 1)
@@ -235,7 +240,7 @@ def rmf_to_res(rmf, arf=None):
     res.resname = None
 
     # Read the total number of groups (which is neg in SPEX format)
-    res.neg = np.append(res.neg, rmf.NumberTotalGroups)
+    res.neg = np.append(res.neg, rmf.matrix[matext].NumberTotalGroups)
 
     res.eg1 = np.zeros(res.neg, dtype=float)
     res.eg2 = np.zeros(res.neg, dtype=float)
@@ -244,7 +249,7 @@ def rmf_to_res(rmf, arf=None):
     res.ic2 = np.zeros(res.neg, dtype=int)
 
     # Read the total number of matrix elements
-    nm = rmf.NumberTotalElements
+    nm = rmf.matrix[matext].NumberTotalElements
     res.resp = np.zeros(nm, dtype=float)
 
     # Set the number of components to 1 (no optimization or re-ordering)
@@ -253,26 +258,26 @@ def rmf_to_res(rmf, arf=None):
     # Read the energy bin boundaries and group information
     g = 0  # Index for the group number
     m = 0  # Index for the matrix element number
-    for i in np.arange(rmf.NumberEnergyBins):
+    for i in np.arange(rmf.matrix[matext].NumberEnergyBins):
         # Number of response groups for this energy bin
-        ngrp = rmf.NumberGroups[i]
+        ngrp = rmf.matrix[matext].NumberGroups[i]
         for j in np.arange(ngrp):
             # Energy bin boundaries
-            if rmf.LowEnergy[i] <= 0.:
+            if rmf.matrix[matext].LowEnergy[i] <= 0.:
                 res.eg1[g] = 1e-7
                 message.warning("Lowest energy boundary is 0. Set to 1E-7 to avoid problems.")
             else:
-                res.eg1[g] = rmf.LowEnergy[i]
+                res.eg1[g] = rmf.matrix[matext].LowEnergy[i]
 
-            res.eg2[g] = rmf.HighEnergy[i]
+            res.eg2[g] = rmf.matrix[matext].HighEnergy[i]
             if res.eg2[g] <= res.eg1[g]:
                 message.error("Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
                     i + 1))
                 return
 
-            res.nc[g] = rmf.NumberChannelsGroup[g]
+            res.nc[g] = rmf.matrix[matext].NumberChannelsGroup[g]
             # Add the start channel to the IC to correct for cases where we start at channel 0/1
-            res.ic1[g] = rmf.FirstChannelGroup[g]
+            res.ic1[g] = rmf.matrix[matext].FirstChannelGroup[g]
             ic2 = res.ic1[g] + res.nc[g] - 1
             res.ic2[g] = ic2
 
@@ -282,7 +287,7 @@ def rmf_to_res(rmf, arf=None):
                 area = 1.0
 
             for k in np.arange(res.nc[g]):
-                res.resp[m] = rmf.Matrix[m] * area
+                res.resp[m] = rmf.matrix[matext].Matrix[m] * area
                 if res.resp[m] < 0.0:
                     res.resp[m] = 0.0
                 m = m + 1
@@ -305,7 +310,7 @@ def rmf_to_res(rmf, arf=None):
 
     # Check if channel order needs to be swapped
     if res.nchan > 1:
-        if rmf.ChannelLowEnergy[0] > rmf.ChannelLowEnergy[1]:
+        if rmf.ebounds.ChannelLowEnergy[0] > rmf.ebounds.ChannelLowEnergy[1]:
             res.swap = True
             res.swap_order()
 
