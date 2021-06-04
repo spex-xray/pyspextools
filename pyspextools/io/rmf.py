@@ -19,14 +19,46 @@ from pyspextools.io.arf import Arf
 standard_library.install_aliases()
 
 
-class Rmf:
-    """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-    Keith Arnaud.
+class RmfEbounds:
+    """Class to read the EBOUNDS extension from an RMF or RSP file.
 
     :ivar FirstChannel: First channel number.
     :vartype FirstChannel: int
     :ivar Channel: Channel numbers.
     :vartype Channel: numpy.ndarray
+    :ivar ChannelLowEnergy: Start energy of channel.
+    :vartype ChannelLowEnergy: numpy.ndarray
+    :ivar ChannelHighEnergy: End energy of channel.
+    :vartype ChannelHighEnergy: numpy.ndarray
+    :ivar NumberChannels: Number of data channels.
+    :vartype NumberChannels: int
+    :ivar EnergyUnits: Unit of the energy scale
+    :vartype EnergyUnits: string
+    """
+
+    def __init__(self):
+        self.FirstChannel = 0                               # First channel number
+        self.Channel = np.array([], dtype=int)              # Channel numbers
+        self.ChannelLowEnergy = np.array([], dtype=float)   # Start energy of channel
+        self.ChannelHighEnergy = np.array([], dtype=float)  # End energy of channel
+        self.NumberChannels = 0                             # Number of data channels
+        self.EnergyUnits = ''                               # Unit of the energy scale
+
+    def read(self, rmffile):
+        # Read the Ebounds table
+        (data, header) = fits.getdata(rmffile, 'EBOUNDS', header=True)
+
+        self.Channel = data['CHANNEL']
+        self.ChannelLowEnergy = data['E_MIN']
+        self.ChannelHighEnergy = data['E_MAX']
+        self.NumberChannels = self.Channel.size
+        self.FirstChannel = self.Channel[0]
+        self.EnergyUnits = header['TUNIT2']
+
+
+class RmfMatrix:
+    """Class to read a MATRIX extension from an OGIP RMF or RSP file.
+
     :ivar NumberGroups: Number of response groups.
     :vartype NumberGroups: numpy.ndarray
     :ivar FirstGroup: First response group for this energy bin.
@@ -43,13 +75,7 @@ class Rmf:
     :vartype HighEnergy: numpy.ndarray
     :ivar Matrix: Response matrix elements.
     :vartype Matrix: numpy.ndarray
-    :ivar ChannelLowEnergy: Start energy of channel.
-    :vartype ChannelLowEnergy: numpy.ndarray
-    :ivar ChannelHighEnergy: End energy of channel.
-    :vartype ChannelHighEnergy: numpy.ndarray
 
-    :ivar NumberChannels: Number of data channels.
-    :vartype NumberChannels: int
     :ivar NumberEnergyBins: Number of energy bins.
     :vartype NumberEnergyBins: int
     :ivar NumberTotalGroups: Total number of groups.
@@ -73,8 +99,6 @@ class Rmf:
     """
 
     def __init__(self):
-        self.FirstChannel = 0                               # First channel number
-        self.Channel = np.array([], dtype=int)              # Channel numbers
         self.NumberGroups = np.array([], dtype=int)         # Number of response groups
         self.FirstGroup = np.array([], dtype=int)           # First response group for this energy bin
         self.FirstChannelGroup = np.array([], dtype=int)    # First channel number in this group
@@ -83,10 +107,7 @@ class Rmf:
         self.LowEnergy = np.array([], dtype=float)          # Start energy of bin
         self.HighEnergy = np.array([], dtype=float)         # End energy of bin
         self.Matrix = np.array([], dtype=float)             # Matrix elements
-        self.ChannelLowEnergy = np.array([], dtype=float)   # Start energy of channel
-        self.ChannelHighEnergy = np.array([], dtype=float)  # End energy of channel
 
-        self.NumberChannels = 0                             # Number of data channels
         self.NumberEnergyBins = 0                           # Number of energy bins
         self.NumberTotalGroups = 0                          # Total number of groups
         self.NumberTotalElements = 0                        # Total number of response elements
@@ -99,35 +120,21 @@ class Rmf:
 
         self.Order = 0                                      # Order of the matrix
 
-    def read(self, rmffile):
-        """Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-        Keith Arnaud.
-
-        :param rmffile: RMF file name to read.
-        :type rmffile: str
-        """
-
-        # Read the Ebounds table
-        (data, header) = fits.getdata(rmffile, 'EBOUNDS', header=True)
-
-        self.Channel = data['CHANNEL']
-        self.ChannelLowEnergy = data['E_MIN']
-        self.ChannelHighEnergy = data['E_MAX']
-        self.NumberChannels = self.Channel.size
-        self.FirstChannel = self.Channel[0]
+    def read(self, rmfhdu):
 
         # Read the Matrix table
-        rmf = fits.open(rmffile)
+        data = rmfhdu.data
+        header = rmfhdu.header
 
-        try:
-            data = rmf['MATRIX'].data
-            header = rmf['MATRIX'].header
-        except KeyError:
-            data = rmf['SPECRESP MATRIX'].data
-            header = rmf['SPECRESP MATRIX'].header
+        if rmfhdu.name == 'MATRIX':
+            pass
+        elif rmfhdu.name == 'SPECRESP MATRIX':
             message.warning("This is an RSP file with the effective area included.")
             print("Do not read an ARF file, unless you know what you are doing.")
             self.AreaIncluded = True
+        else:
+            message.error("MATRIX extension not successfully found in RMF file.")
+            return
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
@@ -189,6 +196,48 @@ class Rmf:
         self.NumberTotalElements = self.Matrix.size
         self.ResponseThreshold = np.amin(self.Matrix)
 
+
+class Rmf:
+    """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+    Keith Arnaud.
+
+    """
+
+    def __init__(self):
+        self.ebounds = RmfEbounds()
+        self.matrix = []
+        self.NumberMatrixExt = 0
+        self.MatrixExt = np.array([], dtype=int)
+
+    def read(self, rmffile):
+        """Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+        Keith Arnaud.
+
+        :param rmffile: RMF file name to read.
+        :type rmffile: str
+        """
+
+        # Read the Ebounds table
+        self.ebounds.read(rmffile)
+
+        # Empty lists for safety
+        self.NumberMatrixExt = 0
+        self.MatrixExt = np.array([], dtype=int)
+        self.matrix = []
+
+        # Read the number of MATRIX extensions
+        rmf = fits.open(rmffile)
+        for i in range(len(rmf)):
+            if rmf[i].name == 'MATRIX' or rmf[i].name == 'SPECRESP MATRIX':
+                self.NumberMatrixExt += 1
+                self.MatrixExt = np.append(self.MatrixExt, i)
+
+        # Read the individual matrix extensions
+        for i in self.MatrixExt:
+            mat = RmfMatrix()
+            mat.read(rmf[i])
+            self.matrix.append(mat)
+
         rmf.close()
 
         return 0
@@ -211,7 +260,7 @@ class Rmf:
         #
         # Generate warning if there are multiple groups per energy
         #
-        if np.amax(self.NumberGroups) != 1:
+        if np.amax(self.matrix[0].NumberGroups) != 1:
             message.warning("This method has not been tested for responses with multiple response groups per energy.")
 
         #
@@ -222,15 +271,15 @@ class Rmf:
         #
         # Create the EBOUNDS extension
         #
-        ecol1 = fits.Column(name='CHANNEL', format='J', array=self.Channel)
-        ecol2 = fits.Column(name='E_MIN', format='D', unit=self.EnergyUnits, array=self.ChannelLowEnergy)
-        ecol3 = fits.Column(name='E_MAX', format='D', unit=self.EnergyUnits, array=self.ChannelHighEnergy)
+        ecol1 = fits.Column(name='CHANNEL', format='J', array=self.ebounds.Channel)
+        ecol2 = fits.Column(name='E_MIN', format='D', unit=self.ebounds.EnergyUnits, array=self.ebounds.ChannelLowEnergy)
+        ecol3 = fits.Column(name='E_MAX', format='D', unit=self.ebounds.EnergyUnits, array=self.ebounds.ChannelHighEnergy)
 
-        ebounds = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
+        ebnds = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
 
-        ehdr = ebounds.header
+        ehdr = ebnds.header
         ehdr.set('EXTNAME', 'EBOUNDS')
-        ehdr.set('DETCHANS', self.NumberChannels)
+        ehdr.set('DETCHANS', self.ebounds.NumberChannels)
 
         # Set the TELESCOP keyword (optional)
         if telescop is None:
@@ -258,80 +307,86 @@ class Rmf:
         ehdr.set('HDUVERS1', '1.2.0')
         ehdr.set('ORIGIN ', 'SRON')
 
+        hdu = fits.HDUList([primary, ebnds])
+
         #
         # Create SPECRESP MATRIX extension
         #
-        mcol1 = fits.Column(name='ENERG_LO', format='D', unit=self.EnergyUnits, array=self.LowEnergy)
-        mcol2 = fits.Column(name='ENERG_HI', format='D', unit=self.EnergyUnits, array=self.HighEnergy)
-        mcol3 = fits.Column(name='N_GRP', format='J', array=self.NumberGroups)
-        mcol4 = fits.Column(name='F_CHAN', format='J', array=self.FirstChannelGroup)
-        mcol5 = fits.Column(name='N_CHAN', format='J', array=self.NumberChannelsGroup)
+        for e in range(self.NumberMatrixExt):
+            print("Writing matrix for matrix number: {0}".format(e))
 
-        # Determine the width of the matrix
-        width = np.amax(self.NumberChannelsGroup)
-        formatstr = str(width)+'D'
+            mcol1 = fits.Column(name='ENERG_LO', format='D', unit=self.matrix[e].EnergyUnits, array=self.matrix[e].LowEnergy)
+            mcol2 = fits.Column(name='ENERG_HI', format='D', unit=self.matrix[e].EnergyUnits, array=self.matrix[e].HighEnergy)
+            mcol3 = fits.Column(name='N_GRP', format='J', array=self.matrix[e].NumberGroups)
+            mcol4 = fits.Column(name='F_CHAN', format='J', array=self.matrix[e].FirstChannelGroup)
+            mcol5 = fits.Column(name='N_CHAN', format='J', array=self.matrix[e].NumberChannelsGroup)
 
-        # Building the MATRIX column
-        newmatrix = np.zeros(self.Matrix.size, dtype=float).reshape(self.NumberEnergyBins, width)
+            # Determine the width of the matrix
+            width = np.amax(self.matrix[e].NumberChannelsGroup)
+            formatstr = str(width)+'D'
 
-        re = 0
-        for i in np.arange(self.NumberEnergyBins):
-            for j in np.arange(self.NumberGroups[i]):
-                for k in np.arange(self.NumberChannelsGroup[i]):
-                    newmatrix[i, k] = self.Matrix[re]
-                    re = re + 1
+            #
+            # THIS PART COULD BE UPDATED TO OPTIMIZE THE SIZE USING VARIABLE SIZE ARRAYS IN FITS.
+            #
 
-        mcol6 = fits.Column(name='MATRIX', format=formatstr, array=newmatrix)
+            # Building the MATRIX column
+            newmatrix = np.zeros(self.matrix[e].NumberEnergyBins * width, dtype=float).reshape(self.matrix[e].NumberEnergyBins, width)
 
-        matrix = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
+            re = 0
+            for i in np.arange(self.matrix[e].NumberEnergyBins):
+                for j in np.arange(self.matrix[e].NumberGroups[i]):
+                    for k in np.arange(self.matrix[e].NumberChannelsGroup[i]):
+                        newmatrix[i, k] = self.matrix[e].Matrix[re]
+                        re = re + 1
 
-        mhdr = matrix.header
+            mcol6 = fits.Column(name='MATRIX', format=formatstr, array=newmatrix)
 
-        if self.AreaIncluded:
-            mhdr.set('EXTNAME', 'SPECRESP MATRIX')
-        else:
-            mhdr.set('EXTNAME', 'MATRIX')
+            matrix = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
 
-        # Set the TELESCOP keyword (optional)
-        if telescop is None:
-            mhdr.set('TELESCOP', 'None', 'Telescope name')
-        else:
-            mhdr.set('TELESCOP', telescop, 'Telescope name')
+            mhdr = matrix.header
 
-        # Set the INSTRUME keyword (optional)
-        if instrume is None:
-            mhdr.set('INSTRUME', 'None', 'Instrument name')
-        else:
-            mhdr.set('INSTRUME', instrume, 'Instrument name')
+            if self.matrix[e].AreaIncluded:
+                mhdr.set('EXTNAME', 'SPECRESP MATRIX')
+            else:
+                mhdr.set('EXTNAME', 'MATRIX')
 
-        # Set the FILTER keyword (optional)
-        if filterkey is None:
-            mhdr.set('FILTER', 'None', 'Filter setting')
-        else:
-            mhdr.set('FILTER', filterkey, 'Filter setting')
+            # Set the TELESCOP keyword (optional)
+            if telescop is None:
+                mhdr.set('TELESCOP', 'None', 'Telescope name')
+            else:
+                mhdr.set('TELESCOP', telescop, 'Telescope name')
 
-        mhdr.set('DETCHANS', self.NumberChannels)
-        mhdr.set('LO_THRES', self.ResponseThreshold)
+            # Set the INSTRUME keyword (optional)
+            if instrume is None:
+                mhdr.set('INSTRUME', 'None', 'Instrument name')
+            else:
+                mhdr.set('INSTRUME', instrume, 'Instrument name')
 
-        mhdr.set('CHANTYPE', 'PI')
-        mhdr.set('HDUCLASS', 'OGIP')
-        mhdr.set('HDUCLAS1', 'RESPONSE')
-        mhdr.set('HDUCLAS2', 'RSP_MATRIX')
+            # Set the FILTER keyword (optional)
+            if filterkey is None:
+                mhdr.set('FILTER', 'None', 'Filter setting')
+            else:
+                mhdr.set('FILTER', filterkey, 'Filter setting')
 
-        if self.AreaIncluded:
-            mhdr.set('HDUCLAS3', 'FULL')
-        else:
-            mhdr.set('HDUCLAS3', 'REDIST')
-        mhdr.set('HDUVERS1', '1.3.0')
-        mhdr.set('ORIGIN  ', 'SRON')
+            mhdr.set('DETCHANS', self.ebounds.NumberChannels)
+            mhdr.set('LO_THRES', self.matrix[e].ResponseThreshold)
 
-        matrix.header['HISTORY'] = 'Created by pyspextools:'
-        matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
+            mhdr.set('CHANTYPE', 'PI')
+            mhdr.set('HDUCLASS', 'OGIP')
+            mhdr.set('HDUCLAS1', 'RESPONSE')
+            mhdr.set('HDUCLAS2', 'RSP_MATRIX')
 
-        #
-        # Final HDU List
-        #
-        hdu = fits.HDUList([primary, ebounds, matrix])
+            if self.matrix[e].AreaIncluded:
+                mhdr.set('HDUCLAS3', 'FULL')
+            else:
+                mhdr.set('HDUCLAS3', 'REDIST')
+            mhdr.set('HDUVERS1', '1.3.0')
+            mhdr.set('ORIGIN  ', 'SRON')
+
+            matrix.header['HISTORY'] = 'Created by pyspextools:'
+            matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
+
+            hdu.append(matrix)
 
         try:
             hdu.writeto(rmffile, overwrite=overwrite)
@@ -343,54 +398,62 @@ class Rmf:
 
     def check(self):
         """Check the RMF for internal consistency."""
-        if self.NumberChannels <= 0:
+        if self.ebounds.NumberChannels <= 0:
             message.error("Number of Channels in response is zero.")
             return 1
-        if self.NumberEnergyBins <= 0:
-            message.error("Number of Energy bins in response is zero.")
-            return 1
 
-        c = 0
-        r = 0
-        # Check if matrix array is consistent with the indexing
-        for i in np.arange(self.NumberEnergyBins):
-            for j in np.arange(self.NumberGroups[i]):
-                for k in np.arange(self.NumberChannelsGroup[c]):
-                    r = r + 1
-                c = c + 1
+        for e in range(self.NumberMatrixExt):
+            if self.matrix[e].NumberEnergyBins <= 0:
+                message.error("Number of Energy bins in response is zero.")
+                return 1
 
-        if r != self.Matrix.size:
-            message.error("Matrix size does not correspond to index arrays. Response inconsistent.")
-            return 1
+            c = 0
+            r = 0
+            # Check if matrix array is consistent with the indexing
+            for i in np.arange(self.matrix[e].NumberEnergyBins):
+                for j in np.arange(self.matrix[e].NumberGroups[i]):
+                    for k in np.arange(self.matrix[e].NumberChannelsGroup[c]):
+                        r = r + 1
+                    c = c + 1
+
+            if r != self.matrix[e].Matrix.size:
+                message.error("Matrix size does not correspond to index arrays. Response inconsistent.")
+                return 1
 
         return 0
 
     def disp(self):
         """Display a summary of the RMF object."""
         print("RMF Response matrix:")
-        print("FirstChannel:        {0}  First channel number".format(self.FirstChannel))
-        print("NumberChannels:      {0}  Number of data channels".format(self.NumberChannels))
-        print("NumberEnergyBins:    {0}  Number of energy bins".format(self.NumberEnergyBins))
-        print("NumberTotalGroups:   {0}  Total number of groups".format(self.NumberTotalGroups))
-        print("NumberTotalElements: {0}  Total number of response elements".format(self.NumberTotalElements))
-        print("AreaScaling          {0}  Value of EFFAREA keyword".format(self.AreaScaling))
-        print("ResponseThreshold    {0}  Minimum value in response".format(self.ResponseThreshold))
-        print("EnergyUnits          {0}  Units of the energy scale".format(self.EnergyUnits))
-        print("RMFUnits             {0}  Units for RMF values".format(self.RMFUnits))
         print("")
-        print("Arrays:")
-        print("Channel              {0}  Channel numbers".format(self.Channel.size))
-        print("ChannelLowEnergy     {0}  Start energy of channel".format(self.ChannelLowEnergy.size))
-        print("ChannelHighEnergy    {0}  End energy of channel".format(self.ChannelHighEnergy.size))
-        print("NumberGroups         {0}  Number of response groups".format(self.NumberGroups.size))
-        print("FirstGroup           {0}  First response group for this energy bin".format(self.FirstGroup.size))
-        print("FirstChannelGroup    {0}  First channel number in this group".format(self.FirstChannelGroup.size))
-        print("NumberChannelsGroup  {0}  Number of channels in this group".format(self.NumberChannelsGroup.size))
-        print("FirstElement         {0}  First response element for this group".format(self.FirstElement.size))
-        print("LowEnergy            {0}  Start energy of bin".format(self.LowEnergy.size))
-        print("HighEnergy           {0}  End energy of bin".format(self.HighEnergy.size))
-        print("Matrix               {0}  Matrix elements".format(self.Matrix.size))
+        print("Channel energy bounds:")
+        print("FirstChannel:        {0:>20}  First channel number".format(self.ebounds.FirstChannel))
+        print("NumberChannels:      {0:>20}  Number of data channels".format(self.ebounds.NumberChannels))
+        print("Channel              {0:>20}  Channel numbers".format(self.ebounds.Channel.size))
+        print("ChannelLowEnergy     {0:>20}  Start energy of channel".format(self.ebounds.ChannelLowEnergy.size))
+        print("ChannelHighEnergy    {0:>20}  End energy of channel".format(self.ebounds.ChannelHighEnergy.size))
         print("")
+        print("NumberMatrixExt      {0:>10}  Number of MATRIX extensions".format(self.NumberMatrixExt))
+        for i in range(self.NumberMatrixExt):
+            print("")
+            print("Information for MATRIX number {0}:".format(i+1))
+            print("NumberEnergyBins:    {0:>20}  Number of energy bins".format(self.matrix[i].NumberEnergyBins))
+            print("NumberTotalGroups:   {0:>20}  Total number of groups".format(self.matrix[i].NumberTotalGroups))
+            print("NumberTotalElements: {0:>20}  Total number of response elements".format(self.matrix[i].NumberTotalElements))
+            print("AreaScaling          {0:>20}  Value of EFFAREA keyword".format(self.matrix[i].AreaScaling))
+            print("ResponseThreshold    {0:>20g}  Minimum value in response".format(self.matrix[i].ResponseThreshold))
+            print("EnergyUnits          {0:>20}  Units of the energy scale".format(self.matrix[i].EnergyUnits))
+            print("RMFUnits             {0:>20}  Units for RMF values".format(self.matrix[i].RMFUnits))
+            print("")
+            print("NumberGroups         {0:>20}  Number of response groups".format(self.matrix[i].NumberGroups.size))
+            print("FirstGroup           {0:>20}  First response group for this energy bin".format(self.matrix[i].FirstGroup.size))
+            print("FirstChannelGroup    {0:>20}  First channel number in this group".format(self.matrix[i].FirstChannelGroup.size))
+            print("NumberChannelsGroup  {0:>20}  Number of channels in this group".format(self.matrix[i].NumberChannelsGroup.size))
+            print("FirstElement         {0:>20}  First response element for this group".format(self.matrix[i].FirstElement.size))
+            print("LowEnergy            {0:>20}  Start energy of bin".format(self.matrix[i].LowEnergy.size))
+            print("HighEnergy           {0:>20}  End energy of bin".format(self.matrix[i].HighEnergy.size))
+            print("Matrix               {0:>20}  Matrix elements".format(self.matrix[i].Matrix.size))
+            print("")
 
         return
 
@@ -407,20 +470,20 @@ class Rmf:
             return 1
 
         # Check if the size of the energy arrays is the same.
-        if arf.LowEnergy.size != self.LowEnergy.size:
+        if arf.LowEnergy.size != self.matrix[0].LowEnergy.size:
             message.error("Size of ARF and RMF are not the same.")
             return 1
 
         # Check if the numbers of the high energy column are the same
         # Here we check the high values, because sometimes the first low value is different...
-        if arf.HighEnergy[0] != self.HighEnergy[0]:
+        if arf.HighEnergy[0] != self.matrix[0].HighEnergy[0]:
             message.error("First high-energy boundaries of arrays are not the same.")
             return 1
 
         # Check if the last values of the array are similar.
         size = arf.HighEnergy.size - 1
 
-        if arf.HighEnergy[size] != self.HighEnergy[size]:
+        if arf.HighEnergy[size] != self.matrix[0].HighEnergy[size]:
             message.error("Last high-energy boundaries of arrays are not the same.")
             return 1
 

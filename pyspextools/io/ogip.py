@@ -238,7 +238,11 @@ class OGIPRegion(Region):
                 return 1
 
             message.proc_start("Convert OGIP response to res format")
-            res = rmf_to_res(self.resp, arf=self.area)
+            res = rmf_to_res(self.resp, matext=0, arf=self.area)
+            if self.resp.NumberMatrixExt > 1:
+                for i in range(self.resp.NumberMatrixExt-1):
+                    rescomp = rmf_to_res(self.resp, matext=i+1, arf=self.area)
+                    res.append_component(rescomp, iregion=1, isector=1)
 
             if isinstance(res, Res):
                 self.res = res
@@ -251,8 +255,9 @@ class OGIPRegion(Region):
             return 1
 
         # Correct for possible shifts in channels if first channel is 0
-        if self.resp.FirstChannel == 0:
-            self.correct_possible_shift()
+        if self.resp.ebounds.FirstChannel == 0:
+            for i in range(self.resp.NumberMatrixExt):
+                self.correct_possible_shift(i)
 
         # Check output spo object
         checkspo = self.spo.check()
@@ -390,12 +395,16 @@ class OGIPRegion(Region):
     # -----------------------------------------------------
     # Check for possible shifts in response array
     # -----------------------------------------------------
-    def correct_possible_shift(self):
+    def correct_possible_shift(self, ext):
         """See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,
         then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
         channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
         and if the first channel in the OGIP spectrum is 0.
-        The ogip_to_spex method calls this function by default."""
+        The ogip_to_spex method calls this function by default.
+
+        :param ext: Matrix extension number (Most RMFs have only one extension (ext=0), but could be more)
+        :type ext: int
+        """
 
         if not isinstance(self.spo, Spo) or not isinstance(self.res, Res):
             message.error("Could not find spo and res information in this region.")
@@ -414,30 +423,30 @@ class OGIPRegion(Region):
         i = 0
         while True:
             # Find an energy bin with at least one response group.
-            if self.resp.NumberGroups[i] == 0:
+            if self.resp.matrix[ext].NumberGroups[i] == 0:
                 i = i + 1
             else:
                 break
 
         # Save the energy boundaries and calculate the average model energy for the group
-        elow = self.resp.LowEnergy[i]
-        ehigh = self.resp.HighEnergy[i]
+        elow = self.resp.matrix[ext].LowEnergy[i]
+        ehigh = self.resp.matrix[ext].HighEnergy[i]
         target_energy = (elow + ehigh) / 2.0
 
         # For this group, save the first channel of the group (F_CHAN)
-        fchan = self.resp.FirstChannelGroup[0]
+        fchan = self.resp.matrix[ext].FirstChannelGroup[0]
 
         # Find the array index for this channel number
         j = 0
         while True:
-            if self.resp.Channel[j] != fchan:
+            if self.resp.ebounds.Channel[j] != fchan:
                 j = j + 1
             else:
                 break
 
         # For this array index, the corresponding channel energy boundaries should be:
-        lchan = self.resp.ChannelLowEnergy[j]
-        hchan = self.resp.ChannelHighEnergy[j]
+        lchan = self.resp.ebounds.ChannelLowEnergy[j]
+        hchan = self.resp.ebounds.ChannelHighEnergy[j]
         target_channel = (lchan + hchan) / 2.0
 
         # Now find the same group and channel in the SPEX format objects

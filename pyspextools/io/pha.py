@@ -269,9 +269,9 @@ class Pha:
             return
 
         # First copy the channel information to the PHA object
-        self.Channel = resp.Channel
-        self.FirstChannel = resp.Channel[0]
-        self.DetChans = resp.NumberChannels
+        self.Channel = resp.ebounds.Channel
+        self.FirstChannel = resp.ebounds.Channel[0]
+        self.DetChans = resp.ebounds.NumberChannels
     
         # Generate a dummy spectrum (obviously not realistic, should be simulated in SPEX later)
         # Set exposure, statistic and type of spectrum
