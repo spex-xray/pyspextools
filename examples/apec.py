@@ -33,13 +33,13 @@ except ImportError:
 User model parameter translation table:
 p01	usr.par[0]	Normalisation Photons m^-3 s^-1 keV^-1
 p02	usr.par[1]	Temperature in keV
-p03  	usr.par[2]	-
+p03 usr.par[2]	-
 p04	usr.par[3]	-
 p05	usr.par[4]	-
 p06	usr.par[5]	06 C
 p07	usr.par[6]	07 N
 p08	usr.par[7]	08 O
-p09 	usr.par[8]	09 F
+p09 usr.par[8]	09 F
 p10	usr.par[9]	10 Ne
 p11	usr.par[10]	11 Na
 p12	usr.par[11]	12 Mg
@@ -73,17 +73,18 @@ def main():
         sys.exit()
 
     # Create a pyatomdb spectrum session
-    data = pyatomdb.spectrum.Session()
+    data = pyatomdb.spectrum.CIESession()
 
     # Set the energy grid for the calculation
     # Pyatomdb expects bin boundaries (n+1)
     # SPEX has an array of upper boundary,
     # so we need to calculate the lower boundary
     # for the first bin:
-    fbin = numpy.array([usr.egb[0] - usr.deg[0]])
+    ebin = numpy.array([usr.egb[0] - usr.deg[0]])
+    ebin = numpy.append(ebin, usr.egb)
 
     # And set the energy bins
-    data.set_specbins(numpy.append(fbin, usr.egb), specunits='keV')
+    data.set_response(ebin, raw=True)
 
     # Set abundance table
     data.set_abundset("AG89")  # Anders & Grevesse (1989)
@@ -103,7 +104,7 @@ def main():
         data.set_abund(atom[a], usr.par[a])
 
     # Calculate the APEC spectrum
-    aspec = data.return_spectra(temp, teunit='keV')
+    aspec = data.return_spectrum(temp, teunit='keV')
 
     # Write the calculated spectrum to the sener array:
     for i in numpy.arange(usr.neg):
