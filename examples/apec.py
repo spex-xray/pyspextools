@@ -7,6 +7,7 @@ within SPEX.
 
 This model needs the pyatomdb module from atomdb.org and numpy.
 Also set the ATOMDB environment variable to a local ATOMDB installation.
+This file is designed to work with Pyatomdb 0.8.0 and above.
 """
 
 # Stuff to import for compatibility between python 2 and 3
