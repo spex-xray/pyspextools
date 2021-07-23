@@ -198,9 +198,18 @@ class RmfMatrix:
 
 
 class Rmf:
-    """Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-    Keith Arnaud.
+    """Class to read OGIP RMF files. The response is given in two parts: an EBOUNDS extension, containing
+    the energy boundries of the instrument channels, and one or more MATRIX extensions, which contain components
+    of the response matrix.
 
+    :ivar ebounds: Represents the EBOUNDS extension in the RMF file, which contains the channel energy scale.
+    :vartype ebounds: pyspextools.io.rmf.RmfEbounds
+    :ivar matrix: List containing the matrix extensions (type pyspextools.io.rmf.RmfMatrix)
+    :vartype matrix: list
+    :ivar NumberMatrixExt: The number of matrix extensions.
+    :vartype NumberMatrixExt: int
+    :ivar MatrixExt: Array containing the FITS extension numbers that contain a response matrix.
+    :vartype MatrixExt: numpy.ndarray
     """
 
     def __init__(self):
