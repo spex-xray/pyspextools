@@ -16,8 +16,7 @@ Before you start, make sure the following things are installed or set:
 
 - Install numpy
 - Install pyspextools (pip install pyspextools)
-- Install ATOMDB (Coco and line tables.)
-- Install pyatomdb (pip install pyatomdb)
+- Install pyatomdb (pip install pyatomdb) and import this into python once before use to install ATOMDB.
 - Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions)::
 
     linux:~> export ATOMDB=/path/to/my/atomdb   (bash shell)
@@ -27,6 +26,8 @@ For more information about installing ATOMDB and pyatomdb see `atomdb.org <http:
 
 .. note:: pyATOMDB only supports Python 3 from version 0.6.0 onwards. If you are using Python 2,
           you need to install an older pyATOMDB version.
+
+.. note:: This example apec.py script has been updated to work with pyATOMDB 0.8.0 and above.
 
 Usage
 -----

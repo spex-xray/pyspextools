@@ -20,3 +20,7 @@ Version 0.3.4:
  - Fixed issue with reading multiple res and spo files.
  - Consistently changed pyspex to pyspextools in anticipation of the pyspex release with SPEX 3.06.00.
 (Thanks to Anna Ogorzałek for reporting these issues).
+
+Version 0.4.0:
+ - Added capability to read and convert OGIP RMF files with multiple MATRIX extensions.
+ - Updated apec.py to work with pyatomdb 0.8.0 and above.

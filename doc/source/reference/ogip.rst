@@ -115,14 +115,37 @@ The TGRegion class description
 The OGIP file classes
 ---------------------
 
+Pha spectra
+'''''''''''
+
 .. autoclass:: pyspextools.io.pha.Pha
    :members:
+
+Pha2 grating spectra
+''''''''''''''''''''
 
 .. autoclass:: pyspextools.io.pha2.Pha2
    :members:
 
+Rmf instrument response matrix
+''''''''''''''''''''''''''''''
+
 .. autoclass:: pyspextools.io.rmf.Rmf
    :members:
+
+The Rmf consists of two parts. The first is an EBOUNDS extension, which is defined in the class below:
+
+.. autoclass:: pyspextools.io.rmf.RmfEbounds
+   :members:
+
+And one or more response matrix extensions. The matrices are of type RmfMatrix and are kept in the list
+called ``matrix``.
+
+.. autoclass:: pyspextools.io.rmf.RmfMatrix
+   :members:
+
+Arf mirror effective area
+'''''''''''''''''''''''''
 
 .. autoclass:: pyspextools.io.arf.Arf
    :members:
