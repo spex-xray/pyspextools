@@ -5,35 +5,29 @@
   <head>
     <meta charset="utf-8" />
     <title>pyspextools.io.arf &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for pyspextools.io.arf</h1><div class="highlight"><pre>
@@ -41,14 +35,14 @@
 
 <span class="c1"># Import stuff for compatibility between python 2 and 3</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 
-<span class="kn">from</span> <span class="nn">future</span> <span class="kn">import</span> <span class="n">standard_library</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
 
 <span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -56,24 +50,48 @@
 
 <span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Arf"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.arf.Arf">[docs]</a><span class="k">class</span> <span class="nc">Arf</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Arf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf">[docs]</a><span class="k">class</span> <span class="nc">Arf</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
-<span class="sd">    Keith Arnaud.&quot;&quot;&quot;</span>
+<span class="sd">    Keith Arnaud.</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>      <span class="c1">#: Low Energy of bin</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>     <span class="c1">#: High Energy of bin</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">EffArea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>        <span class="c1">#: Effective Area of bin</span>
+<span class="sd">    :ivar LowEnergy: Low Energy boundary of bin</span>
+<span class="sd">    :vartype LowEnergy: numpy.ndarray</span>
+<span class="sd">    :ivar HighEnergy: High Energy boundary of bin</span>
+<span class="sd">    :vartype HighEnergy: numpy.ndarray</span>
+<span class="sd">    :ivar EffArea: Effective area of bin</span>
+<span class="sd">    :vartype EffArea: numpy.ndarray</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="s1">&#39;keV&#39;</span>                       <span class="c1">#: Energy units</span>
+<span class="sd">    :ivar EnergyUnits: Energy units</span>
+<span class="sd">    :vartype EnergyUnits: str</span>
+<span class="sd">    :ivar ARFUnits: Unit of effective area</span>
+<span class="sd">    :vartype ARFUnits: str</span>
+<span class="sd">    :ivar Order: Grating order (for grating arrays, else 0)</span>
+<span class="sd">    :vartype Order: int</span>
+<span class="sd">    :ivar Grating: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</span>
+<span class="sd">    :vartype Grating: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize an ARF object.&quot;&quot;&quot;</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>      <span class="c1"># Low Energy of bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>     <span class="c1"># High Energy of bin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">EffArea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>        <span class="c1"># Effective Area of bin</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="s1">&#39;keV&#39;</span>                        <span class="c1"># Energy units</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ARFUnits</span> <span class="o">=</span> <span class="s1">&#39;cm2&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="mi">0</span>                                 <span class="c1">#: Grating order (for grating arrays, else 0)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Grating</span> <span class="o">=</span> <span class="mi">0</span>                               <span class="c1">#: Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="mi">0</span>                                  <span class="c1"># Grating order (for grating arrays, else 0)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Grating</span> <span class="o">=</span> <span class="mi">0</span>                                <span class="c1"># Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</span>
 
-<div class="viewcode-block" id="Arf.read"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.arf.Arf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">arffile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read the effective area from an OGIP ARF file.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Arf.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read the effective area from an OGIP ARF file.</span>
 
-        <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">arffile</span><span class="p">,</span><span class="s1">&#39;SPECRESP&#39;</span><span class="p">,</span><span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="sd">        :param arffile: Effective area file name (FITS/OGIP format)</span>
+<span class="sd">        :type arffile: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">arffile</span><span class="p">,</span> <span class="s1">&#39;SPECRESP&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_LO&#39;</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;ENERG_HI&#39;</span><span class="p">]</span>
@@ -91,7 +109,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;TG_M&#39;</span><span class="p">]</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Grating</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;TG_PART&#39;</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
+        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">Grating</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -104,8 +122,20 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Arf.write"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.arf.Arf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&#39;&#39;&#39;Write an OGIP compatible ARF file (Non-grating format).&#39;&#39;&#39;</span>
+<div class="viewcode-block" id="Arf.write"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write an OGIP compatible ARF file (Non-grating format).</span>
+
+<span class="sd">        :param arffile: Effective area file name to write (FITS/OGIP format)</span>
+<span class="sd">        :type arffile: str</span>
+<span class="sd">        :param telescop: Telescope name (optional)</span>
+<span class="sd">        :type telescop: str</span>
+<span class="sd">        :param instrume: Instrument name (optional)</span>
+<span class="sd">        :type instrume: str</span>
+<span class="sd">        :param filter: Filter setting (optional)</span>
+<span class="sd">        :type filter: str</span>
+<span class="sd">        :param overwrite: Overwrite existing file? (True/False)</span>
+<span class="sd">        :type overwrite: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Write the ARF arrays into FITS column format</span>
         <span class="n">col1</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;ENERG_LO&#39;</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;D&#39;</span><span class="p">,</span> <span class="n">unit</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">)</span>
@@ -115,32 +145,32 @@
         <span class="n">hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">([</span><span class="n">col1</span><span class="p">,</span> <span class="n">col2</span><span class="p">,</span> <span class="n">col3</span><span class="p">])</span>
 
         <span class="n">hdr</span> <span class="o">=</span> <span class="n">hdu</span><span class="o">.</span><span class="n">header</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">,</span><span class="s1">&#39;SPECRESP&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">,</span> <span class="s1">&#39;SPECRESP&#39;</span><span class="p">)</span>
 
         <span class="c1"># Set the TELESCOP keyword (optional)</span>
         <span class="k">if</span> <span class="n">telescop</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">,</span><span class="s1">&#39;None&#39;</span><span class="p">,</span><span class="s1">&#39;Telescope name&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Telescope name&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">,</span><span class="n">telescop</span><span class="p">,</span><span class="s1">&#39;Telescope name&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">,</span> <span class="n">telescop</span><span class="p">,</span> <span class="s1">&#39;Telescope name&#39;</span><span class="p">)</span>
 
         <span class="c1"># Set the INSTRUME keyword (optional)</span>
         <span class="k">if</span> <span class="n">instrume</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">,</span><span class="s1">&#39;None&#39;</span><span class="p">,</span><span class="s1">&#39;Instrument name&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Instrument name&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">,</span><span class="n">instrume</span><span class="p">,</span><span class="s1">&#39;Instrument name&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">,</span> <span class="n">instrume</span><span class="p">,</span> <span class="s1">&#39;Instrument name&#39;</span><span class="p">)</span>
 
         <span class="c1"># Set the FILTER keyword (optional)</span>
-        <span class="k">if</span> <span class="nb">filter</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;FILTER&#39;</span><span class="p">,</span><span class="s1">&#39;None&#39;</span><span class="p">,</span><span class="s1">&#39;Filter setting&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">filter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;FILTER&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">,</span> <span class="s1">&#39;Filter setting&#39;</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;FILTER&#39;</span><span class="p">,</span><span class="nb">filter</span><span class="p">,</span><span class="s1">&#39;Filter setting&#39;</span><span class="p">)</span>
+            <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;FILTER&#39;</span><span class="p">,</span> <span class="nb">filter</span><span class="p">,</span> <span class="s1">&#39;Filter setting&#39;</span><span class="p">)</span>
 
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;DETNAM&#39;</span><span class="p">,</span><span class="s1">&#39;None&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLASS&#39;</span><span class="p">,</span><span class="s1">&#39;OGIP&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLAS1&#39;</span><span class="p">,</span><span class="s1">&#39;RESPONSE&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">,</span><span class="s1">&#39;SPECRESP&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUVERS&#39;</span><span class="p">,</span><span class="s1">&#39;1.1.0&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;ORIGIN&#39;</span><span class="p">,</span><span class="s1">&#39;SRON&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;DETNAM&#39;</span><span class="p">,</span> <span class="s1">&#39;None&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLASS&#39;</span><span class="p">,</span> <span class="s1">&#39;OGIP&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLAS1&#39;</span><span class="p">,</span> <span class="s1">&#39;RESPONSE&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">,</span> <span class="s1">&#39;SPECRESP&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;HDUVERS&#39;</span><span class="p">,</span> <span class="s1">&#39;1.1.0&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="s1">&#39;ORIGIN&#39;</span><span class="p">,</span> <span class="s1">&#39;SRON&#39;</span><span class="p">)</span>
 
         <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;HISTORY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;Created by pyspextools:&#39;</span>
         <span class="n">hdu</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;HISTORY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;https://github.com/spex-xray/pyspextools&#39;</span>
@@ -153,7 +183,7 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Arf.check"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.arf.Arf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Arf.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if the basic information is read in.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Energy array has zero length.&quot;</span><span class="p">)</span>
@@ -164,7 +194,7 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Arf.disp"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.arf.Arf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Arf.disp"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Display a summary of the ARF object.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ARF effective area:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LowEnergy array:   </span><span class="si">{0}</span><span class="s2">  Low Energy of bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
@@ -179,10 +209,41 @@
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Module reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -193,26 +254,29 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

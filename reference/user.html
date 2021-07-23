@@ -1,0 +1,182 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>SPEX user model support &#8212; pyspextools 0.3.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Data filtering and optimization" href="data.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="module-pyspextools.model">
+<span id="spex-user-model-support"></span><h1>SPEX user model support<a class="headerlink" href="#module-pyspextools.model" title="Permalink to this headline">¶</a></h1>
+<p>The pyspextools module provides interface routines to create SPEX user models. There is
+a helper class for the SPEX ‘user’ and ‘musr’ models, which provides the opportunity for
+users to import their own models into SPEX.</p>
+<div class="section" id="spex-user-model-interface-module">
+<span id="usermodel"></span><h2>SPEX user model interface module<a class="headerlink" href="#spex-user-model-interface-module" title="Permalink to this headline">¶</a></h2>
+<p>This is a Python helper class for the development of user defined models in SPEX.
+The ‘user’ and ‘musr’ components in SPEX can calculate an additive and multiplicative
+model, respectively, based on a user program. See the SPEX manual for details:
+<a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
+<p>The ‘user’ component can run an executable provided by the user. This module provides
+the class that helps to exchange the relevant information between SPEX and the user
+provided executable. Documentation for an example program is here: <a class="reference internal" href="../tutorials/myusermodel.html#user-example"><span class="std std-ref">User model example</span></a>.</p>
+<p><strong>SPEX output and executable input:</strong></p>
+<p>The SPEX user component will provide an energy grid and a list of model parameters to
+the executable through a text file, for example input-01-01.prm. Using this information,
+the user provided program should calculate the spectrum on the provided grid using the
+input parameters.</p>
+<p><strong>Executable output and SPEX input:</strong></p>
+<p>The spectrum (and the weights) can be written to the provided sener (and wener) arrays
+in this module. The write_spc function will write the calculated spectrum to an output
+file named, for example, output-01-01.spc. This file will be read again by the SPEX
+user model and the resulting values will be used in the SPEX fit.</p>
+<blockquote>
+<div><dl class="class">
+<dt id="pyspextools.model.User">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.model.</code><code class="sig-name descname">User</code><a class="reference internal" href="../_modules/pyspextools/model/user.html#User"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.model.User" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class structure to contain the input and output parameters of the user function.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>npar</strong> (<em>int</em>) – Numper of model input parameters from SPEX.</p></li>
+<li><p><strong>par</strong> (<em>numpy.ndarray</em>) – Array containing the parameter values from SPEX (length npar).</p></li>
+<li><p><strong>neg</strong> (<em>int</em>) – Number of bins in the input energy grid from SPEX.</p></li>
+<li><p><strong>egb</strong> (<em>numpy.ndarray</em>) – Upper boundaries of the energy bins (length neg).</p></li>
+<li><p><strong>eg</strong> (<em>numpy.ndarray</em>) – Bin centroids of the energy bins (length neg).</p></li>
+<li><p><strong>deg</strong> (<em>numpy.ndarray</em>) – Bin widths of the energy bins (length deg).</p></li>
+<li><p><strong>sener</strong> (<em>numpy.ndarray</em>) – Spectrum or transmission (e.g. in ph/s/bin)</p></li>
+<li><p><strong>wener</strong> (<em>numpy.ndarray</em>) – If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E</p></li>
+<li><p><strong>fprm</strong> (<em>str</em>) – Input file name from command line.</p></li>
+<li><p><strong>fspc</strong> (<em>str</em>) – Output file name from command line.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.model.User.read_prm">
+<code class="sig-name descname">read_prm</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/model/user.html#User.read_prm"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.model.User.read_prm" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the parameter file that SPEX creates at the beginning of the model evaluation. This is done
+automatically when the User class is initialised.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.model.User.write_spc">
+<code class="sig-name descname">write_spc</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/model/user.html#User.write_spc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.model.User.write_spc" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the calculated spectrum to the output file for SPEX.
+Make sure that the sener and wener arrays are initialized and 
+filled with a spectrum before calling this function.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div></blockquote>
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Module reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="io.html">SPEX data format support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="ogip.html">OGIP data format support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data filtering and optimization</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">SPEX user model support</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../reference.html">Module reference</a><ul>
+      <li>Previous: <a href="data.html" title="previous chapter">Data filtering and optimization</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/user.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

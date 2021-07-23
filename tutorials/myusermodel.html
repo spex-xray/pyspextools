@@ -5,43 +5,31 @@
   <head>
     <meta charset="utf-8" />
     <title>User model example &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="APEC interface for SPEX" href="apec.html" />
-    <link rel="prev" title="SIMRES" href="simres.html" /> 
+    <link rel="prev" title="Managing datasets in pyspextools" href="datasets.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="apec.html" title="APEC interface for SPEX"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="simres.html" title="SIMRES"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="user-model-example">
@@ -55,7 +43,7 @@ example to his/her own needs.</p>
 <p>The following imports are mandatory:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">math</span>                         <span class="c1"># Import math module</span>
 <span class="kn">import</span> <span class="nn">numpy</span>                        <span class="c1"># Import numpy module</span>
-<span class="kn">from</span> <span class="nn">pyspextools.model</span> <span class="kn">import</span> <span class="n">User</span>  <span class="c1"># Import the user module from pyspextools.model</span>
+<span class="kn">from</span> <span class="nn">pyspextools.model</span> <span class="k">import</span> <span class="n">User</span>  <span class="c1"># Import the user module from pyspextools.model</span>
 </pre></div>
 </div>
 <p><strong>Initialisation</strong></p>
@@ -65,7 +53,7 @@ the input file from SPEX automatically and initialize the arrays:</p>
 </pre></div>
 </div>
 <p><strong>Calculation</strong></p>
-<p>This step needs the creativity of the user. The module reference page <a class="reference internal" href="../user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a> provides an overview of the
+<p>This step needs the creativity of the user. The module reference page <a class="reference internal" href="../reference/user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a> provides an overview of the
 parameters of the user module that can be used in the program. At least, the output spectrum or transmission
 needs to be calculated and written to the ‘usr.sener’ output array. This array will be passed back to SPEX after
 the calculation:</p>
@@ -79,7 +67,7 @@ the calculation:</p>
 <p>In this case, a simple exponential function is returned as an example, but this
 function can be as simple or complicated as needed. The unit for the ‘usr.sener’ array is
 ‘photons/s/bin’ and this example function also uses the first model input parameter ‘user.par[0]’
-from SPEX and the bin energy <cite>usr.eg</cite> (see <a class="reference internal" href="../user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a> for a full description).</p>
+from SPEX and the bin energy <cite>usr.eg</cite> (see <a class="reference internal" href="../reference/user.html#usermodel"><span class="std std-ref">SPEX user model interface module</span></a> for a full description).</p>
 <blockquote>
 <div><p><strong>NOTE:</strong> There is a difference between the index of the array and the parameter number in SPEX.
 The parameter number in SPEX is equal to the array index + 1, since Python starts counting
@@ -121,31 +109,48 @@ model needs. Set it using:</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">User model example</a><ul>
-<li><a class="reference internal" href="#usage">Usage</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-scripts">Using the pyspextools scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-api">Using the pyspextools API</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#using-the-spex-user-model">Using the SPEX user model</a></li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Module reference</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="simres.html"
-                        title="previous chapter">SIMRES</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="apec.html"
-                        title="next chapter">APEC interface for SPEX</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials/myusermodel.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Pyspextools tutorials</a><ul>
+      <li>Previous: <a href="datasets.html" title="previous chapter">Managing datasets in pyspextools</a></li>
+      <li>Next: <a href="apec.html" title="next chapter">APEC interface for SPEX</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -156,32 +161,32 @@ model needs. Set it using:</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="apec.html" title="APEC interface for SPEX"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="simres.html" title="SIMRES"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorials/myusermodel.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

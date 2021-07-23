@@ -5,35 +5,29 @@
   <head>
     <meta charset="utf-8" />
     <title>pyspextools.model.user &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for pyspextools.model.user</h1><div class="highlight"><pre>
@@ -44,16 +38,16 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># Stuff to import for compatibility between python 2 and 3</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">int</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">open</span>
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">str</span>
-<span class="kn">from</span> <span class="nn">future</span> <span class="kn">import</span> <span class="n">standard_library</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">int</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">open</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
 
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">object</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">object</span>
 
 <span class="kn">import</span> <span class="nn">sys</span>
 <span class="kn">import</span> <span class="nn">math</span>
@@ -62,41 +56,59 @@
 <span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
 
 
-<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../user.html#pyspextools.model.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;Class structure to contain the input and output parameters of the user function. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="User"><a class="viewcode-back" href="../../../reference/user.html#pyspextools.model.User">[docs]</a><span class="k">class</span> <span class="nc">User</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Class structure to contain the input and output parameters of the user function.</span>
 
-    <span class="c1"># Input parameters:</span>
+<span class="sd">    :ivar npar: Numper of model input parameters from SPEX.</span>
+<span class="sd">    :vartype npar: int</span>
+<span class="sd">    :ivar par: Array containing the parameter values from SPEX (length npar).</span>
+<span class="sd">    :vartype par: numpy.ndarray</span>
+<span class="sd">    :ivar neg: Number of bins in the input energy grid from SPEX.</span>
+<span class="sd">    :vartype neg: int</span>
+<span class="sd">    :ivar egb: Upper boundaries of the energy bins (length neg).</span>
+<span class="sd">    :vartype egb: numpy.ndarray</span>
+<span class="sd">    :ivar eg: Bin centroids of the energy bins (length neg).</span>
+<span class="sd">    :vartype eg: numpy.ndarray</span>
+<span class="sd">    :ivar deg: Bin widths of the energy bins (length deg).</span>
+<span class="sd">    :vartype deg: numpy.ndarray</span>
 
-    <span class="c1">#: Number of input parameters from SPEX</span>
-    <span class="n">npar</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1">#: Array containing the parameter values from SPEX (length npar)</span>
-    <span class="n">par</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1">#: Number of bins in the input energy grid from SPEX</span>
-    <span class="n">neg</span> <span class="o">=</span> <span class="mi">0</span>
-    <span class="c1">#: Upper boundaries of the energy bins (length neg)</span>
-    <span class="n">egb</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1">#: Bin centroids of the energy bins (length neg)</span>
-    <span class="n">eg</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1">#: Bin widths of the energy bins (length deg)</span>
-    <span class="n">deg</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="sd">    :ivar sener: Spectrum or transmission (e.g. in ph/s/bin)</span>
+<span class="sd">    :vartype sener: numpy.ndarray</span>
+<span class="sd">    :ivar wener: If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E</span>
+<span class="sd">    :vartype wener: numpy.ndarray</span>
 
-    <span class="c1"># Output parameters:</span>
+<span class="sd">    :ivar fprm: Input file name from command line.</span>
+<span class="sd">    :vartype fprm: str</span>
+<span class="sd">    :ivar fspc: Output file name from command line.</span>
+<span class="sd">    :vartype fspc: str</span>
+<span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="c1">#: Spectrum or transmission (e.g. in ph/s/bin)</span>
-    <span class="n">sener</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1">#: If Delta E = average photon energy within the bin (keV) minus the bin centroid then wener = sener * Delta E</span>
-    <span class="n">wener</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># Filenames:</span>
-
-    <span class="c1">#: Input file name</span>
-    <span class="n">fprm</span> <span class="o">=</span> <span class="kc">None</span>
-    <span class="c1">#: Output file name</span>
-    <span class="n">fspc</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read the input file names from command line. Then read in the input parameters </span>
 <span class="sd">        and energy grid from the SPEX provided input file.&quot;&quot;&quot;</span>
+
+        <span class="c1"># Input parameters:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">=</span> <span class="mi">0</span>                              <span class="c1"># Number of input parameters from SPEX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">par</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>    <span class="c1"># Array containing the parameter values from SPEX (length npar)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="mi">0</span>                               <span class="c1"># Number of bins in the input energy grid from SPEX</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">egb</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>    <span class="c1"># Upper boundaries of the energy bins (length neg)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eg</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>     <span class="c1"># Bin centroids of the energy bins (length neg)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">deg</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>    <span class="c1"># Bin widths of the energy bins (length deg)</span>
+
+        <span class="c1"># Output parameters:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sener</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># Spectrum or transmission (e.g. in ph/s/bin)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wener</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># If Delta E = average photon energy within the bin (keV) minus</span>
+        <span class="c1"># the bin centroid then wener = sener * Delta E</span>
+
+        <span class="c1"># Filenames:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fprm</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="c1"># Input file name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fspc</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>        <span class="c1"># Output file name</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">read_prm</span><span class="p">()</span>
+
+<div class="viewcode-block" id="User.read_prm"><a class="viewcode-back" href="../../../reference/user.html#pyspextools.model.User.read_prm">[docs]</a>    <span class="k">def</span> <span class="nf">read_prm</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Read the parameter file that SPEX creates at the beginning of the model evaluation. This is done</span>
+<span class="sd">        automatically when the User class is initialised.&quot;&quot;&quot;</span>
 
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">fprm</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -119,7 +131,7 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Input file does not exist...&quot;</span><span class="p">)</span>
             <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
 
-            <span class="c1"># Read the number of parameters</span>
+        <span class="c1"># Read the number of parameters</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">npar</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">())</span>
 
         <span class="c1"># Allocate an array containing the parameters</span>
@@ -156,9 +168,9 @@
 
         <span class="c1"># Set size of sener and wener arrays</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sener</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">wener</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wener</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="User.write_spc"><a class="viewcode-back" href="../../../user.html#pyspextools.model.User.write_spc">[docs]</a>    <span class="k">def</span> <span class="nf">write_spc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="User.write_spc"><a class="viewcode-back" href="../../../reference/user.html#pyspextools.model.User.write_spc">[docs]</a>    <span class="k">def</span> <span class="nf">write_spc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Write the calculated spectrum to the output file for SPEX.</span>
 <span class="sd">        Make sure that the sener and wener arrays are initialized and </span>
 <span class="sd">        filled with a spectrum before calling this function.&quot;&quot;&quot;</span>
@@ -200,10 +212,41 @@
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Module reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -214,26 +257,29 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

@@ -1,0 +1,689 @@
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <title>OGIP data format support &#8212; pyspextools 0.3.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Data filtering and optimization" href="data.html" />
+    <link rel="prev" title="SPEX data format support" href="io.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <div class="section" id="ogip-data-format-support">
+<h1>OGIP data format support<a class="headerlink" href="#ogip-data-format-support" title="Permalink to this headline">¶</a></h1>
+<p>The pyspextools module offers to import OGIP spectral files and convert them to
+SPEX format. There are basicly two types of OGIP files: regular type I files,
+which are distributed with most X-ray missions, and type II files distributed
+with the Chandra transmission grating (TG) spectra. Pyspextools can handle both
+types.</p>
+<div class="section" id="pyspextools-io-ogip-importing-ogip-files">
+<h2>pyspextools.io.ogip: Importing OGIP files<a class="headerlink" href="#pyspextools-io-ogip-importing-ogip-files" title="Permalink to this headline">¶</a></h2>
+<p>The pyspextools OGIPRegion class contains methods to read a source spectrum, background
+spectrum, response file and effective area file, and save them as a SPEX region, which
+can be used by the other methods in the pyspextools module. Please note that the
+module does a direct translation of the OGIP files. No filtering of bad channels or
+other optimizations are performed. Bad channel filtering and optimizations can be
+found in pyspextools.data.</p>
+<p>The main method of the OGIPRegion class is read_region. We recommend to use this
+method to read a combination of a spectrum and response matrix. This method will
+do the necessary checks to make sure that the final region object is consistent.
+The OGIP class can be imported separately if needed:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.ogip</span> <span class="k">as</span> <span class="nn">ogip</span>
+<span class="n">oregion</span> <span class="o">=</span> <span class="n">ogip</span><span class="o">.</span><span class="n">OGIPRegion</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The oregion instance above will be an extended version of the parent region class of
+pyspextools and will have the same functionality.</p>
+<p>The ‘read_region’ method can be called to read the OGIP spectra and responses and return
+a SPEX region object, which can be written to spo and res files.</p>
+<p>A convenient script called <a class="reference internal" href="../tutorials/ogip2spex.html#ogip2spex"><span class="std std-ref">OGIP2spex - Convert OGIP files to SPEX format</span></a> is available to convert OGIP spectra
+and responses to SPEX format.</p>
+</div>
+<div class="section" id="pyspextools-io-tg-importing-chandra-grating-files">
+<h2>pyspextools.io.tg: Importing Chandra grating files<a class="headerlink" href="#pyspextools-io-tg-importing-chandra-grating-files" title="Permalink to this headline">¶</a></h2>
+<p>Spectra from the Chandra gratings are stored in a special format, called PHA2 format,
+and contain the spectra of the specific orders of the spectrum. The TGRegion class allows
+a user to import a Chandra grating spectrum into a SPEX region.</p>
+<p>Similar to the OGIP files, there is also a region class for grating spectra called TGRegion:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyspextools.io.tg</span> <span class="k">as</span> <span class="nn">tg</span>
+<span class="n">tgregion</span> <span class="o">=</span> <span class="n">tg</span><span class="o">.</span><span class="n">TGRegion</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The ‘read_region’ method can be called to read the grating spectra and responses and return
+a SPEX region object, which can be written to spo and res files.</p>
+<p>A convenient script called <a class="reference internal" href="../tutorials/tg2spex.html#tg2spex"><span class="std std-ref">TG2Spex - Convert Chandra grating data</span></a> is available to convert one Chandra grating
+observation to SPEX format.</p>
+</div>
+<div class="section" id="notes-about-converting-pha-to-spex-format">
+<h2>Notes about converting PHA to SPEX format<a class="headerlink" href="#notes-about-converting-pha-to-spex-format" title="Permalink to this headline">¶</a></h2>
+<p>The methods in this class perform an almost direct copy of the PHA spectrum files into
+SPEX format. The conversion of source and background spectra into (background subtracted)
+source and background rates with errors is relatively straightforward. The areascal and
+backscal values from the PHA file are used to scale the spectral rates and errors as they
+are stored in SPEX format.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The method of subtracting the background from a spectrum provides wrong
+results in case of Poisson distributed data and C-statistics. It would be better to
+use a model for the background instead. Such alternatives will be implemented from
+SPEX version &gt;=3.05.00.</p>
+</div>
+<p>This method does not yet ignore bad channels. In pyspextools this is regarded as additional
+filtering of the data and is implemented in a different method (ref). Therefore, this
+method alone could give different results from the SPEX trafo program.</p>
+</div>
+<div class="section" id="notes-about-converting-rmf-to-spex-format">
+<h2>Notes about converting RMF to SPEX format<a class="headerlink" href="#notes-about-converting-rmf-to-spex-format" title="Permalink to this headline">¶</a></h2>
+<p>While the conversion of PHA format spectra to SPEX format is relatively trivial, the
+conversion of response matrices is more interesting. The RMF format chooses to store
+response groups, which describe a particular redistribution function, per model energy
+bin. Since there can be multiple physical effects causing their own characteristic
+response function, there can be multiple groups associated with a particular model energy,
+each describing the redistribution function for a particular physical effect.</p>
+<p>In SPEX, the groups are not organised per model energy bin, but per physical effect, which
+is called a response component. This allows more freedom in the binning that is needed for
+the group and thus the storage space required. The optimal range and binning needed for a sharp
+Gaussian response feature is obviously different from a broad-band power-law redistribution
+function. The latter can be binned in a much coarser way than the Gaussian case.</p>
+<p>However, the RMF files do not contain information about the physical response components.
+There are methods to detect similar groups in an RMF file and organise them in a component,
+but we did not add this method to this class. This class does a direct copy of all the groups
+of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in
+components is desired, that should be done with other methods in the pyspextools module (ref).</p>
+</div>
+<div class="section" id="the-ogipregion-class-description">
+<h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspextools.io.ogip.OGIPRegion">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.ogip.</code><code class="sig-name descname">OGIPRegion</code><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to
+spo and res format objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spec</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – Input PHA source spectrum.</p></li>
+<li><p><strong>back</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – Input PHA background spectrum (optional).</p></li>
+<li><p><strong>resp</strong> (<a class="reference internal" href="#pyspextools.io.rmf.Rmf" title="pyspextools.io.rmf.Rmf"><em>pyspextools.io.rmf.Rmf</em></a>) – Input RMF response matrix.</p></li>
+<li><p><strong>area</strong> (<a class="reference internal" href="#pyspextools.io.arf.Arf" title="pyspextools.io.arf.Arf"><em>pyspextools.io.arf.Arf</em></a>) – Input ARF effective area (optional).</p></li>
+<li><p><strong>corr</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – Input CORR correction file (optional).</p></li>
+<li><p><strong>input_spec</strong> (<em>bool</em>) – Is a source spectrum read in?</p></li>
+<li><p><strong>input_back</strong> (<em>bool</em>) – Is a background spectrum specified?</p></li>
+<li><p><strong>input_resp</strong> (<em>bool</em>) – Is a response matrix read in?</p></li>
+<li><p><strong>input_area</strong> (<em>bool</em>) – Is an effective area file specified?</p></li>
+<li><p><strong>input_corr</strong> (<em>bool</em>) – Is a correction file specified?</p></li>
+<li><p><strong>first_channel_zero</strong> (<em>bool</em>) – If the first channel is 0, then matrix data needs shift since SPEX starts at 1.</p></li>
+<li><p><strong>save_grouping</strong> (<em>bool</em>) – Save the grouping of the spectra (Default: no).</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_region">
+<code class="sig-name descname">read_region</code><span class="sig-paren">(</span><em class="sig-param">phafile</em>, <em class="sig-param">rmffile</em>, <em class="sig-param">bkgfile=None</em>, <em class="sig-param">arffile=None</em>, <em class="sig-param">corrfile=None</em>, <em class="sig-param">grouping=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
+are mandatory. If needed, a background file and effective area file can be added.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phafile</strong> (<em>str</em>) – Name of the PHA file to read.</p></li>
+<li><p><strong>rmffile</strong> (<em>str</em>) – Name of the RMF file to read.</p></li>
+<li><p><strong>bkgfile</strong> (<em>str</em>) – Name of the background PHA file to read (optional).</p></li>
+<li><p><strong>arffile</strong> (<em>str</em>) – Name of the ARF file to read (optional).</p></li>
+<li><p><strong>corrfile</strong> (<em>str</em>) – Name of the Correction file to read (optional).</p></li>
+<li><p><strong>grouping</strong> (<em>bool</em>) – Keep the grouping information?</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.add_region">
+<code class="sig-name descname">add_region</code><span class="sig-paren">(</span><em class="sig-param">spec</em>, <em class="sig-param">resp</em>, <em class="sig-param">back=None</em>, <em class="sig-param">corr=None</em>, <em class="sig-param">area=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.add_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.add_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they
+need to be added to an OGIP region and converted to spo and res objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>spec</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – PHA object to add.</p></li>
+<li><p><strong>resp</strong> (<a class="reference internal" href="#pyspextools.io.rmf.Rmf" title="pyspextools.io.rmf.Rmf"><em>pyspextools.io.rmf.Rmf</em></a>) – RMF object to add.</p></li>
+<li><p><strong>back</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – PHA background object to add.</p></li>
+<li><p><strong>corr</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – PHA correction spectrum to add.</p></li>
+<li><p><strong>area</strong> (<a class="reference internal" href="#pyspextools.io.arf.Arf" title="pyspextools.io.arf.Arf"><em>pyspextools.io.arf.Arf</em></a>) – ARF effective area object to add.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.ogip_to_spex">
+<code class="sig-name descname">ogip_to_spex</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.ogip_to_spex"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.ogip_to_spex" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert the OGIP part of the OGIP region to spo and res objects.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_source_pha">
+<code class="sig-name descname">read_source_pha</code><span class="sig-paren">(</span><em class="sig-param">phafile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_source_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_source_pha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a pha file containing the source spectrum.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>phafile</strong> (<em>str</em>) – PHA file name of source spectrum to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_background_pha">
+<code class="sig-name descname">read_background_pha</code><span class="sig-paren">(</span><em class="sig-param">bkgfile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_background_pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_background_pha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open a pha file containing the background spectrum (if specified).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bkgfile</strong> (<em>str</em>) – PHA file name of background spectrum to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_rmf">
+<code class="sig-name descname">read_rmf</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_rmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Open rmf file containing the response matrix.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rmffile</strong> (<em>str</em>) – RMF file name to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_arf">
+<code class="sig-name descname">read_arf</code><span class="sig-paren">(</span><em class="sig-param">arffile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_arf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read arf file containing the effective area.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arffile</strong> (<em>str</em>) – ARF file name to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.read_corr">
+<code class="sig-name descname">read_corr</code><span class="sig-paren">(</span><em class="sig-param">corrfile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_corr"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_corr" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read correction file if specified.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>corrfile</strong> (<em>str</em>) – PHA correction file name to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.correct_possible_shift">
+<code class="sig-name descname">correct_possible_shift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.correct_possible_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.correct_possible_shift" title="Permalink to this definition">¶</a></dt>
+<dd><p>See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,
+then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
+channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
+and if the first channel in the OGIP spectrum is 0.
+The ogip_to_spex method calls this function by default.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.check_ogip">
+<code class="sig-name descname">check_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.check_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.check_ogip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check consistency of the OGIP files in this class.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.ogip.OGIPRegion.show_ogip">
+<code class="sig-name descname">show_ogip</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.show_ogip"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.show_ogip" title="Permalink to this definition">¶</a></dt>
+<dd><p>Shows a summary of the loaded OGIP data.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-tgregion-class-description">
+<h2>The TGRegion class description<a class="headerlink" href="#the-tgregion-class-description" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspextools.io.tg.TGRegion">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.tg.</code><code class="sig-name descname">TGRegion</code><a class="reference internal" href="../_modules/pyspextools/io/tg.html#TGRegion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion" title="Permalink to this definition">¶</a></dt>
+<dd><p>The TGRegion class contains methods to read Chandra grating data into the pyspextools module and convert
+these to spo and res format objects.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><p><strong>grating</strong> (<em>str</em>) – Grating name.</p>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.tg.TGRegion.read_region">
+<code class="sig-name descname">read_region</code><span class="sig-paren">(</span><em class="sig-param">pha2file</em>, <em class="sig-param">rmflist</em>, <em class="sig-param">arflist</em>, <em class="sig-param">grating</em>, <em class="sig-param">bkgsubtract=True</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/tg.html#TGRegion.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.tg.TGRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<dd><p>Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists
+are mandatory. The grating option can be either HETG, METG or LETG.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>pha2file</strong> (<em>str</em>) – PHA2 file name to read.</p></li>
+<li><p><strong>rmflist</strong> (<em>list</em>) – List of RMF response files.</p></li>
+<li><p><strong>arflist</strong> (<em>list</em>) – List of ARF effective area files.</p></li>
+<li><p><strong>grating</strong> (<em>str</em>) – Grating name.</p></li>
+<li><p><strong>bkgsubtract</strong> (<em>bool</em>) – Subtract the background?</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="the-ogip-file-classes">
+<h2>The OGIP file classes<a class="headerlink" href="#the-ogip-file-classes" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="pyspextools.io.pha.Pha">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha.</code><code class="sig-name descname">Pha</code><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FirstChannel</strong> (<em>int</em>) – First valid spectral channel.</p></li>
+<li><p><strong>DetChans</strong> (<em>int</em>) – Total number of legal channels.</p></li>
+<li><p><strong>Channel</strong> (<em>numpy.ndarray</em>) – Spectrum channels.</p></li>
+<li><p><strong>Rate</strong> (<em>numpy.ndarray</em>) – Spectrum spectrum count rate.</p></li>
+<li><p><strong>StatError</strong> (<em>numpy.ndarray</em>) – Spectrum error rate (if exists).</p></li>
+<li><p><strong>SysError</strong> (<em>numpy.ndarray</em>) – Spectrum systematic error.</p></li>
+<li><p><strong>Quality</strong> (<em>numpy.ndarray</em>) – Quality flag.</p></li>
+<li><p><strong>Grouping</strong> (<em>numpy.ndarray</em>) – Grouping information.</p></li>
+<li><p><strong>AreaScaling</strong> (<em>numpy.ndarray</em>) – Areascal keyword/array.</p></li>
+<li><p><strong>BackScaling</strong> (<em>numpy.ndarray</em>) – Backscal keyword/array.</p></li>
+<li><p><strong>CorrScal</strong> (<em>float</em>) – Correction spectrum scaling.</p></li>
+<li><p><strong>Exposure</strong> (<em>float</em>) – Exposure time of the spectrum.</p></li>
+<li><p><strong>Poisserr</strong> (<em>bool</em>) – Are the errors Poissonian.</p></li>
+<li><p><strong>Spectrumtype</strong> – Spectrumtype (TOTAL, NET or BKG).</p></li>
+<li><p><strong>PhaType</strong> (<em>str</em>) – Whether the spectrum is in COUNTS or RATE.</p></li>
+<li><p><strong>rmffile</strong> (<em>str</em>) – Associated Response matrix file.</p></li>
+<li><p><strong>arffile</strong> (<em>str</em>) – Associated Effective area file.</p></li>
+<li><p><strong>bkgfile</strong> (<em>str</em>) – Associated Background file.</p></li>
+<li><p><strong>corfile</strong> (<em>str</em>) – Associated Correction spectrum file.</p></li>
+<li><p><strong>Telescope</strong> (<em>str</em>) – Name of the observatory.</p></li>
+<li><p><strong>Instrument</strong> (<em>str</em>) – Name of the instrument.</p></li>
+<li><p><strong>Pha2Back</strong> (<em>bool</em>) – Is there a PHA2 background available?</p></li>
+<li><p><strong>BackRate</strong> (<em>numpy.ndarray</em>) – PHA2 Background Rate.</p></li>
+<li><p><strong>BackStatError</strong> (<em>numpy.ndarray</em>) – PHA2 Background Error.</p></li>
+<li><p><strong>Pha2BackScal</strong> (<em>float</em>) – Backscale value for background.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a spectrum from a PHA file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – PHA file name to be read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.read_header">
+<code class="sig-name descname">read_header</code><span class="sig-paren">(</span><em class="sig-param">header</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.read_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>header</strong> (<em>astropy.io.fits.Header</em>) – Header of the SPECTRUM extension.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write a simple pha file with the minimum required keywords.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – PHA file name to be read.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Overwrite existing file?</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the object contains the minimum required data.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.create_dummy">
+<code class="sig-name descname">create_dummy</code><span class="sig-paren">(</span><em class="sig-param">resp</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.create_dummy"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.create_dummy" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generate dummy spectrum based on rmf channel information.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>resp</strong> (<a class="reference internal" href="#pyspextools.io.rmf.Rmf" title="pyspextools.io.rmf.Rmf"><em>pyspextools.io.rmf.Rmf</em></a>) – Input RMF response object.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.disp">
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the PHA file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha.Pha.checkCompatibility">
+<code class="sig-name descname">checkCompatibility</code><span class="sig-paren">(</span><em class="sig-param">pha</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.checkCompatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.checkCompatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if another PHA object is compatible with the current one in terms of number of channels.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pha</strong> (<a class="reference internal" href="#pyspextools.io.pha.Pha" title="pyspextools.io.pha.Pha"><em>pyspextools.io.pha.Pha</em></a>) – PHA object to check compatibility for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspextools.io.pha2.Pha2">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha2.</code><code class="sig-name descname">Pha2</code><a class="reference internal" href="../_modules/pyspextools/io/pha2.html#Pha2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read PHA2 type OGIP spectra.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NumberSpectra</strong> (<em>int</em>) – Number of spectra in PHAII file.</p></li>
+<li><p><strong>phalist</strong> (<em>list</em>) – List of PHA spectra.</p></li>
+<li><p><strong>tg_m</strong> (<em>numpy.ndarray</em>) – Array of order numbers.</p></li>
+<li><p><strong>tg_part</strong> (<em>numpy.ndarray</em>) – Array of grating numbers.</p></li>
+<li><p><strong>instrument</strong> (<em>str</em>) – Instrument name.</p></li>
+<li><p><strong>telescope</strong> (<em>str</em>) – Telescope name.</p></li>
+<li><p><strong>grating</strong> (<em>str</em>) – Grating name</p></li>
+<li><p><strong>gratings</strong> (<em>dict</em>) – Dictionary of grating names.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.pha2.Pha2.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">phafile</em>, <em class="sig-param">force_poisson=True</em>, <em class="sig-param">background=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha2.html#Pha2.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the
+optional ‘force_poisson’ flag is True by default. Set force_poisson to false to obtain the errors from
+the file. If the user wants to subtract the background, the flag ‘background’ should be set to True.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phafile</strong> (<em>str</em>) – Name of the type II PHA file.</p></li>
+<li><p><strong>force_poisson</strong> (<em>bool</em>) – Flag to set the enforcement of Poisson errors.</p></li>
+<li><p><strong>background</strong> (<em>bool</em>) – Subtract the background (True/False)?</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.pha2.Pha2.combine_orders">
+<code class="sig-name descname">combine_orders</code><span class="sig-paren">(</span><em class="sig-param">grating</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha2.html#Pha2.combine_orders"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2.combine_orders" title="Permalink to this definition">¶</a></dt>
+<dd><p>Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>grating</strong> (<em>int</em>) – Grating number to combine the orders for.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspextools.io.rmf.Rmf">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.rmf.</code><code class="sig-name descname">Rmf</code><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FirstChannel</strong> (<em>int</em>) – First channel number.</p></li>
+<li><p><strong>Channel</strong> (<em>numpy.ndarray</em>) – Channel numbers.</p></li>
+<li><p><strong>NumberGroups</strong> (<em>numpy.ndarray</em>) – Number of response groups.</p></li>
+<li><p><strong>FirstGroup</strong> (<em>numpy.ndarray</em>) – First response group for this energy bin.</p></li>
+<li><p><strong>FirstChannelGroup</strong> (<em>numpy.ndarray</em>) – First channel number in this group.</p></li>
+<li><p><strong>NumberChannelsGroup</strong> (<em>numpy.ndarray</em>) – Number of channels in this group.</p></li>
+<li><p><strong>FirstElement</strong> (<em>numpy.ndarray</em>) – First response element for this group.</p></li>
+<li><p><strong>LowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of bin.</p></li>
+<li><p><strong>HighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of bin.</p></li>
+<li><p><strong>Matrix</strong> (<em>numpy.ndarray</em>) – Response matrix elements.</p></li>
+<li><p><strong>ChannelLowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of channel.</p></li>
+<li><p><strong>ChannelHighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of channel.</p></li>
+<li><p><strong>NumberChannels</strong> (<em>int</em>) – Number of data channels.</p></li>
+<li><p><strong>NumberEnergyBins</strong> (<em>int</em>) – Number of energy bins.</p></li>
+<li><p><strong>NumberTotalGroups</strong> (<em>int</em>) – Total number of groups.</p></li>
+<li><p><strong>NumberTotalElements</strong> (<em>int</em>) – Total number of response elements.</p></li>
+<li><p><strong>AreaScaling</strong> (<em>float</em>) – Value of EFFAREA keyword.</p></li>
+<li><p><strong>ResponseThreshold</strong> (<em>float</em>) – Minimum value in response.</p></li>
+<li><p><strong>EnergyUnits</strong> (<em>str</em>) – Units of the energy scale.</p></li>
+<li><p><strong>RMFUnits</strong> (<em>str</em>) – Units for RMF values.</p></li>
+<li><p><strong>AreaIncluded</strong> (<em>bool</em>) – Is the effective area included in the response?</p></li>
+<li><p><strong>Order</strong> (<em>int</em>) – Order of the matrix.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.rmf.Rmf.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>rmffile</strong> (<em>str</em>) – RMF file name to read.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.rmf.Rmf.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">rmffile</em>, <em class="sig-param">telescop=None</em>, <em class="sig-param">instrume=None</em>, <em class="sig-param">filterkey=None</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method to write an OGIP format RMF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>rmffile</strong> (<em>str</em>) – RMF file name to write.</p></li>
+<li><p><strong>telescop</strong> (<em>str</em>) – Name of the telescope to be put in the TELESCOP keyword.</p></li>
+<li><p><strong>instrume</strong> (<em>str</em>) – Name of the instrument to be put in the INSTRUME keyword.</p></li>
+<li><p><strong>filterkey</strong> (<em>str</em>) – Name of the filter to be put in the FILTER keyword.</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Overwrite existing file names? (True/False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.rmf.Rmf.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check the RMF for internal consistency.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.rmf.Rmf.disp">
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the RMF object.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.rmf.Rmf.checkCompatibility">
+<code class="sig-name descname">checkCompatibility</code><span class="sig-paren">(</span><em class="sig-param">arf</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.checkCompatibility"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.checkCompatibility" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check whether the input arf object is really an ARF object with data and consistent with this RMF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arf</strong> (<em>pyspextools.io.Arf</em>) – Input arf object to check.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="pyspextools.io.arf.Arf">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.arf.</code><code class="sig-name descname">Arf</code><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by
+Keith Arnaud.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>LowEnergy</strong> (<em>numpy.ndarray</em>) – Low Energy boundary of bin</p></li>
+<li><p><strong>HighEnergy</strong> (<em>numpy.ndarray</em>) – High Energy boundary of bin</p></li>
+<li><p><strong>EffArea</strong> (<em>numpy.ndarray</em>) – Effective area of bin</p></li>
+<li><p><strong>EnergyUnits</strong> (<em>str</em>) – Energy units</p></li>
+<li><p><strong>ARFUnits</strong> (<em>str</em>) – Unit of effective area</p></li>
+<li><p><strong>Order</strong> (<em>int</em>) – Grating order (for grating arrays, else 0)</p></li>
+<li><p><strong>Grating</strong> (<em>int</em>) – Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="method">
+<dt id="pyspextools.io.arf.Arf.read">
+<code class="sig-name descname">read</code><span class="sig-paren">(</span><em class="sig-param">arffile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf.read"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.read" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read the effective area from an OGIP ARF file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>arffile</strong> (<em>str</em>) – Effective area file name (FITS/OGIP format)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.arf.Arf.write">
+<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">arffile</em>, <em class="sig-param">telescop=None</em>, <em class="sig-param">instrume=None</em>, <em class="sig-param">filter=None</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.write" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write an OGIP compatible ARF file (Non-grating format).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>arffile</strong> (<em>str</em>) – Effective area file name to write (FITS/OGIP format)</p></li>
+<li><p><strong>telescop</strong> (<em>str</em>) – Telescope name (optional)</p></li>
+<li><p><strong>instrume</strong> (<em>str</em>) – Instrument name (optional)</p></li>
+<li><p><strong>filter</strong> (<em>str</em>) – Filter setting (optional)</p></li>
+<li><p><strong>overwrite</strong> (<em>bool</em>) – Overwrite existing file? (True/False)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.arf.Arf.check">
+<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.check" title="Permalink to this definition">¶</a></dt>
+<dd><p>Check if the basic information is read in.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="pyspextools.io.arf.Arf.disp">
+<code class="sig-name descname">disp</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf.disp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf.disp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a summary of the ARF object.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Module reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="io.html">SPEX data format support</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">OGIP data format support</a></li>
+<li class="toctree-l2"><a class="reference internal" href="data.html">Data filtering and optimization</a></li>
+<li class="toctree-l2"><a class="reference internal" href="user.html">SPEX user model support</a></li>
+</ul>
+</li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../reference.html">Module reference</a><ul>
+      <li>Previous: <a href="io.html" title="previous chapter">SPEX data format support</a></li>
+      <li>Next: <a href="data.html" title="next chapter">Data filtering and optimization</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/reference/ogip.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>

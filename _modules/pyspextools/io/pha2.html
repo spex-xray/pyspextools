@@ -5,35 +5,29 @@
   <head>
     <meta charset="utf-8" />
     <title>pyspextools.io.pha2 &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for pyspextools.io.pha2</h1><div class="highlight"><pre>
@@ -41,41 +35,71 @@
 
 <span class="c1"># Import stuff for compatibility between python 2 and 3</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">str</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
 
-<span class="kn">from</span> <span class="nn">future</span> <span class="kn">import</span> <span class="n">standard_library</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
 
 <span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
 
-<span class="kn">from</span> <span class="nn">.pha</span> <span class="kn">import</span> <span class="n">Pha</span>
+<span class="kn">from</span> <span class="nn">.pha</span> <span class="k">import</span> <span class="n">Pha</span>
 
 <span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
 
-<div class="viewcode-block" id="Pha2"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha2.Pha2">[docs]</a><span class="k">class</span> <span class="nc">Pha2</span><span class="p">:</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">NumberSpectra</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c1">#: Number of spectra in PHAII file</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">phalist</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1">#: List of PHA spectra</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tg_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>                <span class="c1">#: Array of order numbers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tg_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>             <span class="c1">#: Array of grating numbers</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                    <span class="c1">#: Instrument name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">telescope</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                     <span class="c1">#: Telescope name</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                       <span class="c1">#: Grating name</span>
+<div class="viewcode-block" id="Pha2"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha2.Pha2">[docs]</a><span class="k">class</span> <span class="nc">Pha2</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot; Class to read PHA2 type OGIP spectra.</span>
+
+<span class="sd">    :ivar NumberSpectra: Number of spectra in PHAII file.</span>
+<span class="sd">    :vartype NumberSpectra: int</span>
+<span class="sd">    :ivar phalist: List of PHA spectra.</span>
+<span class="sd">    :vartype phalist: list</span>
+<span class="sd">    :ivar tg_m: Array of order numbers.</span>
+<span class="sd">    :vartype tg_m: numpy.ndarray</span>
+<span class="sd">    :ivar tg_part: Array of grating numbers.</span>
+<span class="sd">    :vartype tg_part: numpy.ndarray</span>
+<span class="sd">    :ivar instrument: Instrument name.</span>
+<span class="sd">    :vartype instrument: str</span>
+<span class="sd">    :ivar telescope: Telescope name.</span>
+<span class="sd">    :vartype telescope: str</span>
+<span class="sd">    :ivar grating: Grating name</span>
+<span class="sd">    :vartype grating: str</span>
+
+<span class="sd">    :ivar gratings: Dictionary of grating names.</span>
+<span class="sd">    :vartype gratings: dict</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">NumberSpectra</span> <span class="o">=</span> <span class="mi">0</span>                  <span class="c1"># Number of spectra in PHAII file</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">phalist</span> <span class="o">=</span> <span class="p">[]</span>                       <span class="c1"># List of PHA spectra</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tg_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>                <span class="c1"># Array of order numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tg_part</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([])</span>             <span class="c1"># Array of grating numbers</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">instrument</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                    <span class="c1"># Instrument name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">telescope</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                     <span class="c1"># Telescope name</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">grating</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                       <span class="c1"># Grating name</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">gratings</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;1&#39;</span><span class="p">:</span> <span class="s1">&#39;heg&#39;</span><span class="p">,</span> <span class="s1">&#39;2&#39;</span><span class="p">:</span> <span class="s1">&#39;meg&#39;</span><span class="p">,</span> <span class="s1">&#39;3&#39;</span><span class="p">:</span> <span class="s1">&#39;leg&#39;</span><span class="p">}</span>
 
-<div class="viewcode-block" id="Pha2.read"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha2.Pha2.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">phafile</span><span class="p">,</span><span class="n">force_poisson</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Pha2.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha2.Pha2.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">background</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Read a type II pha file. Many time Gehrels errors are provided, but we prefer Poisson. Therefore, the</span>
 <span class="sd">        optional &#39;force_poisson&#39; flag is True by default. Set force_poisson to false to obtain the errors from</span>
-<span class="sd">        the file. If the user wants to subtract the background, the flag &#39;subtract_background&#39; should be set to True.&quot;&quot;&quot;</span>
+<span class="sd">        the file. If the user wants to subtract the background, the flag &#39;background&#39; should be set to True.</span>
+
+<span class="sd">        :param phafile: Name of the type II PHA file.</span>
+<span class="sd">        :type phafile: str</span>
+<span class="sd">        :param force_poisson: Flag to set the enforcement of Poisson errors.</span>
+<span class="sd">        :type force_poisson: bool</span>
+<span class="sd">        :param background: Subtract the background (True/False)?</span>
+<span class="sd">        :type background: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="n">file</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">phafile</span><span class="p">)</span>
         <span class="n">header</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;SPECTRUM&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">header</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">file</span><span class="p">[</span><span class="s1">&#39;SPECTRUM&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">data</span>
@@ -115,7 +139,7 @@
             <span class="k">if</span> <span class="ow">not</span> <span class="n">poisson</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">pha</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;STAT_ERR&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-                <span class="k">except</span><span class="p">:</span>
+                <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                     <span class="n">pha</span><span class="o">.</span><span class="n">StatError</span> <span class="o">=</span> <span class="kc">None</span>
                     <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No Poisson errors, but no STAT_ERR keyword found.&quot;</span><span class="p">)</span>
                     <span class="k">return</span> <span class="mi">1</span>
@@ -127,7 +151,7 @@
             <span class="c1"># Are there systematic errors?</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SYS_ERR&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">SysError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
             <span class="k">if</span> <span class="n">pha</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">==</span> <span class="s1">&#39;RATE&#39;</span><span class="p">:</span>
@@ -136,25 +160,25 @@
             <span class="c1"># Are there quality flags?</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;QUALITY&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
             <span class="c1"># Are there grouping flags?</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;GROUPING&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Grouping</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
             <span class="c1"># Is there a backscale column?</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;BACKSCAL&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;BACKSCAL&#39;</span><span class="p">]</span>
 
             <span class="c1"># Is there an areascale column?</span>
             <span class="k">try</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;AREASCAL&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="k">except</span><span class="p">:</span>
+            <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span> <span class="o">*</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;AREASCAL&#39;</span><span class="p">]</span>
 
             <span class="k">if</span> <span class="n">background</span><span class="p">:</span>
@@ -166,8 +190,8 @@
                 <span class="n">pha</span><span class="o">.</span><span class="n">Pha2BackScal</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;BACKSCUP&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;BACKSCDN&#39;</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Pha2Back</span> <span class="o">=</span> <span class="kc">False</span>
-                <span class="n">pha</span><span class="o">.</span><span class="n">BackRate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
-                <span class="n">pha</span><span class="o">.</span><span class="n">BackStatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span><span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">pha</span><span class="o">.</span><span class="n">BackRate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+                <span class="n">pha</span><span class="o">.</span><span class="n">BackStatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">pha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
                 <span class="n">pha</span><span class="o">.</span><span class="n">Pha2BackScal</span> <span class="o">=</span> <span class="mf">1.0</span>
 
             <span class="bp">self</span><span class="o">.</span><span class="n">phalist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pha</span><span class="p">)</span>
@@ -175,8 +199,12 @@
         <span class="n">file</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Pha2.combine_orders"><a class="viewcode-back" href="../../../ogip.html#pyspextools.io.pha2.Pha2.combine_orders">[docs]</a>    <span class="k">def</span> <span class="nf">combine_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">grating</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Pha2.combine_orders"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha2.Pha2.combine_orders">[docs]</a>    <span class="k">def</span> <span class="nf">combine_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grating</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Combine the orders for spectra from the same grating (1 = HETG, 2 = METG, 3 = LETG).</span>
+
+<span class="sd">        :param grating: Grating number to combine the orders for.</span>
+<span class="sd">        :type grating: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Select rows to combine</span>
         <span class="n">tocombine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">tg_part</span> <span class="o">==</span> <span class="n">grating</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
@@ -185,7 +213,7 @@
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Grating number not found in dataset.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
-        <span class="k">if</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span><span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Only a single order found. No combining will be done.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
@@ -218,24 +246,53 @@
             <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">+</span> <span class="n">ipha</span><span class="o">.</span><span class="n">BackScaling</span>
 
         <span class="c1"># Calculate the average AreaScaling and BackScaling (Probably wrong!)</span>
-        <span class="n">srcpha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span>  <span class="n">srcpha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">/</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span>
-        <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span>  <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">/</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">srcpha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">srcpha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">/</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">srcpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">/</span> <span class="n">tocombine</span><span class="o">.</span><span class="n">size</span>
 
         <span class="n">bkgpha</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">srcpha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">bkgpha</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">srcpha</span><span class="o">.</span><span class="n">Pha2BackScal</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">srcpha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="n">bkgpha</span><span class="o">.</span><span class="n">Quality</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">srcpha</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">bkgpha</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">=</span> <span class="n">srcpha</span><span class="o">.</span><span class="n">Exposure</span>
 
-
         <span class="k">return</span> <span class="n">srcpha</span><span class="p">,</span> <span class="n">bkgpha</span></div></div>
-
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Module reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -246,26 +303,29 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

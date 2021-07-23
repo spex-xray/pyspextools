@@ -1,7 +1,7 @@
 .. _ogipgenrsp:
 
-OGIPGENRSP
-==========
+OGIPGENRSP - Create dummy response files
+========================================
 
 Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
 and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting

@@ -1,7 +1,7 @@
 .. _simres:
 
-SIMRES
-======
+SIMRES - Create simulation files based on existing response
+===========================================================
 
 Simres is a script to create a SPEX format spo and res file from just an input response file, optionally with an
 effective area file (ARF) and background spectrum. This is very useful to create spo and res files

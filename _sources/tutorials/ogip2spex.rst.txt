@@ -1,7 +1,7 @@
 .. _ogip2spex:
 
-OGIP2spex
-=========
+OGIP2spex - Convert OGIP files to SPEX format
+=============================================
 
 OGIP2spex is a script that converts OGIP spectra and responses to SPEX format, similar to the trafo program in SPEX.
 
@@ -14,7 +14,7 @@ arguments directly from the command line::
 A full overview of the arguments is given below in the section `Command-line arguments <ogip2spex_commandline_>`_.
 
 .. NOTE::
-   By default ogip2spex creates spo files without the 'Exp_Rate' column. This column was added in SPEX version 3.05.00.
+   By default ogip2spex creates spo files with the 'Exp_Rate' column. This column was added in SPEX version 3.05.00.
    The Exp_Rate column contains the ratio between the backscale values of the source and background spectrum and is
    used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Exp_Rate
    column is created.
@@ -79,7 +79,7 @@ At the end of the program, the spo and res files are saved::
 
 One can overwrite existing files by adding the '--overwrite' option to the ogip2spex call.
 
-This spo file does not have an 'Exp_Rate' column. To generate a spo file with such a column, add '--exprate' to the
+This spo file has an 'Exp_Rate' column. To generate a spo file without such a column, add '--no-exprate' to the
 ogip2spex call.
 
 By default, ogip2spex shows colored output for warnings, errors and OKs. If it is hard for you to see, use the

@@ -1,5 +1,7 @@
 .. _apec-example:
 
+.. highlight:: none
+
 APEC interface for SPEX
 =========================
 

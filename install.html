@@ -5,42 +5,31 @@
   <head>
     <meta charset="utf-8" />
     <title>Install pyspextools &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
     <script type="text/javascript" src="_static/jquery.js"></script>
     <script type="text/javascript" src="_static/underscore.js"></script>
     <script type="text/javascript" src="_static/doctools.js"></script>
     <script type="text/javascript" src="_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Using the pyspextools module" href="tutorials.html" />
-    <link rel="prev" title="Welcome to pyspextools documentation!" href="index.html" /> 
+    <link rel="next" title="Pyspextools tutorials" href="tutorials.html" />
+    <link rel="prev" title="Welcome to pyspextools documentation!" href="index.html" />
+   
+  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tutorials.html" title="Using the pyspextools module"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to pyspextools documentation!"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.4 documentation</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <div class="section" id="install-pyspextools">
@@ -52,7 +41,7 @@ To do so, create your own conda environment first (See this
 <a class="reference external" href="https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/">tutorial</a>).
 In the example below, we create the conda environment <cite>spex</cite> assuming you already have installed conda successfully.
 The commands below create a new conda environment and activate it in your shell:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">spex</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">anaconda</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">spex</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">numpy</span> <span class="n">astropy</span> <span class="n">future</span>
 <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">spex</span>
 <span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span>
 </pre></div>
@@ -130,43 +119,46 @@ module to function.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">Install pyspextools</a><ul>
-<li><a class="reference internal" href="#before-you-install">Before you install</a><ul>
-<li><a class="reference internal" href="#non-conda-environments">Non-conda environments</a></li>
+<p class="logo">
+  <a href="index.html">
+    <img class="logo" src="_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Install pyspextools</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#before-you-install">Before you install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#dependency-issues">Dependency issues</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#install">Install</a><ul>
-<li><a class="reference internal" href="#install-from-github">Install from GitHub</a></li>
-<li><a class="reference internal" href="#install-using-setup-py">Install using setup.py</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#dependency-issues">Dependency issues</a><ul>
-<li><a class="reference internal" href="#notes-on-the-pyspextools-dependencies">Notes on the pyspextools dependencies</a></li>
-</ul>
-</li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Module reference</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="index.html"
-                        title="previous chapter">Welcome to pyspextools documentation!</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="tutorials.html"
-                        title="next chapter">Using the pyspextools module</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="_sources/install.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="index.html">Documentation overview</a><ul>
+      <li>Previous: <a href="index.html" title="previous chapter">Welcome to pyspextools documentation!</a></li>
+      <li>Next: <a href="tutorials.html" title="next chapter">Pyspextools tutorials</a></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -177,31 +169,32 @@ module to function.</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="tutorials.html" title="Using the pyspextools module"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="index.html" title="Welcome to pyspextools documentation!"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="index.html">pyspextools 0.3.4 documentation</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="_sources/install.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

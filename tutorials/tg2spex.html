@@ -4,48 +4,36 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>TG2Spex &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../_static/classic.css" type="text/css" />
+    <title>TG2Spex - Convert Chandra grating data &#8212; pyspextools 0.3.4 documentation</title>
+    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../_static/jquery.js"></script>
     <script type="text/javascript" src="../_static/underscore.js"></script>
     <script type="text/javascript" src="../_static/doctools.js"></script>
     <script type="text/javascript" src="../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="OGIPGENRSP" href="ogipgenrsp.html" />
-    <link rel="prev" title="OGIP2spex" href="ogip2spex.html" /> 
+    <link rel="next" title="OGIPGENRSP - Create dummy response files" href="ogipgenrsp.html" />
+    <link rel="prev" title="OGIP2spex - Convert OGIP files to SPEX format" href="ogip2spex.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="ogipgenrsp.html" title="OGIPGENRSP"
-             accesskey="N">next</a> |</li>
-        <li class="right" >
-          <a href="ogip2spex.html" title="OGIP2spex"
-             accesskey="P">previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" accesskey="U">Using the pyspextools module</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
-  <div class="section" id="tg2spex">
-<span id="id1"></span><h1>TG2Spex<a class="headerlink" href="#tg2spex" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="tg2spex-convert-chandra-grating-data">
+<span id="tg2spex"></span><h1>TG2Spex - Convert Chandra grating data<a class="headerlink" href="#tg2spex-convert-chandra-grating-data" title="Permalink to this headline">¶</a></h1>
 <p>Tg2spex is a script to convert spectra from Chandra grating observations to SPEX format. Tg2spex works
 with input flags from the command line. The ‘-h’ flag shows the help of the tg2spex command:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">tg2spex</span> <span class="o">-</span><span class="n">h</span>
@@ -111,7 +99,7 @@ are read in and combined into a single leg.spo and leg.res.</p>
 </p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">tg2spex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">prefix</span> <span class="n">INPUT_PREFIX</span><span class="p">]</span>
                <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">OUTPUT_PREFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">bkgsubtract</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
                <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
                <span class="n">path</span>
 </pre></div>
@@ -128,7 +116,7 @@ are read in and combined into a single leg.spo and leg.res.</p>
 <h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>--input-prefix</kbd></dt>
-<dd><p>Input filename prefix (example: ‘<a href="#id2"><span class="problematic" id="id3">hrcf04149_repro_</span></a>’).</p>
+<dd><p>Input filename prefix (example: ‘<a href="#id1"><span class="problematic" id="id2">hrcf04149_repro_</span></a>’).</p>
 <p>Default: “”</p>
 </dd>
 <dt><kbd>--output-prefix</kbd></dt>
@@ -147,9 +135,9 @@ are read in and combined into a single leg.spo and leg.res.</p>
 <dd><p>Overwrite existing spo and res files with same name.</p>
 <p>Default: True</p>
 </dd>
-<dt><kbd>--exprate</kbd></dt>
-<dd><p>Write additional Exp_Rate column (SPEX &gt;=3.05.00).</p>
-<p>Default: False</p>
+<dt><kbd>--no-exprate</kbd></dt>
+<dd><p>Do not write additional Exp_Rate column (SPEX &lt;=3.04.00).</p>
+<p>Default: True</p>
 </dd>
 <dt><kbd>--no-color</kbd></dt>
 <dd><p>Suppress color output.</p>
@@ -165,36 +153,48 @@ are read in and combined into a single leg.spo and leg.res.</p>
 
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
-  <h3><a href="../index.html">Table of Contents</a></h3>
-  <ul>
-<li><a class="reference internal" href="#">TG2Spex</a><ul>
-<li><a class="reference internal" href="#example">Example</a></li>
-<li><a class="reference internal" href="#command-line-arguments">Command-line arguments</a><ul>
-<li><a class="reference internal" href="#Positional Arguments">Positional Arguments</a></li>
-<li><a class="reference internal" href="#Named Arguments">Named Arguments</a></li>
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-scripts">Using the pyspextools scripts</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-api">Using the pyspextools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-spex-user-model">Using the SPEX user model</a></li>
 </ul>
 </li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Module reference</a></li>
 </ul>
 
-  <h4>Previous topic</h4>
-  <p class="topless"><a href="ogip2spex.html"
-                        title="previous chapter">OGIP2spex</a></p>
-  <h4>Next topic</h4>
-  <p class="topless"><a href="ogipgenrsp.html"
-                        title="next chapter">OGIPGENRSP</a></p>
-  <div role="note" aria-label="source link">
-    <h3>This Page</h3>
-    <ul class="this-page-menu">
-      <li><a href="../_sources/tutorials/tg2spex.rst.txt"
-            rel="nofollow">Show Source</a></li>
-    </ul>
-   </div>
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Pyspextools tutorials</a><ul>
+      <li>Previous: <a href="ogip2spex.html" title="previous chapter">OGIP2spex - Convert OGIP files to SPEX format</a></li>
+      <li>Next: <a href="ogipgenrsp.html" title="next chapter">OGIPGENRSP - Create dummy response files</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -205,32 +205,32 @@ are read in and combined into a single leg.spo and leg.res.</p>
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="right" >
-          <a href="ogipgenrsp.html" title="OGIPGENRSP"
-             >next</a> |</li>
-        <li class="right" >
-          <a href="ogip2spex.html" title="OGIP2spex"
-             >previous</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../tutorials.html" >Using the pyspextools module</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorials/tg2spex.rst.txt"
+          rel="nofollow">Page source</a>
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>

@@ -5,35 +5,29 @@
   <head>
     <meta charset="utf-8" />
     <title>pyspextools.io.res &#8212; pyspextools 0.3.4 documentation</title>
-    <link rel="stylesheet" href="../../../_static/classic.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
     <script type="text/javascript" src="../../../_static/language_data.js"></script>
-    
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" /> 
+    <link rel="search" title="Search" href="../../../search.html" />
+   
+  <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
   </head><body>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             accesskey="I">index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" accesskey="U">Module code</a> &#187;</li> 
-      </ul>
-    </div>  
+  
 
     <div class="document">
       <div class="documentwrapper">
         <div class="bodywrapper">
+          
+
           <div class="body" role="main">
             
   <h1>Source code for pyspextools.io.res</h1><div class="highlight"><pre>
@@ -45,7 +39,7 @@
 <span class="sd">  SPEX res files contain the response matrix and effective area</span>
 <span class="sd">  See this page for the format specification: </span>
 <span class="sd">      </span>
-<span class="sd">    http://var.sron.nl/SPEX-doc/manualv3.04/manualse108.html#x122-2840008.2</span>
+<span class="sd">    https://spex-xray.github.io/spex-help/theory/response.html</span>
 <span class="sd">  </span>
 <span class="sd">  This file contains the res class</span>
 <span class="sd"> </span>
@@ -54,10 +48,10 @@
 <span class="sd">    - numpy:               Array operations</span>
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># =========================================================</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="kn">import</span> <span class="n">unicode_literals</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
+<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
 
 <span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
 <span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
@@ -68,9 +62,9 @@
 
 <span class="c1"># Stuff to import for compatibility between python 2 and 3</span>
 
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="kn">import</span> <span class="nb">int</span>
+<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">int</span>
 
-<span class="kn">from</span> <span class="nn">future</span> <span class="kn">import</span> <span class="n">standard_library</span>
+<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
 
 <span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
 
@@ -80,41 +74,101 @@
 <span class="c1"># res file. This file can contain multiple responses (regions).</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Res"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res">[docs]</a><span class="k">class</span> <span class="nc">Res</span><span class="p">:</span>
+<div class="viewcode-block" id="Res"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res">[docs]</a><span class="k">class</span> <span class="nc">Res</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;The res class contains the response information for one</span>
-<span class="sd">       res file. This file can contain multiple responses (regions).&quot;&quot;&quot;</span>
+<span class="sd">    res file. This file can contain multiple responses (regions).</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="sd">    :ivar resname: Name of the res file.</span>
+<span class="sd">    :vartype resname: str</span>
+<span class="sd">    :ivar empty: Is the object still empty? (True/False)</span>
+<span class="sd">    :vartype empty: bool</span>
+
+<span class="sd">    :ivar nchan: Number of energy channels.</span>
+<span class="sd">    :vartype nchan: numpy.ndarray</span>
+<span class="sd">    :ivar neg: Number of energy bins.</span>
+<span class="sd">    :vartype neg: numpy.ndarray</span>
+<span class="sd">    :ivar sector: Array containing sector numbers.</span>
+<span class="sd">    :vartype sector: numpy.ndarray</span>
+<span class="sd">    :ivar region: Array containing region numbers.</span>
+<span class="sd">    :vartype region: numpy.ndarray</span>
+<span class="sd">    :ivar shcomp: Array containing shared components.</span>
+<span class="sd">    :vartype shcomp: numpy.ndarray</span>
+
+<span class="sd">    :ivar nsector: Number of sectors.</span>
+<span class="sd">    :vartype nsector: int</span>
+<span class="sd">    :ivar nregion: Number of regions.</span>
+<span class="sd">    :vartype nregion: int</span>
+<span class="sd">    :ivar ncom: Number of response components</span>
+<span class="sd">    :vartype ncom: int</span>
+
+<span class="sd">    :ivar share_comp: Are there any shared components?</span>
+<span class="sd">    :vartype share_comp: bool</span>
+<span class="sd">    :ivar area_scal: Is there areascal information?</span>
+<span class="sd">    :vartype area_scal: bool</span>
+<span class="sd">    :ivar resp_der: Are there response derivatives?</span>
+<span class="sd">    :vartype resp_der: bool</span>
+
+<span class="sd">    :ivar eg1: Start energies for response group.</span>
+<span class="sd">    :vartype eg1: numpy.ndarray</span>
+<span class="sd">    :ivar eg2: End energies for response group.</span>
+<span class="sd">    :vartype eg2: numpy.ndarray</span>
+<span class="sd">    :ivar ic1: Start channel for response group.</span>
+<span class="sd">    :vartype ic1: numpy.ndarray</span>
+<span class="sd">    :ivar ic2: End channel for response group.</span>
+<span class="sd">    :vartype ic2: numpy.ndarray</span>
+<span class="sd">    :ivar nc: Number of data channels in the group.</span>
+<span class="sd">    :vartype nc: numpy.ndarray</span>
+<span class="sd">    :ivar relarea: Area scaling factors.</span>
+<span class="sd">    :vartype relarea: numpy.ndarray</span>
+
+<span class="sd">    :ivar resp: Response values for group (m**2).</span>
+<span class="sd">    :vartype resp: numpy.ndarray</span>
+<span class="sd">    :ivar dresp: Response derivatives for group (optional).</span>
+<span class="sd">    :vartype dresp: numpy.ndarray</span>
+
+<span class="sd">    :ivar mask_resp: Mask array used to select certain response values.</span>
+<span class="sd">    :vartype mask_resp: numpy.ndarray</span>
+<span class="sd">    :ivar mask_group: Mask array used to select certain groups.</span>
+<span class="sd">    :vartype mask_group: numpy.ndarray</span>
+<span class="sd">    :ivar mask_icomp: Mask array used to select certain components.</span>
+<span class="sd">    :vartype mask_icomp: numpy.ndarray</span>
+
+<span class="sd">    :ivar swap: Should the channel order be swapped?</span>
+<span class="sd">    :vartype swap: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Initialize a SPEX response object.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">resname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="c1"># Response components (SPEX_RESP_ICOMP)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Number of channels</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Number of energy bins</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Sectors</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Regions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Shared components (optional)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">nsector</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Number of sectors</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Number of regions</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ncomp</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1">#: Number of response components</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsector</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ncomp</span> <span class="o">=</span> <span class="mi">0</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">share_comp</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Are there shared components (?)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">area_scal</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Is there areascal information (?)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resp_der</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1">#: Are there response derivatives (?)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">share_comp</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">area_scal</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resp_der</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Response groups (SPEX_RESP_GROUP)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: start energy for group (keV)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eg2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: end energy for group (keV)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Start channel for response group</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ic2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: End channel for response group</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>  <span class="c1">#: Number of data channels in group</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">relarea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: Area scaling factors</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eg2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ic2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">relarea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="c1"># Response values (SPEX_RESP_RESP)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: response values for group (m**2)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1">#: response derivatives for group (optional)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
 
         <span class="c1"># Mask arrays</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">mask_resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
@@ -128,8 +182,16 @@
     <span class="c1"># Function to add a response from another region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.</span>
+
+<span class="sd">        :param origres: Response object to be added to this one.</span>
+<span class="sd">        :type origres: pyspextools.io.Res</span>
+<span class="sd">        :param isector: Sector number of the response object to add.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        :param iregion: Region number of the response object to add.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="n">origres</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -189,15 +251,20 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span></div>
 
-
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to remove a region from a response</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.</span>
 
-        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span><span class="n">iregion</span><span class="p">)</span>
+<span class="sd">        :param isector: Sector number of the region to be removed.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        :param iregion: Region number of the region to be removed.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Cannot remove region.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
@@ -239,8 +306,12 @@
     <span class="c1"># Function to read a response from a .res file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.read_file"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function to read a response from a .res file.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.read_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Function to read a response from a .res file.</span>
+
+<span class="sd">        :param resfile: Response filename to be read.</span>
+<span class="sd">        :type resfile: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># The filename is saved in the data object for reference.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">resname</span> <span class="o">=</span> <span class="n">resfile</span>
@@ -307,8 +378,14 @@
     <span class="c1"># Function to return a region from a res object</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.</span>
+
+<span class="sd">        :param isector: Sector number of the region to be returned.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        :param iregion: Region number of the region to be returned.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">stat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_mask</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">stat</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -365,8 +442,16 @@
     <span class="c1"># Function to write a response to a .res file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.write_file"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Write the response information to a .res file with name &#39;resfile&#39;.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.write_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Write the response information to a .res file with name &#39;resfile&#39;.</span>
+
+<span class="sd">        :param resfile: Name of the response file to write to.</span>
+<span class="sd">        :type resfile: str</span>
+<span class="sd">        :param overwrite: Should we overwrite existing files?</span>
+<span class="sd">        :type overwrite: bool</span>
+<span class="sd">        :param history: History information</span>
+<span class="sd">        :type history: List/Array of strings</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">check</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">check</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">check</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
@@ -452,17 +537,17 @@
     <span class="c1"># Swap the channel order between wavelength and energy order</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.swap_order"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.swap_order"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Swap the channel order of the response between wavelength or energy order. This is</span>
 <span class="sd">        for example helpful for grating spectra, which are originally stored in wavelength order</span>
 <span class="sd">        but must be flipped to energy order in SPEX format.&quot;&quot;&quot;</span>
 
         <span class="c1"># Loop over components to swap the channel numbers</span>
-        <span class="n">n1</span><span class="o">=</span><span class="mi">0</span>   <span class="c1"># Lowest channel number</span>
-        <span class="n">r1</span><span class="o">=</span><span class="mi">0</span>   <span class="c1"># Index of response array</span>
+        <span class="n">n1</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Lowest channel number</span>
+        <span class="n">r1</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Index of response array</span>
 
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ncomp</span><span class="p">):</span>
-            <span class="n">n2</span><span class="o">=</span><span class="n">n1</span><span class="o">+</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">n2</span> <span class="o">=</span> <span class="n">n1</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="p">(</span><span class="n">n1</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">[</span><span class="n">i</span><span class="p">])):</span>
                 <span class="c1"># Update group definition</span>
                 <span class="n">ic2</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
@@ -483,33 +568,41 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Add component to RES file</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Res.append_component"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.append_component">[docs]</a>    <span class="k">def</span> <span class="nf">append_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">addres</span><span class="p">,</span><span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.append_component"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.append_component">[docs]</a>    <span class="k">def</span> <span class="nf">append_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addres</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Append a component to the response matrix from another matrix. This is used to add orders to the response</span>
-<span class="sd">        file.&quot;&quot;&quot;</span>
+<span class="sd">        file for Chandra grating data.</span>
+
+<span class="sd">        :param addres: Response object to extract response information from.</span>
+<span class="sd">        :type addres: pyspextools.io.Res</span>
+<span class="sd">        :param iregion: Region number to add to the response.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        :param isector: Sector number to add to the response.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Append line to SPEX_RESP_ICOMP</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">nchan</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">neg</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">,</span><span class="n">isector</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">,</span><span class="n">iregion</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">nchan</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">neg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">neg</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">neg</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">,</span> <span class="n">isector</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">region</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">share_comp</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">shcomp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">shcomp</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">shcomp</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">ncomp</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ncomp</span> <span class="o">+</span> <span class="n">addres</span><span class="o">.</span><span class="n">ncomp</span>
 
         <span class="c1"># Append response groups (SPEX_RESP_ICOMP)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eg1</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">eg1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">eg2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eg2</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">eg2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">ic1</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ic2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ic2</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">ic2</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">nc</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eg1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eg1</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">eg1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eg2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">eg2</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">eg2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">ic1</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ic2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ic2</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">ic2</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">nc</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">area_scal</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">relarea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relarea</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">relarea</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">relarea</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">relarea</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">relarea</span><span class="p">)</span>
 
         <span class="c1"># Append</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">resp</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">resp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">resp</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp_der</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dresp</span><span class="p">,</span><span class="n">addres</span><span class="o">.</span><span class="n">dresp</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">dresp</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dresp</span><span class="p">,</span> <span class="n">addres</span><span class="o">.</span><span class="n">dresp</span><span class="p">)</span>
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
@@ -517,8 +610,15 @@
     <span class="c1"># Function to create a masks for a certain region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file.</span>
+
+<span class="sd">        :param isector: Sector number to create mask for.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        :param iregion: Region number to create mask for.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
         <span class="c1"># Check if iregion is in an allowed range</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">iregion</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Requested region not available.&quot;</span><span class="p">)</span>
@@ -532,7 +632,7 @@
         <span class="c1"># Check if isector and iregion combination is available</span>
         <span class="n">ispectrum</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">)):</span>
-            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">isector</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">==</span><span class="n">iregion</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">isector</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">iregion</span><span class="p">):</span>
                 <span class="n">ispectrum</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="k">if</span> <span class="n">ispectrum</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: Requested sector and region not available&quot;</span><span class="p">)</span>
@@ -582,8 +682,12 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Shift response array</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Res.channel_shift"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.channel_shift">[docs]</a>    <span class="k">def</span> <span class="nf">channel_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">shift</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Shift the response array indices with an integer number provided by input parameter &#39;shift&#39;.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.channel_shift"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.channel_shift">[docs]</a>    <span class="k">def</span> <span class="nf">channel_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Shift the response array indices with an integer number provided by input parameter &#39;shift&#39;.</span>
+
+<span class="sd">        :param shift: Number of channels to shift the spectrum with.</span>
+<span class="sd">        :type shift: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># Check if input shift is indeed an integer</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">shift</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
@@ -607,12 +711,11 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to check the response arrays</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.check"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Res.check"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Perform a number of checks to see if the response information is consistent.&quot;&quot;&quot;</span>
         <span class="c1"># Check if the number of indexed channels is equal to the length of the response array</span>
         <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
@@ -643,7 +746,7 @@
                                       <span class="s2">&quot;bin </span><span class="si">{0}</span><span class="s2"> of component </span><span class="si">{1}</span><span class="s2">.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">))</span>
                         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;For row </span><span class="si">{0}</span><span class="s2"> the first channel is </span><span class="si">{1}</span><span class="s2">, which is not allowed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span><span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;For row </span><span class="si">{0}</span><span class="s2"> the first channel is </span><span class="si">{1}</span><span class="s2">, which is not allowed.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">k</span><span class="p">]))</span>
                     <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">ic2</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">&gt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="n">i</span><span class="p">]:</span>
                     <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;For row </span><span class="si">{0}</span><span class="s2"> the last channel is larger than the number of channels.&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
@@ -667,8 +770,12 @@
     <span class="c1"># Function to check the res file name for correct extension</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.check_filename"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.check_filename">[docs]</a>    <span class="k">def</span> <span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .res extension. The method returns a correct file name.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.check_filename"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.check_filename">[docs]</a>    <span class="k">def</span> <span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .res extension. The method returns a correct file name.</span>
+
+<span class="sd">        :param filename: File name to check.</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">resname</span><span class="p">,</span> <span class="n">res_extension</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">splitext</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">res_extension</span> <span class="o">!=</span> <span class="s2">&quot;.res&quot;</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Output filename does not have the correct .res extension.&quot;</span><span class="p">)</span>
@@ -684,8 +791,14 @@
     <span class="c1"># Show summary of response file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../io.html#pyspextools.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.</span>
+
+<span class="sd">        :param iregion: Region number to show.</span>
+<span class="sd">        :type iregion: int</span>
+<span class="sd">        :param isector: Sector number to show.</span>
+<span class="sd">        :type isector: int</span>
+<span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="n">tres</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">return_region</span><span class="p">(</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">)</span>
 
@@ -695,10 +808,41 @@
 </pre></div>
 
           </div>
+          
         </div>
       </div>
       <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
         <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../../../index.html">
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../reference.html">Module reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../../../index.html">Documentation overview</a><ul>
+  <li><a href="../../index.html">Module code</a><ul>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
 <div id="searchbox" style="display: none" role="search">
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
@@ -709,26 +853,29 @@
     </div>
 </div>
 <script type="text/javascript">$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
         </div>
       </div>
       <div class="clearer"></div>
     </div>
-    <div class="related" role="navigation" aria-label="related navigation">
-      <h3>Navigation</h3>
-      <ul>
-        <li class="right" style="margin-right: 10px">
-          <a href="../../../genindex.html" title="General Index"
-             >index</a></li>
-        <li class="right" >
-          <a href="../../../py-modindex.html" title="Python Module Index"
-             >modules</a> |</li>
-        <li class="nav-item nav-item-0"><a href="../../../index.html">pyspextools 0.3.4 documentation</a> &#187;</li>
-          <li class="nav-item nav-item-1"><a href="../../index.html" >Module code</a> &#187;</li> 
-      </ul>
+    <div class="footer">
+      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
     </div>
-    <div class="footer" role="contentinfo">
-        &#169; Copyright 2018-2020, SRON Netherlands Institute for Space Research.
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 2.2.0.
-    </div>
+
+    
+
+    
   </body>
 </html>
