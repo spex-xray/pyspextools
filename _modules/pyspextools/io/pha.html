@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>pyspextools.io.pha &#8212; pyspextools 0.3.4 documentation</title>
+    <title>pyspextools.io.pha &#8212; pyspextools 0.4.0 documentation</title>
     <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
@@ -101,11 +101,6 @@
 <span class="sd">    :ivar corfile: Associated Correction spectrum file.</span>
 <span class="sd">    :vartype corfile: str</span>
 
-<span class="sd">    :ivar Telescope: Name of the observatory.</span>
-<span class="sd">    :vartype Telescope: str</span>
-<span class="sd">    :ivar Instrument: Name of the instrument.</span>
-<span class="sd">    :vartype Instrument: str</span>
-
 <span class="sd">    :ivar Pha2Back: Is there a PHA2 background available?</span>
 <span class="sd">    :vartype Pha2Back: bool</span>
 <span class="sd">    :ivar BackRate: PHA2 Background Rate.</span>
@@ -142,9 +137,6 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span> <span class="o">=</span> <span class="kc">None</span>                         <span class="c1"># Associated Effective area file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span> <span class="o">=</span> <span class="kc">None</span>                         <span class="c1"># Associated Background file</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span>                         <span class="c1"># Associated Correction spectrum file</span>
-
-        <span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span> <span class="o">=</span> <span class="kc">None</span>                       <span class="c1"># Name of the observatory</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span> <span class="o">=</span> <span class="kc">None</span>                      <span class="c1"># Name of the instrument</span>
 
         <span class="c1"># Only applicable for PHA2 files:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Pha2Back</span> <span class="o">=</span> <span class="kc">False</span>                           <span class="c1"># Is there a PHA2 background available</span>
@@ -281,64 +273,7 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;CORRFILE&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Read the observatory name if available</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span> <span class="o">=</span> <span class="kc">None</span>
-
-        <span class="c1"># Read the instrument name if available</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">]</span>
-        <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span> <span class="o">=</span> <span class="kc">None</span></div>
-
-<div class="viewcode-block" id="Pha.write"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Write a simple pha file with the minimum required keywords.</span>
-
-<span class="sd">        :param filename: PHA file name to be read.</span>
-<span class="sd">        :type filename: str</span>
-<span class="sd">        :param overwrite: Overwrite existing file?</span>
-<span class="sd">        :type overwrite: bool</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-
-        <span class="n">primary_hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">()</span>
-
-        <span class="n">c1</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
-        <span class="n">c2</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RATE&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-        <span class="n">c3</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;STAT_ERR&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">StatError</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-        <span class="n">c4</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SYS_ERR&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SysError</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-        <span class="n">c5</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;QUALITY&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Quality</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
-        <span class="n">c6</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;GROUPING&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
-        <span class="n">c7</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;AREASCAL&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-        <span class="n">c8</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;BACKSCAL&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
-
-        <span class="n">table_hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">([</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">c5</span><span class="p">,</span> <span class="n">c6</span><span class="p">,</span> <span class="n">c7</span><span class="p">,</span> <span class="n">c8</span><span class="p">])</span>
-
-        <span class="n">hdr</span> <span class="o">=</span> <span class="n">table_hdu</span><span class="o">.</span><span class="n">header</span>
-
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SPECTRUM&quot;</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DETCHANS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;EXPOSURE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span><span class="p">,</span> <span class="s1">&#39;Exposure time&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;POISSERR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Poisserr</span><span class="p">,</span> <span class="s1">&#39;Are the errors Poissonian?&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CORRSCAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CorrScal</span><span class="p">,</span> <span class="s1">&#39;Correction scaling factor&#39;</span><span class="p">)</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLASS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;OGIP&quot;</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SPECTRUM&quot;</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUVERS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.2.1&#39;</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BACKFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;RESPFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;ANCRFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CORRFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span>
-        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span>
-
-        <span class="n">hdul</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span><span class="p">([</span><span class="n">primary_hdu</span><span class="p">,</span> <span class="n">table_hdu</span><span class="p">])</span>
-
-        <span class="n">hdul</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span></div>
 
 <div class="viewcode-block" id="Pha.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if the object contains the minimum required data.&quot;&quot;&quot;</span>
@@ -367,9 +302,9 @@
             <span class="k">return</span>
 
         <span class="c1"># First copy the channel information to the PHA object</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">Channel</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">NumberChannels</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">ebounds</span><span class="o">.</span><span class="n">Channel</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">ebounds</span><span class="o">.</span><span class="n">Channel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">ebounds</span><span class="o">.</span><span class="n">NumberChannels</span>
     
         <span class="c1"># Generate a dummy spectrum (obviously not realistic, should be simulated in SPEX later)</span>
         <span class="c1"># Set exposure, statistic and type of spectrum</span>
@@ -412,10 +347,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;arffile       </span><span class="si">{0}</span><span class="s2">  Associated Effective area file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">arffile</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;bkgfile       </span><span class="si">{0}</span><span class="s2">  Associated Background file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;corfile       </span><span class="si">{0}</span><span class="s2">  Associated Correction spectrum file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corfile</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Observatory and instrument:&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Telescope     </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span><span class="p">))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Instrument    </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span><span class="p">))</span></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Pha.checkCompatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.checkCompatibility">[docs]</a>    <span class="k">def</span> <span class="nf">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if another PHA object is compatible with the current one in terms of number of channels.</span>
@@ -494,7 +426,7 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      &copy;2018-2021, SRON Netherlands Institute for Space Research.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>

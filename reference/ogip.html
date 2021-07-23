@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>OGIP data format support &#8212; pyspextools 0.3.4 documentation</title>
+    <title>OGIP data format support &#8212; pyspextools 0.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -113,6 +113,10 @@ There are methods to detect similar groups in an RMF file and organise them in a
 but we did not add this method to this class. This class does a direct copy of all the groups
 of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in
 components is desired, that should be done with other methods in the pyspextools module (ref).</p>
+<p><strong>Update (version 0.4.0)</strong>: There is a new type of RMF file that contains two MATRIX extensions
+in the fits file that both model different components of the instrument response. Pyspextools can
+convert these spectra now and in the resulting SPEX format the separate MATRIX extensions are
+translated into SPEX response components.</p>
 </div>
 <div class="section" id="the-ogipregion-class-description">
 <h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
@@ -239,12 +243,17 @@ need to be added to an OGIP region and converted to spo and res objects.</p>
 
 <dl class="method">
 <dt id="pyspextools.io.ogip.OGIPRegion.correct_possible_shift">
-<code class="sig-name descname">correct_possible_shift</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.correct_possible_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.correct_possible_shift" title="Permalink to this definition">¶</a></dt>
+<code class="sig-name descname">correct_possible_shift</code><span class="sig-paren">(</span><em class="sig-param">ext</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.correct_possible_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.correct_possible_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,
 then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first
 channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place
 and if the first channel in the OGIP spectrum is 0.
 The ogip_to_spex method calls this function by default.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>ext</strong> (<em>int</em>) – Matrix extension number (Most RMFs have only one extension (ext=0), but could be more)</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="method">
@@ -297,6 +306,8 @@ are mandatory. The grating option can be either HETG, METG or LETG.</p>
 </div>
 <div class="section" id="the-ogip-file-classes">
 <h2>The OGIP file classes<a class="headerlink" href="#the-ogip-file-classes" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="pha-spectra">
+<h3>Pha spectra<a class="headerlink" href="#pha-spectra" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pyspextools.io.pha.Pha">
 <em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha.</code><code class="sig-name descname">Pha</code><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha" title="Permalink to this definition">¶</a></dt>
@@ -324,8 +335,6 @@ Keith Arnaud.</p>
 <li><p><strong>arffile</strong> (<em>str</em>) – Associated Effective area file.</p></li>
 <li><p><strong>bkgfile</strong> (<em>str</em>) – Associated Background file.</p></li>
 <li><p><strong>corfile</strong> (<em>str</em>) – Associated Correction spectrum file.</p></li>
-<li><p><strong>Telescope</strong> (<em>str</em>) – Name of the observatory.</p></li>
-<li><p><strong>Instrument</strong> (<em>str</em>) – Name of the instrument.</p></li>
 <li><p><strong>Pha2Back</strong> (<em>bool</em>) – Is there a PHA2 background available?</p></li>
 <li><p><strong>BackRate</strong> (<em>numpy.ndarray</em>) – PHA2 Background Rate.</p></li>
 <li><p><strong>BackStatError</strong> (<em>numpy.ndarray</em>) – PHA2 Background Error.</p></li>
@@ -351,20 +360,6 @@ Keith Arnaud.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
 <dd class="field-odd"><p><strong>header</strong> (<em>astropy.io.fits.Header</em>) – Header of the SPECTRUM extension.</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="method">
-<dt id="pyspextools.io.pha.Pha.write">
-<code class="sig-name descname">write</code><span class="sig-paren">(</span><em class="sig-param">filename</em>, <em class="sig-param">overwrite=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.write"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.write" title="Permalink to this definition">¶</a></dt>
-<dd><p>Write a simple pha file with the minimum required keywords.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>filename</strong> (<em>str</em>) – PHA file name to be read.</p></li>
-<li><p><strong>overwrite</strong> (<em>bool</em>) – Overwrite existing file?</p></li>
-</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -405,6 +400,9 @@ Keith Arnaud.</p>
 
 </dd></dl>
 
+</div>
+<div class="section" id="pha2-grating-spectra">
+<h3>Pha2 grating spectra<a class="headerlink" href="#pha2-grating-spectra" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pyspextools.io.pha2.Pha2">
 <em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.pha2.</code><code class="sig-name descname">Pha2</code><a class="reference internal" href="../_modules/pyspextools/io/pha2.html#Pha2"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.pha2.Pha2" title="Permalink to this definition">¶</a></dt>
@@ -453,36 +451,22 @@ the file. If the user wants to subtract the background, the flag ‘background�
 
 </dd></dl>
 
+</div>
+<div class="section" id="rmf-instrument-response-matrix">
+<h3>Rmf instrument response matrix<a class="headerlink" href="#rmf-instrument-response-matrix" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pyspextools.io.rmf.Rmf">
 <em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.rmf.</code><code class="sig-name descname">Rmf</code><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf" title="Permalink to this definition">¶</a></dt>
-<dd><p>Class to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by
-Keith Arnaud.</p>
+<dd><p>Class to read OGIP RMF files. The response is given in two parts: an EBOUNDS extension, containing
+the energy boundries of the instrument channels, and one or more MATRIX extensions, which contain components
+of the response matrix.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables</dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>FirstChannel</strong> (<em>int</em>) – First channel number.</p></li>
-<li><p><strong>Channel</strong> (<em>numpy.ndarray</em>) – Channel numbers.</p></li>
-<li><p><strong>NumberGroups</strong> (<em>numpy.ndarray</em>) – Number of response groups.</p></li>
-<li><p><strong>FirstGroup</strong> (<em>numpy.ndarray</em>) – First response group for this energy bin.</p></li>
-<li><p><strong>FirstChannelGroup</strong> (<em>numpy.ndarray</em>) – First channel number in this group.</p></li>
-<li><p><strong>NumberChannelsGroup</strong> (<em>numpy.ndarray</em>) – Number of channels in this group.</p></li>
-<li><p><strong>FirstElement</strong> (<em>numpy.ndarray</em>) – First response element for this group.</p></li>
-<li><p><strong>LowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of bin.</p></li>
-<li><p><strong>HighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of bin.</p></li>
-<li><p><strong>Matrix</strong> (<em>numpy.ndarray</em>) – Response matrix elements.</p></li>
-<li><p><strong>ChannelLowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of channel.</p></li>
-<li><p><strong>ChannelHighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of channel.</p></li>
-<li><p><strong>NumberChannels</strong> (<em>int</em>) – Number of data channels.</p></li>
-<li><p><strong>NumberEnergyBins</strong> (<em>int</em>) – Number of energy bins.</p></li>
-<li><p><strong>NumberTotalGroups</strong> (<em>int</em>) – Total number of groups.</p></li>
-<li><p><strong>NumberTotalElements</strong> (<em>int</em>) – Total number of response elements.</p></li>
-<li><p><strong>AreaScaling</strong> (<em>float</em>) – Value of EFFAREA keyword.</p></li>
-<li><p><strong>ResponseThreshold</strong> (<em>float</em>) – Minimum value in response.</p></li>
-<li><p><strong>EnergyUnits</strong> (<em>str</em>) – Units of the energy scale.</p></li>
-<li><p><strong>RMFUnits</strong> (<em>str</em>) – Units for RMF values.</p></li>
-<li><p><strong>AreaIncluded</strong> (<em>bool</em>) – Is the effective area included in the response?</p></li>
-<li><p><strong>Order</strong> (<em>int</em>) – Order of the matrix.</p></li>
+<li><p><strong>ebounds</strong> (<a class="reference internal" href="#pyspextools.io.rmf.RmfEbounds" title="pyspextools.io.rmf.RmfEbounds"><em>pyspextools.io.rmf.RmfEbounds</em></a>) – Represents the EBOUNDS extension in the RMF file, which contains the channel energy scale.</p></li>
+<li><p><strong>matrix</strong> (<em>list</em>) – List containing the matrix extensions (type pyspextools.io.rmf.RmfMatrix)</p></li>
+<li><p><strong>NumberMatrixExt</strong> (<em>int</em>) – The number of matrix extensions.</p></li>
+<li><p><strong>MatrixExt</strong> (<em>numpy.ndarray</em>) – Array containing the FITS extension numbers that contain a response matrix.</p></li>
 </ul>
 </dd>
 </dl>
@@ -540,6 +524,59 @@ Keith Arnaud.</p>
 
 </dd></dl>
 
+<p>The Rmf consists of two parts. The first is an EBOUNDS extension, which is defined in the class below:</p>
+<dl class="class">
+<dt id="pyspextools.io.rmf.RmfEbounds">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.rmf.</code><code class="sig-name descname">RmfEbounds</code><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#RmfEbounds"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.RmfEbounds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read the EBOUNDS extension from an RMF or RSP file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>FirstChannel</strong> (<em>int</em>) – First channel number.</p></li>
+<li><p><strong>Channel</strong> (<em>numpy.ndarray</em>) – Channel numbers.</p></li>
+<li><p><strong>ChannelLowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of channel.</p></li>
+<li><p><strong>ChannelHighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of channel.</p></li>
+<li><p><strong>NumberChannels</strong> (<em>int</em>) – Number of data channels.</p></li>
+<li><p><strong>EnergyUnits</strong> (<em>string</em>) – Unit of the energy scale</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<p>And one or more response matrix extensions. The matrices are of type RmfMatrix and are kept in the list
+called <code class="docutils literal notranslate"><span class="pre">matrix</span></code>.</p>
+<dl class="class">
+<dt id="pyspextools.io.rmf.RmfMatrix">
+<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.rmf.</code><code class="sig-name descname">RmfMatrix</code><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#RmfMatrix"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.rmf.RmfMatrix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Class to read a MATRIX extension from an OGIP RMF or RSP file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Variables</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>NumberGroups</strong> (<em>numpy.ndarray</em>) – Number of response groups.</p></li>
+<li><p><strong>FirstGroup</strong> (<em>numpy.ndarray</em>) – First response group for this energy bin.</p></li>
+<li><p><strong>FirstChannelGroup</strong> (<em>numpy.ndarray</em>) – First channel number in this group.</p></li>
+<li><p><strong>NumberChannelsGroup</strong> (<em>numpy.ndarray</em>) – Number of channels in this group.</p></li>
+<li><p><strong>FirstElement</strong> (<em>numpy.ndarray</em>) – First response element for this group.</p></li>
+<li><p><strong>LowEnergy</strong> (<em>numpy.ndarray</em>) – Start energy of bin.</p></li>
+<li><p><strong>HighEnergy</strong> (<em>numpy.ndarray</em>) – End energy of bin.</p></li>
+<li><p><strong>Matrix</strong> (<em>numpy.ndarray</em>) – Response matrix elements.</p></li>
+<li><p><strong>NumberEnergyBins</strong> (<em>int</em>) – Number of energy bins.</p></li>
+<li><p><strong>NumberTotalGroups</strong> (<em>int</em>) – Total number of groups.</p></li>
+<li><p><strong>NumberTotalElements</strong> (<em>int</em>) – Total number of response elements.</p></li>
+<li><p><strong>AreaScaling</strong> (<em>float</em>) – Value of EFFAREA keyword.</p></li>
+<li><p><strong>ResponseThreshold</strong> (<em>float</em>) – Minimum value in response.</p></li>
+<li><p><strong>EnergyUnits</strong> (<em>str</em>) – Units of the energy scale.</p></li>
+<li><p><strong>RMFUnits</strong> (<em>str</em>) – Units for RMF values.</p></li>
+<li><p><strong>AreaIncluded</strong> (<em>bool</em>) – Is the effective area included in the response?</p></li>
+<li><p><strong>Order</strong> (<em>int</em>) – Order of the matrix.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="arf-mirror-effective-area">
+<h3>Arf mirror effective area<a class="headerlink" href="#arf-mirror-effective-area" title="Permalink to this headline">¶</a></h3>
 <dl class="class">
 <dt id="pyspextools.io.arf.Arf">
 <em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.arf.</code><code class="sig-name descname">Arf</code><a class="reference internal" href="../_modules/pyspextools/io/arf.html#Arf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.arf.Arf" title="Permalink to this definition">¶</a></dt>
@@ -600,6 +637,7 @@ Keith Arnaud.</p>
 
 </dd></dl>
 
+</div>
 </div>
 </div>
 
@@ -671,7 +709,7 @@ Keith Arnaud.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      &copy;2018-2021, SRON Netherlands Institute for Space Research.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>

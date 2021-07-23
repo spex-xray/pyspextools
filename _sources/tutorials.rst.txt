@@ -13,7 +13,6 @@ The pyspextools package contains a number of ready-to-use scripts to perform com
    tutorials/tg2spex
    tutorials/ogipgenrsp
    tutorials/simres
-   tutorials/bkgsmooth
 
 Using the pyspextools API
 -------------------------

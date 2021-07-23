@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
     <meta charset="utf-8" />
-    <title>APEC interface for SPEX &#8212; pyspextools 0.3.4 documentation</title>
+    <title>APEC interface for SPEX &#8212; pyspextools 0.4.0 documentation</title>
     <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
     <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
@@ -43,8 +43,7 @@ within SPEX.</p>
 <ul>
 <li><p>Install numpy</p></li>
 <li><p>Install pyspextools (pip install pyspextools)</p></li>
-<li><p>Install ATOMDB (Coco and line tables.)</p></li>
-<li><p>Install pyatomdb (pip install pyatomdb)</p></li>
+<li><p>Install pyatomdb (pip install pyatomdb) and import this into python once before use to install ATOMDB.</p></li>
 <li><p>Set the ATOMDB environment variable to your local ATOMDB installation (see also the ATOMDB installation instructions):</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>linux:~&gt; export ATOMDB=/path/to/my/atomdb   (bash shell)
 linux:~&gt; setenv ATOMDB /path/to/my/atomdb   (c shell)
@@ -57,6 +56,10 @@ linux:~&gt; setenv ATOMDB /path/to/my/atomdb   (c shell)
 <p class="admonition-title">Note</p>
 <p>pyATOMDB only supports Python 3 from version 0.6.0 onwards. If you are using Python 2,
 you need to install an older pyATOMDB version.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>This example apec.py script has been updated to work with pyATOMDB 0.8.0 and above.</p>
 </div>
 </div>
 <div class="section" id="usage">
@@ -293,7 +296,7 @@ script</p></th>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2020, SRON Netherlands Institute for Space Research.
+      &copy;2018-2021, SRON Netherlands Institute for Space Research.
       
       |
       Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
