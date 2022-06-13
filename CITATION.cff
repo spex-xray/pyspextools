@@ -1,0 +1,49 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Pyspextools
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Jelle
+    name-particle: de
+    family-names: Plaa
+    email: j.de.plaa@sron.nl
+    affiliation: SRON Netherlands Institute for Space Research
+    orcid: 'https://orcid.org/0000-0002-2697-7106'
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.3245804
+    description: >-
+      The Zenodo identifier for all versions of this
+      software.
+  - type: doi
+    value: 10.5281/zenodo.5128614
+    description: >-
+      Pyspextools is a collection of python tools for
+      the SPEX X-ray spectral fitting package. The
+      package contains tools to create and manipulate
+      spectra in SPEX format and tools to create user
+      defined models. This release contains a few
+      bugfixes that are described in the CHANGELOG of
+      this package.
+repository-code: 'https://github.com/spex-xray/pyspextools'
+url: 'https://spex-xray.github.io/pyspextools/'
+abstract: >-
+  Pyspextools is a collection of python tools for the
+  SPEX X-ray spectral fitting package. The package
+  contains tools to create and manipulate spectra in
+  SPEX format and tools to create user defined
+  models.
+keywords:
+  - X-ray
+  - spectroscopy
+  - astrophysics
+license: Apache-2.0
+commit: >-
+  https://github.com/spex-xray/pyspextools/commit/bad3f54eaf287265f1c3a7d169c22032731cf9e6
+version: 0.4.0
+date-released: '2021-07-23'
