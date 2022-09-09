@@ -1,21 +1,9 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 from pyspextools.io.region import Region
 import pyspextools.messages as message
 
 import numpy as np
-
-# Stuff to import for compatibility between python 2 and 3
-from builtins import int
-
-from future import standard_library
-
-standard_library.install_aliases()
 
 
 def clean_region(reg):

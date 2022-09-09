@@ -2,22 +2,11 @@
 
 # Import stuff for compatibility between python 2 and 3
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import str
-
-from future import standard_library
-
 import pyspextools.messages as message
 import numpy as np
 import math
 import astropy.io.fits as fits
 from .rmf import Rmf
-
-standard_library.install_aliases()
 
 
 class Pha:
@@ -316,7 +305,7 @@ class Pha:
         print("corfile       {0}  Associated Correction spectrum file".format(self.corfile))
         print("")
 
-    def checkCompatibility(self, pha):
+    def check_compatibility(self, pha):
         """Check if another PHA object is compatible with the current one in terms of number of channels.
 
         :param pha: PHA object to check compatibility for.
@@ -330,5 +319,5 @@ class Pha:
 
         return 0
 
-    def NumberChannels(self):
+    def number_channels(self):
         return self.DetChans

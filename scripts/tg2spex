@@ -1,10 +1,5 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import os
 import sys
 import glob
@@ -17,12 +12,6 @@ from pyspextools.io.dataset import Dataset
 from pyspextools.data.badchannels import clean_region
 
 import pyspextools.messages as message
-
-from builtins import int
-
-from future import standard_library
-
-standard_library.install_aliases()
 
 
 def main():
@@ -219,7 +208,7 @@ def search_response_files(path, tgcat, prefix, gname):
 
 # Get command line arguments
 def tg2spex_arguments():
-    # Obtain command line arguments
+    """Obtain command line arguments."""
     parser = argparse.ArgumentParser(description=message.docs)
     parser.add_argument('path', help="Path to the observation directory where the pha2, arfs and rmfs are.")
     parser.add_argument('--input-prefix', help="Input filename prefix (example: 'hrcf04149_repro_').",

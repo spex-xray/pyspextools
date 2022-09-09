@@ -1,21 +1,8 @@
 #!/usr/bin/env python
 
-# Import stuff for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import str
-
-from future import standard_library
-
 import pyspextools.messages as message
 import numpy as np
 import math
-import os
-
 
 from .region import Region
 from .res import Res
@@ -24,7 +11,6 @@ from .pha import Pha
 from .rmf import Rmf
 from .arf import Arf
 
-standard_library.install_aliases()
 
 # -----------------------------------------------------
 # Return a spo object derived from the OGIP data
@@ -191,9 +177,11 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
 
     return spo
 
+
 # -----------------------------------------------------
 # Return a res object derived from the OGIP data
 # -----------------------------------------------------
+
 
 def rmf_to_res(rmf, matext=0, arf=None):
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one

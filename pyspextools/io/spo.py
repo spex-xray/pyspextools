@@ -16,26 +16,11 @@
 """
 # =========================================================
 
-# Stuff to import for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import pyspextools.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
 import os
-
-# Stuff to import for compatibility between python 2 and 3
-
-from builtins import int
-
-from future import standard_library
-
-standard_library.install_aliases()
 
 
 # =========================================================

@@ -1,32 +1,21 @@
 #!/usr/bin/env python
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import os
 import sys
 import math
 import numpy as np
 import argparse
-import pyspextools
 from pyspextools.io.arf import Arf
 from pyspextools.io.rmf import Rmf
 from pyspextools.data.response import gaussrsp
 
 import pyspextools.messages as message
 
-from builtins import int
-
-from future import standard_library
-
-standard_library.install_aliases()
 
 def main():
-    '''This program can generate response files for new detectors with an arbitrary (Gaussian) redistribution
+    """This program can generate response files for new detectors with an arbitrary (Gaussian) redistribution
     function. The size of the response file and the respective energy ranges can be varied within the limits
-    of the supplied effective area (ARF) file. The output format for this tool is OGIP.'''
+    of the supplied effective area (ARF) file. The output format for this tool is OGIP."""
 
     # Obtain command line arguments
     parser = genrsp_arguments()
@@ -158,7 +147,7 @@ def main():
 
 
 def parserange(string):
-    # Split the input range string into two float values
+    """Split the input range string into two float values."""
     values = string.split(':')
     try:
         range = np.array([float(values[0]), float(values[1])])
@@ -169,7 +158,7 @@ def parserange(string):
 
 
 def genrsp_arguments():
-    # Obtain command line arguments
+    """Obtain command line arguments."""
     parser = argparse.ArgumentParser(description=message.docs)
     parser.add_argument('--arffile', help='Input Effective area file (.arf, required).', type=str, required=True)
     parser.add_argument('--resolution', help='Spectral resolution at 1 keV (FWHM, eV, required).', type=float,

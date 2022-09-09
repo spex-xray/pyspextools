@@ -1,16 +1,5 @@
 #!/usr/bin/env python
 
-# Import stuff for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import str
-
-from future import standard_library
-
 import pyspextools.messages as message
 
 from .region import Region
@@ -21,8 +10,6 @@ from .rmf import Rmf
 from .arf import Arf
 from .convert import pha_to_spo
 from .convert import rmf_to_res
-
-standard_library.install_aliases()
 
 
 class OGIPRegion(Region):
@@ -510,7 +497,7 @@ class OGIPRegion(Region):
                 message.proc_end(1)
                 print(back)
                 return 1
-            back = self.spec.checkCompatibility(self.back)
+            back = self.spec.check_compatibility(self.back)
             if back != 0:
                 message.proc_end(1)
                 message.error("Background spectrum is not compatible with source spectrum.")
@@ -526,7 +513,7 @@ class OGIPRegion(Region):
                 message.proc_end(1)
                 print(corr)
                 return 1
-            corr = self.spec.checkCompatibility(self.corr)
+            corr = self.spec.check_compatibility(self.corr)
             if corr != 0:
                 message.proc_end(1)
                 message.error("Correction spectrum is not compatible with source spectrum.")
@@ -552,7 +539,7 @@ class OGIPRegion(Region):
                 print(area)
                 return 1
             # Is the effective area consistent with the response?
-            area = self.resp.checkCompatibility(self.area)
+            area = self.resp.check_compatibility(self.area)
             if area != 0:
                 message.proc_end(1)
                 message.error("Effective area file is not consistent with the provided response file.")

@@ -1,24 +1,11 @@
 #!/usr/bin/env python
 
-# Import stuff for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import str
-
-from future import standard_library
-
 import pyspextools.messages as message
 import numpy as np
 import math
 import astropy.io.fits as fits
 
 from .pha import Pha
-
-standard_library.install_aliases()
 
 
 class Pha2:

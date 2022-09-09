@@ -6,21 +6,7 @@ Set the color theme of the module
 """
 # =========================================================
 
-# Stuff to import for compatibility between python 2 and 3
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import int
-
-from future import standard_library
-
-standard_library.install_aliases()
-
-
-# Set message colors
 class Colors:
     """This class contains the color codes needed to output colored text to the
     terminal. By default, colors are shown, but the user can request to output

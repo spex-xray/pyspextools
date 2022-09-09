@@ -19,25 +19,11 @@
 """
 # =========================================================
 
-
-# Import stuff for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
-from builtins import str
-
-from future import standard_library
-
 import numpy as np
 
 from pyspextools.io.spo import Spo
 from pyspextools.io.res import Res
 import pyspextools.messages as message
-
-standard_library.install_aliases()
 
 
 # =========================================================

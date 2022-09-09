@@ -6,26 +6,13 @@ Methods to send messages to the user.
 """
 # =========================================================
 
-# Stuff to import for compatibility between python 2 and 3
-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import sys
 import pyspextools
 from pyspextools.color import Colors
 
-# Stuff to import for compatibility between python 2 and 3
-
-from future import standard_library
-
-standard_library.install_aliases()
-
 # Set general messages for argument parsing
 docs = 'See full documentation at: https://spex-xray.github.io/pyspextools'
-version = '%(prog)s {:s} (C) 2018-2020, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
+version = '%(prog)s {:s} (C) 2018-2022, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
           'Apache 2.0 License'.format(pyspextools.__version__)
 
 # Initialize colors
@@ -100,7 +87,7 @@ def print_header(scriptname):
     print("==================================")
     print(" This is {:s} version {:s}".format(scriptname, pyspextools.__version__))
     print("==================================")
-    print("(C) 2018-2020 Jelle de Plaa")
+    print("(C) 2018-2022 Jelle de Plaa")
     print("SRON Netherlands Institute for Space Research")
     print("Github: https://github.com/spex-xray/pyspextools")
     print("")
