@@ -4,13 +4,14 @@ Install pyspextools
 Before you install
 ------------------
 
+From pyspextools version 0.5.0, you need a Python 3 environment to install pyspextools.
 We recommend to install the pyspextools module in a virtual environment like conda to manage the dependencies.
 To do so, create your own conda environment first (See this
 `tutorial <https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/>`_).
 In the example below, we create the conda environment `spex` assuming you already have installed conda successfully.
 The commands below create a new conda environment and activate it in your shell::
 
-    linux:~> conda create -n spex python=3.6 numpy astropy future
+    linux:~> conda create -n spex python=3.6 numpy astropy sphinx sphinx-argparse
     linux:~> conda activate spex
     (spex) linux:~>
 
@@ -76,12 +77,11 @@ an issue report on our `Github issues page <https://github.com/spex-xray/pyspext
 Notes on the pyspextools dependencies
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Pyspextools works both in Python 2.7 and Python 3, thanks to the backports from the 'future' module. We try to keep
-the dependencies limited to ensure the stability of the module. Currently, the dependencies are:
+Pyspextools works Python 3. We try to keep the dependencies limited to ensure the stability of the module.
+Currently, the dependencies are:
 
 - numpy
 - astropy
-- future (provides backward compatibility with Python 2.7)
 
 For the generation of documentation, the following packages are needed:
 
