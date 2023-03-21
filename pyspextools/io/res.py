@@ -655,7 +655,7 @@ class Res:
         for i in np.arange(self.eg1.size):
             ic1[i] = self.ic1[i] + shift
             ic2[i] = self.ic2[i] + shift
-            if self.ic2[i] > np.amax(self.nchan):
+            if ic2[i] > np.amax(self.nchan):
                 message.error("Maximum channel number is larger than actual channel range!")
                 print("Aborting shift.")
                 return -1
