@@ -24,3 +24,9 @@ Version 0.3.4:
 Version 0.4.0:
  - Added capability to read and convert OGIP RMF files with multiple MATRIX extensions.
  - Updated apec.py to work with pyatomdb 0.8.0 and above.
+
+Version 0.5.0:
+ - Discontinued Python 2 support.
+ - SPEX spectra and responses are now written in double precision.
+ - Fix for converting spectra from LEM and HEX-P responses where channel numbers are shifted by 1.
+ - Fix for converting spectra from rgscombine.
