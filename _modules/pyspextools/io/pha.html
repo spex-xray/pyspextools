@@ -1,17 +1,17 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>pyspextools.io.pha &#8212; pyspextools 0.4.0 documentation</title>
-    <link rel="stylesheet" href="../../../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../../../_static/jquery.js"></script>
-    <script type="text/javascript" src="../../../_static/underscore.js"></script>
-    <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <script type="text/javascript" src="../../../_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pyspextools.io.pha &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+    <script src="../../../_static/jquery.js"></script>
+    <script src="../../../_static/underscore.js"></script>
+    <script src="../../../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
@@ -35,22 +35,11 @@
 
 <span class="c1"># Import stuff for compatibility between python 2 and 3</span>
 
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">absolute_import</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">division</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">print_function</span>
-<span class="kn">from</span> <span class="nn">__future__</span> <span class="k">import</span> <span class="n">unicode_literals</span>
-
-<span class="kn">from</span> <span class="nn">builtins</span> <span class="k">import</span> <span class="nb">str</span>
-
-<span class="kn">from</span> <span class="nn">future</span> <span class="k">import</span> <span class="n">standard_library</span>
-
 <span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">math</span>
 <span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
-<span class="kn">from</span> <span class="nn">.rmf</span> <span class="k">import</span> <span class="n">Rmf</span>
-
-<span class="n">standard_library</span><span class="o">.</span><span class="n">install_aliases</span><span class="p">()</span>
+<span class="kn">from</span> <span class="nn">.rmf</span> <span class="kn">import</span> <span class="n">Rmf</span>
 
 
 <div class="viewcode-block" id="Pha"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha">[docs]</a><span class="k">class</span> <span class="nc">Pha</span><span class="p">:</span>
@@ -111,7 +100,7 @@
 <span class="sd">    :vartype Pha2BackScal: float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Spectrum arrays</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="mi">0</span>                       <span class="c1"># First valid spectral channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="mi">0</span>                           <span class="c1"># Total number of legal channels</span>
@@ -349,7 +338,7 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;corfile       </span><span class="si">{0}</span><span class="s2">  Associated Correction spectrum file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corfile</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pha.checkCompatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.checkCompatibility">[docs]</a>    <span class="k">def</span> <span class="nf">checkCompatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha</span><span class="p">):</span>
+<div class="viewcode-block" id="Pha.check_compatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;Check if another PHA object is compatible with the current one in terms of number of channels.</span>
 
 <span class="sd">        :param pha: PHA object to check compatibility for.</span>
@@ -363,7 +352,7 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-    <span class="k">def</span> <span class="nf">NumberChannels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">number_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span></div>
 </pre></div>
 
@@ -407,12 +396,12 @@
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -426,10 +415,10 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2021, SRON Netherlands Institute for Space Research.
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
     </div>

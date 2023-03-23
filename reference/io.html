@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>SPEX data format support &#8212; pyspextools 0.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>SPEX data format support &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="OGIP data format support" href="ogip.html" />
@@ -32,13 +33,13 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="spex-data-format-support">
+  <section id="spex-data-format-support">
 <span id="iomodule"></span><h1>SPEX data format support<a class="headerlink" href="#spex-data-format-support" title="Permalink to this headline">¶</a></h1>
 <p><code class="docutils literal notranslate"><span class="pre">pyspextools.io</span></code> is a Python submodule to read, write and manipulate
 SPEX spectrum and response file (.spo and .res). The
 format of these FITS files is described in Chapter 5
 of the SPEX manual: <a class="reference external" href="http://var.sron.nl/SPEX-doc/">http://var.sron.nl/SPEX-doc/</a></p>
-<span class="target" id="module-pyspextools.io"></span><div class="section" id="reading-writing-datasets">
+<span class="target" id="module-pyspextools.io"></span><section id="reading-writing-datasets">
 <h2>Reading/writing datasets<a class="headerlink" href="#reading-writing-datasets" title="Permalink to this headline">¶</a></h2>
 <p>SPEX res and spo files can contain a set of spectra and responses from, for example,
 different instruments used in the same observation or spectra from different spatial
@@ -46,9 +47,9 @@ regions. Each combination of a spectrum and response is called a region in SPEX
 (see the region class below). The dataset class is basically a list of regions and
 allows the user to add and remove regions from a dataset.</p>
 <blockquote>
-<div><dl class="class">
-<dt id="pyspextools.io.Dataset">
-<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.</code><code class="sig-name descname">Dataset</code><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset" title="Permalink to this definition">¶</a></dt>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyspextools.io.</span></span><span class="sig-name descname"><span class="pre">Dataset</span></span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset" title="Permalink to this definition">¶</a></dt>
 <dd><p>The dataset class is the most general class containing a 
 dataset with multiple regions. Using this class, users
 can read, write and manipulate spectral datasets.</p>
@@ -60,9 +61,9 @@ can read, write and manipulate spectral datasets.</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt id="pyspextools.io.Dataset.read_region">
-<code class="sig-name descname">read_region</code><span class="sig-paren">(</span><em class="sig-param">isector</em>, <em class="sig-param">iregion</em>, <em class="sig-param">spofile</em>, <em class="sig-param">resfile</em>, <em class="sig-param">label=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.read_region">
+<span class="sig-name descname"><span class="pre">read_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">spofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read one region with number iregion from the two SPEX files and add it to the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -77,9 +78,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.read_all_regions">
-<code class="sig-name descname">read_all_regions</code><span class="sig-paren">(</span><em class="sig-param">spofile</em>, <em class="sig-param">resfile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.read_all_regions">
+<span class="sig-name descname"><span class="pre">read_all_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_all_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read all the regions from a spo and res file and add them to the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -91,9 +92,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.append_region">
-<code class="sig-name descname">append_region</code><span class="sig-paren">(</span><em class="sig-param">region</em>, <em class="sig-param">isector</em>, <em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.append_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.append_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.append_region">
+<span class="sig-name descname"><span class="pre">append_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.append_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.append_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a region object to the dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -106,9 +107,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.write_region">
-<code class="sig-name descname">write_region</code><span class="sig-paren">(</span><em class="sig-param">spofile</em>, <em class="sig-param">resfile</em>, <em class="sig-param">iregion</em>, <em class="sig-param">exp_rate=True</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">history=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.write_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.write_region">
+<span class="sig-name descname"><span class="pre">write_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.write_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write one region to a spo and res file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -124,9 +125,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.write_all_regions">
-<code class="sig-name descname">write_all_regions</code><span class="sig-paren">(</span><em class="sig-param">spofile</em>, <em class="sig-param">resfile</em>, <em class="sig-param">exp_rate=True</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">history=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.write_all_regions">
+<span class="sig-name descname"><span class="pre">write_all_regions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spofile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.write_all_regions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.write_all_regions" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write all regions in the data object to spo and res.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -141,9 +142,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.read_config">
-<code class="sig-name descname">read_config</code><span class="sig-paren">(</span><em class="sig-param">res</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_config" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.read_config">
+<span class="sig-name descname"><span class="pre">read_config</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">res</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.read_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.read_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read the response configuration.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -152,15 +153,15 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.update_config">
-<code class="sig-name descname">update_config</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.update_config"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.update_config" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.update_config">
+<span class="sig-name descname"><span class="pre">update_config</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.update_config"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.update_config" title="Permalink to this definition">¶</a></dt>
 <dd><p>Update the response configuration.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.assign_sector">
-<code class="sig-name descname">assign_sector</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newsector</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.assign_sector">
+<span class="sig-name descname"><span class="pre">assign_sector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_sector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign a new sector number to a specific region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -172,9 +173,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.assign_region">
-<code class="sig-name descname">assign_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.assign_region">
+<span class="sig-name descname"><span class="pre">assign_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign a new region number to a specific region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -186,9 +187,9 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.assign_sector_region">
-<code class="sig-name descname">assign_sector_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em>, <em class="sig-param">newsector</em>, <em class="sig-param">newregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_sector_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.assign_sector_region">
+<span class="sig-name descname"><span class="pre">assign_sector_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.assign_sector_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.assign_sector_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Assign a new sector and region number to a specific region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -201,17 +202,17 @@ can read, write and manipulate spectral datasets.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Dataset.show">
-<code class="sig-name descname">show</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Dataset.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/dataset.html#Dataset.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Dataset.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show a summary for the entire dataset</p>
 </dd></dl>
 
 </dd></dl>
 
 </div></blockquote>
-</div>
-<div class="section" id="the-region-class">
+</section>
+<section id="the-region-class">
 <h2>The region class<a class="headerlink" href="#the-region-class" title="Permalink to this headline">¶</a></h2>
 <p>A combination of a spectrum and its response matrix is called a region in SPEX. This
 name originates from the idea that a dataset (see above) can contain spectra extracted
@@ -219,9 +220,9 @@ from multiple regions in a spatial image. The region class combines a spo and re
 object into one region and provides tests to see if the spo and res files actually
 belong to each other.</p>
 <blockquote>
-<div><dl class="class">
-<dt id="pyspextools.io.Region">
-<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.</code><code class="sig-name descname">Region</code><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region" title="Permalink to this definition">¶</a></dt>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="pyspextools.io.Region">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyspextools.io.</span></span><span class="sig-name descname"><span class="pre">Region</span></span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region" title="Permalink to this definition">¶</a></dt>
 <dd><p>A SPEX region is a spectrum/response combination for a
 specific observation, instrument or region on the sky.
 It combines the spectrum and response file in one object.</p>
@@ -233,9 +234,9 @@ It combines the spectrum and response file in one object.</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt id="pyspextools.io.Region.change_label">
-<code class="sig-name descname">change_label</code><span class="sig-paren">(</span><em class="sig-param">label</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.change_label"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.change_label" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.change_label">
+<span class="sig-name descname"><span class="pre">change_label</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">label</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.change_label"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.change_label" title="Permalink to this definition">¶</a></dt>
 <dd><p>Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -244,9 +245,9 @@ It combines the spectrum and response file in one object.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Region.set_sector">
-<code class="sig-name descname">set_sector</code><span class="sig-paren">(</span><em class="sig-param">sector</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.set_sector"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.set_sector">
+<span class="sig-name descname"><span class="pre">set_sector</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sector</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.set_sector"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.set_sector" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the sector number for this region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -255,9 +256,9 @@ It combines the spectrum and response file in one object.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Region.set_region">
-<code class="sig-name descname">set_region</code><span class="sig-paren">(</span><em class="sig-param">region</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.set_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.set_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.set_region">
+<span class="sig-name descname"><span class="pre">set_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">region</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.set_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.set_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Set the region number for this region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -266,9 +267,9 @@ It combines the spectrum and response file in one object.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Region.increase_region">
-<code class="sig-name descname">increase_region</code><span class="sig-paren">(</span><em class="sig-param">amount</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.increase_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.increase_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.increase_region">
+<span class="sig-name descname"><span class="pre">increase_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">amount</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.increase_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.increase_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Increase the region numbers by an integer amount.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -277,9 +278,9 @@ It combines the spectrum and response file in one object.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Region.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><em class="sig-param">nregion=False</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.check" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check whether spectrum and response are compatible
 and whether the arrays really consist of one region (if nregion flag is set).</p>
 <dl class="field-list simple">
@@ -289,9 +290,9 @@ and whether the arrays really consist of one region (if nregion flag is set).</p
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Region.show">
-<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">isector=1</em>, <em class="sig-param">iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Region.show" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Region.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/region.html#Region.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Region.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show a summary of the region metadata.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -306,16 +307,16 @@ and whether the arrays really consist of one region (if nregion flag is set).</p
 </dd></dl>
 
 </div></blockquote>
-</div>
-<div class="section" id="the-spo-class">
+</section>
+<section id="the-spo-class">
 <h2>The spo class<a class="headerlink" href="#the-spo-class" title="Permalink to this headline">¶</a></h2>
 <p>The SPEX .spo file contains the source and background spectra, including information
 about systematic uncertainties and grouping. This class manages the reading and writing
 of (regions) in spo files.</p>
 <blockquote>
-<div><dl class="class">
-<dt id="pyspextools.io.Spo">
-<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.</code><code class="sig-name descname">Spo</code><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo" title="Permalink to this definition">¶</a></dt>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="pyspextools.io.Spo">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyspextools.io.</span></span><span class="sig-name descname"><span class="pre">Spo</span></span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo" title="Permalink to this definition">¶</a></dt>
 <dd><p>The spo class contains the spectral information for one
 spo file. This file can contain multiple spectra (regions).
 A call to spo() sets the variables that will contain
@@ -348,9 +349,9 @@ the spectral information.</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt id="pyspextools.io.Spo.zero_spo">
-<code class="sig-name descname">zero_spo</code><span class="sig-paren">(</span><em class="sig-param">nchan</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.zero_spo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.zero_spo" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.zero_spo">
+<span class="sig-name descname"><span class="pre">zero_spo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">nchan</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.zero_spo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.zero_spo" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates empty arrays of size nchan.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -359,9 +360,9 @@ the spectral information.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.add_spo_region">
-<code class="sig-name descname">add_spo_region</code><span class="sig-paren">(</span><em class="sig-param">origspo</em>, <em class="sig-param">iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.add_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.add_spo_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.add_spo_region">
+<span class="sig-name descname"><span class="pre">add_spo_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origspo</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.add_spo_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.add_spo_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to add spectrum regions to a spo file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -373,9 +374,9 @@ the spectral information.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.del_spo_region">
-<code class="sig-name descname">del_spo_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.del_spo_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.del_spo_region">
+<span class="sig-name descname"><span class="pre">del_spo_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.del_spo_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.del_spo_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove spectrum from region with number ‘iregion’</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -384,9 +385,9 @@ the spectral information.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.read_file">
-<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param">spofile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.read_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">spofile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.read_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to read a spectrum from a .spo file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -395,9 +396,9 @@ the spectral information.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.return_region">
-<code class="sig-name descname">return_region</code><span class="sig-paren">(</span><em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.return_region">
+<span class="sig-name descname"><span class="pre">return_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.return_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.return_region" title="Permalink to this definition">¶</a></dt>
 <dd><dl class="simple">
 <dt>Function to return a spo object with containing the</dt><dd><p>spectrum of the region with number ‘iregion’.</p>
 </dd>
@@ -409,9 +410,9 @@ the spectral information.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.write_file">
-<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param">sponame</em>, <em class="sig-param">exp_rate=True</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">history=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sponame</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">exp_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.write_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to write the spectrum to a .spo file with the name ‘sponame’.
 The exp_rate flag determines whether the Exp_Rate column is added containing
 the ratio between the backscales of the source and background spectra. This column
@@ -428,23 +429,23 @@ can only be read by SPEX &gt;=3.05.00.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.swap_order">
-<code class="sig-name descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.swap_order" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.swap_order">
+<span class="sig-name descname"><span class="pre">swap_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.swap_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.swap_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap the channel order of the spectrum between wavelength or energy order. This is
 for example helpful for grating spectra, which are originally stored in wavelength order
 but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.check" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform several checks whether the information in the spectrum is consistent.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.check_filename">
-<code class="sig-name descname">check_filename</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.check_filename" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.check_filename">
+<span class="sig-name descname"><span class="pre">check_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.check_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.check_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the output filename has the correct .spo extension. The method returns a correct file name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -453,9 +454,9 @@ but must be flipped to energy order in SPEX format.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.get_mask">
-<code class="sig-name descname">get_mask</code><span class="sig-paren">(</span><em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.get_mask">
+<span class="sig-name descname"><span class="pre">get_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.get_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create a mask to select spectral information for one region only.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -464,9 +465,9 @@ but must be flipped to energy order in SPEX format.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Spo.show">
-<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Spo.show" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Spo.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/spo.html#Spo.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Spo.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show some basic properties of the spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -478,15 +479,15 @@ but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
 </div></blockquote>
-</div>
-<div class="section" id="the-res-class">
+</section>
+<section id="the-res-class">
 <h2>The res class<a class="headerlink" href="#the-res-class" title="Permalink to this headline">¶</a></h2>
 <p>The SPEX .res file contains the response matrix and effective area information for a
 spectrum. This class manages the reading and writing of (regions) in res files.</p>
 <blockquote>
-<div><dl class="class">
-<dt id="pyspextools.io.Res">
-<em class="property">class </em><code class="sig-prename descclassname">pyspextools.io.</code><code class="sig-name descname">Res</code><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res" title="Permalink to this definition">¶</a></dt>
+<div><dl class="py class">
+<dt class="sig sig-object py" id="pyspextools.io.Res">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyspextools.io.</span></span><span class="sig-name descname"><span class="pre">Res</span></span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res" title="Permalink to this definition">¶</a></dt>
 <dd><p>The res class contains the response information for one
 res file. This file can contain multiple responses (regions).</p>
 <dl class="field-list simple">
@@ -520,9 +521,9 @@ res file. This file can contain multiple responses (regions).</p>
 </ul>
 </dd>
 </dl>
-<dl class="method">
-<dt id="pyspextools.io.Res.add_res_region">
-<code class="sig-name descname">add_res_region</code><span class="sig-paren">(</span><em class="sig-param">origres</em>, <em class="sig-param">isector=1</em>, <em class="sig-param">iregion=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.add_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.add_res_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.add_res_region">
+<span class="sig-name descname"><span class="pre">add_res_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">origres</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.add_res_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.add_res_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to add region(s) to a response.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -535,9 +536,9 @@ res file. This file can contain multiple responses (regions).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.del_res_region">
-<code class="sig-name descname">del_res_region</code><span class="sig-paren">(</span><em class="sig-param">isector</em>, <em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.del_res_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.del_res_region">
+<span class="sig-name descname"><span class="pre">del_res_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.del_res_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.del_res_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Remove region with number ‘iregion’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -549,9 +550,9 @@ res file. This file can contain multiple responses (regions).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.read_file">
-<code class="sig-name descname">read_file</code><span class="sig-paren">(</span><em class="sig-param">resfile</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.read_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.read_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.read_file">
+<span class="sig-name descname"><span class="pre">read_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.read_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.read_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Function to read a response from a .res file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -560,9 +561,9 @@ res file. This file can contain multiple responses (regions).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.return_region">
-<code class="sig-name descname">return_region</code><span class="sig-paren">(</span><em class="sig-param">isector</em>, <em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.return_region"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.return_region" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.return_region">
+<span class="sig-name descname"><span class="pre">return_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.return_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.return_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Return a res object with the data from 1 selected region.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -574,9 +575,9 @@ res file. This file can contain multiple responses (regions).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.write_file">
-<code class="sig-name descname">write_file</code><span class="sig-paren">(</span><em class="sig-param">resfile</em>, <em class="sig-param">overwrite=False</em>, <em class="sig-param">history=None</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.write_file"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.write_file">
+<span class="sig-name descname"><span class="pre">write_file</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">resfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">overwrite</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">history</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.write_file"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.write_file" title="Permalink to this definition">¶</a></dt>
 <dd><p>Write the response information to a .res file with name ‘resfile’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -589,17 +590,17 @@ res file. This file can contain multiple responses (regions).</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.swap_order">
-<code class="sig-name descname">swap_order</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.swap_order"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.swap_order" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.swap_order">
+<span class="sig-name descname"><span class="pre">swap_order</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.swap_order"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.swap_order" title="Permalink to this definition">¶</a></dt>
 <dd><p>Swap the channel order of the response between wavelength or energy order. This is
 for example helpful for grating spectra, which are originally stored in wavelength order
 but must be flipped to energy order in SPEX format.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.append_component">
-<code class="sig-name descname">append_component</code><span class="sig-paren">(</span><em class="sig-param">addres</em>, <em class="sig-param">iregion=1</em>, <em class="sig-param">isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.append_component"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.append_component" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.append_component">
+<span class="sig-name descname"><span class="pre">append_component</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">addres</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.append_component"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.append_component" title="Permalink to this definition">¶</a></dt>
 <dd><p>Append a component to the response matrix from another matrix. This is used to add orders to the response
 file for Chandra grating data.</p>
 <dl class="field-list simple">
@@ -613,9 +614,9 @@ file for Chandra grating data.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.get_mask">
-<code class="sig-name descname">get_mask</code><span class="sig-paren">(</span><em class="sig-param">isector</em>, <em class="sig-param">iregion</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.get_mask"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.get_mask">
+<span class="sig-name descname"><span class="pre">get_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">isector</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iregion</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.get_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.get_mask" title="Permalink to this definition">¶</a></dt>
 <dd><p>Create masks to select a particular region in a .res file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -627,9 +628,9 @@ file for Chandra grating data.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.channel_shift">
-<code class="sig-name descname">channel_shift</code><span class="sig-paren">(</span><em class="sig-param">shift</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.channel_shift"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.channel_shift">
+<span class="sig-name descname"><span class="pre">channel_shift</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">shift</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.channel_shift"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.channel_shift" title="Permalink to this definition">¶</a></dt>
 <dd><p>Shift the response array indices with an integer number provided by input parameter ‘shift’.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -638,15 +639,15 @@ file for Chandra grating data.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.check">
-<code class="sig-name descname">check</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.check"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.check" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.check">
+<span class="sig-name descname"><span class="pre">check</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.check"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.check" title="Permalink to this definition">¶</a></dt>
 <dd><p>Perform a number of checks to see if the response information is consistent.</p>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.check_filename">
-<code class="sig-name descname">check_filename</code><span class="sig-paren">(</span><em class="sig-param">filename</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.check_filename"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.check_filename" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.check_filename">
+<span class="sig-name descname"><span class="pre">check_filename</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.check_filename"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.check_filename" title="Permalink to this definition">¶</a></dt>
 <dd><p>Check if the output filename has the correct .res extension. The method returns a correct file name.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -655,9 +656,9 @@ file for Chandra grating data.</p>
 </dl>
 </dd></dl>
 
-<dl class="method">
-<dt id="pyspextools.io.Res.show">
-<code class="sig-name descname">show</code><span class="sig-paren">(</span><em class="sig-param">iregion=1</em>, <em class="sig-param">isector=1</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.show"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#pyspextools.io.Res.show" title="Permalink to this definition">¶</a></dt>
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.Res.show">
+<span class="sig-name descname"><span class="pre">show</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">iregion</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">isector</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">1</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/res.html#Res.show"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.Res.show" title="Permalink to this definition">¶</a></dt>
 <dd><p>Show some basic properties of the response file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
@@ -672,8 +673,8 @@ file for Chandra grating data.</p>
 </dd></dl>
 
 </div></blockquote>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -724,12 +725,12 @@ file for Chandra grating data.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -743,10 +744,10 @@ file for Chandra grating data.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2021, SRON Netherlands Institute for Space Research.
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

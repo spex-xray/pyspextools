@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>Managing datasets in pyspextools &#8212; pyspextools 0.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Managing datasets in pyspextools &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="User model example" href="myusermodel.html" />
@@ -32,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="managing-datasets-in-pyspextools">
+  <section id="managing-datasets-in-pyspextools">
 <h1>Managing datasets in pyspextools<a class="headerlink" href="#managing-datasets-in-pyspextools" title="Permalink to this headline">¶</a></h1>
 <p>The best starting point to manipulate SPEX files is to use the Dataset class in pyspextools. A dataset can be a
 collection of several spectrum-response combinations, which are called regions. This way, multiple related spectra can
@@ -55,7 +56,7 @@ model is not supposed to be multiplied by the effective area, but just the respo
 to the model spectrum of the previous region. In that case, two spectrum-response combinations are required (one with
 and one without ARF), where each combination obtains its own sector number (1,2), but only a single region number(1).
 See the <a class="reference external" href="http://var.sron.nl/SPEX-doc/cookbookv3.0/cookbookch8.html#x36-570008">SPEX Cookbook</a> for more information.</p>
-<div class="section" id="example-use-of-the-dataset-class">
+<section id="example-use-of-the-dataset-class">
 <h2>Example use of the dataset class<a class="headerlink" href="#example-use-of-the-dataset-class" title="Permalink to this headline">¶</a></h2>
 <p>Let’s perform a simple operation to read a few existing spo and res files and combine them into one dataset.
 First, start python and then import the pyspextools.io module:</p>
@@ -148,8 +149,8 @@ the created structure to one spo and res file:</p>
 </pre></div>
 </div>
 <p>The dataset has been successfully written to RGS.spo and RGS.res.</p>
-</div>
-</div>
+</section>
+</section>
 
 
           </div>
@@ -199,12 +200,12 @@ the created structure to one spo and res file:</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -218,10 +219,10 @@ the created structure to one spo and res file:</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2021, SRON Netherlands Institute for Space Research.
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

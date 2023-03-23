@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>TG2Spex - Convert Chandra grating data &#8212; pyspextools 0.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>TG2Spex - Convert Chandra grating data &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="OGIPGENRSP - Create dummy response files" href="ogipgenrsp.html" />
@@ -32,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="tg2spex-convert-chandra-grating-data">
+  <section id="tg2spex-convert-chandra-grating-data">
 <span id="tg2spex"></span><h1>TG2Spex - Convert Chandra grating data<a class="headerlink" href="#tg2spex-convert-chandra-grating-data" title="Permalink to this headline">¶</a></h1>
 <p>Tg2spex is a script to convert spectra from Chandra grating observations to SPEX format. Tg2spex works
 with input flags from the command line. The ‘-h’ flag shows the help of the tg2spex command:</p>
@@ -40,7 +41,7 @@ with input flags from the command line. The ‘-h’ flag shows the help of the 
 </pre></div>
 </div>
 <p>A full overview of the arguments is given below in the section <a class="reference internal" href="#tg2spex-commandline">Command-line arguments</a>.</p>
-<div class="section" id="example">
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Tg2spex detects the standard file names in a directory, so providing the path to the directory
 should be enough. In addition, flags can be provided to, for example, overwrite existing spo and res
@@ -92,28 +93,26 @@ Write combined res file... OK
 <p>In this example, the directory contains a Chandra LETG spectrum with 16 orders. In the first step
 the spectra from the pha2 file are combined and saved. After that, the responses and effective areas
 are read in and combined into a single leg.spo and leg.res.</p>
-</div>
-<div class="section" id="command-line-arguments">
+</section>
+<section id="command-line-arguments">
 <span id="tg2spex-commandline"></span><h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
 <p><p>See full documentation at: <a class="reference external" href="https://spex-xray.github.io/pyspextools">https://spex-xray.github.io/pyspextools</a></p>
 </p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">tg2spex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">prefix</span> <span class="n">INPUT_PREFIX</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">OUTPUT_PREFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">bkgsubtract</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span>
-               <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">tg2spex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="nb">input</span><span class="o">-</span><span class="n">prefix</span> <span class="n">INPUT_PREFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">output</span><span class="o">-</span><span class="n">prefix</span> <span class="n">OUTPUT_PREFIX</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">bkgsubtract</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+               <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
                <span class="n">path</span>
 </pre></div>
 </div>
-<div class="section" id="Positional Arguments">
-<h3>Positional Arguments<a class="headerlink" href="#Positional Arguments" title="Permalink to this headline">¶</a></h3>
+<section id="positional-arguments">
+<h3>Positional Arguments<a class="headerlink" href="#positional-arguments" title="Permalink to this headline">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>path</kbd></dt>
 <dd><p>Path to the observation directory where the pha2, arfs and rmfs are.</p>
 </dd>
 </dl>
-</div>
-<div class="section" id="Named Arguments">
-<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this headline">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>--input-prefix</kbd></dt>
 <dd><p>Input filename prefix (example: ‘<a href="#id1"><span class="problematic" id="id2">hrcf04149_repro_</span></a>’).</p>
@@ -147,9 +146,9 @@ are read in and combined into a single leg.spo and leg.res.</p>
 <dd><p>show program’s version number and exit</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -199,12 +198,12 @@ are read in and combined into a single leg.spo and leg.res.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -218,10 +217,10 @@ are read in and combined into a single leg.spo and leg.res.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2021, SRON Netherlands Institute for Space Research.
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |

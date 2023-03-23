@@ -1,17 +1,18 @@
 
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
   <head>
     <meta charset="utf-8" />
-    <title>SIMRES - Create simulation files based on existing response &#8212; pyspextools 0.4.0 documentation</title>
-    <link rel="stylesheet" href="../_static/alabaster.css" type="text/css" />
-    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
-    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
-    <script type="text/javascript" src="../_static/jquery.js"></script>
-    <script type="text/javascript" src="../_static/underscore.js"></script>
-    <script type="text/javascript" src="../_static/doctools.js"></script>
-    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>SIMRES - Create simulation files based on existing response &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Managing datasets in pyspextools" href="datasets.html" />
@@ -32,7 +33,7 @@
 
           <div class="body" role="main">
             
-  <div class="section" id="simres-create-simulation-files-based-on-existing-response">
+  <section id="simres-create-simulation-files-based-on-existing-response">
 <span id="simres"></span><h1>SIMRES - Create simulation files based on existing response<a class="headerlink" href="#simres-create-simulation-files-based-on-existing-response" title="Permalink to this headline">¶</a></h1>
 <p>Simres is a script to create a SPEX format spo and res file from just an input response file, optionally with an
 effective area file (ARF) and background spectrum. This is very useful to create spo and res files
@@ -42,7 +43,7 @@ to simulate spectra in SPEX.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">simres</span> <span class="o">-</span><span class="n">h</span>
 </pre></div>
 </div>
-<div class="section" id="example">
+<section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Suppose we have a response matrix from a future instrument like X-IFU aboard Athena called athena_xifu_A.rsp, then
 we can create a spo and res file with the simres command, and call them xifu.spo and xifu.res:</p>
@@ -77,19 +78,17 @@ correction twice.</p>
 <p>The output spectrum is obviously wrong with a constant count rate across the entire band. The idea is to set up a new
 model in SPEX and simulate a new spectrum with this response matrix to replace the dummy spectrum with something more
 realistic.</p>
-</div>
-<div class="section" id="command-line-arguments">
+</section>
+<section id="command-line-arguments">
 <h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
 <p><p>See full documentation at: <a class="reference external" href="https://spex-xray.github.io/pyspextools">https://spex-xray.github.io/pyspextools</a></p>
 </p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">simres</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span>
-              <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">backscale</span> <span class="n">BACKSCALE</span><span class="p">]</span>
-              <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">simres</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span> <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span>
+              <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">backscale</span> <span class="n">BACKSCALE</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
 </pre></div>
 </div>
-<div class="section" id="Named Arguments">
-<h3>Named Arguments<a class="headerlink" href="#Named Arguments" title="Permalink to this headline">¶</a></h3>
+<section id="named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this headline">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>--rmffile</kbd></dt>
 <dd><p>Input Response matrix (required)</p>
@@ -130,9 +129,9 @@ realistic.</p>
 <dd><p>show program’s version number and exit</p>
 </dd>
 </dl>
-</div>
-</div>
-</div>
+</section>
+</section>
+</section>
 
 
           </div>
@@ -182,12 +181,12 @@ realistic.</p>
   <h3 id="searchlabel">Quick search</h3>
     <div class="searchformwrapper">
     <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" />
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
       <input type="submit" value="Go" />
     </form>
     </div>
 </div>
-<script type="text/javascript">$('#searchbox').show(0);</script>
+<script>$('#searchbox').show(0);</script>
 
 
 
@@ -201,10 +200,10 @@ realistic.</p>
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2021, SRON Netherlands Institute for Space Research.
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 2.1.1</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
       
       |
