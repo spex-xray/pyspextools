@@ -40,7 +40,12 @@ class RmfEbounds:
         self.ChannelHighEnergy = data['E_MAX']
         self.NumberChannels = self.Channel.size
         self.FirstChannel = self.Channel[0]
-        self.EnergyUnits = header['TUNIT2']
+
+        try:
+            self.EnergyUnits = header['TUNIT2']
+        except KeyError:
+            message.warning("Could not find energy units in the Energy column. Assuming unit keV")
+            self.EnergyUnits = 'keV'
 
 
 class RmfMatrix:
@@ -126,7 +131,12 @@ class RmfMatrix:
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
         self.NumberEnergyBins = self.LowEnergy.size
-        self.EnergyUnits = header['TUNIT1']
+
+        try:
+            self.EnergyUnits = header['TUNIT1']
+        except KeyError:
+            message.warning("Could not find units in the file for the Energy grid. Assuming keV.")
+            self.EnergyUnits = 'keV'
 
         self.NumberGroups = data['N_GRP']
         self.NumberTotalGroups = np.sum(self.NumberGroups)
