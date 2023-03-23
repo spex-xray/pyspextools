@@ -466,9 +466,9 @@ class Res:
         tb_group.header['EXTNAME'] = 'SPEX_RESP_GROUP'
 
         # Create the SPEX_RESP_GROUP extension
-        col1 = fits.Column(name='Response', format='1E', unit='m**2', array=self.resp)
+        col1 = fits.Column(name='Response', format='1D', unit='m**2', array=self.resp)
         if self.resp_der:
-            col2 = fits.Column(name='Response_Der', format='1E', unit='m**2', array=self.dresp)
+            col2 = fits.Column(name='Response_Der', format='1D', unit='m**2', array=self.dresp)
             cols = fits.ColDefs([col1, col2])
         else:
             cols = fits.ColDefs([col1])
@@ -655,7 +655,7 @@ class Res:
         for i in np.arange(self.eg1.size):
             ic1[i] = self.ic1[i] + shift
             ic2[i] = self.ic2[i] + shift
-            if self.ic2[i] > np.amax(self.nchan):
+            if ic2[i] > np.amax(self.nchan):
                 message.error("Maximum channel number is larger than actual channel range!")
                 print("Aborting shift.")
                 return -1

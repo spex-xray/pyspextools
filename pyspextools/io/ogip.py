@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import pyspextools.messages as message
+import numpy as np
 
 from .region import Region
 from .res import Res
@@ -404,7 +405,19 @@ class OGIPRegion(Region):
             message.warning("Not auto-detecting shifts in the response array. ")
             return 1
 
-        # Start with the OGIP response object
+        # Check the channel range in the res file. Are the first channels starting at 0 as well?
+        # Is the last channel larger than the given channel number? Then the ic1 and ic2 channels may
+        # actually be mapped on a grid starting with 1.
+        min_ic1 = np.amin(self.res.ic1)
+        max_ic2 = np.amax(self.res.ic2)
+
+        if (min_ic1 == 1 and max_ic2 == np.amax(self.resp.ebounds.Channel)+1):
+            # The actual mapping appears to be on a grid starting at 1.
+            # We can ignore the channel numbers in ebounds and proceed without a shift
+            print("No shift in response array detected. Continuing...")
+            return
+
+        # Check the OGIP response object
         # Check the channel indices for the first group with useful data
         # Find such a group first in OGIP response:
         i = 0
@@ -421,7 +434,7 @@ class OGIPRegion(Region):
         target_energy = (elow + ehigh) / 2.0
 
         # For this group, save the first channel of the group (F_CHAN)
-        fchan = self.resp.matrix[ext].FirstChannelGroup[0]
+        fchan = self.resp.matrix[ext].FirstChannelGroup[i]
 
         # Find the array index for this channel number
         j = 0
