@@ -43,13 +43,23 @@ To do so, create your own conda environment first (See this
 <a class="reference external" href="https://uoa-eresearch.github.io/eresearch-cookbook/recipe/2014/11/20/conda/">tutorial</a>).
 In the example below, we create the conda environment <cite>spex</cite> assuming you already have installed conda successfully.
 The commands below create a new conda environment and activate it in your shell:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">spex</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.6</span> <span class="n">numpy</span> <span class="n">astropy</span> <span class="n">sphinx</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">argparse</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">create</span> <span class="o">-</span><span class="n">n</span> <span class="n">spex</span> <span class="n">python</span><span class="o">=</span><span class="mf">3.9</span> <span class="n">numpy</span> <span class="n">astropy</span> <span class="n">sphinx</span> <span class="n">sphinx</span><span class="o">-</span><span class="n">argparse</span>
 <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">activate</span> <span class="n">spex</span>
 <span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span>
 </pre></div>
 </div>
 <p>To use pyspextools later, each time you open a terminal, you need to activate the conda spex environment
 using the <cite>conda activate spex</cite> command.</p>
+<section id="install-pyspextools-through-anaconda">
+<h3>Install pyspextools through Anaconda<a class="headerlink" href="#install-pyspextools-through-anaconda" title="Permalink to this headline">¶</a></h3>
+<p>Pyspextools can be installed directly in conda for python 3.8, 3.9 and 3.10. Of course, you can use the conda
+environment created in the previous step, but it should also work in other conda environments.</p>
+<p>The command below installs pyspextools in your conda environment:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">user</span><span class="nd">@linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">spexxray</span> <span class="n">pyspextools</span>
+</pre></div>
+</div>
+<p>It downloads pyspextools from the <a class="reference external" href="https://anaconda.org/spexxray">spexxray channel at Anaconda</a>.</p>
+</section>
 <section id="non-conda-environments">
 <h3>Non-conda environments<a class="headerlink" href="#non-conda-environments" title="Permalink to this headline">¶</a></h3>
 <p>It is also possible to install pyspextools natively on your operating system (Linux and Mac OS). To avoid dependency
@@ -63,8 +73,8 @@ the following command should install all dependencies for python 3:</p>
 dependency conflicts.</p>
 </section>
 </section>
-<section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Permalink to this headline">¶</a></h2>
+<section id="install-using-pip">
+<h2>Install using pip<a class="headerlink" href="#install-using-pip" title="Permalink to this headline">¶</a></h2>
 <p>Pyspextools can be easily installed with pip using the following command (with or without conda environment):</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="n">spex</span><span class="p">)</span> <span class="n">linux</span><span class="p">:</span><span class="o">~&gt;</span> <span class="n">pip</span> <span class="n">install</span> <span class="n">pyspextools</span>
 </pre></div>
@@ -143,7 +153,7 @@ module to function.</p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Install pyspextools</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#before-you-install">Before you install</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#install">Install</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-using-pip">Install using pip</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#dependency-issues">Dependency issues</a></li>
 </ul>
 </li>
