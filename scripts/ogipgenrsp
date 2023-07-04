@@ -6,7 +6,7 @@ import math
 import numpy as np
 import argparse
 from pyspextools.io.arf import Arf
-from pyspextools.io.rmf import Rmf
+from pyspextools.io.rmf import Rmf, RmfMatrix
 from pyspextools.data.response import gaussrsp
 
 import pyspextools.messages as message
@@ -43,40 +43,44 @@ def main():
 
     # Create a new RSP output object
     rsp_out = Rmf()
+    matx = RmfMatrix()
+    rsp_out.matrix.append(matx)
+    rsp_out.NumberMatrixExt += 1
+    rsp_out.MatrixExt = np.array([1])
 
-    rsp_out.NumberEnergyBins = int((high - low) / step)
-    rsp_out.EnergyUnits = arf_in.EnergyUnits
+    rsp_out.matrix[0].NumberEnergyBins = int((high - low) / step)
+    rsp_out.ebounds.EnergyUnits = arf_in.EnergyUnits
     
     if args.noarea:
-        rsp_out.AreaIncluded = False
-        rsp_out.RMFUnits = ''
+        rsp_out.matrix[0].AreaIncluded = False
+        rsp_out.matrix[0].RMFUnits = ''
     else:
-        rsp_out.AreaIncluded = True
-        rsp_out.RMFUnits = arf_in.ARFUnits
+        rsp_out.matrix[0].AreaIncluded = True
+        rsp_out.matrix[0].RMFUnits = arf_in.ARFUnits
 
     # Calculate new arrays
-    rsp_out.LowEnergy = low + step * np.arange(rsp_out.NumberEnergyBins,dtype=float)
-    rsp_out.HighEnergy = low + step * (np.arange(rsp_out.NumberEnergyBins,dtype=float)+1.0)
-    EffArea = np.zeros(rsp_out.NumberEnergyBins, dtype=float)
+    rsp_out.matrix[0].LowEnergy = low + step * np.arange(rsp_out.matrix[0].NumberEnergyBins,dtype=float)
+    rsp_out.matrix[0].HighEnergy = low + step * (np.arange(rsp_out.matrix[0].NumberEnergyBins,dtype=float)+1.0)
+    EffArea = np.zeros(rsp_out.matrix[0].NumberEnergyBins, dtype=float)
 
     # Linear interpolation of Effective area
-    for i in np.arange(rsp_out.NumberEnergyBins):
-        e = (rsp_out.LowEnergy[i] + rsp_out.HighEnergy[i]) / 2.0
+    for i in np.arange(rsp_out.matrix[0].NumberEnergyBins):
+        e = (rsp_out.matrix[0].LowEnergy[i] + rsp_out.matrix[0].HighEnergy[i]) / 2.0
         EffArea[i] = np.interp(e, x, arf_in.EffArea)
 
     # Assume same binning for energy channels (Not optimal, but ok...)
-    rsp_out.NumberChannels = rsp_out.NumberEnergyBins
+    rsp_out.ebounds.NumberChannels = rsp_out.matrix[0].NumberEnergyBins
 
-    rsp_out.Channel = np.arange(rsp_out.NumberChannels) + 1
-    rsp_out.FirstChannel = rsp_out.Channel[0]
-    rsp_out.ChannelLowEnergy = rsp_out.LowEnergy
-    rsp_out.ChannelHighEnergy = rsp_out.HighEnergy
+    rsp_out.ebounds.Channel = np.arange(rsp_out.ebounds.NumberChannels) + 1
+    rsp_out.ebounds.FirstChannel = rsp_out.ebounds.Channel[0]
+    rsp_out.ebounds.ChannelLowEnergy = rsp_out.matrix[0].LowEnergy
+    rsp_out.ebounds.ChannelHighEnergy = rsp_out.matrix[0].HighEnergy
 
     # We choose only one response group per energy (simple Gaussian response)
-    rsp_out.NumberGroups = np.ones(rsp_out.NumberChannels)
+    rsp_out.matrix[0].NumberGroups = np.ones(rsp_out.ebounds.NumberChannels)
 
     # Set response thresholds
-    rsp_out.ResponseThreshold = 1.E-7
+    rsp_out.matrix[0].ResponseThreshold = 1.E-7
 
     # Determine maximum width in channels for group
     # We assume that 10 times the FWHM at 1 keV is enough
@@ -84,51 +88,51 @@ def main():
     nbin_group = math.ceil(10 * args.resolution * 1E-3 / step)
 
     try:
-        rsp_out.Matrix = np.zeros(nbin_group * rsp_out.NumberEnergyBins, dtype=float)
+        rsp_out.matrix[0].Matrix = np.zeros(nbin_group * rsp_out.matrix[0].NumberEnergyBins, dtype=float)
     except MemoryError:
         message.error('Not enough memory to create matrix...')
 
-    rsp_out.NumberChannelsGroup = np.zeros(rsp_out.NumberEnergyBins, dtype=int)
-    rsp_out.FirstChannelGroup = np.zeros(rsp_out.NumberEnergyBins, dtype=int)
+    rsp_out.matrix[0].NumberChannelsGroup = np.zeros(rsp_out.matrix[0].NumberEnergyBins, dtype=int)
+    rsp_out.matrix[0].FirstChannelGroup = np.zeros(rsp_out.matrix[0].NumberEnergyBins, dtype=int)
 
     # Generate response matrix
-    print("Number of energy bins: {0}".format(rsp_out.NumberEnergyBins))
+    print("Number of energy bins: {0}".format(rsp_out.matrix[0].NumberEnergyBins))
     print("Number of channels per group: {0}".format(nbin_group))
 
     message.proc_start('Calculate response matrix')
 
     r = 0
-    for i in np.arange(rsp_out.NumberEnergyBins):
+    for i in np.arange(rsp_out.matrix[0].NumberEnergyBins):
         # The number of channels per group is nbin_group
-        rsp_out.NumberChannelsGroup[i] = nbin_group
+        rsp_out.matrix[0].NumberChannelsGroup[i] = nbin_group
 
         # Calculate the start channel of the group
-        rsp_out.FirstChannelGroup[i] = int(1 + i - math.ceil(nbin_group / 2))
-        if rsp_out.FirstChannelGroup[i] < 1:
-            rsp_out.FirstChannelGroup[i] = 1
-        if rsp_out.FirstChannelGroup[i] > rsp_out.NumberChannels - nbin_group:
-            rsp_out.FirstChannelGroup[i] = int(rsp_out.NumberChannels - nbin_group)
+        rsp_out.matrix[0].FirstChannelGroup[i] = int(1 + i - math.ceil(nbin_group / 2))
+        if rsp_out.matrix[0].FirstChannelGroup[i] < 1:
+            rsp_out.matrix[0].FirstChannelGroup[i] = 1
+        if rsp_out.matrix[0].FirstChannelGroup[i] > rsp_out.ebounds.NumberChannels - nbin_group:
+            rsp_out.matrix[0].FirstChannelGroup[i] = int(rsp_out.ebounds.NumberChannels - nbin_group)
 
         # Fill the Matrix
-        mu = (rsp_out.ChannelLowEnergy[i] + rsp_out.ChannelHighEnergy[i]) / 2.0
+        mu = (rsp_out.ebounds.ChannelLowEnergy[i] + rsp_out.ebounds.ChannelHighEnergy[i]) / 2.0
         sum = 0
         for j in np.arange(nbin_group):
-            k = rsp_out.FirstChannelGroup[i] + j
-            e = (rsp_out.ChannelLowEnergy[k - 1] + rsp_out.ChannelHighEnergy[k - 1]) / 2.0
+            k = rsp_out.matrix[0].FirstChannelGroup[i] + j
+            e = (rsp_out.ebounds.ChannelLowEnergy[k - 1] + rsp_out.ebounds.ChannelHighEnergy[k - 1]) / 2.0
             resp = gaussrsp(e, mu, args.resolution, args.resgradient)
             if resp < 0.:
                 message.error('Negative response value detected. Quitting program...')
                 sys.exit(0)
-            rsp_out.Matrix[r] = resp * step
-            if (rsp_out.Matrix[r] < rsp_out.ResponseThreshold):
-                rsp_out.Matrix[r] = 0.
+            rsp_out.matrix[0].Matrix[r] = resp * step
+            if (rsp_out.matrix[0].Matrix[r] < rsp_out.matrix[0].ResponseThreshold):
+                rsp_out.matrix[0].Matrix[r] = 0.
             if not args.noarea:
-                rsp_out.Matrix[r] = rsp_out.Matrix[r] * EffArea[i]
-            sum = sum + rsp_out.Matrix[r]
+                rsp_out.matrix[0].Matrix[r] = rsp_out.matrix[0].Matrix[r] * EffArea[i]
+            sum = sum + rsp_out.matrix[0].Matrix[r]
             r = r + 1
 
-    rsp_out.NumberTotalGroups = rsp_out.NumberEnergyBins
-    rsp_out.NumberTotalElements = r
+    rsp_out.matrix[0].NumberTotalGroups = rsp_out.matrix[0].NumberEnergyBins
+    rsp_out.matrix[0].NumberTotalElements = r
     message.proc_end(0)
 
     if args.noarea:
@@ -142,7 +146,7 @@ def main():
 
     # Write the new matrix to file
     message.proc_start('Write RSP/RMF to file')
-    stat = rsp_out.write(args.rspfile,overwrite=args.overwrite)
+    stat = rsp_out.write(args.rspfile, overwrite=args.overwrite)
     message.proc_end(stat)
 
 
