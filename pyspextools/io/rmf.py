@@ -2,7 +2,9 @@
 
 import pyspextools.messages as message
 import numpy as np
-import astropy.io.fits as fits
+from astropy.io import fits
+from astropy.table import Table
+from astropy.io.fits import PrimaryHDU, table_to_hdu
 from pyspextools.io.arf import Arf
 
 
@@ -113,7 +115,7 @@ class RmfMatrix:
         self.Order = 0                                      # Order of the matrix
 
     def read(self, rmfhdu):
-
+        """Read a MATRIX extension from an OGIP RMF or RSP file."""
         # Read the Matrix table
         data = rmfhdu.data
         header = rmfhdu.header
@@ -181,14 +183,9 @@ class RmfMatrix:
 
                     k = k + 1
 
-        self.Matrix = np.zeros(felem, dtype=float)
-
-        r = 0
-        for i in np.arange(self.NumberEnergyBins):
-            if nelem[i] != 0:
-                for j in np.arange(nelem[i]):
-                    self.Matrix[r] = matrix_local[i][j]
-                    r = r + 1
+        # Ignore groups with 0 elements and stack 2D array to one dimension
+        elem_mask = (nelem != 0)
+        self.Matrix = np.hstack(np.array(matrix_local)[elem_mask])
 
         self.NumberTotalElements = self.Matrix.size
         self.ResponseThreshold = np.amin(self.Matrix)
@@ -232,19 +229,17 @@ class Rmf:
         self.matrix = []
 
         # Read the number of MATRIX extensions
-        rmf = fits.open(rmffile)
-        for i in range(len(rmf)):
-            if rmf[i].name == 'MATRIX' or rmf[i].name == 'SPECRESP MATRIX':
-                self.NumberMatrixExt += 1
-                self.MatrixExt = np.append(self.MatrixExt, i)
+        with fits.open(rmffile) as rmf:
+            for i in range(len(rmf)):
+                if rmf[i].name == 'MATRIX' or rmf[i].name == 'SPECRESP MATRIX':
+                    self.NumberMatrixExt += 1
+                    self.MatrixExt = np.append(self.MatrixExt, i)
 
-        # Read the individual matrix extensions
-        for i in self.MatrixExt:
-            mat = RmfMatrix()
-            mat.read(rmf[i])
-            self.matrix.append(mat)
-
-        rmf.close()
+            # Read the individual matrix extensions
+            for i in self.MatrixExt:
+                mat = RmfMatrix()
+                mat.read(rmf[i])
+                self.matrix.append(mat)
 
         return 0
 
@@ -272,7 +267,7 @@ class Rmf:
         #
         # Create Primary HDU
         #
-        primary = fits.PrimaryHDU()
+        primary = PrimaryHDU()
 
         #
         # Create the EBOUNDS extension
@@ -281,9 +276,8 @@ class Rmf:
         ecol2 = fits.Column(name='E_MIN', format='D', unit=self.ebounds.EnergyUnits, array=self.ebounds.ChannelLowEnergy)
         ecol3 = fits.Column(name='E_MAX', format='D', unit=self.ebounds.EnergyUnits, array=self.ebounds.ChannelHighEnergy)
 
-        ebnds = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
-
-        ehdr = ebnds.header
+        ebnds_hdu = fits.BinTableHDU.from_columns([ecol1, ecol2, ecol3])
+        ehdr = ebnds_hdu.header
         ehdr.set('EXTNAME', 'EBOUNDS')
         ehdr.set('DETCHANS', self.ebounds.NumberChannels)
 
@@ -313,7 +307,7 @@ class Rmf:
         ehdr.set('HDUVERS1', '1.2.0')
         ehdr.set('ORIGIN ', 'SRON')
 
-        hdu = fits.HDUList([primary, ebnds])
+        hdu = fits.HDUList([primary, ebnds_hdu])
 
         #
         # Create SPECRESP MATRIX extension
@@ -347,9 +341,9 @@ class Rmf:
 
             mcol6 = fits.Column(name='MATRIX', format=formatstr, array=newmatrix)
 
-            matrix = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
+            matrix_hdu = fits.BinTableHDU.from_columns([mcol1, mcol2, mcol3, mcol4, mcol5, mcol6])
 
-            mhdr = matrix.header
+            mhdr = matrix_hdu.header
 
             if self.matrix[e].AreaIncluded:
                 mhdr.set('EXTNAME', 'SPECRESP MATRIX')
@@ -389,10 +383,10 @@ class Rmf:
             mhdr.set('HDUVERS1', '1.3.0')
             mhdr.set('ORIGIN  ', 'SRON')
 
-            matrix.header['HISTORY'] = 'Created by pyspextools:'
-            matrix.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
+            matrix_hdu.header['HISTORY'] = 'Created by pyspextools:'
+            matrix_hdu.header['HISTORY'] = 'https://github.com/spex-xray/pyspextools'
 
-            hdu.append(matrix)
+            hdu.append(matrix_hdu)
 
         try:
             hdu.writeto(rmffile, overwrite=overwrite)

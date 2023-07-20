@@ -54,8 +54,7 @@ class TGRegion(Region):
         # Read the PHA2 file for a particular grating
         (src, bkg) = self.__read_pha2(pha2file, grating, bkgsubtract=bkgsubtract)
         if not isinstance(src, Pha):
-            message.error("Failed to read spectrum file.")
-            return 1
+            raise ValueError("Failed to read spectrum file.")
 
         # Convert the PHA2 file to spo
 
@@ -64,14 +63,12 @@ class TGRegion(Region):
 
         self.spo = pha_to_spo(src, rmf, back=bkg)
         if not isinstance(self.spo, Spo):
-            message.error("Failed to convert spectrum file.")
-            return 1
+            raise ValueError("Failed to convert spectrum file.")
 
         # Convert the responses to res
         self.res = self.__rmflist_to_res(rmflist, arflist)
         if not isinstance(self.res, Res):
-            message.error("Failed to combine and convert response files.")
-            return 1
+            raise ValueError("Failed to combine and convert response files.")
 
         self.label = grating
 
@@ -98,14 +95,12 @@ class TGRegion(Region):
             stat = spec.read(pha2file, background=bkgsubtract)
             if stat != 0:
                 message.proc_end(stat)
-                message.error("Failed to read source spectrum.")
-                return 1
+                raise ValueError("Failed to read source spectrum.")
             else:
                 message.proc_end(stat)
         else:
             message.proc_end(1)
-            message.error("Spectrum file {0} not found in path.".format(pha2file))
-            return 1
+            raise ValueError("Spectrum file {0} not found in path.".format(pha2file))
 
         # Convert grating name to number
         if grating == 'HETG':
@@ -115,8 +110,7 @@ class TGRegion(Region):
         elif grating == 'LETG':
             ngrating = 3
         else:
-            message.error("Unsupported grating: '{0}'.".format(grating))
-            return 1
+            raise ValueError("Unsupported grating: '{0}'.".format(grating))
 
         # Combine spectra from a single grating
         message.proc_start("Combining orders of the spectrum")

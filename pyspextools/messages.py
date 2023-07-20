@@ -8,7 +8,7 @@ Methods to send messages to the user.
 
 import sys
 import pyspextools
-from pyspextools.color import Colors
+from pyspextools.color import ColorCodes
 
 # Set general messages for argument parsing
 docs = 'See full documentation at: https://spex-xray.github.io/pyspextools'
@@ -16,7 +16,7 @@ version = '%(prog)s {:s} (C) 2018-2023, Jelle de Plaa, SRON Netherlands Institut
           'Apache 2.0 License'.format(pyspextools.__version__)
 
 # Initialize colors
-color = Colors()
+color = ColorCodes()
 
 
 def set_color(setcol):

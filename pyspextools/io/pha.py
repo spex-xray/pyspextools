@@ -254,8 +254,7 @@ class Pha:
         """
 
         if not isinstance(resp, Rmf):
-            message.error("Input response object is not the required Rmf object.")
-            return
+            raise AttributeError("Input response object is not the required Rmf object.")
 
         # First copy the channel information to the PHA object
         self.Channel = resp.ebounds.Channel

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import pyspextools.messages as message
+from typing import Optional
 import numpy as np
 import math
 
@@ -17,7 +18,7 @@ from .arf import Arf
 # -----------------------------------------------------
 
 
-def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
+def pha_to_spo(src: Pha, rmf: Rmf, back: Optional[Pha] = None, corr: Optional[Pha] = None, save_grouping: bool = False) -> Spo:
     """Convert the source (src) and optional background (back) and correction spectra (corr) from OGIP to SPEX format. 
     Please also provide an OGIP rmf object from the Rmf class to this function to read the channel energies.
     When the save_grouping flag is true, the grouping information in the PHA file will be copied to the spo file.
@@ -36,26 +37,18 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
     :type save_grouping: bool
     """
 
-    if not isinstance(src, Pha):
-        message.error("Input source spectrum is not a PHA object.")
-        return 1
-    
-    if not isinstance(rmf, Rmf):
-        message.error("Input response matrix is not an RMF object.")
-        return 1
-    
+    if src.DetChans <= 0:
+        raise AttributeError("PHA object appears to be empty.")
+
+    if rmf.ebounds.NumberChannels <= 0:
+        raise AttributeError("RMF object appears to be empty.")
+
     if back is not None:
-        if not isinstance(back, Pha):
-            message.error("Input background spectrum is not a PHA object.")
-            return 1
         input_back = True
     else:
         input_back = False
         
     if corr is not None:
-        if not isinstance(corr, Pha):
-            message.error("Input correction spectrum is not a PHA object.")
-            return 1
         input_corr = True
     else:
         input_corr = False
@@ -113,10 +106,10 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
                 fc = 0.
 
             # Subtract correction spectrum and calculate errors
-            spo.ochan[i] = spo.ochan[i] - corr.Rate[i] * fc / ctints
-            spo.dochan[i] = spo.dochan[i] + corr.Rate[i] * (fc / ctints) ** 2
-            spo.mbchan[i] = spo.mbchan[i] + corr.Rate[i] * fc / ctints
-            spo.dbchan[i] = spo.dbchan[i] + corr.Rate[i] * (fc / ctints) ** 2
+            spo.ochan[i] = spo.ochan[i] - corr.Rate[i] * fc / corr.AreaScaling[i]
+            spo.dochan[i] = spo.dochan[i] + (corr.StatError[i] * fc / corr.AreaScaling[i]) ** 2
+            spo.mbchan[i] = spo.mbchan[i] + corr.Rate[i] * fc / corr.AreaScaling[i]
+            spo.dbchan[i] = spo.dbchan[i] + corr.Rate[i] * (fc / corr.AreaScaling[i]) ** 2
 
         # Set background to zero for zero exposure bins
         if spo.tints[i] <= 0.:
@@ -142,18 +135,17 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
         if save_grouping:
             if src.Grouping[i] == 1:
                 spo.first[i] = True
-                spo.last[i] = False
-            if src.Grouping[i] <= 0:
+            else:
                 spo.first[i] = False
-                if i < src.DetChans - 1:
-                    if src.Grouping[i + 1] == 1:
-                        spo.last[i] = True
-                    else:
-                        spo.last[i] = False
-                elif i == src.DetChans - 1:
+            if i < src.DetChans - 1:
+                if src.Grouping[i + 1] == 1:
                     spo.last[i] = True
                 else:
                     spo.last[i] = False
+            elif i == src.DetChans - 1:
+                spo.last[i] = True
+            else:
+                spo.last[i] = False
 
         # Get channel boundaries from response
         # Channel boundary cannot be 0.
@@ -183,7 +175,7 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
 # -----------------------------------------------------
 
 
-def rmf_to_res(rmf, matext=0, arf=None):
+def rmf_to_res(rmf: Rmf, matext: Optional[int] = 0, arf: Optional[Arf] = None) -> Res:
     """Convert an response matrix object from OGIP to SPEX format. The response matrix is translated one-to-one
     without optimizations. Providing an ARF object is optional. All groups in the OGIP matrix are put into one
     SPEX response component. This method returns a pyspextools Res object containing the response matrix.
@@ -196,17 +188,10 @@ def rmf_to_res(rmf, matext=0, arf=None):
     :type matext: int
     """
 
-    if not isinstance(rmf, Rmf):
-        message.error("The input RMF object is not of type Rmf.")
-        return 1
-
     if matext >= rmf.NumberMatrixExt or matext < 0:
-        message.error("The supplied matrix extension number is not available.")
-        return 1
+        raise ValueError("The supplied matrix extension number is not available or invalid.")
 
     if arf is not None:
-        if not isinstance(arf, Arf):
-            message.error("The input ARF object is not of type Arf.")
         input_area = True
     else:
         input_area = False
@@ -215,7 +200,7 @@ def rmf_to_res(rmf, matext=0, arf=None):
         rmf.ebounds.NumberChannels
     except NameError:
         message.error("The OGIP response matrix has not been initialised yet.")
-        return 0
+        raise NameError("The OGIP response matrix has not been initialised yet.")
 
     res = Res()
 
@@ -261,7 +246,8 @@ def rmf_to_res(rmf, matext=0, arf=None):
             if res.eg2[g] <= res.eg1[g]:
                 message.error("Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
                     i + 1))
-                return
+                raise ValueError("Discontinous bins in energy array in channel {0}. Please check the numbers.".format(
+                    i + 1))
 
             res.nc[g] = rmf.matrix[matext].NumberChannelsGroup[g]
             # Add the start channel to the IC to correct for cases where we start at channel 0/1
@@ -283,11 +269,11 @@ def rmf_to_res(rmf, matext=0, arf=None):
 
     if g > res.neg:
         message.error("Mismatch between number of groups.")
-        return 0
+        raise ValueError("Mismatch between number of groups.")
 
     if m > nm:
         message.error("Mismatch between number of matrix elements.")
-        return 0
+        raise ValueError("Mismatch between number of matrix elements.")
 
     # Convert matrix to m**2 units for SPEX
     if input_area:
