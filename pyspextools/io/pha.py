@@ -100,11 +100,13 @@ class Pha:
         self.BackStatError = np.array([], dtype=float)  # PHA2 Background Error
         self.Pha2BackScal = 1.0                         # Backscale value for background
 
-    def read(self, filename):
+    def read(self, filename, force_poisson=False):
         """Read a spectrum from a PHA file.
 
         :param filename: PHA file name to be read.
         :type filename: str
+        :param force_poisson: Force the calculation of Poisson errors (default: False)
+        :type force_poisson: bool
         """
 
         # Read the data and header from the SPECTRUM extension
@@ -127,6 +129,9 @@ class Pha:
             self.Rate = np.zeros(self.DetChans, dtype=float)
             for i in np.arange(self.DetChans):
                 self.Rate[i] = float(data['COUNTS'][i]) / self.Exposure
+            # Only force Poisson errors for COUNTS spectra when flag is present
+            if force_poisson:
+                self.Poisserr = True
 
         # See if there are Statistical Errors present
         if not self.Poisserr:

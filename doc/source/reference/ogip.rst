@@ -31,6 +31,11 @@ pyspextools and will have the same functionality.
 The 'read_region' method can be called to read the OGIP spectra and responses and return
 a SPEX region object, which can be written to spo and res files.
 
+For some missions, the provided PHA file contains counts, but also a ``STAT_ERR`` column with non-Poisson errors.
+It is usually a good idea to use Poisson statistics in these cases. The ``read_region`` routine
+and other methods have an optional ``force_poisson`` flag to make sure that the error on the counts
+is the square root of the number of observed counts.
+
 A convenient script called :ref:`ogip2spex` is available to convert OGIP spectra
 and responses to SPEX format.
 
