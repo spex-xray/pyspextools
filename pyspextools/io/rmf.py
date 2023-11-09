@@ -426,6 +426,13 @@ class Rmf:
                 message.error("Matrix size does not correspond to index arrays. Response inconsistent.")
                 return 1
 
+            # Check for energy bins with zero width
+            wzero = np.where(self.matrix[e].LowEnergy == self.matrix[e].HighEnergy)[0]
+            if wzero.size != 0:
+                for i in np.arange(wzero.size):
+                    message.warning("Energy bin with zero width found in row {0}!".format(wzero[i]+1))
+                    return 2
+
         return 0
 
     def disp(self):
@@ -494,3 +501,17 @@ class Rmf:
             return 1
 
         return 0
+
+    def fix_energy_grid(self):
+        """In some exceptional cases, like with ROSAT response matrices, the matrix contains
+        energy bins with zero width, which is not physical. This method changes them to a small
+        finite width to allow them to be processed with ogip2spex and trafo."""
+
+        for e in range(self.NumberMatrixExt):
+            wzero = np.where(self.matrix[e].LowEnergy == self.matrix[e].HighEnergy)[0]
+
+            if wzero.size != 0:
+                for i in np.arange(wzero.size):
+                    self.matrix[e].HighEnergy[wzero[i]] = self.matrix[e].HighEnergy[wzero[i]] + 1.0E-6
+                    if i < self.matrix[e].NumberEnergyBins:
+                        self.matrix[e].LowEnergy[wzero[i]+1] = self.matrix[e].LowEnergy[wzero[i]+1] + 1.0E-6

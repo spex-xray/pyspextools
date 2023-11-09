@@ -99,6 +99,12 @@ but we did not add this method to this class. This class does a direct copy of a
 of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in 
 components is desired, that should be done with other methods in the pyspextools module (ref).
 
+In some rare cases (e.g. ROSAT responses), the energy grid in the response matrix contains
+bins with a zero width. The Rmf class has a method called ``fix_energy_grid``, which just moves
+the bin boundary by a tiny amount. If this case is recognized by the ``check`` method, it will
+return ``2`` with a warning. The user can decide what to do with the warning. In ``ogip2spex``,
+the bins are fixed automatically while issueing a warning at the same time.
+
 **Update (version 0.4.0)**: There is a new type of RMF file that contains two MATRIX extensions
 in the fits file that both model different components of the instrument response. Pyspextools can
 convert these spectra now and in the resulting SPEX format the separate MATRIX extensions are
