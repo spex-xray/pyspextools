@@ -53,7 +53,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = 'pyspextools'
-copyright = '2018-2023, SRON Netherlands Institute for Space Research'
+copyright = '2018-2024, SRON Netherlands Institute for Space Research'
 author = 'Jelle de Plaa'
 
 # The version info for the project you're documenting, acts as replacement for
