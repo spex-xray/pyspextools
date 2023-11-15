@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -63,7 +63,7 @@
 <span class="c1"># =========================================================</span>
 
 <div class="viewcode-block" id="Res"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res">[docs]</a><span class="k">class</span> <span class="nc">Res</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;The res class contains the response information for one</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The res class contains the response information for one</span>
 <span class="sd">    res file. This file can contain multiple responses (regions).</span>
 
 <span class="sd">    :ivar resname: Name of the res file.</span>
@@ -126,7 +126,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize a SPEX response object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize a SPEX response object.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">resname</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">True</span>
@@ -171,7 +171,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.add_res_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.add_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origres</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to add region(s) to a response.</span>
 
 <span class="sd">        :param origres: Response object to be added to this one.</span>
 <span class="sd">        :type origres: pyspextools.io.Res</span>
@@ -244,7 +244,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.del_res_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.del_res_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_res_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove region with number &#39;iregion&#39;.</span>
 
 <span class="sd">        :param isector: Sector number of the region to be removed.</span>
 <span class="sd">        :type isector: int</span>
@@ -295,7 +295,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.read_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Function to read a response from a .res file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to read a response from a .res file.</span>
 
 <span class="sd">        :param resfile: Response filename to be read.</span>
 <span class="sd">        :type resfile: str</span>
@@ -367,7 +367,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.return_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a res object with the data from 1 selected region.</span>
 
 <span class="sd">        :param isector: Sector number of the region to be returned.</span>
 <span class="sd">        :type isector: int</span>
@@ -431,7 +431,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.write_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Write the response information to a .res file with name &#39;resfile&#39;.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write the response information to a .res file with name &#39;resfile&#39;.</span>
 
 <span class="sd">        :param resfile: Name of the response file to write to.</span>
 <span class="sd">        :type resfile: str</span>
@@ -526,7 +526,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.swap_order"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Swap the channel order of the response between wavelength or energy order. This is</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Swap the channel order of the response between wavelength or energy order. This is</span>
 <span class="sd">        for example helpful for grating spectra, which are originally stored in wavelength order</span>
 <span class="sd">        but must be flipped to energy order in SPEX format.&quot;&quot;&quot;</span>
 
@@ -557,7 +557,7 @@
     <span class="c1"># Add component to RES file</span>
     <span class="c1"># -----------------------------------------------------</span>
 <div class="viewcode-block" id="Res.append_component"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.append_component">[docs]</a>    <span class="k">def</span> <span class="nf">append_component</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">addres</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Append a component to the response matrix from another matrix. This is used to add orders to the response</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a component to the response matrix from another matrix. This is used to add orders to the response</span>
 <span class="sd">        file for Chandra grating data.</span>
 
 <span class="sd">        :param addres: Response object to extract response information from.</span>
@@ -599,7 +599,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.get_mask"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Create masks to select a particular region in a .res file.</span>
 
 <span class="sd">        :param isector: Sector number to create mask for.</span>
 <span class="sd">        :type isector: int</span>
@@ -671,7 +671,7 @@
     <span class="c1"># Shift response array</span>
     <span class="c1"># -----------------------------------------------------</span>
 <div class="viewcode-block" id="Res.channel_shift"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.channel_shift">[docs]</a>    <span class="k">def</span> <span class="nf">channel_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">shift</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Shift the response array indices with an integer number provided by input parameter &#39;shift&#39;.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Shift the response array indices with an integer number provided by input parameter &#39;shift&#39;.</span>
 
 <span class="sd">        :param shift: Number of channels to shift the spectrum with.</span>
 <span class="sd">        :type shift: int</span>
@@ -704,7 +704,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.check"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Perform a number of checks to see if the response information is consistent.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform a number of checks to see if the response information is consistent.&quot;&quot;&quot;</span>
         <span class="c1"># Check if the number of indexed channels is equal to the length of the response array</span>
         <span class="k">if</span> <span class="nb">sum</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nc</span><span class="p">)</span> <span class="o">!=</span> <span class="bp">self</span><span class="o">.</span><span class="n">resp</span><span class="o">.</span><span class="n">size</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -759,7 +759,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.check_filename"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.check_filename">[docs]</a>    <span class="k">def</span> <span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .res extension. The method returns a correct file name.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .res extension. The method returns a correct file name.</span>
 
 <span class="sd">        :param filename: File name to check.</span>
 <span class="sd">        :type filename: str</span>
@@ -780,7 +780,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="Res.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Res.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show some basic properties of the response file.</span>
 
 <span class="sd">        :param iregion: Region number to show.</span>
 <span class="sd">        :type iregion: int</span>

@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -64,7 +64,7 @@
 <span class="c1"># =========================================================</span>
 
 <div class="viewcode-block" id="Region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region">[docs]</a><span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;A SPEX region is a spectrum/response combination for a</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;A SPEX region is a spectrum/response combination for a</span>
 <span class="sd">    specific observation, instrument or region on the sky.</span>
 <span class="sd">    It combines the spectrum and response file in one object.</span>
 
@@ -80,7 +80,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>         <span class="c1"># Optional region label (will not be written to file). For example: MOS1, annulus2, etc.</span>
 
 <div class="viewcode-block" id="Region.change_label"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.change_label">[docs]</a>    <span class="k">def</span> <span class="nf">change_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</span>
 
 <span class="sd">        :param label: Text string to identify region.</span>
 <span class="sd">        :type label: str</span>
@@ -88,7 +88,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the sector number for this region.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the sector number for this region.</span>
 
 <span class="sd">        :param sector: Sector number to set for this region.</span>
 <span class="sd">        :type sector: int</span>
@@ -98,7 +98,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sector</span></div>
 
 <div class="viewcode-block" id="Region.set_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_region">[docs]</a>    <span class="k">def</span> <span class="nf">set_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Set the region number for this region.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the region number for this region.</span>
 
 <span class="sd">        :param region: Region number to set for this region.</span>
 <span class="sd">        :type region: int</span>
@@ -108,7 +108,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">region</span></div>
 
 <div class="viewcode-block" id="Region.increase_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.increase_region">[docs]</a>    <span class="k">def</span> <span class="nf">increase_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Increase the region numbers by an integer amount.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Increase the region numbers by an integer amount.</span>
 
 <span class="sd">        :param amount: Integer amount to add to region numbers.</span>
 <span class="sd">        :type amount: int</span>
@@ -118,7 +118,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">amount</span></div>
 
 <div class="viewcode-block" id="Region.check"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check whether spectrum and response are compatible</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether spectrum and response are compatible</span>
 <span class="sd">        and whether the arrays really consist of one region (if nregion flag is set).</span>
 
 <span class="sd">        :param nregion: Flag to check whether the arrays just contain one region.</span>
@@ -141,7 +141,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Region.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Show a summary of the region metadata.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a summary of the region metadata.</span>
 
 <span class="sd">        :param isector: Sector number to show.</span>
 <span class="sd">        :type isector: int</span>

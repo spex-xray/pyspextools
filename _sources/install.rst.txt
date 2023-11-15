@@ -11,12 +11,24 @@ To do so, create your own conda environment first (See this
 In the example below, we create the conda environment `spex` assuming you already have installed conda successfully.
 The commands below create a new conda environment and activate it in your shell::
 
-    linux:~> conda create -n spex python=3.6 numpy astropy sphinx sphinx-argparse
+    linux:~> conda create -n spex python=3.9 numpy astropy sphinx sphinx-argparse
     linux:~> conda activate spex
     (spex) linux:~>
 
 To use pyspextools later, each time you open a terminal, you need to activate the conda spex environment
 using the `conda activate spex` command.
+
+Install pyspextools through Anaconda
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Pyspextools can be installed directly in conda for python 3.8, 3.9 and 3.10. Of course, you can use the conda
+environment created in the previous step, but it should also work in other conda environments.
+
+The command below installs pyspextools in your conda environment::
+
+    (spex) user@linux:~> conda install -c spexxray pyspextools
+
+It downloads pyspextools from the `spexxray channel at Anaconda <https://anaconda.org/spexxray>`_.
 
 Non-conda environments
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -31,8 +43,8 @@ the following command should install all dependencies for python 3::
 If you have installed `pip`, then you can try to just run the `pip install` commands below and hope there are no
 dependency conflicts.
 
-Install
--------
+Install using pip
+-----------------
 
 Pyspextools can be easily installed with pip using the following command (with or without conda environment)::
 

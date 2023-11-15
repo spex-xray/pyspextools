@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -34,7 +34,7 @@
           <div class="body" role="main">
             
   <section id="ogip-data-format-support">
-<h1>OGIP data format support<a class="headerlink" href="#ogip-data-format-support" title="Permalink to this headline">¶</a></h1>
+<span id="ogipmodule"></span><h1>OGIP data format support<a class="headerlink" href="#ogip-data-format-support" title="Permalink to this headline">¶</a></h1>
 <p>The pyspextools module offers to import OGIP spectral files and convert them to
 SPEX format. There are basicly two types of OGIP files: regular type I files,
 which are distributed with most X-ray missions, and type II files distributed
@@ -60,6 +60,10 @@ The OGIP class can be imported separately if needed:</p>
 pyspextools and will have the same functionality.</p>
 <p>The ‘read_region’ method can be called to read the OGIP spectra and responses and return
 a SPEX region object, which can be written to spo and res files.</p>
+<p>For some missions, the provided PHA file contains counts, but also a <code class="docutils literal notranslate"><span class="pre">STAT_ERR</span></code> column with non-Poisson errors.
+It is usually a good idea to use Poisson statistics in these cases. The <code class="docutils literal notranslate"><span class="pre">read_region</span></code> routine
+and other methods have an optional <code class="docutils literal notranslate"><span class="pre">force_poisson</span></code> flag to make sure that the error on the counts
+is the square root of the number of observed counts.</p>
 <p>A convenient script called <a class="reference internal" href="../tutorials/ogip2spex.html#ogip2spex"><span class="std std-ref">OGIP2spex - Convert OGIP files to SPEX format</span></a> is available to convert OGIP spectra
 and responses to SPEX format.</p>
 </section>
@@ -114,13 +118,18 @@ There are methods to detect similar groups in an RMF file and organise them in a
 but we did not add this method to this class. This class does a direct copy of all the groups
 of the RMF to one SPEX response component. If a more optimal re-arrangement of groups in
 components is desired, that should be done with other methods in the pyspextools module (ref).</p>
+<p>In some rare cases (e.g. ROSAT responses), the energy grid in the response matrix contains
+bins with a zero width. The Rmf class has a method called <code class="docutils literal notranslate"><span class="pre">fix_energy_grid</span></code>, which just moves
+the bin boundary by a tiny amount. If this case is recognized by the <code class="docutils literal notranslate"><span class="pre">check</span></code> method, it will
+return <code class="docutils literal notranslate"><span class="pre">2</span></code> with a warning. The user can decide what to do with the warning. In <code class="docutils literal notranslate"><span class="pre">ogip2spex</span></code>,
+the bins are fixed automatically while issueing a warning at the same time.</p>
 <p><strong>Update (version 0.4.0)</strong>: There is a new type of RMF file that contains two MATRIX extensions
 in the fits file that both model different components of the instrument response. Pyspextools can
 convert these spectra now and in the resulting SPEX format the separate MATRIX extensions are
 translated into SPEX response components.</p>
 </section>
 <section id="the-ogipregion-class-description">
-<h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
+<span id="ogipregion-class"></span><h2>The OGIPRegion class description<a class="headerlink" href="#the-ogipregion-class-description" title="Permalink to this headline">¶</a></h2>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyspextools.io.ogip.OGIPRegion">
 <em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyspextools.io.ogip.</span></span><span class="sig-name descname"><span class="pre">OGIPRegion</span></span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion" title="Permalink to this definition">¶</a></dt>
@@ -146,7 +155,7 @@ spo and res format objects.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyspextools.io.ogip.OGIPRegion.read_region">
-<span class="sig-name descname"><span class="pre">read_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmffile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkgfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arffile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grouping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rmffile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bkgfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">arffile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corrfile</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">grouping</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_poisson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_region" title="Permalink to this definition">¶</a></dt>
 <dd><p>Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
 are mandatory. If needed, a background file and effective area file can be added.</p>
 <dl class="field-list simple">
@@ -158,6 +167,7 @@ are mandatory. If needed, a background file and effective area file can be added
 <li><p><strong>arffile</strong> (<em>str</em>) – Name of the ARF file to read (optional).</p></li>
 <li><p><strong>corrfile</strong> (<em>str</em>) – Name of the Correction file to read (optional).</p></li>
 <li><p><strong>grouping</strong> (<em>bool</em>) – Keep the grouping information?</p></li>
+<li><p><strong>force_poisson</strong> (<em>bool</em>) – Force the calculation of Poisson errors (default: False)</p></li>
 </ul>
 </dd>
 </dl>
@@ -189,22 +199,28 @@ need to be added to an OGIP region and converted to spo and res objects.</p>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyspextools.io.ogip.OGIPRegion.read_source_pha">
-<span class="sig-name descname"><span class="pre">read_source_pha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phafile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_source_pha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_source_pha" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_source_pha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">phafile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_poisson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_source_pha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_source_pha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a pha file containing the source spectrum.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>phafile</strong> (<em>str</em>) – PHA file name of source spectrum to read.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>phafile</strong> (<em>str</em>) – PHA file name of source spectrum to read.</p></li>
+<li><p><strong>force_poisson</strong> (<em>bool</em>) – Force the calculation of Poisson errors (default: False)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pyspextools.io.ogip.OGIPRegion.read_background_pha">
-<span class="sig-name descname"><span class="pre">read_background_pha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bkgfile</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_background_pha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_background_pha" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read_background_pha</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bkgfile</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_poisson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/ogip.html#OGIPRegion.read_background_pha"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.ogip.OGIPRegion.read_background_pha" title="Permalink to this definition">¶</a></dt>
 <dd><p>Open a pha file containing the background spectrum (if specified).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>bkgfile</strong> (<em>str</em>) – PHA file name of background spectrum to read.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bkgfile</strong> (<em>str</em>) – PHA file name of background spectrum to read.</p></li>
+<li><p><strong>force_poisson</strong> (<em>bool</em>) – Force the calculation of Poisson errors (default: False)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -345,11 +361,14 @@ Keith Arnaud.</p>
 </dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="pyspextools.io.pha.Pha.read">
-<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">read</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_poisson</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/pha.html#Pha.read"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.pha.Pha.read" title="Permalink to this definition">¶</a></dt>
 <dd><p>Read a spectrum from a PHA file.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><p><strong>filename</strong> (<em>str</em>) – PHA file name to be read.</p>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filename</strong> (<em>str</em>) – PHA file name to be read.</p></li>
+<li><p><strong>force_poisson</strong> (<em>bool</em>) – Force the calculation of Poisson errors (default: False)</p></li>
+</ul>
 </dd>
 </dl>
 </dd></dl>
@@ -521,6 +540,14 @@ Keith Arnaud.</p>
 <dd class="field-odd"><p><strong>arf</strong> (<em>pyspextools.io.Arf</em>) – Input arf object to check.</p>
 </dd>
 </dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pyspextools.io.rmf.Rmf.fix_energy_grid">
+<span class="sig-name descname"><span class="pre">fix_energy_grid</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/io/rmf.html#Rmf.fix_energy_grid"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.io.rmf.Rmf.fix_energy_grid" title="Permalink to this definition">¶</a></dt>
+<dd><p>In some exceptional cases, like with ROSAT response matrices, the matrix contains
+energy bins with zero width, which is not physical. This method changes them to a small
+finite width to allow them to be processed with ogip2spex and trafo.</p>
 </dd></dl>
 
 </dd></dl>

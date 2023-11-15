@@ -10,8 +10,11 @@ of the SPEX manual: http://var.sron.nl/SPEX-doc/
 
 .. automodule:: pyspextools.io
 
-Reading/writing datasets
-------------------------
+
+.. _dataset_class:
+
+Dataset class description
+-------------------------
 
 SPEX res and spo files can contain a set of spectra and responses from, for example,
 different instruments used in the same observation or spectra from different spatial 

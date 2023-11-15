@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
@@ -50,6 +50,9 @@ The Exp_Rate column contains the ratio between the backscale values of the sourc
 used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Exp_Rate
 column is created.</p>
 </div>
+<p>For some missions, the provided PHA file contains counts, but also a <code class="docutils literal notranslate"><span class="pre">STAT_ERR</span></code> column with non-Poisson errors.
+It is usually a good idea to use Poisson statistics in these cases. Ogip2spex has the <code class="docutils literal notranslate"><span class="pre">--force-poisson</span></code>
+flag to make sure that the error on the counts is the square root of the number of observed counts.</p>
 <section id="example">
 <h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
 <p>Suppose one would like to convert a set of OGIP spectra from the MOS instrument aboard XMM-Newton. The XMM-Newton SAS
@@ -114,7 +117,7 @@ ogip2spex call.</p>
 <p><p>See full documentation at: <a class="reference external" href="https://spex-xray.github.io/pyspextools">https://spex-xray.github.io/pyspextools</a></p>
 </p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">usage</span><span class="p">:</span> <span class="n">ogip2spex</span> <span class="p">[</span><span class="o">-</span><span class="n">h</span><span class="p">]</span> <span class="o">--</span><span class="n">phafile</span> <span class="n">PHAFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">bkgfile</span> <span class="n">BKGFILE</span><span class="p">]</span> <span class="o">--</span><span class="n">rmffile</span> <span class="n">RMFFILE</span> <span class="p">[</span><span class="o">--</span><span class="n">arffile</span> <span class="n">ARFFILE</span><span class="p">]</span> <span class="o">--</span><span class="n">spofile</span> <span class="n">SPOFILE</span> <span class="o">--</span><span class="n">resfile</span> <span class="n">RESFILE</span>
-                 <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">grouping</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
+                 <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">badchannels</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">keep</span><span class="o">-</span><span class="n">grouping</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">overwrite</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">exprate</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">force</span><span class="o">-</span><span class="n">poisson</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">no</span><span class="o">-</span><span class="n">color</span><span class="p">]</span> <span class="p">[</span><span class="o">--</span><span class="n">version</span><span class="p">]</span>
 </pre></div>
 </div>
 <section id="named-arguments">
@@ -153,6 +156,10 @@ ogip2spex call.</p>
 <dt><kbd>--no-exprate</kbd></dt>
 <dd><p>Do not write additional Exp_Rate column (SPEX &lt;=3.04.00).</p>
 <p>Default: True</p>
+</dd>
+<dt><kbd>--force-poisson</kbd></dt>
+<dd><p>Force the use of Poisson statistics for the input spectra.</p>
+<p>Default: False</p>
 </dd>
 <dt><kbd>--no-color</kbd></dt>
 <dd><p>Suppress color output.</p>

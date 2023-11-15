@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -49,7 +49,7 @@
 
 
 <div class="viewcode-block" id="TGRegion"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.tg.TGRegion">[docs]</a><span class="k">class</span> <span class="nc">TGRegion</span><span class="p">(</span><span class="n">Region</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;The TGRegion class contains methods to read Chandra grating data into the pyspextools module and convert</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The TGRegion class contains methods to read Chandra grating data into the pyspextools module and convert</span>
 <span class="sd">    these to spo and res format objects.</span>
 
 <span class="sd">    :ivar grating: Grating name.</span>
@@ -67,7 +67,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
 <div class="viewcode-block" id="TGRegion.read_region"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.tg.TGRegion.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha2file</span><span class="p">,</span> <span class="n">rmflist</span><span class="p">,</span> <span class="n">arflist</span><span class="p">,</span> <span class="n">grating</span><span class="p">,</span> <span class="n">bkgsubtract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Add a Chandra spectrum and response to a SPEX region. The pha2 file and the rmf and arf file lists</span>
 <span class="sd">        are mandatory. The grating option can be either HETG, METG or LETG.</span>
 
 <span class="sd">        :param pha2file: PHA2 file name to read.</span>
@@ -111,7 +111,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
     <span class="k">def</span> <span class="nf">__read_pha2</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha2file</span><span class="p">,</span> <span class="n">grating</span><span class="p">,</span> <span class="n">bkgsubtract</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Method to read a PHA type II file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to read a PHA type II file.</span>
 
 <span class="sd">        :param pha2file: PHA type II file name to read.</span>
 <span class="sd">        :type pha2file: str</span>
@@ -167,7 +167,7 @@
     <span class="c1"># -----------------------------------------------------</span>
 
     <span class="k">def</span> <span class="nf">__rmflist_to_res</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmflist</span><span class="p">,</span> <span class="n">arflist</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Convert a list of compatible rmf and arf file into one res file. This is convenient for combining responses</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert a list of compatible rmf and arf file into one res file. This is convenient for combining responses</span>
 <span class="sd">        that are provided separately, like the Transmission Grating spectra from Chandra.</span>
 
 <span class="sd">        :param rmflist: List of RMF file names.</span>

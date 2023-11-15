@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -39,7 +39,7 @@
 
 
 <div class="viewcode-block" id="Arf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf">[docs]</a><span class="k">class</span> <span class="nc">Arf</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read OGIP ARF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
 <span class="sd">    Keith Arnaud.</span>
 
 <span class="sd">    :ivar LowEnergy: Low Energy boundary of bin</span>
@@ -60,7 +60,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Initialize an ARF object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize an ARF object.&quot;&quot;&quot;</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>      <span class="c1"># Low Energy of bin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>     <span class="c1"># High Energy of bin</span>
@@ -72,7 +72,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">Grating</span> <span class="o">=</span> <span class="mi">0</span>                                <span class="c1"># Grating instrument (if available, 1 = HEG, 2 = MEG, 3 = LEG)</span>
 
 <div class="viewcode-block" id="Arf.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Read the effective area from an OGIP ARF file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the effective area from an OGIP ARF file.</span>
 
 <span class="sd">        :param arffile: Effective area file name (FITS/OGIP format)</span>
 <span class="sd">        :type arffile: str</span>
@@ -110,7 +110,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Arf.write"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="nb">filter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Write an OGIP compatible ARF file (Non-grating format).</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write an OGIP compatible ARF file (Non-grating format).</span>
 
 <span class="sd">        :param arffile: Effective area file name to write (FITS/OGIP format)</span>
 <span class="sd">        :type arffile: str</span>
@@ -171,7 +171,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Arf.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check if the basic information is read in.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the basic information is read in.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Energy array has zero length.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
@@ -182,7 +182,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Arf.disp"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.arf.Arf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display a summary of the ARF object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Display a summary of the ARF object.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ARF effective area:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;LowEnergy array:   </span><span class="si">{0}</span><span class="s2">  Low Energy of bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">LowEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;HighEnergy array:  </span><span class="si">{0}</span><span class="s2">  High Energy of bin&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">HighEnergy</span><span class="o">.</span><span class="n">size</span><span class="p">))</span>

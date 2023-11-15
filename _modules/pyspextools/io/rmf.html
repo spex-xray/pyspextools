@@ -1,7 +1,7 @@
 
 <!DOCTYPE html>
 
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -40,7 +40,7 @@
 
 
 <div class="viewcode-block" id="RmfEbounds"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfEbounds">[docs]</a><span class="k">class</span> <span class="nc">RmfEbounds</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to read the EBOUNDS extension from an RMF or RSP file.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read the EBOUNDS extension from an RMF or RSP file.</span>
 
 <span class="sd">    :ivar FirstChannel: First channel number.</span>
 <span class="sd">    :vartype FirstChannel: int</span>
@@ -82,7 +82,7 @@
 
 
 <div class="viewcode-block" id="RmfMatrix"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfMatrix">[docs]</a><span class="k">class</span> <span class="nc">RmfMatrix</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to read a MATRIX extension from an OGIP RMF or RSP file.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read a MATRIX extension from an OGIP RMF or RSP file.</span>
 
 <span class="sd">    :ivar NumberGroups: Number of response groups.</span>
 <span class="sd">    :vartype NumberGroups: numpy.ndarray</span>
@@ -228,7 +228,7 @@
 
 
 <div class="viewcode-block" id="Rmf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf">[docs]</a><span class="k">class</span> <span class="nc">Rmf</span><span class="p">:</span>
-    <span class="sd">&quot;&quot;&quot;Class to read OGIP RMF files. The response is given in two parts: an EBOUNDS extension, containing</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read OGIP RMF files. The response is given in two parts: an EBOUNDS extension, containing</span>
 <span class="sd">    the energy boundries of the instrument channels, and one or more MATRIX extensions, which contain components</span>
 <span class="sd">    of the response matrix.</span>
 
@@ -249,7 +249,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">MatrixExt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
 <div class="viewcode-block" id="Rmf.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
 <span class="sd">        Keith Arnaud.</span>
 
 <span class="sd">        :param rmffile: RMF file name to read.</span>
@@ -282,7 +282,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Rmf.write"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filterkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Method to write an OGIP format RMF file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to write an OGIP format RMF file.</span>
 
 <span class="sd">        :param rmffile: RMF file name to write.</span>
 <span class="sd">        :type rmffile: str</span>
@@ -436,7 +436,7 @@
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Rmf.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check the RMF for internal consistency.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check the RMF for internal consistency.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ebounds</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of Channels in response is zero.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
@@ -459,10 +459,17 @@
                 <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Matrix size does not correspond to index arrays. Response inconsistent.&quot;</span><span class="p">)</span>
                 <span class="k">return</span> <span class="mi">1</span>
 
+            <span class="c1"># Check for energy bins with zero width</span>
+            <span class="n">wzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">wzero</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wzero</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+                    <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;Energy bin with zero width found in row </span><span class="si">{0}</span><span class="s2">!&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+                    <span class="k">return</span> <span class="mi">2</span>
+
         <span class="k">return</span> <span class="mi">0</span></div>
 
 <div class="viewcode-block" id="Rmf.disp"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Display a summary of the RMF object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Display a summary of the RMF object.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMF Response matrix:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Channel energy bounds:&quot;</span><span class="p">)</span>
@@ -497,7 +504,7 @@
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="Rmf.check_compatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arf</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;Check whether the input arf object is really an ARF object with data and consistent with this RMF file.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether the input arf object is really an ARF object with data and consistent with this RMF file.</span>
 
 <span class="sd">        :param arf: Input arf object to check.</span>
 <span class="sd">        :type arf: pyspextools.io.Arf</span>
@@ -526,7 +533,21 @@
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Last high-energy boundaries of arrays are not the same.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span>
 
-        <span class="k">return</span> <span class="mi">0</span></div></div>
+        <span class="k">return</span> <span class="mi">0</span></div>
+
+<div class="viewcode-block" id="Rmf.fix_energy_grid"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.fix_energy_grid">[docs]</a>    <span class="k">def</span> <span class="nf">fix_energy_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;In some exceptional cases, like with ROSAT response matrices, the matrix contains</span>
+<span class="sd">        energy bins with zero width, which is not physical. This method changes them to a small</span>
+<span class="sd">        finite width to allow them to be processed with ogip2spex and trafo.&quot;&quot;&quot;</span>
+
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NumberMatrixExt</span><span class="p">):</span>
+            <span class="n">wzero</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+            <span class="k">if</span> <span class="n">wzero</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wzero</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="mf">1.0E-6</span>
+                    <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0E-6</span></div></div>
 </pre></div>
 
           </div>

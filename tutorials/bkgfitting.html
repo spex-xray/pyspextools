@@ -1,0 +1,172 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>How to create SPEX files for background fitting &#8212; pyspextools 0.5.0 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="User model example" href="myusermodel.html" />
+    <link rel="prev" title="Managing datasets in pyspextools" href="datasets.html" />
+   
+  <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+
+  </head><body>
+  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          
+
+          <div class="body" role="main">
+            
+  <section id="how-to-create-spex-files-for-background-fitting">
+<span id="bkgfitting"></span><h1>How to create SPEX files for background fitting<a class="headerlink" href="#how-to-create-spex-files-for-background-fitting" title="Permalink to this headline">¶</a></h1>
+<p>In this example, we are using pyspextools to build a .spo and .res file suitable for
+fitting instrumental and particle background simultaneously with fitting the source
+spectrum. We do this by reading in the source spectrum twice. During the first read,
+we read in both the RMF and ARF file. This is to model the photons from the sky.
+During the second read, we just read in the source spectrum and RMF. This way,
+the effective area of the mirror is not applied, so only the redistribution
+function is used.</p>
+<dl class="simple">
+<dt>The files used in this example are:</dt><dd><ul class="simple">
+<li><p>M1_1.pi : The source spectrum from XMM-Newton MOS1.</p></li>
+<li><p>M1_1.rmf : The response matrix from XMM-Newton MOS1.</p></li>
+<li><p>M1_1.arf : The effective area from XMM-Newton MOS1.</p></li>
+</ul>
+</dd>
+</dl>
+<p>First import the pyspextools classes <a class="reference internal" href="../reference/ogip.html#ogipregion-class"><span class="std std-ref">The OGIPRegion class description</span></a> and <a class="reference internal" href="../reference/io.html#dataset-class"><span class="std std-ref">Reading/writing datasets</span></a>
+needed for this example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pyspextools.io.ogip</span> <span class="kn">import</span> <span class="n">OGIPRegion</span>
+<span class="kn">from</span> <span class="nn">pyspextools.io.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+</pre></div>
+</div>
+<p>Reading the spectrum the first time (for source modeling). The <code class="docutils literal notranslate"><span class="pre">read_region</span></code>
+function automatically converts the region to SPEX format in the background:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m1_source</span> <span class="o">=</span> <span class="n">OGIPRegion</span><span class="p">()</span>
+<span class="n">m1_source</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span><span class="s2">&quot;M1_1.pi&quot;</span><span class="p">,</span> <span class="s2">&quot;M1_1.rmf&quot;</span><span class="p">,</span> <span class="n">arffile</span><span class="o">=</span><span class="s2">&quot;M1_1.arf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Reading the spectrum for the second time (for instrumental and particle background modeling):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">m1_back</span> <span class="o">=</span> <span class="n">OGIPRegion</span><span class="p">()</span>
+<span class="n">m1_back</span><span class="o">.</span><span class="n">read_region</span><span class="p">(</span><span class="s2">&quot;M1_1.pi&quot;</span><span class="p">,</span> <span class="s2">&quot;M1_1.rmf&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Now we have two region objects. The first one for the source and the second one for the background.
+To model the background separately and add the background model to the source model when fitting,
+we need to set up two sectors (model sets). The first sector will contain the model components for the
+X-ray photons from the sky and the second sector the background models. The models themselves will
+be defined later in SPEX. But, we need to configure the response file such that the spectrum from
+sector 2 is folded with the RMF only and then applied to the spectrum in region 1. We can set this
+when combining our regions into a SPEX dataset:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spex_data</span> <span class="o">=</span> <span class="n">Dataset</span><span class="p">()</span>
+<span class="n">spex_data</span><span class="o">.</span><span class="n">append_region</span><span class="p">(</span><span class="n">m1_source</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+<span class="n">spex_data</span><span class="o">.</span><span class="n">append_region</span><span class="p">(</span><span class="n">m1_back</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The second and third arguments of <code class="docutils literal notranslate"><span class="pre">append_region</span></code> contain the sector number and region number respectively.
+Once we have appended the regions to the SPEX dataset, we can write it to file:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">spex_data</span><span class="o">.</span><span class="n">write_all_regions</span><span class="p">(</span><span class="s2">&quot;M1_example.spo&quot;</span><span class="p">,</span> <span class="s2">&quot;M1_example.res&quot;</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>You should now have a .spo and .res file that is ready for particle background fitting.</p>
+</section>
+
+
+          </div>
+          
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<p class="logo">
+  <a href="../index.html">
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    
+  </a>
+</p>
+
+
+
+
+
+
+
+
+<h3>Navigation</h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-scripts">Using the pyspextools scripts</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../tutorials.html#using-the-pyspextools-api">Using the pyspextools API</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../tutorials.html#using-the-spex-user-model">Using the SPEX user model</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../reference.html">Module reference</a></li>
+</ul>
+
+<div class="relations">
+<h3>Related Topics</h3>
+<ul>
+  <li><a href="../index.html">Documentation overview</a><ul>
+  <li><a href="../tutorials.html">Pyspextools tutorials</a><ul>
+      <li>Previous: <a href="datasets.html" title="previous chapter">Managing datasets in pyspextools</a></li>
+      <li>Next: <a href="myusermodel.html" title="next chapter">User model example</a></li>
+  </ul></li>
+  </ul></li>
+</ul>
+</div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script>
+
+
+
+
+
+
+
+
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      
+      |
+      <a href="../_sources/tutorials/bkgfitting.rst.txt"
+          rel="nofollow">Page source</a>
+    </div>
+
+    
+
+    
+  </body>
+</html>
