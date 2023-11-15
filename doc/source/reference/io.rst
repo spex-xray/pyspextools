@@ -13,8 +13,8 @@ of the SPEX manual: http://var.sron.nl/SPEX-doc/
 
 .. _dataset_class:
 
-Reading/writing datasets
-------------------------
+Dataset class description
+-------------------------
 
 SPEX res and spo files can contain a set of spectra and responses from, for example,
 different instruments used in the same observation or spectra from different spatial 
