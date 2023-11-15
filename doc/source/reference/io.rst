@@ -10,6 +10,9 @@ of the SPEX manual: http://var.sron.nl/SPEX-doc/
 
 .. automodule:: pyspextools.io
 
+
+.. _dataset_class:
+
 Reading/writing datasets
 ------------------------
 

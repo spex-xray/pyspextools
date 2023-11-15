@@ -1,3 +1,5 @@
+.. _ogipmodule:
+
 OGIP data format support
 ========================
 
@@ -110,6 +112,7 @@ in the fits file that both model different components of the instrument response
 convert these spectra now and in the resulting SPEX format the separate MATRIX extensions are
 translated into SPEX response components.
 
+.. _ogipregion_class:
 
 The OGIPRegion class description
 --------------------------------
