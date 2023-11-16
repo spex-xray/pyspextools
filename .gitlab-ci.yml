@@ -18,7 +18,8 @@ deploy_staging:
   script:
     - echo $STAGING_USERNAME
     - echo $TWINE_USERNAME
-    - twine upload --verbose --repository-url $PYPITEST_REPOSITORY_URL dist/*
+    - cd dist/
+    - twine upload --verbose --repository-url $PYPITEST_REPOSITORY_URL pyspextools*
   only:
     - master
   except:
@@ -30,6 +31,7 @@ deploy_production:
     TWINE_USERNAME: $PRODUCTION_USERNAME
     TWINE_PASSWORD: $PRODUCTION_PASSWORD
   script:
-    - twine upload dist/*
+    - cd dist/
+    - twine upload pyspextools*
   only:
     - tags
