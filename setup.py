@@ -25,7 +25,7 @@ if os.environ.get('CI_COMMIT_TAG'):
     version = pyspextools.__version__
 else:
     if os.environ.get('CI_JOB_ID'):
-        version = pyspextools.__version__ + '_' + os.environ['CI_JOB_ID']
+        version = pyspextools.__version__ + '.post' + os.environ['CI_JOB_ID']
     else:
         version = pyspextools.__version__
 
