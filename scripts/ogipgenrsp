@@ -80,7 +80,7 @@ def main():
     rsp_out.matrix[0].NumberGroups = np.ones(rsp_out.ebounds.NumberChannels)
 
     # Set response thresholds
-    rsp_out.matrix[0].ResponseThreshold = 1.E-7
+    rsp_out.matrix[0].ResponseThreshold = 1.E-10
 
     # Determine maximum width in channels for group
     # We assume that 10 times the FWHM at 1 keV is enough
