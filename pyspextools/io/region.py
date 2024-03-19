@@ -46,6 +46,11 @@ class Region:
         self.res = Res()        # Res object
         self.label = ""         # Optional region label (will not be written to file). For example: MOS1, annulus2, etc.
 
+        # Arrays for optimal binning
+        self.response = np.array([], dtype=float)    #
+        self.nrcomp = np.array([], dtype=int)       # Number of response components
+
+
     def change_label(self, label):
         """Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.
 
@@ -83,6 +88,156 @@ class Region:
 
         for i in np.arange(self.res.region.size):
             self.res.region[i] = self.res.region[i] + amount
+
+    def fwhm(self):
+        """Determine the spectral resolution (FWHM) for each response element."""
+
+        if not self.res.init_fwhm:
+            self.res.initialize_fwhm()
+
+        self.nrcomp = np.zeros(self.res.ncomp, dtype=int)
+
+        # Loop over the response components in the res object
+        for i in np.arange(self.res.ncomp):
+            # Determine the region number for this component and find the related spectrum
+            ireg = self.res.region[i]
+            self.response = np.zeros(self.spo.nchan[ireg])
+
+            spomask = self.spo.get_mask(self.res.region[i])
+            echan1 = self.spo.echan1[spomask]
+            echan2 = self.spo.echan2[spomask]
+
+            # Loop over energies in component
+            ie1 = 0
+
+            while ie1 < self.res.neg[i]:
+                g1 = self.res.get_response_group(i, ie1)
+                if g1.nc == 0:
+                    continue
+
+                # Check if bins have the same energy and need to be combined
+                while True:
+                    ie2 = ie1 + 1
+                    g2 = self.res.get_response_group(i, ie2)
+                    if g2.nc == 0:
+                        continue
+                    if g2.eg1 > g1.eg1:
+                        break
+
+                ie2 = min(ie2 - 1, self.res.neg[i])
+
+                # Make response column for the present energy
+                ic1 = g1.ic1
+                ic2 = ic1
+                for ie in range(ie1, ie2):
+                    ge = self.res.get_response_group(i, ie)
+                    if ge.nc == 0:
+                        continue
+                    self.response[ic1:ic2] = self.response[ic1:ic2] + ge.resp
+                    ic1 = min(ic1, ge.ic1)
+                    ic2 = max(ic2, ge.ic2)
+
+                nc = ic2 - ic1 + 1
+
+                # Determine the values ec1 and ec2 at half maximum, as well as centroid ec
+
+                # Determine the nearest point to the maximum
+                imax = np.argmax(self.response)
+
+                # Interpolate the actual maximum value using quadratic fitting
+                i1 = max(imax[0]-1, 0)              # Maximum point -1, but at least 0
+                i2 = min(i1+2, nc - 1)              # Minimum point + 2, but prevent overflow
+                npol = i2 - i1 + 1
+
+                if npol <= 2:
+                    xc = float(imax[0])
+                    resp_max = self.response[imax[0]]
+                else:
+                    delta = self.response[i1] + self.response[i2] - 2.0 * self.response[i1+1]
+                    if delta >= 0:
+                        xc = float(imax[0])
+                        resp_max = self.response[imax[0]]
+                    else:
+                        xc = (self.response[i1] - self.response[i2]) / (2.0 * delta)
+                        resp_max = self.response[i1+1] - 0.5 * delta * xc**2
+                        xc = xc + float(i1 + 1)
+                        if (xc > float(i2)) or (xc < float(i1)):
+                            xc = xc = float(imax[0])
+                            resp_max = self.response[imax[0]]
+
+                # Shortcut for zero effective area cases
+                if resp_max <= 0.0:
+                    ec = echan1[imax[0]]
+                    ec1 = ec
+                    ec2 = ec
+                    return
+
+                # Next determine half maximum
+                half_max = resp_max / 2.0
+                ic = np.rint(xc)
+                i1 = ic
+                while i1 > 0:
+                    if self.response[i1] < half_max:
+                        break
+                    i1 = i1 - 1
+
+                # See if we get a good point and do linear interpolation
+
+
+                # !!! Check the counting carefully! No offsets ???
+
+
+                if self.response[i1] < half_max:
+                    x1 = float(i1) + (half_max - self.response[i1]) / (self.response[i1+1] - self.response[i1])
+                else:
+                    x1 = 1.0
+
+                i2 = ic
+                while i2 < nc:
+                    if self.response[i2] < half_max:
+                        break
+                    i2 = i2 + 1
+
+                if self.response[i2] < half_max:
+                    x2 = float(i2) + (half_max - self.response[i2]) / (self.response[i2] - self.response[i2-1])
+                else:
+                    x2 = float(nc)
+
+                # Add offsets
+                x1 = x1 + (ic1 - 1)
+                x2 = x2 + (ic1 - 1)
+                xc = xc + (ic1 - 1)
+
+                ic = np.rint(xc)
+                ec = echan1[ic] + (xc - ic + 0.5) * (echan2[ic] - echan1[ic])
+                ic = np.rint(x1)
+                ec1 = echan1[ic] + (x1 - ic + 0.5) * (echan2[ic] - echan1[ic])
+                ic = np.rint(x2)
+                ec2 = echan1[ic] + (x2 - ic + 0.5) * (echan2[ic] - echan1[ic])
+
+                for ie in range(ie1, ie2):
+                    ge = self.res.get_response_group(i, ie)
+                    fwhm = ec2 - ec1
+                    if fwhm > 0:
+                        self.res.r = self.res.r + (ge.eg2 - ge.eg1) / fwhm
+
+                # Determine the number of counts within the resolution element
+                rcount = 1
+
+                for ie in range(ie1, ie2):
+                    ge = self.res.get_response_group(i, ie)
+                    self.res.rcount[ge.i] = rcount
+
+                # End of while loop
+                ie1 = ie2 + 1
+
+            self.res.r = max(1, self.res.r)
+            return
+
+    def obin(self):
+        """Optimally bin the spectrum and the response."""
+
+
 
     def check(self, nregion=False):
         """Check whether spectrum and response are compatible

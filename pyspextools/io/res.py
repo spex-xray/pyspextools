@@ -53,8 +53,9 @@ class Res:
     :vartype nsector: int
     :ivar nregion: Number of regions.
     :vartype nregion: int
-    :ivar ncom: Number of response components
-    :vartype ncom: int
+    :ivar ncomp: Number of response components
+    :vartype ncomp: int
+    :ivar r: Total number of response elements
 
     :ivar share_comp: Are there any shared components?
     :vartype share_comp: bool
@@ -75,6 +76,13 @@ class Res:
     :vartype nc: numpy.ndarray
     :ivar relarea: Area scaling factors.
     :vartype relarea: numpy.ndarray
+
+    :ivar ec: Centroid energy of the response
+    :vartype ec: numpy.ndarray
+    :ivar ec1: Lower half-maximum of the response
+    :vartype ec1: numpy.ndarray
+    :ivar ec2: Upper half-maximum of the response
+    :vartype ec2: numpy.ndarray
 
     :ivar resp: Response values for group (m**2).
     :vartype resp: numpy.ndarray
@@ -108,6 +116,7 @@ class Res:
         self.nsector = 0
         self.nregion = 0
         self.ncomp = 0
+        self.r = 0
 
         self.share_comp = False
         self.area_scal = False
@@ -120,6 +129,17 @@ class Res:
         self.ic2 = np.array([], dtype=int)
         self.nc = np.array([], dtype=int)
         self.relarea = np.array([], dtype=float)
+
+        # Arrays used for FWHM determination
+        self.init_fwhm = False
+        self.ec = np.array([], dtype=float)
+        self.ec1 = np.array([], dtype=float)
+        self.ec2 = np.array([], dtype=float)
+        self.rcount = np.array([], dtype=float)
+        self.ewidth0 = np.array([], dtype=float)
+        self.ewidth1 = np.array([], dtype=float)
+        self.nbin = np.array([], dtype=int)
+        self.ienew = np.array([], dtype=int)
 
         # Response values (SPEX_RESP_RESP)
         self.resp = np.array([], dtype=float)
@@ -635,6 +655,52 @@ class Res:
         return 0
 
     # -----------------------------------------------------
+    # Get response group at energy ie
+    # -----------------------------------------------------
+    def get_response_group(self, icomp, ie):
+        """Get response group information for the selected component and energy."""
+        igroup = ResGroup()
+
+        # Go through the regions and find the component and energy
+        icp = 1    # Counter over components
+        igrp = 0   # Counter over groups
+        while icp < icomp:
+            igrp = igrp + self.neg[icp-1]
+            icp = icp + 1
+
+        igrp = igrp + ie
+
+        igroup.i = igrp
+        igroup.eg1 = self.eg1[igrp]
+        igroup.eg2 = self.eg2[igrp]
+        igroup.ic1 = self.ic1[igrp]
+        igroup.ic2 = self.ic2[igrp]
+        igroup.nc = self.nc[igrp]
+        igroup.ir1 = np.sum(self.nc[:igrp])
+        igroup.ir2 = igroup.ir1 + igroup.nc - 1
+        igroup.resp = self.resp[igroup.ir1:igroup.ir2+1]
+
+        return igroup
+
+    # -----------------------------------------------------
+    # Initialize FWHM arrays
+    # -----------------------------------------------------
+    def initialize_fwhm(self):
+        """Initialize the FWHM arrays in the response."""
+
+        # Total number of groups
+        ngrp = np.sum(self.neg)
+        self.ec = np.zeros(ngrp, dtype=float)
+        self.ec1 = np.zeros(ngrp, dtype=float)
+        self.ec2 = np.zeros(ngrp, dtype=float)
+        self.rcount = np.zeros(ngrp, dtype=float)
+        self.ewidth0 = np.zeros(ngrp, dtype=float)
+        self.ewidth1 = np.zeros(ngrp, dtype=float)
+        self.nbin = np.zeros(ngrp, dtype=int)
+        self.ienew = np.zeros(ngrp, dtype=int)
+        self.init_fwhm = True
+
+    # -----------------------------------------------------
     # Shift response array
     # -----------------------------------------------------
     def channel_shift(self, shift):
@@ -760,3 +826,18 @@ class Res:
         print(" Original response file name            :  {0}".format(tres.resname))
         print(" Number of data channels in response    :  {0}".format(tres.nchan[0]))
         print(" Number of response components          :  {0}".format(tres.ncomp))
+
+
+class ResGroup:
+    """Class to contain response group information."""
+
+    def __init__(self):
+        self.i = 0
+        self.eg1 = 0.0
+        self.eg2 = 0.0
+        self.ic1 = 0
+        self.ic2 = 0
+        self.nc = 0
+        self.ir1 = 0
+        self.ir2 = 0
+        self.resp = np.array([], dtype=float)
