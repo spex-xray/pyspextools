@@ -103,9 +103,9 @@ class Region:
             ireg = self.res.region[i]
             self.response = np.zeros(self.spo.nchan[ireg])
 
-            spomask = self.spo.get_mask(self.res.region[i])
-            echan1 = self.spo.echan1[spomask]
-            echan2 = self.spo.echan2[spomask]
+            self.spo.get_mask(self.res.region[i])
+            echan1 = self.spo.echan1[self.spo.mask_spectrum]
+            echan2 = self.spo.echan2[self.spo.mask_spectrum]
 
             # Loop over energies in component
             ie1 = 0
@@ -116,8 +116,9 @@ class Region:
                     continue
 
                 # Check if bins have the same energy and need to be combined
+                ie2 = ie1
                 while True:
-                    ie2 = ie1 + 1
+                    ie2 += 1
                     g2 = self.res.get_response_group(i, ie2)
                     if g2.nc == 0:
                         continue
@@ -133,7 +134,7 @@ class Region:
                     ge = self.res.get_response_group(i, ie)
                     if ge.nc == 0:
                         continue
-                    self.response[ic1:ic2] = self.response[ic1:ic2] + ge.resp
+                    self.response[ge.ic1:ge.ic2+1] = self.response[ge.ic1:ge.ic2+1] + ge.resp
                     ic1 = min(ic1, ge.ic1)
                     ic2 = max(ic2, ge.ic2)
 
@@ -142,39 +143,39 @@ class Region:
                 # Determine the values ec1 and ec2 at half maximum, as well as centroid ec
 
                 # Determine the nearest point to the maximum
-                imax = np.argmax(self.response)
+                imax = int(np.argmax(self.response))
 
                 # Interpolate the actual maximum value using quadratic fitting
-                i1 = max(imax[0]-1, 0)              # Maximum point -1, but at least 0
-                i2 = min(i1+2, nc - 1)              # Minimum point + 2, but prevent overflow
+                i1 = int(max(imax-1, 0))              # Maximum point -1, but at least 0
+                i2 = int(min(i1+2, nc - 1))           # Minimum point + 2, but prevent overflow
                 npol = i2 - i1 + 1
 
                 if npol <= 2:
-                    xc = float(imax[0])
-                    resp_max = self.response[imax[0]]
+                    xc = float(imax)
+                    resp_max = self.response[imax]
                 else:
                     delta = self.response[i1] + self.response[i2] - 2.0 * self.response[i1+1]
                     if delta >= 0:
-                        xc = float(imax[0])
-                        resp_max = self.response[imax[0]]
+                        xc = float(imax)
+                        resp_max = self.response[imax]
                     else:
                         xc = (self.response[i1] - self.response[i2]) / (2.0 * delta)
                         resp_max = self.response[i1+1] - 0.5 * delta * xc**2
                         xc = xc + float(i1 + 1)
                         if (xc > float(i2)) or (xc < float(i1)):
-                            xc = xc = float(imax[0])
+                            xc = float(imax)
                             resp_max = self.response[imax[0]]
 
                 # Shortcut for zero effective area cases
                 if resp_max <= 0.0:
-                    ec = echan1[imax[0]]
+                    ec = echan1[imax]
                     ec1 = ec
                     ec2 = ec
                     return
 
                 # Next determine half maximum
                 half_max = resp_max / 2.0
-                ic = np.rint(xc)
+                ic = int(np.rint(xc))
                 i1 = ic
                 while i1 > 0:
                     if self.response[i1] < half_max:
@@ -208,11 +209,11 @@ class Region:
                 x2 = x2 + (ic1 - 1)
                 xc = xc + (ic1 - 1)
 
-                ic = np.rint(xc)
-                ec = echan1[ic] + (xc - ic + 0.5) * (echan2[ic] - echan1[ic])
-                ic = np.rint(x1)
+                ic = int(np.rint(xc))
+                ec = echan1[ic] + (float(xc) - float(ic) + 0.5) * (echan2[ic] - echan1[ic])
+                ic = int(np.rint(x1))
                 ec1 = echan1[ic] + (x1 - ic + 0.5) * (echan2[ic] - echan1[ic])
-                ic = np.rint(x2)
+                ic = int(np.rint(x2))
                 ec2 = echan1[ic] + (x2 - ic + 0.5) * (echan2[ic] - echan1[ic])
 
                 for ie in range(ie1, ie2):
