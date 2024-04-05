@@ -92,7 +92,9 @@ class Region:
     def fwhm(self):
         """Determine the spectral resolution (FWHM) for each response element."""
 
-        if not self.res.init_fwhm:
+        if self.res.init_fwhm:
+            return
+        else:
             self.res.initialize_fwhm()
 
         self.nrcomp = np.zeros(self.res.ncomp, dtype=int)
@@ -102,10 +104,7 @@ class Region:
             # Determine the region number for this component and find the related spectrum
             ireg = self.res.region[i]
             self.response = np.zeros(self.spo.nchan[ireg])
-
-            self.spo.get_mask(self.res.region[i])
-            echan1 = self.spo.echan1[self.spo.mask_spectrum]
-            echan2 = self.spo.echan2[self.spo.mask_spectrum]
+            sporeg = self.spo.return_region(ireg)
 
             # Loop over energies in component
             ie1 = 0
@@ -142,6 +141,8 @@ class Region:
 
                 # Determine the values ec1 and ec2 at half maximum, as well as centroid ec
 
+                # Start fwhm_resp
+
                 # Determine the nearest point to the maximum
                 imax = int(np.argmax(self.response))
 
@@ -164,11 +165,11 @@ class Region:
                         xc = xc + float(i1 + 1)
                         if (xc > float(i2)) or (xc < float(i1)):
                             xc = float(imax)
-                            resp_max = self.response[imax[0]]
+                            resp_max = self.response[imax]
 
                 # Shortcut for zero effective area cases
                 if resp_max <= 0.0:
-                    ec = echan1[imax]
+                    ec = sporeg.echan1[imax]
                     ec1 = ec
                     ec2 = ec
                     return
@@ -210,11 +211,13 @@ class Region:
                 xc = xc + (ic1 - 1)
 
                 ic = int(np.rint(xc))
-                ec = echan1[ic] + (float(xc) - float(ic) + 0.5) * (echan2[ic] - echan1[ic])
+                ec = sporeg.echan1[ic] + (float(xc) - float(ic) + 0.5) * (sporeg.echan2[ic] - sporeg.echan1[ic])
                 ic = int(np.rint(x1))
-                ec1 = echan1[ic] + (x1 - ic + 0.5) * (echan2[ic] - echan1[ic])
+                ec1 = sporeg.echan1[ic] + (x1 - ic + 0.5) * (sporeg.echan2[ic] - sporeg.echan1[ic])
                 ic = int(np.rint(x2))
-                ec2 = echan1[ic] + (x2 - ic + 0.5) * (echan2[ic] - echan1[ic])
+                ec2 = sporeg.echan1[ic] + (x2 - ic + 0.5) * (sporeg.echan2[ic] - sporeg.echan1[ic])
+
+                # End fwhm_resp
 
                 for ie in range(ie1, ie2):
                     ge = self.res.get_response_group(i, ie)
@@ -222,8 +225,81 @@ class Region:
                     if fwhm > 0:
                         self.res.r = self.res.r + (ge.eg2 - ge.eg1) / fwhm
 
+                #
                 # Determine the number of counts within the resolution element
-                rcount = 1
+                #
+
+                # Begin of fwhm_n
+
+                # Determine array cumobs: cumulative number of counts up to and including the current data channel
+                # Determine array cumres: cumulative response up to and including the current data channel
+                # Determine array echan: Channel boundaries
+
+                n = sporeg.nchan + 1
+
+                echan = np.zeros(n, dtype=float)
+                cumobs = np.zeros(n, dtype=float)
+                cumres = np.zeros(n, dtype=float)
+
+                echan[:n-2] = sporeg.echan1
+                echan[n-1] = sporeg.echan2[n-1]
+
+                cum = 0.0
+                res = 0.0
+
+                iresp = self.response[ic1:ic2]
+
+                j = 1 - ic1
+                for k in np.arange(sporeg.nchan):
+                    cumobs[k] = cum
+                    cum = cum + sporeg.tints[k] * sporeg.ochan[k]
+                    j = j + 1
+                    if (j > 0) and (j <= nc):
+                        cumres[k] = res
+                        res = res + iresp[j]
+
+                cumobs[n] = cum
+                cumres[n] = res
+                if res > 0.0:
+                    cumres = cumres / res
+
+                # Interpolate both for ec1 and ec2
+                for k in np.arange(2):
+                    if k == 0:
+                        ec = ec1
+                    else:
+                        ec = ec2
+
+                    ilk = np.searchsorted(echan, ec)
+                    if ilk == 0.0:
+                        cum = 0.0
+                        rsc = 0.0
+                    elif ilk == n:
+                        cum = cumobs[n]
+                        rsc = cumres[n]
+                    else:
+                        cum = np.interp(ec, echan, cumobs)
+                        rsc = np.interp(ec, echan, cumres)
+
+                    if k == 0:
+                        cum1 = cum
+                        res1 = rsc
+                    else:
+                        cum2 = cum
+                        res2 = rsc
+
+                rcount = max(0.0, cum2-cum1)    # Make sure rcount is non-negative
+                r = max(0.0, res2-res1)         # Make sure r is non-negative
+
+                if r > 0.0:
+                    rcount = rcount / r    # Correct for finite number of counts within FWHM
+
+                if res == 0.0:
+                    rcount = 0.0           # solution for pathological cases where response is 0
+
+                rcount = max(rcount, 1.0)  # Make rcount at least 1 to prevent crashes
+
+                # End of fwhm_n
 
                 for ie in range(ie1, ie2):
                     ge = self.res.get_response_group(i, ie)
@@ -237,6 +313,11 @@ class Region:
 
     def obin(self):
         """Optimally bin the spectrum and the response."""
+
+        # First phase: determine effective resolution for data and model
+        self.fwhm()
+
+
 
 
 

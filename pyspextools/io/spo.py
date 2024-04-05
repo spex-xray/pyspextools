@@ -347,6 +347,37 @@ class Spo:
         return sporeg
 
     # -----------------------------------------------------
+    # Function to return a copy of the spo object
+    # -----------------------------------------------------
+
+    def copy(self):
+        """Function to return a copy of a spo object.
+        """
+        sporeg = Spo()
+
+        sporeg.nchan = self.nchan
+
+        sporeg.echan1 = self.echan1
+        sporeg.echan2 = self.echan2
+        sporeg.tints = self.tints
+        sporeg.ochan = self.ochan
+        sporeg.dochan = self.dochan
+        sporeg.mbchan = self.mbchan
+        sporeg.dbchan = self.dbchan
+        sporeg.brat = self.brat
+        sporeg.ssys = self.ssys
+        sporeg.bsys = self.bsys
+        sporeg.used = self.used
+        sporeg.first = self.first
+        sporeg.last = self.last
+
+        sporeg.sponame = self.sponame
+        sporeg.empty = False
+        sporeg.check()
+
+        return sporeg
+
+    # -----------------------------------------------------
     # Function to write all spectra to a .spo file
     # -----------------------------------------------------
 
@@ -566,6 +597,71 @@ class Spo:
         self.mask_spectrum[frow:lrow] = True
 
         return 0
+
+    # -----------------------------------------------------
+    # Rebin the spectrum according to the first, last and used arrays
+    # -----------------------------------------------------
+
+    def rebin(self, iregion):
+        """Rebin the spectrum according to the first, last and used arrays.
+
+        :param iregion: Region number to rebin.
+        :type iregion: int
+        """
+        if (iregion >= self.nregion) and (iregion < 1):
+            print("Error: Requested region not available.")
+            return -1
+
+        # Copy the current SPO and empty self
+        cspo = self.copy()
+        self.__init__()
+
+        for ireg in range(1, self.nregion):
+            ispo = cspo.return_region(ireg)
+
+            if ireg != iregion:
+                self.add_spo_region(ispo)
+                continue
+
+            # If this is the selected region, then begin rebin
+
+            # These are the new number of bins
+            nbins = np.logical_and(ispo.first, ispo.used).sum()
+
+            sporeg = Spo()
+            sporeg.nregion = 1
+            sporeg.nchan = np.array([nbins])
+            sporeg.zero_spo(nbins)
+
+            # Create new rebinning algorithm based on first, last and used
+
+            used = np.where(ispo.used)
+
+            first = np.where(np.logical_and(ispo.first, ispo.used))
+            last = np.where(np.logical_and(ispo.last, ispo.used))
+
+            sporeg.echan1 = ispo.echan1[first]
+            sporeg.echan2 = ispo.echan2[last]
+
+            i = 0
+
+            for f, l in zip(first, last):
+                sporeg.tints[i] = np.average(ispo.tints[f:l+1])
+                sporeg.ochan[i] = np.sum(ispo.ochan[f:l+1] * ispo.tints[f:l+1]) / sporeg.tints[i]
+                sporeg.dochan[i] = np.sqrt(np.sum(ispo.dochan[f:l+1]**2 * ispo.tints[f:l+1]**2)) / sporeg.tints[i]
+                sporeg.mbchan[i] = np.sum(ispo.mbchan[f:l+1] * ispo.tints[f:l+1]) / sporeg.tints[i]
+                sporeg.dbchan[i] = np.sqrt(np.sum(ispo.dbchan[f:l+1]**2 * ispo.tints[f:l+1]**2)) / sporeg.tints[i]
+                sporeg.ssys[i] = np.average(ispo.ssys[f:l+1])
+                sporeg.bsys[i] = np.average(ispo.bsys[f:l+1])
+                i = i + 1
+
+            sporeg.first = np.ones(nbins, dtype=bool)
+            sporeg.last = np.ones(nbins, dtype=bool)
+            sporeg.used = np.ones(nbins, dtype=bool)
+
+            self.add_spo_region(sporeg)
+
+        return
 
     # -----------------------------------------------------
     # Show a summary of the spo file, similar to data show in SPEX
