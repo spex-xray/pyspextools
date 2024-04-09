@@ -308,18 +308,182 @@ class Region:
                 # End of while loop
                 ie1 = ie2 + 1
 
-            self.res.r = max(1, self.res.r)
-            return
+        self.res.r = max(1, self.res.r)
 
+        return
+
+    # -----------------------------------------------------
+    # Optimally bin the spectrum and response
+    # -----------------------------------------------------
     def obin(self):
         """Optimally bin the spectrum and the response."""
 
         # First phase: determine effective resolution for data and model
         self.fwhm()
+        huge = 1.0E+32
+
+        # Copy the current SPO and empty self
+        cspo = self.spo.copy()
+        self.spo.__init__()
+
+        for i in np.arange(cspo.nregion):
+            # Determine the region number for this component and find the related spectrum
+            ireg = self.res.region[i]
+            isect = self.res.sector[i]
+            sporeg = cspo.return_region(ireg)
+            resreg = self.res.return_region(isect, ireg)
+
+            cwidth = huge * np.ones(sporeg.nchan, dtype=float)
+            nbin = np.zeros(sporeg.nchan, dtype=int)
+
+            # Determine the maximum number of energy bins per component and allocate scratch arrays
+            negmax = 0
+            ign = np.zeros(resreg.ncomp, dtype=int)
+            for icomp in np.arange(resreg.ncomp):
+                negmax = max(negmax, resreg.neg[icomp])
+            ig1 = np.zeros((negmax, resreg.ncomp), dtype=int)
+            ig2 = np.zeros((negmax, resreg.ncomp), dtype=int)
+            negnew = np.zeros(resreg.ncomp, dtype=int)
+
+            # Loop over components
+            for icomp in np.arange(resreg.ncomp):
+                resreg.ewidth0 = huge * np.ones(resreg.neg[icomp], dtype=float)
+                resreg.ewidth1 = huge * np.ones(resreg.neg[icomp], dtype=float)
+                used = np.zeros(sporeg.nchan, dtype=bool)
+
+                # Update the 'used' array
+                for iie in np.arange(resreg.neg[icomp]):
+                    if resreg.nc == 0:
+                        continue
+                    used[resreg.ic1[iie] - 1:resreg.ic1[iie] + resreg.nc[iie] - 2] = True
+
+                ec = np.zeros(resreg.neg, dtype=float)
+                dfwhm = np.zeros(resreg.neg, dtype=float)
+                dfwhm0 = np.zeros(resreg.neg, dtype=float)
+                dfwhm1 = np.zeros(resreg.neg, dtype=float)
+                ie1 = 1
+                iex = 0
+                ie = 0
+                while ie1 <= resreg.neg:
+                    if resreg.nc[ie1] == 0:
+                        continue
+                    # Check if more bins have the same energy and should be combined
+                    for iie2 in range(ie1 + 1, resreg.neg):
+                        if resreg.nc[iie2] == 0:
+                            continue
+                        if resreg.eg1[iie2] > resreg.eg1[ie1]:
+                            break
+                        iex = iie2
+
+                    ie2 = min(iex - 1, resreg.neg)
+
+                    # Determine the optimal bin size
+                    ie = ie + 1
+                    ig1[ie][icomp] = ie1
+                    ig2[ie][icomp] = ie2
+                    ec[ie] = resreg.ec[ie1]
+                    fwhm = resreg.ec2[ie1] - resreg.ec1[ie1]
+                    x = np.log(resreg.rcount[ie1] * (1.0 + 0.2 * np.log(resreg.r)))
+                    if x <= 2.119:
+                        dfwhm[ie] = fwhm
+                    else:
+                        dfwhm[ie] = fwhm * ((1.8 / x + 7.0) / x + 0.08) / (1.0 + 5.9 / x)
+
+                # Determine optimal model binning for approximations of order 0,1 (Kaastra & Bleeker eq. 17-23)
+                x0 = np.log(resreg.rcount * (1.0 + 0.3 * np.log(self.res.r)))
+                x1 = np.log(resreg.rcount * (1.0 + 0.1 * np.log(self.res.r)))
+                y0 = 0.5707 * (1.0 + 1.0 / x0) / np.sqrt(x0)
+                y1 = 1.404 * (1.0 + 18.0 / x1) / x1 ** 0.25
+                dfwhm0[ie] = fwhm * min(1.0, y0)
+                dfwhm1[ie] = fwhm * min(1.0, y1)
+
+                ie1 = ie2 + 1
+
+                # Sort the arrays ec and fwhm
+                idx = np.argsort(ec)
+                ec = ec[idx]
+                dfwhm = dfwhm[idx]
+                dfwhm0 = dfwhm0[idx]
+                dfwhm1 = dfwhm1[idx]
+
+                # Determine width array data
+                for ic in np.arange(sporeg.nchan):
+                    if not used[ic]:
+                        continue
+                    echan = 0.5 * (sporeg.echan1[ic] + sporeg.echan2[ic])
+                    width = np.interp(echan, ec, dfwhm)
+                    cwidth[ic] = min(cwidth[ic], width)
+
+                # Determine width array model
+                width0 = np.interp(resreg.eg, ec, dfwhm0)
+                width1 = np.interp(resreg.eg, ec, dfwhm1)
+
+                # Update full array ewidth
+                resreg.ewidth0 = min(resreg.ewidth0, width0)
+                resreg.ewidth1 = min(resreg.ewidth1, width1)
+
+                # Now this needs to be saved to the original res file
+                self.res.get_mask(isect, ireg)
+                self.res.ewidth0[self.res.mask_icomp] = resreg.ewidth0
+                self.res.ewidth1[self.res.mask_icomp] = resreg.ewidth1
+
+            # Second phase: rebin the data
+            for ic in np.arange(sporeg.nchan):
+                if cwidth == huge:
+                    nbin[ic] = 1
+                else:
+                    nbin[ic] = np.rint(cwidth[ic] / (sporeg.echan2[ic] - sporeg.echan1[ic]))
+                    nbin[ic] = max(nbin[ic], 1)
+
+            # Start the actual rebinning
+            icnew = np.zeros(sporeg.nchan, dtype=int)
+            ic = 0
+            for j in np.arange(sporeg.nchan):
+                if not sporeg.used[j]:
+                    continue
+                ic = ic + 1
+                icnew[j] = ic
+
+            ia = 1
+            j = 0
+            while ia <= sporeg.nchan:
+                i1 = j
+                i2 = j + nbin[j] - 1
+                i2 = min(i2, sporeg.nchan)
+                ia = int(huge)
+                for k in range(i1, i2):
+                    ia = min(ia, k + nbin[k])
+                i2 = min(ia - 1, sporeg.nchan)
+                sporeg.first[i1:i2] = False
+                sporeg.last[i1:i2] = False
+
+                for m in range(i1, i2):
+                    if sporeg.used[m]:
+                        sporeg.first[m] = True
+                        break
+
+                for m in range(i2, i1, -1):
+                    if sporeg.used[m]:
+                        sporeg.last[m] = True
+                        break
+
+                ic = ic + 1
+
+                for m in range(i1, i2):
+                    if not sporeg.used[m]:
+                        icnew[m] = ic
+
+                j = ia
+
+            sporeg.rebin(ireg)
+            self.spo.add_spo_region(sporeg, iregion=ireg)
+
+        # Phase 3: Rebin the response matrix
+
+        
 
 
-
-
+        return
 
     def check(self, nregion=False):
         """Check whether spectrum and response are compatible
