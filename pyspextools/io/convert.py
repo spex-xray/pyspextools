@@ -270,7 +270,10 @@ def rmf_to_res(rmf, matext=0, arf=None):
             res.ic2[g] = ic2
 
             if input_area:
-                area = arf.EffArea[i]
+                # Interpolate the effective area in case the response energy bins do not match the arf bins
+                # Center energy of response bin
+                renergy = (res.eg1[g] + res.eg2[g]) / 2.0
+                area = np.interp(renergy, arf.CentEnergy, arf.EffArea)
             else:
                 area = 1.0
 

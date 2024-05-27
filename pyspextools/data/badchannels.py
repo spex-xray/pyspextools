@@ -160,10 +160,15 @@ def __get_bad_channel_masks(reg):
         return -1
 
     ir = 0
+
     # Loop over groups to find zero response elements and finalize channel mask
     for ie in np.arange(reg.res.eg1.size):
         ic1 = reg.res.ic1[ie]  # Original first channel of group
         ic2 = reg.res.ic2[ie]  # Original last channel of group
+        grsum = np.sum(reg.res.resp[ir:ir+reg.res.nc[ie]+1])
+        if grsum <= 0.0:
+            groupmask[ie] = False
+
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j - 1  # -1 because Python array starts at 0, not 1
             if ic > ic2 - 1:
@@ -189,7 +194,7 @@ def __get_bad_channel_masks(reg):
 
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j - 1
-            if chanmask[ic]:  # If channel is good
+            if chanmask[ic] and groupmask[ie]:  # If channel is good and group is good
                 newnc = newnc + 1  # Count number of good channels in group
                 if first:  # If this is the first good bin of the group, set ic1
                     first = False

@@ -31,6 +31,7 @@ class Arf:
 
         self.LowEnergy = np.array([], dtype=float)      # Low Energy of bin
         self.HighEnergy = np.array([], dtype=float)     # High Energy of bin
+        self.CentEnergy = np.array([], dtype=float)     # Center Energy of bin
         self.EffArea = np.array([], dtype=float)        # Effective Area of bin
 
         self.EnergyUnits = 'keV'                        # Energy units
@@ -49,6 +50,7 @@ class Arf:
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
+        self.CentEnergy = (self.LowEnergy + self.HighEnergy) / 2.0
         self.EffArea = data['SPECRESP']
 
         self.EnergyUnits = header['TUNIT1']
