@@ -87,7 +87,7 @@ def print_header(scriptname):
     print("==================================")
     print(" This is {:s} version {:s}".format(scriptname, pyspextools.__version__))
     print("==================================")
-    print("(C) 2018-2023 Jelle de Plaa")
+    print("(C) 2018-2024 Jelle de Plaa")
     print("SRON Netherlands Institute for Space Research")
     print("Github: https://github.com/spex-xray/pyspextools")
     print("")
