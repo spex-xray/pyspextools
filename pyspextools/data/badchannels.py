@@ -165,9 +165,10 @@ def __get_bad_channel_masks(reg):
     for ie in np.arange(reg.res.eg1.size):
         ic1 = reg.res.ic1[ie]  # Original first channel of group
         ic2 = reg.res.ic2[ie]  # Original last channel of group
-        grsum = np.sum(reg.res.resp[ir:ir+reg.res.nc[ie]+1])
-        if grsum <= 0.0:
-            groupmask[ie] = False
+        # Masking entire group if response is zero
+        #grsum = np.sum(reg.res.resp[ir:ir+reg.res.nc[ie]+1])
+        #if grsum <= 0.0:
+        #    groupmask[ie] = False
 
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j - 1  # -1 because Python array starts at 0, not 1
