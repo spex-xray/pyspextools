@@ -59,25 +59,19 @@ Pyspextools can also be installed with pip using the Github git link to get the 
     (spex) linux:~> pip install git+https://github.com/spex-xray/pyspextools.git
 
 
-Install using setup.py
-~~~~~~~~~~~~~~~~~~~~~~
+Install using python build
+~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Download the pyspextools source code from Github and, if necessary, extract it in a convenient directory.
 
 Before you continue, please think about where you want to install pyspextools. If you have a
 dedicated conda environment, conda will take care of this. Otherwise, you need to specify a
-suitable directory to install pyspextools in.
+suitable environment to install pyspextools in.
 
-Within a conda environment, install pyspextools as follows::
+Within an environment, install pyspextools as follows::
 
-  (spex) linux:~/pyspextools> python setup.py install
+  (spex) linux:~/pyspextools> python -m build && pip install dist/pyspextools-0.7.0.tar.gz
 
-If you do not have conda, install it in a local python module directory::
-
-  linux:~/pyspextools> python setup.py install --prefix=$HOME/python
-
-In that case, make sure that the '$HOME/python/lib/pythonx.x/site-packages' directory
-is mentioned in the PYTHONPATH environment variable.
 
 Dependency issues
 -----------------
