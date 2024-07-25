@@ -4,11 +4,12 @@ stages:
   - deploy
 
 before_script:
+   - pip install build
    - pip install twine
    - pip install numpy
    - pip install astropy
    - pip install sphinx sphinx-argparse
-   - python setup.py sdist
+   - python -m build --sdist --wheel
 
 deploy_staging:
   stage: deploy
