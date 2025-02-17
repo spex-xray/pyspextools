@@ -14,23 +14,20 @@ def clean_region(reg):
     """
 
     if not isinstance(reg, Region):
-        message.error("The input object is not of type Region.")
-        return -1
+        raise ValueError("The input object is not of type Region.")
 
     if reg.spo.empty:
-        message.error("The input spo object is empty.")
-        return -1
+        raise ValueError("The input spo object is empty.")
 
     if reg.res.empty:
-        message.error("The input spo object is empty.")
-        return -1
+        raise ValueError("The input res object is empty.")
 
     message.proc_start("Identify bad channels in spectrum and response matrix and re-index matrix")
 
     (chanmask, groupmask, respmask) = __get_bad_channel_masks(reg)
 
     if not isinstance(chanmask, np.ndarray):
-        return -1
+        raise ValueError("Generated mask is invalid.")
 
     message.proc_end(0)
 
@@ -42,13 +39,12 @@ def clean_region(reg):
     print("Number of bad channels:  {0}".format(badchan))
 
     if goodchan == 0:
-        message.error("All channels appear to be bad. Please check your input files.")
-        return -1
+        raise ValueError("All channels appear to be bad. Please check your input files.")
 
     message.proc_start("Removing bad channels from spectral region")
 
     # Fix binning issues first. Make sure bin ends before bad channel and starts after bad channel.
-    for i in np.arange(reg.spo.nchan):
+    for i in np.arange(reg.spo.nchan[0]):
         if not chanmask[i]:
             if i != 0:
                 reg.spo.last[i-1] = True
@@ -138,32 +134,34 @@ def __get_bad_channel_masks(reg):
     chanmask = np.zeros(reg.spo.used.size, dtype=bool)
 
     if reg.spo.nchan != reg.spo.used.size:
-        message.error("Mismatch in number of channels in spo object.")
-        return -1
+        raise ValueError("Mismatch in number of channels in spo object.")
 
     if chanmask.size != reg.res.nchan[0]:
-        message.error("Mismatch in number of channels between res and spo object.")
-        return -1
+        raise ValueError("Mismatch in number of channels between res and spo object.")
 
     # Create a mask array for the number of groups (all true)
     groupmask = np.ones(reg.res.nc.size, dtype=bool)
 
     if groupmask.size != np.sum(reg.res.neg):
-        message.error("Mismatch between the number of groups in the ICOMP and GROUP extensions.")
-        return -1
+        raise ValueError("Mismatch between the number of groups in the ICOMP and GROUP extensions.")
 
     # Create a mask array for the number of response elements (all true)
     respmask = np.ones(reg.res.resp.size, dtype=bool)
 
     if respmask.size != np.sum(reg.res.nc):
-        message.error("Mismatch between the number of response elements in the GROUP and RESP extensions.")
-        return -1
+        raise ValueError("Mismatch between the number of response elements in the GROUP and RESP extensions.")
 
     ir = 0
+
     # Loop over groups to find zero response elements and finalize channel mask
     for ie in np.arange(reg.res.eg1.size):
         ic1 = reg.res.ic1[ie]  # Original first channel of group
         ic2 = reg.res.ic2[ie]  # Original last channel of group
+        # Masking entire group if response is zero
+        #grsum = np.sum(reg.res.resp[ir:ir+reg.res.nc[ie]+1])
+        #if grsum <= 0.0:
+        #    groupmask[ie] = False
+
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j - 1  # -1 because Python array starts at 0, not 1
             if ic > ic2 - 1:
@@ -189,7 +187,7 @@ def __get_bad_channel_masks(reg):
 
         for j in np.arange(reg.res.nc[ie]):
             ic = ic1 + j - 1
-            if chanmask[ic]:  # If channel is good
+            if chanmask[ic] and groupmask[ie]:  # If channel is good and group is good
                 newnc = newnc + 1  # Count number of good channels in group
                 if first:  # If this is the first good bin of the group, set ic1
                     first = False

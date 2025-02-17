@@ -200,8 +200,25 @@ class Pha:
         try:
             self.PhaType = header['HDUCLAS3']
         except KeyError:
-            self.PhaType = 'COUNTS'
-            message.warning("HDUCLAS3 keyword not found. Assuming PHA type is COUNTS.")
+            message.warning("HDUCLAS3 keyword not found.")
+            # When the HDUCLAS3 keyword does not exist, try to find either a COUNTS or RATE column in the table
+            message.proc_start("Figuring out the type of PHA file")
+            ncolumns = int(header['TFIELDS'])
+            self.PhaType = None
+            for i in np.arange(ncolumns):
+                keyword = 'TTYPE{0}'.format(i+1)
+                if header[keyword] == "RATE":
+                    self.PhaType = 'RATE'
+                    print(self.PhaType)
+                    break
+                elif header[keyword] == "COUNTS":
+                    self.PhaType = 'COUNTS'
+                    print(self.PhaType)
+                    break
+
+            if self.PhaType is None:
+                message.error("The provided PHA file does not have a COUNTS or RATE column. Is this a spectrum?")
+                return 1
 
         # Read the POISERR keyword
         try:
@@ -259,8 +276,7 @@ class Pha:
         """
 
         if not isinstance(resp, Rmf):
-            message.error("Input response object is not the required Rmf object.")
-            return
+            raise AttributeError("Input response object is not the required Rmf object.")
 
         # First copy the channel information to the PHA object
         self.Channel = resp.ebounds.Channel

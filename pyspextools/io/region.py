@@ -65,9 +65,7 @@ class Region:
         :param sector: Sector number to set for this region.
         :type sector: int
         """
-
-        for i in np.arange(self.res.sector.size):
-            self.res.sector[i] = sector
+        self.res.sector = np.full_like(self.res.sector, sector)
 
     def set_region(self, region):
         """Set the region number for this region.
@@ -75,9 +73,7 @@ class Region:
         :param region: Region number to set for this region.
         :type region: int
         """
-
-        for i in np.arange(self.res.region.size):
-            self.res.region[i] = region
+        self.res.region = np.full_like(self.res.region, region)
 
     def increase_region(self, amount):
         """Increase the region numbers by an integer amount.
@@ -85,9 +81,7 @@ class Region:
         :param amount: Integer amount to add to region numbers.
         :type amount: int
         """
-
-        for i in np.arange(self.res.region.size):
-            self.res.region[i] = self.res.region[i] + amount
+        self.res.region += amount
 
     def fwhm(self):
         """Determine the spectral resolution (FWHM) for each response element."""
@@ -493,7 +487,7 @@ class Region:
         :type nregion: bool
         """
 
-        if self.res.nchan[0] != self.spo.nchan[0]:
+        if not np.array_equal(self.res.nchan, self.spo.nchan):
             message.error("Number of channels in spectrum is not equal to number of channels in response.")
             return -1
 

@@ -37,3 +37,10 @@ Version 0.6.0:
    types of statistics are used and Poisson is desired.
  - Added code to fix bins with zero width in ROSAT response matrices.
  - Added tutorial about how to create .spo and .res files with more complicated sectors and regions.
+
+Version 0.6.1:
+ - Fixed an issue with large XRISM response matrices where the second matrix extension was not properly converted.
+
+Version 0.7.0:
+ - Move to pyproject.toml file to build and install pyspextools
+ - Determine PHA type in cases when HDUCLAS3 keyword is not defined

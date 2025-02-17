@@ -145,6 +145,7 @@ class Spo:
         :param nchan: Number of channels to create.
         :type nchan: int
         """
+        self.nchan = np.array([nchan])
         self.echan1 = np.zeros(nchan, dtype=float)
         self.echan2 = np.zeros(nchan, dtype=float)
         self.tints = np.zeros(nchan, dtype=float)
@@ -174,26 +175,25 @@ class Spo:
 
         stat = origspo.get_mask(iregion)
         if stat != 0:
-            print("Error: Cannot select region.")
-            return -1
+            raise Exception("Error: Cannot select region.")
 
         mask = origspo.mask_region
-        self.nchan = np.append(self.nchan, origspo.nchan[mask])
+        self.nchan = np.concatenate([self.nchan, origspo.nchan[mask]])
 
         mask = origspo.mask_spectrum
-        self.echan1 = np.append(self.echan1, origspo.echan1[mask])
-        self.echan2 = np.append(self.echan2, origspo.echan2[mask])
-        self.tints = np.append(self.tints, origspo.tints[mask])
-        self.ochan = np.append(self.ochan, origspo.ochan[mask])
-        self.dochan = np.append(self.dochan, origspo.dochan[mask])
-        self.mbchan = np.append(self.mbchan, origspo.mbchan[mask])
-        self.dbchan = np.append(self.dbchan, origspo.dbchan[mask])
-        self.brat = np.append(self.brat, origspo.brat[mask])
-        self.ssys = np.append(self.ssys, origspo.ssys[mask])
-        self.bsys = np.append(self.bsys, origspo.bsys[mask])
-        self.used = np.append(self.used, origspo.used[mask])
-        self.first = np.append(self.first, origspo.first[mask])
-        self.last = np.append(self.last, origspo.last[mask])
+        self.echan1 = np.concatenate([self.echan1, origspo.echan1[mask]])
+        self.echan2 = np.concatenate([self.echan2, origspo.echan2[mask]])
+        self.tints = np.concatenate([self.tints, origspo.tints[mask]])
+        self.ochan = np.concatenate([self.ochan, origspo.ochan[mask]])
+        self.dochan = np.concatenate([self.dochan, origspo.dochan[mask]])
+        self.mbchan = np.concatenate([self.mbchan, origspo.mbchan[mask]])
+        self.dbchan = np.concatenate([self.dbchan, origspo.dbchan[mask]])
+        self.brat = np.concatenate([self.brat, origspo.brat[mask]])
+        self.ssys = np.concatenate([self.ssys, origspo.ssys[mask]])
+        self.bsys = np.concatenate([self.bsys, origspo.bsys[mask]])
+        self.used = np.concatenate([self.used, origspo.used[mask]])
+        self.first = np.concatenate([self.first, origspo.first[mask]])
+        self.last = np.concatenate([self.last, origspo.last[mask]])
 
         self.empty = False
 
@@ -210,8 +210,7 @@ class Spo:
 
         stat = self.get_mask(iregion)
         if stat != 0:
-            print("Error: Cannot select region.")
-            return -1
+            raise Exception("Error: Cannot select region.")
 
         mask = np.invert(self.mask_region)
         self.nchan = self.nchan[mask]
@@ -252,9 +251,9 @@ class Spo:
 
         # Open the .spo file with astropy.io.fits and open the table and header 
         # information in the SPEX_REGIONS extension in the FITS file.
-        spofile = fits.open(self.sponame)
-        table = spofile['SPEX_REGIONS'].data
-        header = spofile['SPEX_REGIONS'].header
+        with fits.open(self.sponame) as spofile:
+            table = spofile['SPEX_REGIONS'].data
+            header = spofile['SPEX_REGIONS'].header
 
         # Read the number of regions in the .spo file 
         # (equal to the number of spectra)
@@ -267,8 +266,9 @@ class Spo:
 
         # Now, we open the SPEX_SPECTRUM extension in the .spo file 
         # which contains the actual spectra.
-        table = spofile['SPEX_SPECTRUM'].data
-        cols = spofile['SPEX_SPECTRUM'].columns
+        with fits.open(self.sponame) as spofile:
+            table = spofile['SPEX_SPECTRUM'].data
+            cols = spofile['SPEX_SPECTRUM'].columns
 
         # Copy all the table columns
         self.echan1 = table['Lower_Energy']
@@ -294,9 +294,6 @@ class Spo:
         if not self.brat_exist:
             self.brat = np.ones(self.ochan.size, dtype=float)
 
-        # Close the .spo file
-        spofile.close()
-
         self.empty = False
 
     # -----------------------------------------------------
@@ -312,13 +309,11 @@ class Spo:
         """
         stat = self.get_mask(iregion)
         if stat != 0:
-            print("Error: Cannot select region.")
-            return -1
+            raise Exception("Error: Cannot select region.")
 
         # Check if object is empty
         if self.empty:
-            print("Error: Response object empty.")
-            return -1
+            raise Exception("Error: Response object empty.")
 
         sporeg = Spo()
 
@@ -401,9 +396,8 @@ class Spo:
         good = self.check()
 
         if good == -1:
-            print("Error: Object is not internally consistent!")
             print("Check the object structure.")
-            return -1
+            raise Exception("Error: Object is not internally consistent!")
 
         # Create a primary header
         prihdr = fits.Header()
@@ -490,8 +484,7 @@ class Spo:
 
         # Check if nchan is numpy array
         if not isinstance(self.nchan, np.ndarray):
-            print("Error: NCHAN is not a numpy array.")
-            return -1
+            raise Exception("Error: NCHAN is not a numpy array.")
 
         # Check if all the columns have the right length
         total = np.sum(self.nchan)
@@ -499,39 +492,32 @@ class Spo:
         for name in self.anames.keys():
             array = getattr(self, name)
             if array.size != total:
-                print("Error: " + self.anames[name] + " array length not consistent!")
                 print("According to nchan the length should be: {0}".format(total))
                 print("The actual array length is:              {0}".format(array.size))
-                return -1
+                raise ValueError("Error: " + self.anames[name] + " array length not consistent!")
 
         # Check the arrays for consistency
         for ireg in np.arange(self.nregion):
             fchan = sum(self.nchan[0:ireg]) - self.nchan[ireg]
             for ichan in np.arange(self.nchan[ireg]) + fchan:
                 if self.echan2[ichan] <= self.echan1[ichan]:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "does not have a positive width.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "does not have a positive width.".format(ichan-fchan+1, ireg+1))
                 if self.echan1[ichan] < 0.0:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "has a negative lower limit.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "has a negative lower limit.".format(ichan-fchan+1, ireg+1))
                 if self.dochan[ichan] < 0.0:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "has a negative error.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "has a negative error.".format(ichan-fchan+1, ireg+1))
                 if self.ssys[ichan] < 0.0:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "has a negative systematic error.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "has a negative systematic error.".format(ichan-fchan+1, ireg+1))
                 if self.bsys[ichan] < 0.0:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "has a negative background systematic error.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "has a negative background systematic error.".format(ichan-fchan+1, ireg+1))
                 if self.tints[ichan] < 0.0:
-                    message.error("Bin number {0} in spectrum region {1} "
-                                  "has a negative exposure time.".format(ichan-fchan+1, ireg+1))
-                    return -1
+                    raise ValueError("Bin number {0} in spectrum region {1} "
+                                     "has a negative exposure time.".format(ichan-fchan+1, ireg+1))
 
         return 0
 
@@ -575,8 +561,7 @@ class Spo:
 
         # Check if iregion is in an allowed range
         if (iregion >= self.nregion) and (iregion < 1):
-            print("Error: Requested region not available.")
-            return -1
+            raise ValueError("Error: Requested region not available.")
 
         # Mark region in SPEX_REGION extension
         self.mask_region = np.full(len(self.nchan), False, dtype=bool)

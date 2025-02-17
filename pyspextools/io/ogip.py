@@ -2,6 +2,7 @@
 
 import pyspextools.messages as message
 import numpy as np
+from typing import Optional
 
 from .region import Region
 from .res import Res
@@ -52,8 +53,8 @@ class OGIPRegion(Region):
         self.spec = Pha()  # Input PHA source spectrum.
         self.back = Pha()  # Input PHA background spectrum (optional).
         self.resp = Rmf()  # Input RMF response matrix.
-        self.area = Arf()  # Input ARF effective area (optional).
-        self.corr = Pha()  # Input CORR correction file (optional).
+        self.area = Arf()   # Input ARF effective area (optional).
+        self.corr = Pha()   # Input CORR correction file (optional).
 
         self.input_spec = False  # Is a source spectrum read in?
         self.input_back = False  # Is a background spectrum specified?
@@ -128,7 +129,8 @@ class OGIPRegion(Region):
     # Add OGIP objects to the OGIP region and convert
     # -----------------------------------------------------
 
-    def add_region(self, spec, resp, back=None, corr=None, area=None):
+    def add_region(self, spec: Pha, resp: Rmf, back: Optional[Pha] = None, corr: Optional[Pha] = None,
+                   area: Optional[Arf] = None):
         """Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they
         need to be added to an OGIP region and converted to spo and res objects.
 
@@ -149,16 +151,14 @@ class OGIPRegion(Region):
             self.spec = spec
             self.input_spec = True
         else:
-            message.error("Input spectrum object is not of type Pha.")
-            return 1
+            raise ValueError("Input spectrum object is not of type Pha.")
 
         # Load Rmf object
         if isinstance(resp, Rmf):
             self.resp = resp
             self.input_resp = True
         else:
-            message.error("Input response object is not of type Rmf.")
-            return 1
+            raise ValueError("Input response object is not of type Rmf.")
 
         # Load background object (if available)
         if isinstance(back, Pha):
@@ -179,8 +179,7 @@ class OGIPRegion(Region):
             self.input_corr = False
         else:
             self.input_corr = False
-            message.error("Input correction object is not of type Pha.")
-            return 1
+            raise ValueError("Input correction object is not of type Pha.")
 
         # Load effective area (if available)
         if isinstance(area, Arf):
@@ -190,8 +189,7 @@ class OGIPRegion(Region):
             self.input_area = False
         else:
             self.input_area = False
-            message.error("Input effective area object is not of type Arf.")
-            return 1
+            raise ValueError("Input effective area object is not of type Arf.")
 
         # Do the OGIP to SPEX conversion
         stat = self.ogip_to_spex()
@@ -217,7 +215,14 @@ class OGIPRegion(Region):
         # Convert OGIP spectra to SPO object:
         if self.input_spec and self.input_resp:
             message.proc_start("Convert OGIP spectra to spo format")
-            spo = pha_to_spo(self.spec, self.resp, back=self.back, corr=self.corr, save_grouping=self.save_grouping)
+            if self.input_back and self.input_corr:
+                spo = pha_to_spo(self.spec, self.resp, back=self.back, corr=self.corr, save_grouping=self.save_grouping)
+            elif self.input_back and not self.input_corr:
+                spo = pha_to_spo(self.spec, self.resp, back=self.back, save_grouping=self.save_grouping)
+            elif self.input_corr and not self.input_back:
+                spo = pha_to_spo(self.spec, self.resp, corr=self.corr, save_grouping=self.save_grouping)
+            else:
+                spo = pha_to_spo(self.spec, self.resp, save_grouping=self.save_grouping)
 
             if isinstance(spo, Spo):
                 self.spo = spo
@@ -228,10 +233,17 @@ class OGIPRegion(Region):
                 return 1
 
             message.proc_start("Convert OGIP response to res format")
-            res = rmf_to_res(self.resp, matext=0, arf=self.area)
+            if self.input_area:
+                res = rmf_to_res(self.resp, matext=0, arf=self.area)
+            else:
+                res = rmf_to_res(self.resp, matext=0)
+
             if self.resp.NumberMatrixExt > 1:
                 for i in range(self.resp.NumberMatrixExt-1):
-                    rescomp = rmf_to_res(self.resp, matext=i+1, arf=self.area)
+                    if self.input_area:
+                        rescomp = rmf_to_res(self.resp, matext=i+1, arf=self.area)
+                    else:
+                        rescomp = rmf_to_res(self.resp, matext=i+1)
                     res.append_component(rescomp, iregion=1, isector=1)
 
             if isinstance(res, Res):

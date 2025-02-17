@@ -31,6 +31,7 @@ class Arf:
 
         self.LowEnergy = np.array([], dtype=float)      # Low Energy of bin
         self.HighEnergy = np.array([], dtype=float)     # High Energy of bin
+        self.CentEnergy = np.array([], dtype=float)     # Center Energy of bin
         self.EffArea = np.array([], dtype=float)        # Effective Area of bin
 
         self.EnergyUnits = 'keV'                        # Energy units
@@ -45,20 +46,22 @@ class Arf:
         :type arffile: str
         """
 
-        (data, header) = fits.getdata(arffile, 'SPECRESP', header=True)
+        with fits.open(arffile) as hdul:
+            data = hdul['SPECRESP'].data
+            header = hdul['SPECRESP'].header
 
         self.LowEnergy = data['ENERG_LO']
         self.HighEnergy = data['ENERG_HI']
+        self.CentEnergy = (self.LowEnergy + self.HighEnergy) / 2.0
         self.EffArea = data['SPECRESP']
 
         self.EnergyUnits = header['TUNIT1']
 
-        if header['TUNIT3'] == 'cm**2':
-            self.ARFUnits = 'cm2'
-        elif header['TUNIT3'] == 'cm2':
-            self.ARFUnits = 'cm2'
-        else:
-            message.warning("ARF units are not recognized.")
+        arf_units_mapping = {'cm**2': 'cm2', 'cm2': 'cm2'}
+        self.ARFUnits = arf_units_mapping.get(header['TUNIT3'], 'cm2')
+
+        if len(self.EffArea) == 0:
+            raise IndexError("Effective area file appears to be empty.")
 
         try:
             self.Order = header['TG_M']
@@ -67,12 +70,8 @@ class Arf:
             self.Order = 0
             self.Grating = 0
 
-        # Check for NULL values
-        nans = np.isnan(self.EffArea)
-        if np.any(nans):
-            for i in np.arange(self.EffArea.size):
-                if nans[i]:
-                   self.EffArea[i] = 0.0
+        # Replace NaN values with 0.0
+        self.EffArea = np.nan_to_num(self.EffArea)
 
         return 0
 
@@ -102,13 +101,13 @@ class Arf:
         hdr.set('EXTNAME', 'SPECRESP')
 
         # Set the TELESCOP keyword (optional)
-        if telescop == None:
+        if telescop is None:
             hdr.set('TELESCOP', 'None', 'Telescope name')
         else:
             hdr.set('TELESCOP', telescop, 'Telescope name')
 
         # Set the INSTRUME keyword (optional)
-        if instrume == None:
+        if instrume is None:
             hdr.set('INSTRUME', 'None', 'Instrument name')
         else:
             hdr.set('INSTRUME', instrume, 'Instrument name')
@@ -158,5 +157,4 @@ class Arf:
         print("Area units:        {0}  Area units".format(self.ARFUnits))
 
         return
-
 

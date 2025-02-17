@@ -2,7 +2,6 @@
 
 import pyspextools.messages as message
 import numpy as np
-import math
 import astropy.io.fits as fits
 
 from .pha import Pha
@@ -53,10 +52,10 @@ class Pha2:
         :param background: Subtract the background (True/False)?
         :type background: bool
         """
-
-        file = fits.open(phafile)
-        header = file['SPECTRUM'].header
-        data = file['SPECTRUM'].data
+        
+        with fits.open(phafile) as file:
+            header = file['SPECTRUM'].header
+            data = file['SPECTRUM'].data
 
         self.NumberSpectra = header['NAXIS2']
         self.tg_m = data['TG_M']
@@ -80,9 +79,7 @@ class Pha2:
             if pha.PhaType == 'RATE':
                 pha.Rate = data['RATE'][i]
             else:
-                pha.Rate = np.zeros(pha.DetChans, dtype=float)
-                for j in np.arange(pha.DetChans):
-                    pha.Rate[j] = float(data['COUNTS'][i][j]) / pha.Exposure
+                pha.Rate = np.divide(data['COUNTS'][i].astype(np.float32), pha.Exposure)
 
             if force_poisson:
                 poisson = True
@@ -98,11 +95,9 @@ class Pha2:
                     message.error("No Poisson errors, but no STAT_ERR keyword found.")
                     return 1
             else:
-                pha.StatError = np.zeros(pha.DetChans, dtype=float)
-                for j in np.arange(pha.DetChans):
-                    pha.StatError[j] = math.sqrt(pha.Rate[j] / pha.Exposure)
+                pha.StatError = np.sqrt(pha.Rate / pha.Exposure)
 
-            # Are there systematic errors?
+             # Are there systematic errors?
             try:
                 pha.SysError = data['SYS_ERR'][i]
             except KeyError:
@@ -138,9 +133,7 @@ class Pha2:
             if background:
                 pha.Pha2Back = True
                 pha.BackRate = (data['BACKGROUND_UP'][i] + data['BACKGROUND_DOWN'][i]) / pha.Exposure
-                pha.BackStatError = np.zeros(data['BACKGROUND_UP'].size, dtype=float)
-                for j in np.arange(pha.DetChans):
-                    pha.BackStatError[j] = math.sqrt(pha.BackRate[j] / pha.Exposure)
+                pha.BackStatError = np.sqrt(pha.BackRate / pha.Exposure)
                 pha.Pha2BackScal = header['BACKSCUP'] + header['BACKSCDN']
             else:
                 pha.Pha2Back = False
@@ -150,7 +143,6 @@ class Pha2:
 
             self.phalist.append(pha)
 
-        file.close()
         return 0
 
     def combine_orders(self, grating):
@@ -165,11 +157,11 @@ class Pha2:
 
         if tocombine.size == 0:
             message.error("Grating number not found in dataset.")
-            return 1
+            raise ValueError("Grating number not found in dataset.")
 
         if tocombine.size == 1:
             message.error("Only a single order found. No combining will be done.")
-            return 1
+            raise ValueError("Only a single order found. No combining will be done.")
 
         # Create new PHA file to output (set first row as default).
         srcpha = self.phalist[tocombine[0]]
@@ -184,12 +176,13 @@ class Pha2:
 
             srcpha.Rate = srcpha.Rate + ipha.Rate
             bkgpha.Rate = srcpha.BackRate + ipha.BackRate
-
+            
+            if srcpha.StatError is not None:
+                srcpha.StatError = np.sqrt(srcpha.StatError**2 + ipha.StatError**2)
+                bkgpha.StatError = np.sqrt(srcpha.BackStatError**2 + ipha.BackStatError**2)
+                srcpha.SysError = np.sqrt(srcpha.SysError**2 + ipha.SysError**2)
+                
             for j in np.arange(srcpha.DetChans):
-                if srcpha.StatError is not None:
-                    srcpha.StatError[j] = math.sqrt(srcpha.StatError[j]**2 + ipha.StatError[j]**2)
-                    bkgpha.StatError[j] = math.sqrt(srcpha.BackStatError[j]**2 + ipha.BackStatError[j]**2)
-                srcpha.SysError[j] = math.sqrt(srcpha.SysError[j]**2 + ipha.SysError[j]**2)
                 if ipha.Quality[j] != 0:
                     srcpha.Quality = 1
 

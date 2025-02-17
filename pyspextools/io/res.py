@@ -20,7 +20,6 @@ import pyspextools.messages as message
 import astropy.io.fits as fits
 import numpy as np
 import datetime
-import math
 import os
 
 
@@ -170,8 +169,7 @@ class Res:
 
         stat = origres.get_mask(isector, iregion)
         if stat != 0:
-            print("Error: Cannot select region.")
-            return -1
+            raise ValueError("Cannot select region.")
 
         # If object is still empty, there cannot be conflicts, so set
         # the logicals to the input values:
@@ -183,41 +181,38 @@ class Res:
         # Check whether the existing settings are compatible with the response
         # being added:
         if self.share_comp != origres.share_comp:
-            print("Error: Share_comp setting of added response is different from ")
-            print("the existing response. The matrices are incompatible.")
-            return -1
+            raise Exception("Error: Share_comp setting of added response is different from "
+                            "the existing response. The matrices are incompatible.")
 
         if self.area_scal != origres.area_scal:
-            print("Error: Areascal setting of added response is different from ")
-            print("the existing response. The matrices are incompatible.")
-            return -1
+            raise Exception("Error: Areascal setting of added response is different from "
+                            "the existing response. The matrices are incompatible.")
 
         if self.resp_der != origres.resp_der:
-            print("Error: Response derivative setting of added response is different from ")
-            print("the existing response. The matrices are incompatible.")
-            return -1
+            raise Exception("Error: Response derivative setting of added response is different from "
+                            "the existing response. The matrices are incompatible.")
 
         # Append the response information to the arrays
-        self.nchan = np.append(self.nchan, origres.nchan[origres.mask_icomp])
-        self.neg = np.append(self.neg, origres.neg[origres.mask_icomp])
-        self.sector = np.append(self.sector, origres.sector[origres.mask_icomp])
-        self.region = np.append(self.region, origres.region[origres.mask_icomp])
+        self.nchan = np.concatenate([self.nchan, origres.nchan[origres.mask_icomp]])
+        self.neg = np.concatenate([self.neg, origres.neg[origres.mask_icomp]])
+        self.sector = np.concatenate([self.sector, origres.sector[origres.mask_icomp]])
+        self.region = np.concatenate([self.region, origres.region[origres.mask_icomp]])
         if self.share_comp:
-            self.shcomp = np.append(self.shcomp, origres.shcomp[origres.mask_icomp])
+            self.shcomp = np.concatenate([self.shcomp, origres.shcomp[origres.mask_icomp]])
 
         # Append the response groups (SPEX_RESP_GROUP)
-        self.eg1 = np.append(self.eg1, origres.eg1[origres.mask_group])
-        self.eg2 = np.append(self.eg2, origres.eg2[origres.mask_group])
-        self.ic1 = np.append(self.ic1, origres.ic1[origres.mask_group])
-        self.ic2 = np.append(self.ic2, origres.ic2[origres.mask_group])
-        self.nc = np.append(self.nc, origres.nc[origres.mask_group])
-        if self.relarea:
-            self.relarea = np.append(self.relarea, origres.relarea[origres.mask_group])
+        self.eg1 = np.concatenate([self.eg1, origres.eg1[origres.mask_group]])
+        self.eg2 = np.concatenate([self.eg2, origres.eg2[origres.mask_group]])
+        self.ic1 = np.concatenate([self.ic1, origres.ic1[origres.mask_group]])
+        self.ic2 = np.concatenate([self.ic2, origres.ic2[origres.mask_group]])
+        self.nc = np.concatenate([self.nc, origres.nc[origres.mask_group]])
+        if self.relarea.size > 0:
+            self.relarea = np.concatenate([self.relarea, origres.relarea[origres.mask_group]])
 
         # Append the response values (SPEX_RESP_RESP)
-        self.resp = np.append(self.resp, origres.resp[origres.mask_resp])
+        self.resp = np.concatenate([self.resp, origres.resp[origres.mask_resp]])
         if self.resp_der:
-            self.dresp = np.append(self.dresp, origres.dresp[origres.mask_resp])
+            self.dresp = np.concatenate([self.dresp, origres.dresp[origres.mask_resp]])
 
         self.nregion = self.nregion + origres.nregion
         self.ncomp = self.ncomp + origres.ncomp
@@ -241,8 +236,7 @@ class Res:
 
         stat = self.get_mask(isector, iregion)
         if stat != 0:
-            print("Error: Cannot remove region.")
-            return -1
+            raise Exception("Error: Cannot remove region.")
 
         mask = np.invert(self.mask_resp)
         self.resp = self.resp[mask]
@@ -292,10 +286,9 @@ class Res:
         self.resname = resfile
 
         # Open the .res file with astropy.io.fits 
-        resfile = fits.open(self.resname)
-
-        table = resfile['SPEX_RESP_ICOMP'].data
-        header = resfile['SPEX_RESP_ICOMP'].header
+        with fits.open(self.resname) as resfile:
+            table = resfile['SPEX_RESP_ICOMP'].data
+            header = resfile['SPEX_RESP_ICOMP'].header
 
         # Read number of sectors, regions and components
         self.nsector = header['NSECTOR']
@@ -314,8 +307,8 @@ class Res:
             self.shcomp = table['SHCOMP']
 
         # Read group indices from SPEX_RESP_GROUP
-
-        table = resfile['SPEX_RESP_GROUP'].data
+        with fits.open(self.resname) as resfile:
+            table = resfile['SPEX_RESP_GROUP'].data
 
         self.eg1 = table['EG1']
         self.eg2 = table['EG2']
@@ -326,9 +319,9 @@ class Res:
             self.relarea = table['RELAREA']
 
         # Read response values from SPEX_RESP_RESP
-
-        table = resfile['SPEX_RESP_RESP'].data
-        header = resfile['SPEX_RESP_RESP'].header
+        with fits.open(self.resname) as resfile:
+            table = resfile['SPEX_RESP_RESP'].data
+            header = resfile['SPEX_RESP_RESP'].header
 
         if header['TTYPE1'] == "Response":
             self.resp = table['Response']
@@ -347,8 +340,6 @@ class Res:
 
         self.empty = False
 
-        resfile.close()
-
     # -----------------------------------------------------
     # Function to return a region from a res object
     # -----------------------------------------------------
@@ -364,13 +355,11 @@ class Res:
 
         stat = self.get_mask(isector, iregion)
         if stat != 0:
-            print("Error: Cannot select sector and region.")
-            return -1
+            raise Exception("Error: Cannot select sector and region.")
 
         # Check if object is empty
         if self.empty:
-            print("Error: Response object empty.")
-            return -1
+            raise Exception("Error: Response object empty.")
 
         # Initialize the response object to return  
         resreg = Res()
@@ -430,8 +419,7 @@ class Res:
 
         check = self.check()
         if check != 0:
-            print("Error: Response check failed.")
-            return
+            raise Exception("Error: Response check failed.")
 
         # Create a primary header
         prihdr = fits.Header()
@@ -596,13 +584,11 @@ class Res:
 
         # Check if iregion is in an allowed range
         if (iregion >= self.nregion) and (iregion < 1):
-            print("Error: Requested region not available.")
-            return -1
+            raise ValueError("Error: Requested region not available.")
 
         # Check if isector is in an allowed range
         if (isector >= self.nsector) and (iregion < 1):
-            print("Error: Requested sector not available.")
-            return -1
+            raise ValueError("Error: Requested sector not available.")
 
         # Check if isector and iregion combination is available
         ispectrum = 0
@@ -610,8 +596,7 @@ class Res:
             if (self.sector[i] == isector) and (self.region[i] == iregion):
                 ispectrum = i + 1
         if ispectrum == 0:
-            print("Error: Requested sector and region not available")
-            return -1
+            raise ValueError("Error: Requested sector and region not available")
 
         # Find which rows in SPEX_RESP_ICOMP are to be masked
         icomp_reg = np.where(self.region == iregion)[0]
@@ -712,8 +697,7 @@ class Res:
 
         # Check if input shift is indeed an integer
         if not isinstance(shift, int):
-            message.error("Entered shift is not an integer number. Not doing anything")
-            return -1
+            raise ValueError("Entered shift is not an integer number. Not doing anything")
 
         ic1 = np.zeros(self.eg1.size, dtype=int)
         ic2 = np.zeros(self.eg2.size, dtype=int)
@@ -723,8 +707,7 @@ class Res:
             ic2[i] = self.ic2[i] + shift
             if ic2[i] > np.amax(self.nchan):
                 message.error("Maximum channel number is larger than actual channel range!")
-                print("Aborting shift.")
-                return -1
+                raise Exception("Aborting shift.")
 
         # Save the shifted channel numbers
         self.ic1 = ic1
@@ -741,49 +724,40 @@ class Res:
         # Check if the number of indexed channels is equal to the length of the response array
         if sum(self.nc) != self.resp.size:
             print("")
-            message.error("Number of indexed channels not equal to response array.")
             print("Sum of channels in group:  {0}".format(sum(self.nc)))
             print("Length of response array:  {0}".format(self.resp.size))
-            return -1
+            raise ValueError("Number of indexed channels not equal to response array.")
 
         # Check if the channel start and end bin are consistent with the number of channels
         for j in np.arange(len(self.neg)):
             check = self.ic2[j] - self.ic1[j] + 1
             if check != self.nc[j]:
-                message.error("Number of group channels not consistent.")
-                return -1
+                raise ValueError("Number of group channels not consistent.")
 
         # Check if energy grid is monotonous
         k = 0
         for i in np.arange(self.ncomp):
             for j in np.arange(self.neg[i]):
                 if self.eg1[k] >= self.eg2[k]:
-                    message.error("Energy bin size is not positive for"
-                                  "bin {0} of component {1}.".format(j, i))
-                    return -1
+                    raise ValueError("Energy bin size is not positive for"
+                                     "bin {0} of component {1}.".format(j, i))
                 if j > 1:
                     if self.eg1[k] < self.eg1[k-1]:
-                        message.error("Energy grid is not increasing for"
-                                      "bin {0} of component {1}.".format(j, i))
-                        return -1
+                        raise ValueError("Energy grid is not increasing for"
+                                         "bin {0} of component {1}.".format(j, i))
                 if self.nc[k] > 0 and self.ic1[k] < 1:
-                    message.error("For row {0} the first channel is {1}, which is not allowed.".format(k, self.ic1[k]))
-                    return -1
+                    raise ValueError("For row {0} the first channel is {1}, which is not allowed.".format(k, self.ic1[k]))
                 elif self.nc[k] > 0 and self.ic2[k] > self.nchan[i]:
-                    message.error("For row {0} the last channel is larger than the number of channels.".format(k))
-                    return -1
+                    raise ValueError("For row {0} the last channel is larger than the number of channels.".format(k))
                 elif self.ic2[k] < self.ic1[k]:
-                    message.error("For row {0} the last channel is smaller than the first channel.".format(k))
-                    return -1
+                    raise ValueError("For row {0} the last channel is smaller than the first channel.".format(k))
                 elif self.nc[k] > 0 and self.nc[k] != self.ic2[k] - self.ic1[k] + 1:
-                    message.error("For row {0} the number of channels does not match the limits.".format(k))
-                    return -1
+                    raise ValueError("For row {0} the number of channels does not match the limits.".format(k))
                 k = k + 1
 
         for i in np.arange(self.resp.size):
             if self.resp[i] < 0.0:
-                message.error("Negative response value detected in matrix.")
-                return -1
+                raise ValueError("Negative response value detected in matrix.")
 
         return 0
 

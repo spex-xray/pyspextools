@@ -1,70 +1,29 @@
 #!/usr/bin/env python
 
-# =========================================================
-"""
-Set the color theme of the module
-"""
-# =========================================================
 
-
-class Colors:
-    """This class contains the color codes needed to output colored text to the
-    terminal. By default, colors are shown, but the user can request to output
-    the text without color, either using a flag or manually setting the color
-    scheme with the method below.
-
-    :ivar HEADER: Color for headers.
-    :vartype HEADER: str
-    :ivar OKBLUE: Color blue.
-    :vartype OKBLUE: str
-    :ivar OKGREEN: Color green for OK.
-    :vartype OKGREEN: str
-    :ivar WARNING: Color yellow for Warnings.
-    :vartype WARNING: str
-    :ivar FAIL: Color red for Errors.
-    :vartype FAIL: str
-    :ivar ENDC: End character for color.
-    :vartype ENDC: str
-    :ivar BOLD: Bold font.
-    :vartype BOLD: str
-    :ivar UNDERLINE: Underline font.
-    :vartype UNDERLINE: str
-    """
+class ColorCodes:
+    """Set the color theme of the module."""
+    color_codes = {
+        'HEADER': '\033[95m',
+        'OKBLUE': '\033[94m',
+        'OKGREEN': '\033[92m',
+        'WARNING': '\033[93m',
+        'FAIL': '\033[91m',
+        'ENDC': '\033[0m',
+        'BOLD': '\033[1m',
+        'UNDERLINE': '\033[4m'
+    }
 
     def __init__(self):
-        self.HEADER = ''
-        self.OKBLUE = ''
-        self.OKGREEN = ''
-        self.WARNING = ''
-        self.FAIL = ''
-        self.ENDC = ''
-        self.BOLD = ''
-        self.UNDERLINE = ''
-
         self.set_color(True)
 
     def set_color(self, setcol):
-        """Set color output on (True) or off (False).
-
-        :param setcol: Put color output on? (True/False)
-        :type setcol: bool
-        """
-
+        """If setcol is True, enable showing terminal colors. False disables the colors."""
+        if not isinstance(setcol, bool):
+            raise TypeError("The setcol parameter should be either True or False.")
         if setcol:
-            self.HEADER = '\033[95m'
-            self.OKBLUE = '\033[94m'
-            self.OKGREEN = '\033[92m'
-            self.WARNING = '\033[93m'
-            self.FAIL = '\033[91m'
-            self.ENDC = '\033[0m'
-            self.BOLD = '\033[1m'
-            self.UNDERLINE = '\033[4m'
+            for code, value in ColorCodes.color_codes.items():
+                setattr(ColorCodes, code, value)
         else:
-            self.HEADER = ''
-            self.OKBLUE = ''
-            self.OKGREEN = ''
-            self.WARNING = ''
-            self.FAIL = ''
-            self.ENDC = ''
-            self.BOLD = ''
-            self.UNDERLINE = ''
+            for code in ColorCodes.color_codes.keys():
+                setattr(ColorCodes, code, '')
