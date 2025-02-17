@@ -40,3 +40,7 @@ Version 0.6.0:
 
 Version 0.6.1:
  - Fixed an issue with large XRISM response matrices where the second matrix extension was not properly converted.
+
+Version 0.7.0:
+ - Move to pyproject.toml file to build and install pyspextools
+ - Determine PHA type in cases when HDUCLAS3 keyword is not defined
