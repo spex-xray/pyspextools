@@ -18,17 +18,16 @@ class TestGaussrsp:
 
     #  Tests with fwhm_mu = 0
     def test_edge_case_fwhm_mu_zero(self):
-        assert gaussrsp(1.0, 1.0, -1.0, 1.0) == -1
-        assert gaussrsp(2.0, 1.0, -1.0, 1.0) == -1
-        assert gaussrsp(3.0, 1.0, -1.0, 1.0) == -1
-        assert gaussrsp(4.0, 1.0, -1.0, 1.0) == -1
+        with pytest.raises(ValueError):
+            gaussrsp(1.0, 1.0, -1.0, 1.0)
 
     #  Tests with sigma = 0
     def test_edge_case_sigma_zero(self):
-        assert gaussrsp(1.0, 1.0, 0.0, 1.0) == -1
-        assert gaussrsp(2.0, 1.0, 0.0, 1.0) == -1
-        assert gaussrsp(3.0, 1.0, 0.0, 1.0) == -1
-        assert gaussrsp(4.0, 1.0, 0.0, 1.0) == -1
+        with pytest.raises(ValueError):
+            gaussrsp(1.0, 1.0, 0.0, 1.0)
+            gaussrsp(2.0, 1.0, 0.0, 1.0)
+            gaussrsp(3.0, 1.0, 0.0, 1.0)
+            gaussrsp(4.0, 1.0, 0.0, 1.0)
 
     #  Tests with dfwhm > 0 and dfwhm < 0
     def test_general_behaviour_dfwhm(self):
