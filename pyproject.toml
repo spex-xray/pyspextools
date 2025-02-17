@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "pyspextools"
 dependencies = [
-    "astropy", "numpy", "matplotlib", "sphinx"
+    "astropy", "numpy", "matplotlib", "sphinx", "setuptools>=40.8.0"
 ]
 authors = [
   { name="Jelle de Plaa", email="j.de.plaa@sron.nl" },
