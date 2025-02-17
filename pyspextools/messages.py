@@ -12,7 +12,7 @@ from pyspextools.color import ColorCodes
 
 # Set general messages for argument parsing
 docs = 'See full documentation at: https://spex-xray.github.io/pyspextools'
-version = '%(prog)s {:s} (C) 2018-2023, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
+version = '%(prog)s {:s} (C) 2018-2025, Jelle de Plaa, SRON Netherlands Institute for Space Research, ' \
           'Apache 2.0 License'.format(pyspextools.__version__)
 
 # Initialize colors
@@ -87,7 +87,7 @@ def print_header(scriptname):
     print("==================================")
     print(" This is {:s} version {:s}".format(scriptname, pyspextools.__version__))
     print("==================================")
-    print("(C) 2018-2023 Jelle de Plaa")
+    print("(C) 2018-2024 Jelle de Plaa")
     print("SRON Netherlands Institute for Space Research")
     print("Github: https://github.com/spex-xray/pyspextools")
     print("")

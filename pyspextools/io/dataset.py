@@ -171,7 +171,7 @@ class Dataset:
         self.regions.append(region)
 
         # Add the sector and region to the config variable of this dataset
-        self.config = np.append(self.config, [[isector, iregion]], axis=0)
+        self.config = np.append(self.config, np.array([[isector, iregion]]), axis=0)
 
     # -----------------------------------------------------
     # Write one region to a spo and res file.
@@ -258,7 +258,7 @@ class Dataset:
         for i in np.arange(res.ncomp):
             # Loop through components to find sector-region combinations
             if (res.region[i] != pregion) or (res.sector[i] != psector):
-                config = np.append(config, [[res.sector[i], res.region[i]]], axis=0)
+                config = np.append(config, np.array([[res.sector[i], res.region[i]]]), axis=0)
                 psector = res.sector[i]
                 pregion = res.region[i]
 
@@ -276,7 +276,7 @@ class Dataset:
         for reg in self.regions:
             # Loop through components to find sector-region combinations
             if (reg.res.region[0] != pregion) or (reg.res.sector[0] != psector):
-                self.config = np.append(self.config, [[reg.res.sector[0], reg.res.region[0]]], axis=0)
+                self.config = np.append(self.config, np.array([[reg.res.sector[0], reg.res.region[0]]]), axis=0)
                 pregion = reg.res.region[0]
                 psector = reg.res.sector[0]
             else:

@@ -24,6 +24,7 @@ of the use of the pyspextools API:
    :maxdepth: 2
 
    tutorials/datasets
+   tutorials/bkgfitting
 
 Using the SPEX user model
 -------------------------

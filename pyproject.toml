@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyspextools"
+dependencies = [
+    "astropy", "numpy", "matplotlib", "sphinx", "setuptools>=40.8.0"
+]
+authors = [
+  { name="Jelle de Plaa", email="j.de.plaa@sron.nl" },
+]
+description = "SPEX Python tools"
+readme = "README.md"
+requires-python = ">=3.8"
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "Operating System :: OS Independent",
+]
+license = {text = "Apache-2.0"}
+dynamic = ["version"]
+
+[project.urls]
+Homepage = "https://github.com/spex-xray/pyspextools"
+Documentation = "https://spex-xray.github.io/pyspextools/"
+Repository = "https://github.com/spex-xray/pyspextools.git"
+Issues = "https://github.com/spex-xray/pyspextools/issues"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.dynamic]
+version = {attr = "pyspextools.__version__"}
+
+[project.scripts]
+ogip2spex = "pyspextools.scripts.ogip2spex:main"
+ogipgenrsp = "pyspextools.scripts.ogipgenrsp:main"
+simres = "pyspextools.scripts.simres:main"
+tg2spex = "pyspextools.scripts.tg2spex:main"
+

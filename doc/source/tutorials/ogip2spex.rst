@@ -19,6 +19,10 @@ A full overview of the arguments is given below in the section `Command-line arg
    used to properly simulate spectra. If you need to simulate spectra including background, then make sure the Exp_Rate
    column is created.
 
+For some missions, the provided PHA file contains counts, but also a ``STAT_ERR`` column with non-Poisson errors.
+It is usually a good idea to use Poisson statistics in these cases. Ogip2spex has the ``--force-poisson``
+flag to make sure that the error on the counts is the square root of the number of observed counts.
+
 Example
 -------
 

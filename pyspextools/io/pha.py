@@ -100,11 +100,13 @@ class Pha:
         self.BackStatError = np.array([], dtype=float)  # PHA2 Background Error
         self.Pha2BackScal = 1.0                         # Backscale value for background
 
-    def read(self, filename):
+    def read(self, filename, force_poisson=False):
         """Read a spectrum from a PHA file.
 
         :param filename: PHA file name to be read.
         :type filename: str
+        :param force_poisson: Force the calculation of Poisson errors (default: False)
+        :type force_poisson: bool
         """
 
         # Read the data and header from the SPECTRUM extension
@@ -127,6 +129,9 @@ class Pha:
             self.Rate = np.zeros(self.DetChans, dtype=float)
             for i in np.arange(self.DetChans):
                 self.Rate[i] = float(data['COUNTS'][i]) / self.Exposure
+            # Only force Poisson errors for COUNTS spectra when flag is present
+            if force_poisson:
+                self.Poisserr = True
 
         # See if there are Statistical Errors present
         if not self.Poisserr:
@@ -195,8 +200,25 @@ class Pha:
         try:
             self.PhaType = header['HDUCLAS3']
         except KeyError:
-            self.PhaType = 'COUNTS'
-            message.warning("HDUCLAS3 keyword not found. Assuming PHA type is COUNTS.")
+            message.warning("HDUCLAS3 keyword not found.")
+            # When the HDUCLAS3 keyword does not exist, try to find either a COUNTS or RATE column in the table
+            message.proc_start("Figuring out the type of PHA file")
+            ncolumns = int(header['TFIELDS'])
+            self.PhaType = None
+            for i in np.arange(ncolumns):
+                keyword = 'TTYPE{0}'.format(i+1)
+                if header[keyword] == "RATE":
+                    self.PhaType = 'RATE'
+                    print(self.PhaType)
+                    break
+                elif header[keyword] == "COUNTS":
+                    self.PhaType = 'COUNTS'
+                    print(self.PhaType)
+                    break
+
+            if self.PhaType is None:
+                message.error("The provided PHA file does not have a COUNTS or RATE column. Is this a spectrum?")
+                return 1
 
         # Read the POISERR keyword
         try:

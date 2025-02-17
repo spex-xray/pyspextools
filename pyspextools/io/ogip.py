@@ -69,7 +69,7 @@ class OGIPRegion(Region):
     # Read a set of OGIP files into a region
     # -----------------------------------------------------
 
-    def read_region(self, phafile, rmffile, bkgfile=None, arffile=None, corrfile=None, grouping=False):
+    def read_region(self, phafile, rmffile, bkgfile=None, arffile=None, corrfile=None, grouping=False, force_poisson=False):
         """Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names
         are mandatory. If needed, a background file and effective area file can be added.
 
@@ -85,14 +85,16 @@ class OGIPRegion(Region):
         :type corrfile: str
         :param grouping: Keep the grouping information?
         :type grouping: bool
+        :param force_poisson: Force the calculation of Poisson errors (default: False)
+        :type force_poisson: bool
         """
 
         # Read the source PHA file
-        self.read_source_pha(phafile)
+        self.read_source_pha(phafile, force_poisson=force_poisson)
 
         # Read the background PHA file if specified:
         if bkgfile is not None:
-            self.read_background_pha(bkgfile)
+            self.read_background_pha(bkgfile, force_poisson=force_poisson)
 
         # Read a correction spectrum if specified:
         if corrfile is not None:
@@ -277,15 +279,17 @@ class OGIPRegion(Region):
     # Read an OGIP pha file
     # -----------------------------------------------------
 
-    def read_source_pha(self, phafile):
+    def read_source_pha(self, phafile, force_poisson=False):
         """Open a pha file containing the source spectrum.
 
         :param phafile: PHA file name of source spectrum to read.
         :type phafile: str
+        :param force_poisson: Force the calculation of Poisson errors (default: False)
+        :type force_poisson: bool
         """
 
         message.proc_start("Read source PHA spectrum")
-        stat = self.spec.read(phafile)
+        stat = self.spec.read(phafile, force_poisson=force_poisson)
         if stat != 0:
             message.proc_end(stat)
             message.error("Unable to read source PHA file.")
@@ -304,16 +308,18 @@ class OGIPRegion(Region):
     # Read an OGIP background file
     # -----------------------------------------------------
 
-    def read_background_pha(self, bkgfile):
+    def read_background_pha(self, bkgfile, force_poisson=False):
         """Open a pha file containing the background spectrum (if specified).
 
         :param bkgfile: PHA file name of background spectrum to read.
         :type bkgfile: str
+        :param force_poisson: Force the calculation of Poisson errors (default: False)
+        :type force_poisson: bool
         """
 
         if bkgfile is not None:
             message.proc_start("Read background PHA spectrum")
-            stat = self.back.read(bkgfile)
+            stat = self.back.read(bkgfile, force_poisson=force_poisson)
             if stat != 0:
                 message.proc_end(stat)
                 message.error("Unable to read background PHA file.")
@@ -548,6 +554,11 @@ class OGIPRegion(Region):
         # Check rmf file
         message.proc_start("Check OGIP response matrix")
         resp = self.resp.check()
+        if resp == 2:
+            message.warning("The response matrix contains zero width energy bins.")
+            message.warning("Fixing the bins by moving the bin boundary by 1E-6.")
+            self.resp.fix_energy_grid()
+            return 0
         if resp != 0:
             message.proc_end(1)
             print(resp)

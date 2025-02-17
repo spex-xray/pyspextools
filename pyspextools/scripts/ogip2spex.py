@@ -32,7 +32,8 @@ def main():
     print("Input Response file: {0}".format(args.rmffile))
     print("Input Effective area file: {0}".format(args.arffile))
 
-    ogip.read_region(args.phafile, args.rmffile, bkgfile=args.bkgfile, arffile=args.arffile, grouping=args.group)
+    ogip.read_region(args.phafile, args.rmffile, bkgfile=args.bkgfile, arffile=args.arffile, grouping=args.group,
+                     force_poisson=args.force_poisson)
 
     # Filter for bad channels (if not blocked by command line argument)
     if args.badchan:
@@ -82,6 +83,8 @@ def ogip2spex_arguments():
                         default=False)
     parser.add_argument('--no-exprate', help="Do not write additional Exp_Rate column (SPEX <=3.04.00).",
                         dest="exprate", action="store_false", default=True)
+    parser.add_argument('--force-poisson', help="Force the use of Poisson statistics for the input spectra.",
+                        dest="force_poisson", action="store_true", default=False)
     parser.add_argument('--no-color', help="Suppress color output.", dest="color", action="store_false", default=True)
     parser.add_argument('--version', action='version', version=message.version)
 

@@ -1,14 +1,15 @@
-image: python:3.6-slim
+image: python:3.8-slim
 
 stages:
   - deploy
 
 before_script:
+   - pip install build
    - pip install twine
    - pip install numpy
    - pip install astropy
    - pip install sphinx sphinx-argparse
-   - python setup.py sdist
+   - python -m build --sdist --wheel
 
 deploy_staging:
   stage: deploy
@@ -18,7 +19,7 @@ deploy_staging:
   script:
     - echo $STAGING_USERNAME
     - echo $TWINE_USERNAME
-    - twine upload --repository-url $PYPITEST_REPOSITORY_URL dist/*
+    - twine upload --verbose --repository-url $PYPITEST_REPOSITORY_URL dist/*
   only:
     - master
   except:

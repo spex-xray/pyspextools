@@ -30,3 +30,17 @@ Version 0.5.0:
  - SPEX spectra and responses are now written in double precision.
  - Fix for converting spectra from LEM and HEX-P responses where channel numbers are shifted by 1.
  - Fix for converting spectra from rgscombine.
+
+Version 0.6.0:
+ - Fixed ogipgenrsp which now uses the rmf structure with multiple MATRIX extensions.
+ - Added a force_poisson option to PHA reading routine and ogip2spex for cases where other
+   types of statistics are used and Poisson is desired.
+ - Added code to fix bins with zero width in ROSAT response matrices.
+ - Added tutorial about how to create .spo and .res files with more complicated sectors and regions.
+
+Version 0.6.1:
+ - Fixed an issue with large XRISM response matrices where the second matrix extension was not properly converted.
+
+Version 0.7.0:
+ - Move to pyproject.toml file to build and install pyspextools
+ - Determine PHA type in cases when HDUCLAS3 keyword is not defined
