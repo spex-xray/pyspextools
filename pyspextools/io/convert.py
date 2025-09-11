@@ -142,18 +142,18 @@ def pha_to_spo(src, rmf, back=None, corr=None, save_grouping=False):
         if save_grouping:
             if src.Grouping[i] == 1:
                 spo.first[i] = True
-                spo.last[i] = False
             if src.Grouping[i] <= 0:
                 spo.first[i] = False
-                if i < src.DetChans - 1:
-                    if src.Grouping[i + 1] == 1:
-                        spo.last[i] = True
-                    else:
-                        spo.last[i] = False
-                elif i == src.DetChans - 1:
+            
+            if i < src.DetChans - 1:
+                if src.Grouping[i + 1] == 1:
                     spo.last[i] = True
                 else:
                     spo.last[i] = False
+            elif i == src.DetChans - 1:
+                spo.last[i] = True
+            else:
+                spo.last[i] = False
 
         # Get channel boundaries from response
         # Channel boundary cannot be 0.
