@@ -191,7 +191,7 @@ class Res:
         self.ic1 = np.append(self.ic1, origres.ic1[origres.mask_group])
         self.ic2 = np.append(self.ic2, origres.ic2[origres.mask_group])
         self.nc = np.append(self.nc, origres.nc[origres.mask_group])
-        if self.relarea:
+        if self.area_scal:
             self.relarea = np.append(self.relarea, origres.relarea[origres.mask_group])
 
         # Append the response values (SPEX_RESP_RESP)
