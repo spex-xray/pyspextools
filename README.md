@@ -1,7 +1,7 @@
 # Pyspextools
 
 Pyspextools is a collection of python tools for the SPEX X-ray spectral 
-fitting package (see the [SPEX website](http://www.sron.nl/spex)). 
+fitting package (see the [SPEX website](https://www.sron.nl/en/pillars/science/astrophysics/)). 
 
 ## Install
 

@@ -8,7 +8,7 @@ dependencies = [
     "astropy", "numpy", "matplotlib", "sphinx", "setuptools>=40.8.0"
 ]
 authors = [
-  { name="Jelle de Plaa", email="j.de.plaa@sron.nl" },
+  { name="Jelle de Plaa", email="spex@sron.nl" },
 ]
 description = "SPEX Python tools"
 readme = "README.md"

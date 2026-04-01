@@ -5,8 +5,8 @@ SPEX data format support
 
 ``pyspextools.io`` is a Python submodule to read, write and manipulate
 SPEX spectrum and response file (.spo and .res). The
-format of these FITS files is described in Chapter 5
-of the SPEX manual: http://var.sron.nl/SPEX-doc/ 
+format of these FITS files is described in `the SPEX manual
+<https://spex-xray.github.io/spex-help/theory/response.html>`_.
 
 .. automodule:: pyspextools.io
 

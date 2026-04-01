@@ -377,7 +377,7 @@ class Spo:
         # Create a primary header
         prihdr = fits.Header()
         prihdr['CREATOR'] = 'pyspextools python module'
-        prihdr['ORIGIN'] = 'SRON Netherlands Institute for Space Research'
+        prihdr['ORIGIN'] = 'NWO-I/SRON Space Research Organisation Netherlands'
 
         now = datetime.datetime.now()
         prihdr['HISTORY'] = "Created on: {0}".format(str(now))

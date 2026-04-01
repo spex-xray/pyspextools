@@ -6,7 +6,8 @@
 Welcome to pyspextools documentation!
 =====================================
 
-Welcome to pyspextools, the python helper module for the `SPEX spectral fitting package <http://www.sron.nl/spex>`_.
+Welcome to pyspextools, the python helper module for the `SPEX spectral fitting package
+<https://www.sron.nl/en/pillars/science/astrophysics/>`_.
 This module offers a growing number of utilities and scripts that can help with analysing X-ray spectra using
 SPEX.
 
