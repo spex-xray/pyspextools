@@ -21,7 +21,7 @@ identifiers:
       The Zenodo identifier for all versions of this
       software.
   - type: doi
-    value: 10.5281/zenodo.5128614
+    value: 10.5281/zenodo.19370498
     description: >-
       Pyspextools is a collection of python tools for
       the SPEX X-ray spectral fitting package. The
@@ -43,8 +43,8 @@ keywords:
   - spectroscopy
   - astrophysics
 license: Apache-2.0
-doi: 10.5281/zenodo.5128614
+doi: 10.5281/zenodo.19370498
 commit: >-
-  https://github.com/spex-xray/pyspextools/commit/bad3f54eaf287265f1c3a7d169c22032731cf9e6
+  https://github.com/spex-xray/pyspextools/commit/31b8f7b05eaa107bd8a9faed310a1d777e79c4d9
 version: 0.7.1
 date-released: '2026-04-01'
