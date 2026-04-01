@@ -23,7 +23,8 @@ However, in some cases it can be helpful to point different sectors to one regio
 model is not supposed to be multiplied by the effective area, but just the response. Then this model needs to be added
 to the model spectrum of the previous region. In that case, two spectrum-response combinations are required (one with
 and one without ARF), where each combination obtains its own sector number (1,2), but only a single region number(1).
-See the `SPEX Cookbook <http://var.sron.nl/SPEX-doc/cookbookv3.0/cookbookch8.html#x36-570008>`_ for more information.
+See the `Modeling particle background page <https://spex-xray.github.io/spex-help/threads/partbkg/partbkg.html>`_
+for more information.
 
 Example use of the dataset class
 --------------------------------

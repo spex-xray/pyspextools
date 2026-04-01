@@ -15,7 +15,7 @@ SPEX user model interface module
 This is a Python helper class for the development of user defined models in SPEX. 
 The 'user' and 'musr' components in SPEX can calculate an additive and multiplicative
 model, respectively, based on a user program. See the SPEX manual for details:
-http://var.sron.nl/SPEX-doc/ 
+https://spex-xray.github.io/spex-help/threads/user/user.html
 
 The 'user' component can run an executable provided by the user. This module provides 
 the class that helps to exchange the relevant information between SPEX and the user
