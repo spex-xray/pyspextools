@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.dataset &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.dataset &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -52,19 +52,21 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># =========================================================</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
 
-<span class="kn">from</span> <span class="nn">.region</span> <span class="kn">import</span> <span class="n">Region</span>
-<span class="kn">from</span> <span class="nn">.spo</span> <span class="kn">import</span> <span class="n">Spo</span>
-<span class="kn">from</span> <span class="nn">.res</span> <span class="kn">import</span> <span class="n">Res</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.region</span><span class="w"> </span><span class="kn">import</span> <span class="n">Region</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.res</span><span class="w"> </span><span class="kn">import</span> <span class="n">Res</span>
 
 
 <span class="c1"># =========================================================</span>
 <span class="c1"># Data class</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Dataset"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset">[docs]</a><span class="k">class</span> <span class="nc">Dataset</span><span class="p">:</span>
+<div class="viewcode-block" id="Dataset">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Dataset</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The dataset class is the most general class containing a </span>
 <span class="sd">    dataset with multiple regions. Using this class, users</span>
 <span class="sd">    can read, write and manipulate spectral datasets.</span>
@@ -75,7 +77,7 @@
 <span class="sd">    :vartype config: numpy.ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialise a SPEX dataset.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">regions</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
@@ -84,7 +86,9 @@
     <span class="c1"># Read one region from a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.read_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.read_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read one region with number iregion from the two SPEX files and add it to the dataset.</span>
 
 <span class="sd">        :param isector: Sector number associated with the region to select.</span>
@@ -128,11 +132,14 @@
         <span class="c1"># Add the sector and region to the config variable of this dataset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="p">[[</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">]],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read all the regions from a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.read_all_regions"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">read_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.read_all_regions">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_all_regions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read all the regions from a spo and res file and add them to the dataset.</span>
 
 <span class="sd">        :param spofile: File name of the input .spo file.</span>
@@ -181,10 +188,13 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">update_config</span><span class="p">()</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Append a region object to the dataset</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Dataset.append_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.append_region">[docs]</a>    <span class="k">def</span> <span class="nf">append_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.append_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.append_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">append_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">,</span> <span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Append a region object to the dataset.</span>
 
 <span class="sd">        :param region: Input region object.</span>
@@ -206,11 +216,14 @@
         <span class="c1"># Add the sector and region to the config variable of this dataset</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="p">]]),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Write one region to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.write_region">[docs]</a>    <span class="k">def</span> <span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.write_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write one region to a spo and res file.</span>
 
 <span class="sd">        :param spofile: File name of the input .spo file.</span>
@@ -236,11 +249,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Write all the regions to a spo and res file.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.write_all_regions"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.write_all_regions">[docs]</a>    <span class="k">def</span> <span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.write_all_regions">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.write_all_regions">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_all_regions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">,</span> <span class="n">resfile</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Write all regions in the data object to spo and res.</span>
 
 <span class="sd">        :param spofile: File name of the input .spo file.</span>
@@ -275,11 +291,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to read the response configuration</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.read_config"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_config">[docs]</a>    <span class="k">def</span> <span class="nf">read_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.read_config">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.read_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_config</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">res</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read the response configuration.</span>
 
 <span class="sd">        :param res: SPEX response object.</span>
@@ -297,11 +316,14 @@
 
         <span class="k">return</span> <span class="n">config</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to update the response configuration</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.update_config"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.update_config">[docs]</a>    <span class="k">def</span> <span class="nf">update_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.update_config">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.update_config">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">update_config</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Update the response configuration.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">config</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
         <span class="n">pregion</span> <span class="o">=</span> <span class="mi">0</span>   <span class="c1"># Set previous region</span>
@@ -315,11 +337,14 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Double sector and region identification.&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to assign a new sector number to a region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.assign_sector"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_sector">[docs]</a>    <span class="k">def</span> <span class="nf">assign_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newsector</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.assign_sector">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_sector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newsector</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign a new sector number to a specific region.</span>
 
 <span class="sd">        :param iregion: Region number to assign new sector number for.</span>
@@ -334,11 +359,14 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: region number not found!&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to assign a new region number to a region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.assign_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_region">[docs]</a>    <span class="k">def</span> <span class="nf">assign_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.assign_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign a new region number to a specific region.</span>
 
 <span class="sd">        :param iregion: Region number to assign new number for.</span>
@@ -353,11 +381,14 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: region number not found!&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to assign a new region number to a region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.assign_sector_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_sector_region">[docs]</a>    <span class="k">def</span> <span class="nf">assign_sector_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newsector</span><span class="p">,</span> <span class="n">newregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.assign_sector_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.assign_sector_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">assign_sector_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">,</span> <span class="n">newsector</span><span class="p">,</span> <span class="n">newregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Assign a new sector and region number to a specific region.</span>
 
 <span class="sd">        :param iregion: Region number to assign new sector number for.</span>
@@ -375,28 +406,35 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Error: region number not found!&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Show a summary of the dataset, similar to data show in SPEX</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Dataset.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Dataset.show">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Dataset.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a summary for the entire dataset&quot;&quot;&quot;</span>
         <span class="k">for</span> <span class="n">ireg</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">)):</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Part </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ireg</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">regions</span><span class="p">[</span><span class="n">ireg</span><span class="p">]</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">isector</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span> <span class="n">iregion</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">config</span><span class="p">[</span><span class="n">ireg</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div></div>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -408,7 +446,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -424,16 +471,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -447,11 +484,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

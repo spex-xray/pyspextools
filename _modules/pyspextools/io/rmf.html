@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.rmf &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.rmf &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -33,13 +33,15 @@
   <h1>Source code for pyspextools.io.rmf</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
-<span class="kn">from</span> <span class="nn">pyspextools.io.arf</span> <span class="kn">import</span> <span class="n">Arf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.io.fits</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspextools.io.arf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Arf</span>
 
 
-<div class="viewcode-block" id="RmfEbounds"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfEbounds">[docs]</a><span class="k">class</span> <span class="nc">RmfEbounds</span><span class="p">:</span>
+<div class="viewcode-block" id="RmfEbounds">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfEbounds">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RmfEbounds</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read the EBOUNDS extension from an RMF or RSP file.</span>
 
 <span class="sd">    :ivar FirstChannel: First channel number.</span>
@@ -56,7 +58,7 @@
 <span class="sd">    :vartype EnergyUnits: string</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="mi">0</span>                               <span class="c1"># First channel number</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Channel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>              <span class="c1"># Channel numbers</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ChannelLowEnergy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>   <span class="c1"># Start energy of channel</span>
@@ -64,7 +66,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">=</span> <span class="mi">0</span>                             <span class="c1"># Number of data channels</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span>                               <span class="c1"># Unit of the energy scale</span>
 
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
         <span class="c1"># Read the Ebounds table</span>
         <span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">header</span><span class="p">)</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">rmffile</span><span class="p">,</span> <span class="s1">&#39;EBOUNDS&#39;</span><span class="p">,</span> <span class="n">header</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -81,7 +83,10 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">EnergyUnits</span> <span class="o">=</span> <span class="s1">&#39;keV&#39;</span></div>
 
 
-<div class="viewcode-block" id="RmfMatrix"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfMatrix">[docs]</a><span class="k">class</span> <span class="nc">RmfMatrix</span><span class="p">:</span>
+
+<div class="viewcode-block" id="RmfMatrix">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.RmfMatrix">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">RmfMatrix</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read a MATRIX extension from an OGIP RMF or RSP file.</span>
 
 <span class="sd">    :ivar NumberGroups: Number of response groups.</span>
@@ -123,7 +128,7 @@
 <span class="sd">    :vartype Order: int</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NumberGroups</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>         <span class="c1"># Number of response groups</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FirstGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>           <span class="c1"># First response group for this energy bin</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannelGroup</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>    <span class="c1"># First channel number in this group</span>
@@ -145,7 +150,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">Order</span> <span class="o">=</span> <span class="mi">0</span>                                      <span class="c1"># Order of the matrix</span>
 
-    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmfhdu</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmfhdu</span><span class="p">):</span>
 
         <span class="c1"># Read the Matrix table</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">rmfhdu</span><span class="o">.</span><span class="n">data</span>
@@ -227,7 +232,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">ResponseThreshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Matrix</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="Rmf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf">[docs]</a><span class="k">class</span> <span class="nc">Rmf</span><span class="p">:</span>
+
+<div class="viewcode-block" id="Rmf">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Rmf</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read OGIP RMF files. The response is given in two parts: an EBOUNDS extension, containing</span>
 <span class="sd">    the energy boundries of the instrument channels, and one or more MATRIX extensions, which contain components</span>
 <span class="sd">    of the response matrix.</span>
@@ -242,13 +250,15 @@
 <span class="sd">    :vartype MatrixExt: numpy.ndarray</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ebounds</span> <span class="o">=</span> <span class="n">RmfEbounds</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">NumberMatrixExt</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">MatrixExt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">)</span>
 
-<div class="viewcode-block" id="Rmf.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
+<div class="viewcode-block" id="Rmf.read">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.read">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to read OGIP RMF files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
 <span class="sd">        Keith Arnaud.</span>
 
@@ -281,7 +291,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Rmf.write"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filterkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rmf.write">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.write">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">telescop</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">instrume</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filterkey</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Method to write an OGIP format RMF file.</span>
 
 <span class="sd">        :param rmffile: RMF file name to write.</span>
@@ -435,7 +448,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Rmf.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rmf.check">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check the RMF for internal consistency.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ebounds</span><span class="o">.</span><span class="n">NumberChannels</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;Number of Channels in response is zero.&quot;</span><span class="p">)</span>
@@ -468,7 +484,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Rmf.disp"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rmf.disp">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.disp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Display a summary of the RMF object.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;RMF Response matrix:&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -503,7 +522,10 @@
 
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="Rmf.check_compatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arf</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rmf.check_compatibility">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.check_compatibility">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arf</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether the input arf object is really an ARF object with data and consistent with this RMF file.</span>
 
 <span class="sd">        :param arf: Input arf object to check.</span>
@@ -535,7 +557,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Rmf.fix_energy_grid"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.fix_energy_grid">[docs]</a>    <span class="k">def</span> <span class="nf">fix_energy_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Rmf.fix_energy_grid">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.rmf.Rmf.fix_energy_grid">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">fix_energy_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;In some exceptional cases, like with ROSAT response matrices, the matrix contains</span>
 <span class="sd">        energy bins with zero width, which is not physical. This method changes them to a small</span>
 <span class="sd">        finite width to allow them to be processed with ogip2spex and trafo.&quot;&quot;&quot;</span>
@@ -547,18 +572,22 @@
                 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">wzero</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
                     <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">HighEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">+</span> <span class="mf">1.0E-6</span>
                     <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">NumberEnergyBins</span><span class="p">:</span>
-                        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0E-6</span></div></div>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">matrix</span><span class="p">[</span><span class="n">e</span><span class="p">]</span><span class="o">.</span><span class="n">LowEnergy</span><span class="p">[</span><span class="n">wzero</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0E-6</span></div>
+</div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -570,7 +599,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -586,16 +624,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -609,11 +637,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

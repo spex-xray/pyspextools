@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.pha &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.pha &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -35,14 +35,16 @@
 
 <span class="c1"># Import stuff for compatibility between python 2 and 3</span>
 
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
-<span class="kn">from</span> <span class="nn">.rmf</span> <span class="kn">import</span> <span class="n">Rmf</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.io.fits</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rmf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rmf</span>
 
 
-<div class="viewcode-block" id="Pha"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha">[docs]</a><span class="k">class</span> <span class="nc">Pha</span><span class="p">:</span>
+<div class="viewcode-block" id="Pha">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Pha</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Class to read OGIP PHA files. The variable naming is made consistent with the HEASOFT HEASP module by</span>
 <span class="sd">    Keith Arnaud.    </span>
 <span class="sd">  </span>
@@ -100,7 +102,7 @@
 <span class="sd">    :vartype Pha2BackScal: float</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Spectrum arrays</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span> <span class="o">=</span> <span class="mi">0</span>                       <span class="c1"># First valid spectral channel</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span> <span class="o">=</span> <span class="mi">0</span>                           <span class="c1"># Total number of legal channels</span>
@@ -133,7 +135,9 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">BackStatError</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>  <span class="c1"># PHA2 Background Error</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">Pha2BackScal</span> <span class="o">=</span> <span class="mf">1.0</span>                         <span class="c1"># Backscale value for background</span>
 
-<div class="viewcode-block" id="Pha.read"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.read">[docs]</a>    <span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Pha.read">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.read">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a spectrum from a PHA file.</span>
 
 <span class="sd">        :param filename: PHA file name to be read.</span>
@@ -213,7 +217,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Pha.read_header"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.read_header">[docs]</a>    <span class="k">def</span> <span class="nf">read_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Pha.read_header">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.read_header">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">header</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Utility function to read the header from a SPECTRUM extension for both PHA and PHAII files.</span>
 
 <span class="sd">        :param header: Header of the SPECTRUM extension.</span>
@@ -233,8 +240,25 @@
         <span class="k">try</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="s1">&#39;COUNTS&#39;</span>
-            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;HDUCLAS3 keyword not found. Assuming PHA type is COUNTS.&quot;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">warning</span><span class="p">(</span><span class="s2">&quot;HDUCLAS3 keyword not found.&quot;</span><span class="p">)</span>
+            <span class="c1"># When the HDUCLAS3 keyword does not exist, try to find either a COUNTS or RATE column in the table</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">proc_start</span><span class="p">(</span><span class="s2">&quot;Figuring out the type of PHA file&quot;</span><span class="p">)</span>
+            <span class="n">ncolumns</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="s1">&#39;TFIELDS&#39;</span><span class="p">])</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ncolumns</span><span class="p">):</span>
+                <span class="n">keyword</span> <span class="o">=</span> <span class="s1">&#39;TTYPE</span><span class="si">{0}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;RATE&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="s1">&#39;RATE&#39;</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span><span class="p">)</span>
+                    <span class="k">break</span>
+                <span class="k">elif</span> <span class="n">header</span><span class="p">[</span><span class="n">keyword</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;COUNTS&quot;</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="o">=</span> <span class="s1">&#39;COUNTS&#39;</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span><span class="p">)</span>
+                    <span class="k">break</span>
+
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;The provided PHA file does not have a COUNTS or RATE column. Is this a spectrum?&quot;</span><span class="p">)</span>
+                <span class="k">return</span> <span class="mi">1</span>
 
         <span class="c1"># Read the POISERR keyword</span>
         <span class="k">try</span><span class="p">:</span>
@@ -269,7 +293,58 @@
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span> <span class="o">=</span> <span class="kc">None</span></div>
 
-<div class="viewcode-block" id="Pha.check"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Pha.write">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.write">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Write a simple pha file with the minimum required keywords.</span>
+
+<span class="sd">        :param filename: PHA file name to be read.</span>
+<span class="sd">        :type filename: str</span>
+<span class="sd">        :param overwrite: Overwrite existing file?</span>
+<span class="sd">        :type overwrite: bool</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">primary_hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">PrimaryHDU</span><span class="p">()</span>
+
+        <span class="n">c1</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;CHANNEL&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Channel</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;J&#39;</span><span class="p">)</span>
+        <span class="n">c2</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;RATE&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Rate</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+        <span class="n">c3</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s1">&#39;STAT_ERR&#39;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">StatError</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+        <span class="n">c4</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;SYS_ERR&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">SysError</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+        <span class="n">c5</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;QUALITY&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Quality</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+        <span class="n">c6</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;GROUPING&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">Grouping</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>
+        <span class="n">c7</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;AREASCAL&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+        <span class="n">c8</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Column</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;BACKSCAL&quot;</span><span class="p">,</span> <span class="n">array</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s1">&#39;E&#39;</span><span class="p">)</span>
+
+        <span class="n">table_hdu</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">BinTableHDU</span><span class="o">.</span><span class="n">from_columns</span><span class="p">([</span><span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">c3</span><span class="p">,</span> <span class="n">c4</span><span class="p">,</span> <span class="n">c5</span><span class="p">,</span> <span class="n">c6</span><span class="p">,</span> <span class="n">c7</span><span class="p">,</span> <span class="n">c8</span><span class="p">])</span>
+
+        <span class="n">hdr</span> <span class="o">=</span> <span class="n">table_hdu</span><span class="o">.</span><span class="n">header</span>
+
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;EXTNAME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SPECTRUM&quot;</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;DETCHANS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;EXPOSURE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span><span class="p">,</span> <span class="s1">&#39;Exposure time&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;POISSERR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">Poisserr</span><span class="p">,</span> <span class="s1">&#39;Are the errors Poissonian?&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CORRSCAL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">CorrScal</span><span class="p">,</span> <span class="s1">&#39;Correction scaling factor&#39;</span><span class="p">)</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLASS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;OGIP&quot;</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS1&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SPECTRUM&quot;</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUVERS&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;1.2.1&#39;</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS2&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Spectrumtype</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;HDUCLAS3&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">PhaType</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;BACKFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">bkgfile</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;RESPFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rmffile</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;ANCRFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">arffile</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;CORRFILE&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">corfile</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;TELESCOP&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Telescope</span>
+        <span class="n">hdr</span><span class="p">[</span><span class="s1">&#39;INSTRUME&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">Instrument</span>
+
+        <span class="n">hdul</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">HDUList</span><span class="p">([</span><span class="n">primary_hdu</span><span class="p">,</span> <span class="n">table_hdu</span><span class="p">])</span>
+
+        <span class="n">hdul</span><span class="o">.</span><span class="n">writeto</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="Pha.check">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the object contains the minimum required data.&quot;&quot;&quot;</span>
         <span class="c1"># Check exposure value</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">Exposure</span> <span class="o">&lt;=</span> <span class="mf">0.0</span><span class="p">:</span>
@@ -284,7 +359,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Pha.create_dummy"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.create_dummy">[docs]</a>    <span class="k">def</span> <span class="nf">create_dummy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resp</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Pha.create_dummy">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.create_dummy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_dummy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">resp</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Generate dummy spectrum based on rmf channel information.</span>
 
 <span class="sd">        :param resp: Input RMF response object.</span>
@@ -315,7 +393,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">AreaScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">BackScaling</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pha.disp"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.disp">[docs]</a>    <span class="k">def</span> <span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Pha.disp">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.disp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">disp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Display a summary of the PHA file.&quot;&quot;&quot;</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;FirstChannel  </span><span class="si">{0}</span><span class="s2">  First valid spectral channel&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">FirstChannel</span><span class="p">))</span>
@@ -343,7 +424,10 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;corfile       </span><span class="si">{0}</span><span class="s2">  Associated Correction spectrum file&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">corfile</span><span class="p">))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Pha.check_compatibility"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check_compatibility">[docs]</a>    <span class="k">def</span> <span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Pha.check_compatibility">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.pha.Pha.check_compatibility">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_compatibility</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pha</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if another PHA object is compatible with the current one in terms of number of channels.</span>
 
 <span class="sd">        :param pha: PHA object to check compatibility for.</span>
@@ -357,19 +441,23 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-    <span class="k">def</span> <span class="nf">number_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">number_channels</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">DetChans</span></div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -381,7 +469,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -397,16 +494,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -420,11 +507,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

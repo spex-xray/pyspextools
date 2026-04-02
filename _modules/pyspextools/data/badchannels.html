@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.data.badchannels &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.data.badchannels &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -33,13 +33,15 @@
   <h1>Source code for pyspextools.data.badchannels</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="kn">from</span> <span class="nn">pyspextools.io.region</span> <span class="kn">import</span> <span class="n">Region</span>
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspextools.io.region</span><span class="w"> </span><span class="kn">import</span> <span class="n">Region</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 
-<div class="viewcode-block" id="clean_region"><a class="viewcode-back" href="../../../reference/data.html#pyspextools.data.clean_region">[docs]</a><span class="k">def</span> <span class="nf">clean_region</span><span class="p">(</span><span class="n">reg</span><span class="p">):</span>
+<div class="viewcode-block" id="clean_region">
+<a class="viewcode-back" href="../../../reference/data.html#pyspextools.data.clean_region">[docs]</a>
+<span class="k">def</span><span class="w"> </span><span class="nf">clean_region</span><span class="p">(</span><span class="n">reg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Remove bad channels and channels with zero response from the region.</span>
 
 <span class="sd">    :param reg: Input Region object.</span>
@@ -160,7 +162,8 @@
     <span class="k">return</span> <span class="n">reg</span></div>
 
 
-<span class="k">def</span> <span class="nf">__get_bad_channel_masks</span><span class="p">(</span><span class="n">reg</span><span class="p">):</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">__get_bad_channel_masks</span><span class="p">(</span><span class="n">reg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Identify channels with zero response.</span>
 
 <span class="sd">    :param reg: Input Region object.</span>
@@ -193,10 +196,16 @@
         <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
 
     <span class="n">ir</span> <span class="o">=</span> <span class="mi">0</span>
+
     <span class="c1"># Loop over groups to find zero response elements and finalize channel mask</span>
     <span class="k">for</span> <span class="n">ie</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">eg1</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
         <span class="n">ic1</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ic1</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>  <span class="c1"># Original first channel of group</span>
         <span class="n">ic2</span> <span class="o">=</span> <span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">ic2</span><span class="p">[</span><span class="n">ie</span><span class="p">]</span>  <span class="c1"># Original last channel of group</span>
+        <span class="c1"># Masking entire group if response is zero</span>
+        <span class="c1">#grsum = np.sum(reg.res.resp[ir:ir+reg.res.nc[ie]+1])</span>
+        <span class="c1">#if grsum &lt;= 0.0:</span>
+        <span class="c1">#    groupmask[ie] = False</span>
+
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">ie</span><span class="p">]):</span>
             <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>  <span class="c1"># -1 because Python array starts at 0, not 1</span>
             <span class="k">if</span> <span class="n">ic</span> <span class="o">&gt;</span> <span class="n">ic2</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
@@ -222,7 +231,7 @@
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">reg</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">nc</span><span class="p">[</span><span class="n">ie</span><span class="p">]):</span>
             <span class="n">ic</span> <span class="o">=</span> <span class="n">ic1</span> <span class="o">+</span> <span class="n">j</span> <span class="o">-</span> <span class="mi">1</span>
-            <span class="k">if</span> <span class="n">chanmask</span><span class="p">[</span><span class="n">ic</span><span class="p">]:</span>  <span class="c1"># If channel is good</span>
+            <span class="k">if</span> <span class="n">chanmask</span><span class="p">[</span><span class="n">ic</span><span class="p">]</span> <span class="ow">and</span> <span class="n">groupmask</span><span class="p">[</span><span class="n">ie</span><span class="p">]:</span>  <span class="c1"># If channel is good and group is good</span>
                 <span class="n">newnc</span> <span class="o">=</span> <span class="n">newnc</span> <span class="o">+</span> <span class="mi">1</span>  <span class="c1"># Count number of good channels in group</span>
                 <span class="k">if</span> <span class="n">first</span><span class="p">:</span>  <span class="c1"># If this is the first good bin of the group, set ic1</span>
                     <span class="n">first</span> <span class="o">=</span> <span class="kc">False</span>
@@ -248,11 +257,13 @@
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -264,7 +275,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -280,16 +300,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -303,11 +313,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

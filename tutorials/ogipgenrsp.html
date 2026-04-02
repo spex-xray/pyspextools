@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>OGIPGENRSP - Create dummy response files &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <title>OGIPGENRSP - Create dummy response files &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="SIMRES - Create simulation files based on existing response" href="simres.html" />
@@ -20,8 +19,9 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -34,7 +34,7 @@
           <div class="body" role="main">
             
   <section id="ogipgenrsp-create-dummy-response-files">
-<span id="ogipgenrsp"></span><h1>OGIPGENRSP - Create dummy response files<a class="headerlink" href="#ogipgenrsp-create-dummy-response-files" title="Permalink to this headline">¶</a></h1>
+<span id="ogipgenrsp"></span><h1>OGIPGENRSP - Create dummy response files<a class="headerlink" href="#ogipgenrsp-create-dummy-response-files" title="Link to this heading">¶</a></h1>
 <p>Ogipgenrsp is a script to generate a dummy (Gaussian) response file with a user provided effective area, energy scale
 and energy resolution. This is particularly helpful when creating responses for possible future missions. The resulting
 response file is in OGIP RSP format. If you need a spectrum and response in SPEX format based on this
@@ -53,7 +53,7 @@ be implemented.</p></li>
 </pre></div>
 </div>
 <section id="energy-dependent-resolution">
-<h2>Energy dependent resolution<a class="headerlink" href="#energy-dependent-resolution" title="Permalink to this headline">¶</a></h2>
+<h2>Energy dependent resolution<a class="headerlink" href="#energy-dependent-resolution" title="Link to this heading">¶</a></h2>
 <p>Instead of a constant spectral resolution (FWHM) for the entire band, it is also possible to make the resolution
 linearly depend on the energy. The linear dependence is implemented in data/response.py and integrated in the
 gaussrsp function. The resulting FWHM(E) for energy E in keV is calculated as follows:</p>
@@ -63,7 +63,7 @@ gaussrsp function. The resulting FWHM(E) for energy E in keV is calculated as fo
 <p>The FWHM(&#64; 1keV) is set by the –resolution flag (in eV) and DELTA_FWHM is set by the –resgradient flag (in eV per keV).</p>
 </section>
 <section id="example">
-<h2>Example<a class="headerlink" href="#example" title="Permalink to this headline">¶</a></h2>
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">¶</a></h2>
 <p>In the example below, we create a new matrix for new mission with a spectral resolution of 1 eV and an energy range
 of 0.1 to 10 keV:</p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>linux:~&gt; ogipgenrsp --arffile athena.arf --resolution 1.0 --range 0.1:10 --rspfile newmission.rsp --overwrite
@@ -86,15 +86,15 @@ response is calculated.</p>
 new matrix, you can run the <a class="reference internal" href="simres.html#simres"><span class="std std-ref">SIMRES - Create simulation files based on existing response</span></a> script in this package with the RSP file from this script as input.</p>
 </section>
 <section id="command-line-arguments">
-<h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Permalink to this headline">¶</a></h2>
+<h2>Command-line arguments<a class="headerlink" href="#command-line-arguments" title="Link to this heading">¶</a></h2>
 <p><p>See full documentation at: <a class="reference external" href="https://spex-xray.github.io/pyspextools">https://spex-xray.github.io/pyspextools</a></p>
 </p>
 <div class="highlight-none notranslate"><div class="highlight"><pre><span></span>usage: ogipgenrsp [-h] --arffile ARFFILE --resolution RESOLUTION [--resgradient RESGRADIENT] [--range RANGE] [--sampling SAMPLING] --rspfile RSPFILE
                   [--no-area] [--overwrite] [--no-color] [--version]
 </pre></div>
 </div>
-<section id="named-arguments">
-<h3>Named Arguments<a class="headerlink" href="#named-arguments" title="Permalink to this headline">¶</a></h3>
+<section id="pyspextools.scripts.ogipgenrsp-genrsp_arguments-named-arguments">
+<h3>Named Arguments<a class="headerlink" href="#pyspextools.scripts.ogipgenrsp-genrsp_arguments-named-arguments" title="Link to this heading">¶</a></h3>
 <dl class="option-list">
 <dt><kbd>--arffile</kbd></dt>
 <dd><p>Input Effective area file (.arf, required).</p>
@@ -104,30 +104,30 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
 </dd>
 <dt><kbd>--resgradient</kbd></dt>
 <dd><p>Energy dependence of spectral resolution (in eV per keV, see documentation).</p>
-<p>Default: 0.0</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">0.0</span></code></p>
 </dd>
 <dt><kbd>--range</kbd></dt>
 <dd><p>Energy range of the response files (in keV), for example –range 0.1:10.</p>
-<p>Default: 0.1:10</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">0.1:10</span></code></p>
 </dd>
 <dt><kbd>--sampling</kbd></dt>
 <dd><p>The number of channels per resolution element (FWHM) at 1 keV.</p>
-<p>Default: 5</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">5</span></code></p>
 </dd>
 <dt><kbd>--rspfile</kbd></dt>
 <dd><p>Output filename for the OGIP RSP file (.rsp required).</p>
 </dd>
 <dt><kbd>--no-area</kbd></dt>
 <dd><p>Do NOT include effective area in response file (create .rmf).</p>
-<p>Default: False</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><kbd>--overwrite</kbd></dt>
 <dd><p>Overwrite existing rsp files with same name.</p>
-<p>Default: False</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">False</span></code></p>
 </dd>
 <dt><kbd>--no-color</kbd></dt>
 <dd><p>Suppress color output.</p>
-<p>Default: True</p>
+<p>Default: <code class="docutils literal notranslate"><span class="pre">True</span></code></p>
 </dd>
 <dt><kbd>--version</kbd></dt>
 <dd><p>show program’s version number and exit</p>
@@ -142,11 +142,13 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../index.html">
-    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -158,7 +160,16 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
 <li class="toctree-l1 current"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a><ul class="current">
@@ -181,16 +192,6 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -204,11 +205,11 @@ new matrix, you can run the <a class="reference internal" href="simres.html#simr
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2024, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
       <a href="../_sources/tutorials/ogipgenrsp.rst.txt"

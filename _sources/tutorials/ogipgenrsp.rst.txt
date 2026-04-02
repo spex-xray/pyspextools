@@ -65,6 +65,5 @@ Command-line arguments
 ----------------------
 
 .. argparse::
-   :filename: scripts/ogipgenrsp
-   :func: genrsp_arguments
+   :ref: pyspextools.scripts.ogipgenrsp.genrsp_arguments
    :prog: ogipgenrsp

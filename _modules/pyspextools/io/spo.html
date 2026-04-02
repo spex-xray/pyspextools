@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.spo &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.spo &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -49,11 +49,11 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># =========================================================</span>
 
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
-<span class="kn">import</span> <span class="nn">astropy.io.fits</span> <span class="k">as</span> <span class="nn">fits</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">astropy.io.fits</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">fits</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 
 <span class="c1"># =========================================================</span>
@@ -61,7 +61,9 @@
 <span class="c1"># spo file. This file can contain multiple spectra (regions).</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Spo"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo">[docs]</a><span class="k">class</span> <span class="nc">Spo</span><span class="p">:</span>
+<div class="viewcode-block" id="Spo">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Spo</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The spo class contains the spectral information for one</span>
 <span class="sd">    spo file. This file can contain multiple spectra (regions).</span>
 <span class="sd">    A call to spo() sets the variables that will contain</span>
@@ -126,7 +128,7 @@
     <span class="c1"># The &#39;add_&#39; functions below are used to fill the arrays with information.  </span>
     <span class="c1">#</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the SPEX spectrum object.&quot;&quot;&quot;</span>
 
         <span class="c1"># Initialize spo filename</span>
@@ -172,7 +174,9 @@
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Create a spo with zeros and size nchan</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Spo.zero_spo"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.zero_spo">[docs]</a>    <span class="k">def</span> <span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nchan</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.zero_spo">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.zero_spo">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">zero_spo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nchan</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Creates empty arrays of size nchan.</span>
 
 <span class="sd">        :param nchan: Number of channels to create.</span>
@@ -192,11 +196,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">first</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">last</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nchan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Functions to add spectra to the spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.add_spo_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.add_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origspo</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.add_spo_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.add_spo_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">origspo</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to add spectrum regions to a spo file.</span>
 
 <span class="sd">        :param origspo: Spo object to import region from.</span>
@@ -230,11 +237,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to remove a region from a spectrum</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.del_spo_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.del_spo_region">[docs]</a>    <span class="k">def</span> <span class="nf">del_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.del_spo_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.del_spo_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">del_spo_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove spectrum from region with number &#39;iregion&#39;</span>
 
 <span class="sd">        :param iregion: Region number to delete from spo object.</span>
@@ -269,11 +279,14 @@
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">nregion</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">True</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to read spectrum from a .spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.read_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.read_file">[docs]</a>    <span class="k">def</span> <span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.read_file">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.read_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spofile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot; Function to read a spectrum from a .spo file.</span>
 
 <span class="sd">        :param spofile: File name of .spo file.</span>
@@ -332,11 +345,14 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">empty</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to return one spectrum for one region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.return_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.return_region">[docs]</a>    <span class="k">def</span> <span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.return_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.return_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">return_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to return a spo object with containing the</span>
 <span class="sd">           spectrum of the region with number &#39;iregion&#39;.</span>
 
@@ -379,11 +395,14 @@
 
         <span class="k">return</span> <span class="n">sporeg</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to write all spectra to a .spo file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.write_file"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.write_file">[docs]</a>    <span class="k">def</span> <span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.write_file">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.write_file">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">write_file</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sponame</span><span class="p">,</span> <span class="n">exp_rate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">history</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Function to write the spectrum to a .spo file with the name &#39;sponame&#39;.</span>
 <span class="sd">        The exp_rate flag determines whether the Exp_Rate column is added containing</span>
 <span class="sd">        the ratio between the backscales of the source and background spectra. This column</span>
@@ -410,7 +429,7 @@
         <span class="c1"># Create a primary header</span>
         <span class="n">prihdr</span> <span class="o">=</span> <span class="n">fits</span><span class="o">.</span><span class="n">Header</span><span class="p">()</span>
         <span class="n">prihdr</span><span class="p">[</span><span class="s1">&#39;CREATOR&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;pyspextools python module&#39;</span>
-        <span class="n">prihdr</span><span class="p">[</span><span class="s1">&#39;ORIGIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;SRON Netherlands Institute for Space Research&#39;</span>
+        <span class="n">prihdr</span><span class="p">[</span><span class="s1">&#39;ORIGIN&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;NWO-I/SRON Space Research Organisation Netherlands&#39;</span>
 
         <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
         <span class="n">prihdr</span><span class="p">[</span><span class="s1">&#39;HISTORY&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Created on: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">now</span><span class="p">))</span>
@@ -469,10 +488,13 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Swap/Flip arrays between energy or wavelength order</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="Spo.swap_order"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.swap_order">[docs]</a>    <span class="k">def</span> <span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.swap_order">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.swap_order">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">swap_order</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Swap the channel order of the spectrum between wavelength or energy order. This is</span>
 <span class="sd">        for example helpful for grating spectra, which are originally stored in wavelength order</span>
 <span class="sd">        but must be flipped to energy order in SPEX format. &quot;&quot;&quot;</span>
@@ -483,11 +505,14 @@
                 <span class="n">inarr</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">)</span>
                 <span class="nb">setattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">flip</span><span class="p">(</span><span class="n">inarr</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Sanity check whether object is complete and consistent</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.check"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.check">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Perform several checks whether the information in the spectrum is consistent. &quot;&quot;&quot;</span>
 
         <span class="c1"># Check if nchan is numpy array</span>
@@ -537,11 +562,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Function to check the spo file name for correct extension</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.check_filename"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.check_filename">[docs]</a>    <span class="k">def</span> <span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.check_filename">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.check_filename">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check if the output filename has the correct .spo extension. The method returns a correct file name.</span>
 
 <span class="sd">        :param filename: File name to check.</span>
@@ -558,6 +586,7 @@
 
         <span class="k">return</span> <span class="n">spofile</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Create a mask for a spo region selection</span>
     <span class="c1">#</span>
@@ -566,7 +595,9 @@
     <span class="c1"># spectrum or region begins and ends.</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.get_mask"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.get_mask">[docs]</a>    <span class="k">def</span> <span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.get_mask">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.get_mask">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_mask</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Create a mask to select spectral information for one region only.</span>
 
 <span class="sd">        :param iregion: Region number to create mask for.</span>
@@ -600,11 +631,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Show a summary of the spo file, similar to data show in SPEX</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="Spo.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<div class="viewcode-block" id="Spo.show">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Spo.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Show some basic properties of the spectrum.</span>
 
 <span class="sd">        :param iregion: Region number to show.</span>
@@ -617,18 +651,22 @@
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Number of data channels                :  </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">nchan</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Data energy range                      :  </span><span class="si">{0:.2f}</span><span class="s2"> - </span><span class="si">{1:.2f}</span><span class="s2"> keV&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">echan1</span><span class="p">),</span>
                                                                                         <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">echan2</span><span class="p">)))</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Exposure time mean                     :  </span><span class="si">{0:.2f}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">tints</span><span class="p">)))</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; Exposure time mean                     :  </span><span class="si">{0:.2f}</span><span class="s2"> s&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">tspo</span><span class="o">.</span><span class="n">tints</span><span class="p">)))</span></div>
+</div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -640,7 +678,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -656,16 +703,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -679,11 +716,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

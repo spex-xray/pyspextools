@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.ogip &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.ogip &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -33,20 +33,22 @@
   <h1>Source code for pyspextools.io.ogip</h1><div class="highlight"><pre>
 <span></span><span class="ch">#!/usr/bin/env python</span>
 
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.region</span> <span class="kn">import</span> <span class="n">Region</span>
-<span class="kn">from</span> <span class="nn">.res</span> <span class="kn">import</span> <span class="n">Res</span>
-<span class="kn">from</span> <span class="nn">.spo</span> <span class="kn">import</span> <span class="n">Spo</span>
-<span class="kn">from</span> <span class="nn">.pha</span> <span class="kn">import</span> <span class="n">Pha</span>
-<span class="kn">from</span> <span class="nn">.rmf</span> <span class="kn">import</span> <span class="n">Rmf</span>
-<span class="kn">from</span> <span class="nn">.arf</span> <span class="kn">import</span> <span class="n">Arf</span>
-<span class="kn">from</span> <span class="nn">.convert</span> <span class="kn">import</span> <span class="n">pha_to_spo</span>
-<span class="kn">from</span> <span class="nn">.convert</span> <span class="kn">import</span> <span class="n">rmf_to_res</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.region</span><span class="w"> </span><span class="kn">import</span> <span class="n">Region</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.res</span><span class="w"> </span><span class="kn">import</span> <span class="n">Res</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.spo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.pha</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pha</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rmf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Rmf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.arf</span><span class="w"> </span><span class="kn">import</span> <span class="n">Arf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.convert</span><span class="w"> </span><span class="kn">import</span> <span class="n">pha_to_spo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.convert</span><span class="w"> </span><span class="kn">import</span> <span class="n">rmf_to_res</span>
 
 
-<div class="viewcode-block" id="OGIPRegion"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion">[docs]</a><span class="k">class</span> <span class="nc">OGIPRegion</span><span class="p">(</span><span class="n">Region</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">OGIPRegion</span><span class="p">(</span><span class="n">Region</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;The OGIPRegion class contains methods to read OGIP data into the pyspextools module and convert these to</span>
 <span class="sd">    spo and res format objects.</span>
 
@@ -78,7 +80,7 @@
 <span class="sd">    :vartype save_grouping: bool</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 
         <span class="n">Region</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
 
@@ -101,7 +103,9 @@
     <span class="c1"># Read a set of OGIP files into a region</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_region"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_region">[docs]</a>    <span class="k">def</span> <span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">bkgfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arffile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corrfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grouping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_region">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">,</span> <span class="n">bkgfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">arffile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corrfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">grouping</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add an OGIP spectrum and response to a SPEX region. The pha and rmf file names</span>
 <span class="sd">        are mandatory. If needed, a background file and effective area file can be added.</span>
 
@@ -157,11 +161,14 @@
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;OGIP to spex conversion failed.&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="mi">1</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Add OGIP objects to the OGIP region and convert</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.add_region"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.add_region">[docs]</a>    <span class="k">def</span> <span class="nf">add_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.add_region">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.add_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">add_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">,</span> <span class="n">resp</span><span class="p">,</span> <span class="n">back</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">area</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Add OGIP objects to an OGIP region. This is useful when the OGIP files are already read in, but they</span>
 <span class="sd">        need to be added to an OGIP region and converted to spo and res objects.</span>
 
@@ -234,11 +241,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Convert the OGIP part of the region to spo and res</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.ogip_to_spex"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.ogip_to_spex">[docs]</a>    <span class="k">def</span> <span class="nf">ogip_to_spex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.ogip_to_spex">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.ogip_to_spex">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">ogip_to_spex</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Convert the OGIP part of the OGIP region to spo and res objects.&quot;&quot;&quot;</span>
 
         <span class="c1"># Check the consistency between the OGIP files</span>
@@ -296,11 +306,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP pha file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_source_pha"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_source_pha">[docs]</a>    <span class="k">def</span> <span class="nf">read_source_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_source_pha">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_source_pha">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_source_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">phafile</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Open a pha file containing the source spectrum.</span>
 
 <span class="sd">        :param phafile: PHA file name of source spectrum to read.</span>
@@ -325,11 +338,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">first_channel_zero</span> <span class="o">=</span> <span class="kc">False</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP background file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_background_pha"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_background_pha">[docs]</a>    <span class="k">def</span> <span class="nf">read_background_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bkgfile</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_background_pha">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_background_pha">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_background_pha</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">bkgfile</span><span class="p">,</span> <span class="n">force_poisson</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Open a pha file containing the background spectrum (if specified).</span>
 
 <span class="sd">        :param bkgfile: PHA file name of background spectrum to read.</span>
@@ -351,11 +367,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No background filename specified.&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP rmf file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_rmf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_rmf">[docs]</a>    <span class="k">def</span> <span class="nf">read_rmf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_rmf">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_rmf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_rmf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rmffile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Open rmf file containing the response matrix.</span>
 
 <span class="sd">        :param rmffile: RMF file name to read.</span>
@@ -371,11 +390,14 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">input_resp</span> <span class="o">=</span> <span class="kc">True</span>
             <span class="n">message</span><span class="o">.</span><span class="n">proc_end</span><span class="p">(</span><span class="n">stat</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP arf file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_arf"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_arf">[docs]</a>    <span class="k">def</span> <span class="nf">read_arf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_arf">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_arf">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_arf</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">arffile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read arf file containing the effective area.</span>
 
 <span class="sd">        :param arffile: ARF file name to read.</span>
@@ -395,11 +417,14 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No effective area filename specified.&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Read an OGIP corr file</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.read_corr"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_corr">[docs]</a>    <span class="k">def</span> <span class="nf">read_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrfile</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.read_corr">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.read_corr">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_corr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">corrfile</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read correction file if specified.</span>
 
 <span class="sd">        :param corrfile: PHA correction file name to read.</span>
@@ -419,10 +444,13 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">message</span><span class="o">.</span><span class="n">error</span><span class="p">(</span><span class="s2">&quot;No correction file specified.&quot;</span><span class="p">)</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Check for possible shifts in response array</span>
     <span class="c1"># -----------------------------------------------------</span>
-<div class="viewcode-block" id="OGIPRegion.correct_possible_shift"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.correct_possible_shift">[docs]</a>    <span class="k">def</span> <span class="nf">correct_possible_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.correct_possible_shift">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.correct_possible_shift">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">correct_possible_shift</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ext</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;See if there is a shift in the response array. When the spectral channels start at 0 in OGIP responses,</span>
 <span class="sd">        then there is a possibility that the channel indexing needs to be shifted by 1. The SPEX format first</span>
 <span class="sd">        channel should always be 1. Run this function after the conversion of OGIP to SPEX had taken place</span>
@@ -521,11 +549,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Do a consistency check for the OGIP part</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.check_ogip"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.check_ogip">[docs]</a>    <span class="k">def</span> <span class="nf">check_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.check_ogip">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.check_ogip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check consistency of the OGIP files in this class.&quot;&quot;&quot;</span>
 
         <span class="c1"># Check consistency of the source spectrum</span>
@@ -605,11 +636,14 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
+
     <span class="c1"># -----------------------------------------------------</span>
     <span class="c1"># Show a summary of the provided OGIP data</span>
     <span class="c1"># -----------------------------------------------------</span>
 
-<div class="viewcode-block" id="OGIPRegion.show_ogip"><a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.show_ogip">[docs]</a>    <span class="k">def</span> <span class="nf">show_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="OGIPRegion.show_ogip">
+<a class="viewcode-back" href="../../../reference/ogip.html#pyspextools.io.ogip.OGIPRegion.show_ogip">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show_ogip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Shows a summary of the loaded OGIP data.&quot;&quot;&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span>
@@ -638,18 +672,22 @@
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No effective area file provided.&quot;</span><span class="p">)</span>
             <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span></div></div>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;===========================================================&quot;</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -661,7 +699,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -677,16 +724,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -700,11 +737,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 

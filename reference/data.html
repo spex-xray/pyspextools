@@ -1,18 +1,17 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Data filtering and optimization &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css" />
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
-    <script src="../_static/jquery.js"></script>
-    <script src="../_static/underscore.js"></script>
-    <script src="../_static/doctools.js"></script>
+    <title>Data filtering and optimization &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="SPEX user model support" href="user.html" />
@@ -20,8 +19,9 @@
    
   <link rel="stylesheet" href="../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -34,21 +34,21 @@
           <div class="body" role="main">
             
   <section id="data-filtering-and-optimization">
-<h1>Data filtering and optimization<a class="headerlink" href="#data-filtering-and-optimization" title="Permalink to this headline">¶</a></h1>
+<h1>Data filtering and optimization<a class="headerlink" href="#data-filtering-and-optimization" title="Link to this heading">¶</a></h1>
 <p>Spectra and response matrices are not always delivered in their most optimal form. They, for example, contain
 bad channels or channels with zero response. In addition, spectra and responses can be optimized for storage,
 calculation speed and statistical accuracy. The pyspextools.data module contains functions to filter or optimize
 spectra and response matrices with respect to their originals.</p>
 <section id="filtering-for-bad-channels">
-<h2>Filtering for bad channels<a class="headerlink" href="#filtering-for-bad-channels" title="Permalink to this headline">¶</a></h2>
+<h2>Filtering for bad channels<a class="headerlink" href="#filtering-for-bad-channels" title="Link to this heading">¶</a></h2>
 <p>The clean_region function returns a region without bad channels and zero response bins. The function reads the
 original region object from the function input and returns a cleaned region. The function call is quite simple:</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyspextools.data.clean_region">
-<span class="sig-prename descclassname"><span class="pre">pyspextools.data.</span></span><span class="sig-name descname"><span class="pre">clean_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/data/badchannels.html#clean_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.data.clean_region" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyspextools.data.</span></span><span class="sig-name descname"><span class="pre">clean_region</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">reg</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/pyspextools/data/badchannels.html#clean_region"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyspextools.data.clean_region" title="Link to this definition">¶</a></dt>
 <dd><p>Remove bad channels and channels with zero response from the region.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><p><strong>reg</strong> (<a class="reference internal" href="io.html#pyspextools.io.Region" title="pyspextools.io.Region"><em>pyspextools.io.Region</em></a>) – Input Region object.</p>
 </dd>
 </dl>
@@ -81,11 +81,13 @@ filtered region object is returned to the user. Such a call could look like this
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../index.html">
-    <img class="logo" src="../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -97,7 +99,16 @@ filtered region object is returned to the user. Such a call could look like this
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../tutorials.html">Pyspextools tutorials</a></li>
@@ -121,16 +132,6 @@ filtered region object is returned to the user. Such a call could look like this
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -144,11 +145,11 @@ filtered region object is returned to the user. Such a call could look like this
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2024, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
       |
       <a href="../_sources/reference/data.rst.txt"

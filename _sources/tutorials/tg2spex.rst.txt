@@ -75,6 +75,5 @@ Command-line arguments
 ----------------------
 
 .. argparse::
-   :filename: scripts/tg2spex
-   :func: tg2spex_arguments
+   :ref: pyspextools.scripts.tg2spex.tg2spex_arguments
    :prog: tg2spex

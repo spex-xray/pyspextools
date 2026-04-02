@@ -1,24 +1,24 @@
-
 <!DOCTYPE html>
 
-<html lang="en">
+<html lang="en" data-content_root="../../../">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyspextools.io.region &#8212; pyspextools 0.5.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css" />
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
-    <script src="../../../_static/jquery.js"></script>
-    <script src="../../../_static/underscore.js"></script>
-    <script src="../../../_static/doctools.js"></script>
+    <title>pyspextools.io.region &#8212; pyspextools 0.7.1 documentation</title>
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/basic.css?v=b08954a9" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/alabaster.css?v=9c2ab4a5" />
+    <script src="../../../_static/documentation_options.js?v=5a057da9"></script>
+    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
    
   <link rel="stylesheet" href="../../../_static/custom.css" type="text/css" />
   
+
   
-  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9" />
+  
 
   </head><body>
   
@@ -52,18 +52,20 @@
 <span class="sd">&quot;&quot;&quot;</span>
 <span class="c1"># =========================================================</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">pyspextools.io.spo</span> <span class="kn">import</span> <span class="n">Spo</span>
-<span class="kn">from</span> <span class="nn">pyspextools.io.res</span> <span class="kn">import</span> <span class="n">Res</span>
-<span class="kn">import</span> <span class="nn">pyspextools.messages</span> <span class="k">as</span> <span class="nn">message</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspextools.io.spo</span><span class="w"> </span><span class="kn">import</span> <span class="n">Spo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyspextools.io.res</span><span class="w"> </span><span class="kn">import</span> <span class="n">Res</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyspextools.messages</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">message</span>
 
 
 <span class="c1"># =========================================================</span>
 <span class="c1"># Region class</span>
 <span class="c1"># =========================================================</span>
 
-<div class="viewcode-block" id="Region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region">[docs]</a><span class="k">class</span> <span class="nc">Region</span><span class="p">:</span>
+<div class="viewcode-block" id="Region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">Region</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A SPEX region is a spectrum/response combination for a</span>
 <span class="sd">    specific observation, instrument or region on the sky.</span>
 <span class="sd">    It combines the spectrum and response file in one object.</span>
@@ -74,12 +76,14 @@
 <span class="sd">    :vartype res: pyspextools.io.Res</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">spo</span> <span class="o">=</span> <span class="n">Spo</span><span class="p">()</span>        <span class="c1"># Spo object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">res</span> <span class="o">=</span> <span class="n">Res</span><span class="p">()</span>        <span class="c1"># Res object</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>         <span class="c1"># Optional region label (will not be written to file). For example: MOS1, annulus2, etc.</span>
 
-<div class="viewcode-block" id="Region.change_label"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.change_label">[docs]</a>    <span class="k">def</span> <span class="nf">change_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
+<div class="viewcode-block" id="Region.change_label">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.change_label">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">change_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Attach a label to this region to easily identify it. For example: MOS1, annulus 2, etc.</span>
 
 <span class="sd">        :param label: Text string to identify region.</span>
@@ -87,7 +91,10 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">label</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Region.set_sector"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_sector">[docs]</a>    <span class="k">def</span> <span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Region.set_sector">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_sector">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_sector</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sector</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the sector number for this region.</span>
 
 <span class="sd">        :param sector: Sector number to set for this region.</span>
@@ -97,7 +104,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">sector</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sector</span></div>
 
-<div class="viewcode-block" id="Region.set_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_region">[docs]</a>    <span class="k">def</span> <span class="nf">set_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Region.set_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.set_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the region number for this region.</span>
 
 <span class="sd">        :param region: Region number to set for this region.</span>
@@ -107,7 +117,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">region</span></div>
 
-<div class="viewcode-block" id="Region.increase_region"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.increase_region">[docs]</a>    <span class="k">def</span> <span class="nf">increase_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Region.increase_region">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.increase_region">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">increase_region</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">amount</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Increase the region numbers by an integer amount.</span>
 
 <span class="sd">        :param amount: Integer amount to add to region numbers.</span>
@@ -117,7 +130,10 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="o">.</span><span class="n">size</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">region</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">amount</span></div>
 
-<div class="viewcode-block" id="Region.check"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.check">[docs]</a>    <span class="k">def</span> <span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Region.check">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.check">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nregion</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check whether spectrum and response are compatible</span>
 <span class="sd">        and whether the arrays really consist of one region (if nregion flag is set).</span>
 
@@ -140,7 +156,10 @@
 
         <span class="k">return</span> <span class="mi">0</span></div>
 
-<div class="viewcode-block" id="Region.show"><a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.show">[docs]</a>    <span class="k">def</span> <span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+
+<div class="viewcode-block" id="Region.show">
+<a class="viewcode-back" href="../../../reference/io.html#pyspextools.io.Region.show">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">show</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">isector</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Show a summary of the region metadata.</span>
 
 <span class="sd">        :param isector: Sector number to show.</span>
@@ -158,18 +177,22 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">spo</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">&quot; --------------------  Response  -------------------------&quot;</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">isector</span><span class="o">=</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="n">iregion</span><span class="p">)</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">res</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">isector</span><span class="o">=</span><span class="n">isector</span><span class="p">,</span> <span class="n">iregion</span><span class="o">=</span><span class="n">iregion</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 
           </div>
           
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+      <div class="sphinxsidebar" role="navigation" aria-label="Main">
         <div class="sphinxsidebarwrapper">
 <p class="logo">
   <a href="../../../index.html">
-    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo"/>
+    <img class="logo" src="../../../_static/logo-wide.png" alt="Logo" />
+    
+    <h1 class="logo logo-name">SPEX</h1>
     
   </a>
 </p>
@@ -181,7 +204,16 @@
 
 
 
-<h3>Navigation</h3>
+
+<search id="searchbox" style="display: none" role="search">
+    <div class="searchformwrapper">
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="Search"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</search>
+<script>document.getElementById('searchbox').style.display = "block"</script><h3>Navigation</h3>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../../install.html">Install pyspextools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../../../tutorials.html">Pyspextools tutorials</a></li>
@@ -197,16 +229,6 @@
   </ul></li>
 </ul>
 </div>
-<div id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="../../../search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</div>
-<script>$('#searchbox').show(0);</script>
 
 
 
@@ -220,11 +242,11 @@
       <div class="clearer"></div>
     </div>
     <div class="footer">
-      &copy;2018-2023, SRON Netherlands Institute for Space Research.
+      &#169;2018-2026, NWO-I/SRON Space Research Organisation Netherlands.
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 4.4.0</a>
-      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.12</a>
+      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 9.0.4</a>
+      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 1.0.0</a>
       
     </div>
 
