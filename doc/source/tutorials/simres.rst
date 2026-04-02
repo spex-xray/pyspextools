@@ -58,6 +58,5 @@ Command-line arguments
 ----------------------
 
 .. argparse::
-   :filename: scripts/simres
-   :func: simres_arguments
+   :ref: pyspextools.scripts.simres.simres_arguments
    :prog: simres

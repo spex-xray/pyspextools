@@ -97,6 +97,5 @@ Command-line arguments
 ----------------------
 
 .. argparse::
-   :filename: scripts/ogip2spex
-   :func: ogip2spex_arguments
+   :ref: pyspextools.scripts.ogip2spex.ogip2spex_arguments
    :prog: ogip2spex
