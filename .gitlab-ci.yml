@@ -1,36 +1,31 @@
-image: python:3.8-slim
+image: 
+  name: sonarsource/sonar-scanner-cli:11
+  entrypoint: [""]
+
+variables:
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"  # Defines the location of the analysis task cache
+  GIT_DEPTH: "0"  # Tells git to fetch all the branches of the project, required by the analysis task
 
 stages:
-  - deploy
+  - build-sonar
 
-before_script:
-   - pip install build
-   - pip install twine
-   - pip install numpy
-   - pip install astropy
-   - pip install sphinx sphinx-argparse
-   - python -m build --sdist --wheel
 
-deploy_staging:
-  stage: deploy
-  variables:
-    TWINE_USERNAME: $STAGING_USERNAME
-    TWINE_PASSWORD: $STAGING_PASSWORD
-  script:
-    - echo $STAGING_USERNAME
-    - echo $TWINE_USERNAME
-    - twine upload --verbose --repository-url $PYPITEST_REPOSITORY_URL dist/*
-  only:
-    - master
-  except:
-    - tags
+build-sonar:
+  stage: build-sonar
   
-deploy_production:
-  stage: deploy
-  variables:
-    TWINE_USERNAME: $PRODUCTION_USERNAME
-    TWINE_PASSWORD: $PRODUCTION_PASSWORD
-  script:
-    - twine upload dist/*
-  only:
-    - tags
+  
+  cache:
+    policy: pull-push
+    key: "sonar-cache-$CI_COMMIT_REF_SLUG"
+    paths:
+      - "${SONAR_USER_HOME}/cache"
+      - sonar-scanner/
+      
+  script: 
+  - sonar-scanner -Dsonar.host.url="${SONAR_HOST_URL}"
+  allow_failure: true
+  rules:
+    - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+    - if: $CI_COMMIT_BRANCH == 'master'
+    - if: $CI_COMMIT_BRANCH == 'main'
+    - if: $CI_COMMIT_BRANCH == 'develop'
