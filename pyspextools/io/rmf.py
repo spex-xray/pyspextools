@@ -187,7 +187,10 @@ class RmfMatrix:
         for i in np.arange(self.NumberEnergyBins):
             if nelem[i] != 0:
                 for j in np.arange(nelem[i]):
-                    self.Matrix[r] = matrix_local[i][j]
+                    if (len(np.shape(matrix_local))>=2):
+                        self.Matrix[r] = matrix_local[i][j]
+                    else:
+                        self.Matrix[r] = matrix_local[i]
                     r = r + 1
 
         self.NumberTotalElements = self.Matrix.size
