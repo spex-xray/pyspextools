@@ -48,7 +48,7 @@ def clean_region(reg):
     message.proc_start("Removing bad channels from spectral region")
 
     # Fix binning issues first. Make sure bin ends before bad channel and starts after bad channel.
-    for i in np.arange(reg.spo.nchan):
+    for i in np.arange(reg.spo.nchan[0]):
         if not chanmask[i]:
             if i != 0:
                 reg.spo.last[i-1] = True
